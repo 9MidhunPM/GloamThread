@@ -198,6 +198,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T01:15:39+05:30 — Bounded overhead roll
+
+- Changed: The former jump bit starts a twelve-tick, 36px cardinal roll with six invulnerable ticks and a 36-tick cooldown; damage, restore and pause retain explicit interruption semantics.
+- Why: Replace platform jumping with a readable, short defensive action that respects water and wall collision.
+- Validation: Isolated Godot 4.7.2 actor scenarios pass 2/2, including exact displacement, direction lock, six-tick evasion, paused timers and real water/wall bodies.
+- Limitations: Null-catalog fixture; the new roll cue is pending the parallel authored audio packet.
+
+
 ### 2026-10-25T01:12:16+05:30 — Overhead courier motor and room context
 
 - Changed: Replaced gravity/platform movement with floating XY movement, 12x10 feet collision, cardinal facing and directional animation keys; introduced set_room_context(bounds, can_stand, can_threadstep, water_body).

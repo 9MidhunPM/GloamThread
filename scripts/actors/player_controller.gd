@@ -14,6 +14,10 @@ const MOVE_ACCEL := 900.0
 const DASH_SPEED := 360.0
 const DASH_TICKS := 12
 const DASH_COOLDOWN_TICKS := 30
+const ROLL_SPEED := 180.0
+const ROLL_TICKS := 12
+const ROLL_COOLDOWN_TICKS := 36
+const ROLL_IMMUNITY_TICKS := 6
 const DAMAGE_IMMUNITY_TICKS := 45
 const REVIVE_IMMUNITY_TICKS := 90
 const Action := CommandSnapshot.Action
@@ -36,6 +40,9 @@ var immunity_ticks: int = 0
 var special_cooldown_ticks: int = 0
 var dash_cooldown_ticks: int = 0
 var dash_ticks: int = 0
+var roll_ticks: int = 0
+var roll_cooldown_ticks: int = 0
+var _roll_immunity_ticks: int = 0
 var special_id: String = "ember_arc"
 var reduced_flash: bool = false
 var sprite_texture: Texture2D:
@@ -112,10 +119,12 @@ func _physics_process(delta: float) -> void:
 		return
 	var commands: CommandSnapshot = InputRouter.snapshot(slot_index)
 	var movement := Vector2(commands.move_x, commands.move_y).limit_length(1.0)
-	if _attack_kind.is_empty() and _hurt_ticks == 0 and dash_ticks == 0:
+	if _attack_kind.is_empty() and _hurt_ticks == 0 and dash_ticks == 0 and roll_ticks == 0:
 		_update_facing(movement)
 		if commands.just_pressed(Action.DASH) and _can_dash():
 			_start_dash(movement)
+		elif commands.just_pressed(Action.JUMP) and roll_cooldown_ticks == 0:
+			_start_roll()
 		elif commands.just_pressed(Action.SPECIAL) and special_cooldown_ticks == 0:
 			_start_attack(special_id)
 		elif commands.just_pressed(Action.ATTACK):
@@ -126,6 +135,13 @@ func _physics_process(delta: float) -> void:
 		_keep_in_room()
 		dash_ticks -= 1
 		_set_animation("dash")
+		return
+	if roll_ticks > 0:
+		velocity = facing_vector * ROLL_SPEED
+		move_and_slide()
+		_keep_in_room()
+		roll_ticks -= 1
+		_set_animation("roll")
 		return
 	if _hurt_ticks > 0:
 		velocity = velocity.move_toward(Vector2.ZERO, MOVE_ACCEL * delta)
@@ -159,6 +175,8 @@ func reset_at(feet_position: Vector2) -> void:
 	_attack_kind = ""
 	_hit_targets.clear()
 	dash_ticks = 0
+	roll_ticks = 0
+	_roll_immunity_ticks = 0
 	_hurt_ticks = 0
 	_last_safe_feet = feet_position
 	if is_inside_tree():
@@ -174,6 +192,7 @@ func restore(feet_position: Vector2) -> void:
 	immunity_ticks = REVIVE_IMMUNITY_TICKS
 	special_cooldown_ticks = 0
 	dash_cooldown_ticks = 0
+	roll_cooldown_ticks = 0
 	_revive_animation_ticks = 0
 	_set_animation("idle")
 
@@ -193,13 +212,14 @@ func revive() -> void:
 
 
 func take_hit(amount: int, knockback: Vector2 = Vector2.ZERO) -> bool:
-	if downed or immunity_ticks > 0 or amount <= 0:
+	if downed or immunity_ticks > 0 or _roll_immunity_ticks > 0 or amount <= 0:
 		return false
 	hearts = maxi(0, hearts - amount)
 	immunity_ticks = DAMAGE_IMMUNITY_TICKS
 	_hurt_ticks = 12
 	_attack_kind = ""
 	dash_ticks = 0
+	roll_ticks = 0
 	velocity = knockback
 	revive_progress_ticks = 0
 	AudioDirector.play_cue(&"hurt")
@@ -220,6 +240,8 @@ func _tick_cooldowns() -> void:
 	immunity_ticks = maxi(0, immunity_ticks - 1)
 	special_cooldown_ticks = maxi(0, special_cooldown_ticks - 1)
 	dash_cooldown_ticks = maxi(0, dash_cooldown_ticks - 1)
+	roll_cooldown_ticks = maxi(0, roll_cooldown_ticks - 1)
+	_roll_immunity_ticks = maxi(0, _roll_immunity_ticks - 1)
 	_hurt_ticks = maxi(0, _hurt_ticks - 1)
 	_revive_animation_ticks = maxi(0, _revive_animation_ticks - 1)
 	if is_instance_valid(_sprite):
@@ -227,6 +249,13 @@ func _tick_cooldowns() -> void:
 			_sprite.modulate.a = 0.65 if reduced_flash else (0.45 if immunity_ticks % 8 < 4 else 1.0)
 		else:
 			_sprite.modulate.a = 1.0
+
+
+func _start_roll() -> void:
+	roll_ticks = ROLL_TICKS
+	roll_cooldown_ticks = ROLL_COOLDOWN_TICKS
+	_roll_immunity_ticks = ROLL_IMMUNITY_TICKS
+	AudioDirector.play_cue(&"roll")
 
 
 func _can_dash() -> bool:

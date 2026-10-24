@@ -58,6 +58,9 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-actors -->
 
+- 2026-10-25T01:15:39+05:30 | Codex | Added the overhead roll and actual-physics boundary tests. Human review pending. Isolated Godot 4.7.2 actor scenarios pass 2/2; original roll sound/rendered animation remain pending.
+
+
 - 2026-10-25T01:12:16+05:30 | Codex | Implemented floating courier movement, cardinal facing, footprint and room-context API with a real-physics owned-input scenario. Human review pending. Isolated Godot 4.7.2 scenario passes; corrected an inferred-string parse error during verification. Original directional art and combat migration remain pending.
 
 
