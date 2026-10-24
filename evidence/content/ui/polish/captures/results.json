@@ -1,0 +1,94 @@
+{
+  "engine": "4.7.2.stable.arch_linux.ed1daf0bf",
+  "renderer": "X11 / Compatibility / Mesa llvmpipe",
+  "private_display": true,
+  "fixture_states_rendered": 9,
+  "native_matches_engine_framebuffer": true,
+  "nonowner_pixels_unchanged": true,
+  "native_actions": [
+    {
+      "action": "music",
+      "payload": {
+        "direction": 1
+      }
+    },
+    {
+      "action": "effects",
+      "payload": {
+        "direction": -1
+      }
+    },
+    {
+      "action": "effects",
+      "payload": {
+        "direction": 1
+      }
+    }
+  ],
+  "cancel_title_quit": true,
+  "pixel_exact_integer_2x": true,
+  "long_prompt_footer_lines": 2,
+  "commands": [
+    [
+      "godot",
+      "--path",
+      "/home/midhun/Coading/GloamThread-content",
+      "--display-driver",
+      "x11",
+      "--rendering-method",
+      "gl_compatibility",
+      "--audio-driver",
+      "Dummy",
+      "--resolution",
+      "960x360",
+      "--position",
+      "0,0",
+      "res://scenes/ui/menu_preview.tscn",
+      "--",
+      "--menu",
+      "settings",
+      "--capture-dir",
+      "/tmp/gloamthread-polish-ui-captures/1x"
+    ],
+    [
+      "godot",
+      "--path",
+      "/home/midhun/Coading/GloamThread-content",
+      "--display-driver",
+      "x11",
+      "--rendering-method",
+      "gl_compatibility",
+      "--audio-driver",
+      "Dummy",
+      "--resolution",
+      "1920x720",
+      "--position",
+      "0,0",
+      "res://scenes/ui/menu_preview.tscn",
+      "--",
+      "--menu",
+      "settings"
+    ],
+    [
+      "godot",
+      "--path",
+      "/home/midhun/Coading/GloamThread-content",
+      "--display-driver",
+      "x11",
+      "--rendering-method",
+      "gl_compatibility",
+      "--audio-driver",
+      "Dummy",
+      "--resolution",
+      "960x360",
+      "--position",
+      "0,0",
+      "res://scenes/ui/menu_preview.tscn",
+      "--",
+      "--menu",
+      "settings",
+      "--long-prompts"
+    ]
+  ],
+  "limits": "UI fixture only; no physical gamepad, keyboard rollover, full application or human acceptance"
+}

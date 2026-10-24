@@ -18,23 +18,6 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def tile_visible(tile_id, x, y):
-    """Small authored fixture silhouettes, independent of the validator masks."""
-    if tile_id.startswith("corner_outer_"):
-        corner = tile_id.rsplit("_", 1)[1]
-        xx, yy = (15 - x if corner[1] == "r" else x), (15 - y if corner[0] == "b" else y)
-        return xx + yy > 3
-    if tile_id.startswith(("one_way_", "bridge_")):
-        part = tile_id.rsplit("_", 1)[1]
-        left, right = (2 if part in ("left", "single") else 0), (13 if part in ("right", "single") else 15)
-        return 1 <= y <= 4 and left <= x <= right or y == 5 and left + 2 <= x <= right - 2
-    if tile_id.startswith("hazard_"):
-        rows = (0, 0, 0, 0, 0x1010, 0x1010, 0x3838, 0x3838, 0x3838, 0x3838,
-                0x7c7c, 0x7c7c, 0x7c7c, 0x7e7e, 0xfefe, 0xffff)
-        return bool(rows[y] & (1 << (15 - x)))
-    return True
-
-
 class AssetValidationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -59,7 +42,7 @@ class AssetValidationTests(unittest.TestCase):
         self.image("diagnostic_mover_v1", (32, 32), "sprite_atlas", (32, 32), [(0, 0, 32, 32)], (16, 28))
         self.image("diagnostic_terrain_v1", (160, 120), "tile_atlas", (16, 16),
                    [(2 + x * 20, 2, 16, 16) for x in range(4)], (0, 0))
-        self.records[-1]["tile_ids"] = ["solid_fill", "solid_top", "one_way_middle", "hazard_middle"]
+        self.records[-1]["tile_ids"] = ["floor_path_1", "floor_path_2", "floor_grass_1", "floor_grass_2"]
         self.image("font_texture_v1", (96, 48), "image")
         font_path = self.root / "assets/generated/diagnostic/font.fnt"
         glyphs = list(range(32, 127)) + [65533]
@@ -71,7 +54,7 @@ class AssetValidationTests(unittest.TestCase):
         self.records.append({"id": "font_v1", "kind": "font", "path": str(font_path.relative_to(self.root)),
                              "sha256": digest(font_path), "diagnostic": False, "sources": [self.source],
                              "texture_id": "font_texture_v1", "glyphs": glyphs})
-        self.manifest = {"schema_version": 1, "content_version": "phase1-v1", "generator_version": "test-1",
+        self.manifest = {"schema_version": 1, "content_version": "overhead-v1", "generator_version": "test-1",
                          "seed": 18427, "stage": "diagnostic", "assets": self.records, "sfx": {}, "music": {}}
 
     def image(self, identifier, size, kind, cell=None, frames=None, origin=None, folder="diagnostic"):
@@ -84,14 +67,8 @@ class AssetValidationTests(unittest.TestCase):
         image = Image.new("RGBA", size)
         if frames:
             colour = (85, 130, 150, 255) if identifier == "fixed_neri_v1" else (120, 170, 90, 255)
-            for index, (x, y, width, height) in enumerate(frames):
-                if identifier.startswith("terrain_") or identifier == "diagnostic_terrain_v1":
-                    for yy in range(height):
-                        for xx in range(width):
-                            if tile_visible(validator.TILE_IDS[index], xx, yy):
-                                image.putpixel((x + xx, y + yy), colour)
-                else:
-                    image.paste(colour, (x, y, x + width, y + height))
+            for x, y, width, height in frames:
+                image.paste(colour, (x, y, x + width, y + height))
         if identifier.startswith("background_"):
             layer = identifier.rsplit("_", 2)[1]
             point = {"far": (1, 1), "middle": (2, 2), "near": (3, 3)}[layer]
@@ -176,7 +153,7 @@ class AssetValidationTests(unittest.TestCase):
     def test_bad_frames_and_animation_ticks(self):
         self.records[0]["frames"][0][0] = -1
         self.assert_error("frames")
-        self.records[0]["animations"]["run"]["ticks"] = [0]
+        self.records[0]["animations"]["run_down"]["ticks"] = [0]
         self.assert_error("ticks")
 
     def test_overlapping_frames(self):
@@ -192,7 +169,7 @@ class AssetValidationTests(unittest.TestCase):
         self.assert_error("diagnostic runtime path")
 
     def test_missing_animation(self):
-        del self.records[0]["animations"]["downed"]
+        del self.records[0]["animations"]["downed_down"]
         self.assert_error("downed")
 
     def test_missing_glyph_and_font_texture(self):
@@ -249,12 +226,15 @@ class AssetValidationTests(unittest.TestCase):
                 offset = 0
                 record["animations"] = {}
                 for state, length in clips.items():
-                    record["animations"][state] = {"frames": list(range(offset, offset + length)), "ticks": [6] * length, "loop": False}
+                    base = state.rsplit("_", 1)[0] if identifier in ("fixed_tavi_v1", "fixed_neri_v1") else ""
+                    ticks = validator.COURIER_TICKS[base].copy() if base else [6] * length
+                    record["animations"][state] = {"frames": list(range(offset, offset + length)), "ticks": ticks,
+                                                    "loop": base in {"idle", "run", "downed"}}
                     offset += length
             return record
 
         for identifier in ("fixed_tavi_v1", "fixed_neri_v1"):
-            sprite(identifier, (32, 48), 8, 32, (16, 43), validator.COURIER_CLIPS)
+            sprite(identifier, (32, 48), 8, 128, (16, 43), validator.COURIER_CLIPS)
         sprite("oru_v1", (32, 48), 8, 8, (16, 43), {"idle": 4, "talk": 2, "acknowledge": 2})
         for identifier, count in (("spoolmite_v1", 16), ("wickwing_v1", 14)):
             sprite(identifier, (32, 32), 8, count, (16, 28), validator.ENEMY_CLIPS[identifier])
@@ -300,13 +280,60 @@ class AssetValidationTests(unittest.TestCase):
             record["sha256"] = digest(path)
         self.assert_error("canonical_mask")
 
+    def test_overhead_facing_bank_cannot_reuse_another_direction(self):
+        self.full_fixture()
+        record = next(record for record in self.records if record["id"] == "fixed_tavi_v1")
+        record["animations"]["slash_up"]["frames"] = record["animations"]["slash_down"]["frames"].copy()
+        self.assert_error("declared facing/state bank")
+
+    def test_attack_pose_timing_cannot_drift_from_the_hit_window(self):
+        self.full_fixture()
+        record = next(record for record in self.records if record["id"] == "fixed_neri_v1")
+        record["animations"]["special_right"]["ticks"] = [3, 3, 3, 3, 10]
+        self.assert_error("combat presentation contract")
+
+    def test_attack_cannot_loop_after_its_recovery(self):
+        self.full_fixture()
+        record = next(record for record in self.records if record["id"] == "fixed_tavi_v1")
+        record["animations"]["slash_left"]["loop"] = True
+        self.assert_error("loop policy")
+
+    def test_missing_fourth_direction_is_rejected(self):
+        self.full_fixture()
+        record = next(record for record in self.records if record["id"] == "fixed_neri_v1")
+        del record["animations"]["run_up"]
+        self.assert_error("run_up: required animation missing")
+
+    def test_oru_clip_alias_cannot_bypass_the_runtime_name(self):
+        self.full_fixture()
+        record = next(record for record in self.records if record["id"] == "oru_v1")
+        record["animations"]["restored"] = record["animations"].pop("acknowledge")
+        self.assert_error("acknowledge: required animation missing")
+
+    def test_effect_cannot_rename_the_runtime_play_clip(self):
+        self.full_fixture()
+        record = next(record for record in self.records if record["id"] == "effect_slash_v1")
+        record["animations"]["wrong_clip"] = record["animations"].pop("play")
+        self.assert_error("play: required animation missing")
+
+    def test_transient_effect_playback_cannot_loop_forever(self):
+        self.full_fixture()
+        record = next(record for record in self.records if record["id"] == "effect_slash_v1")
+        record["animations"]["play"]["loop"] = True
+        self.assert_error("effect playback must finish")
+
+    def test_sideview_version_does_not_admit_an_overhead_bundle(self):
+        self.full_fixture()
+        self.manifest["content_version"] = "phase1-v1"
+        self.assert_error("expected overhead-v1")
+
     def test_equal_theme_edge_damage_is_rejected(self):
         self.full_fixture()
         for theme in ("ember", "moss"):
             record = next(record for record in self.records if record["id"] == f"terrain_{theme}_v1")
             path = self.root / record["path"]
             image = Image.open(path).convert("RGBA")
-            x, y, _, _ = record["frames"][record["tile_ids"].index("solid_top")]
+            x, y, _, _ = record["frames"][record["tile_ids"].index("wall_edge_north")]
             image.putpixel((x + 8, y), (0, 0, 0, 0))
             image.save(path)
             record["sha256"] = digest(path)
@@ -393,7 +420,7 @@ class AssetValidationTests(unittest.TestCase):
     def test_intentional_animation_frame_repeats_remain_valid(self):
         self.full_fixture()
         record = next(record for record in self.records if record["id"] == "fixed_tavi_v1")
-        record["animations"]["idle"]["frames"] = [0, 0, 0, 0]
+        record["animations"]["idle_down"]["frames"] = [0, 0, 0, 0]
         self.assertEqual(self.validate(), [])
 
     def test_full_marker_and_directory_cannot_hide_diagnostic_dependency(self):
@@ -420,8 +447,8 @@ class AssetValidationTests(unittest.TestCase):
     def test_full_clip_budget_and_expected_kind(self):
         self.full_fixture()
         record = next(record for record in self.records if record["id"] == "fixed_tavi_v1")
-        record["animations"]["run"]["frames"] = [0]
-        record["animations"]["run"]["ticks"] = [6]
+        record["animations"]["run_down"]["frames"] = [0]
+        record["animations"]["run_down"]["ticks"] = [6]
         self.assert_error("requires 6 frames")
         record["kind"] = "image"
         self.assert_error("required kind")
@@ -475,7 +502,7 @@ class AssetValidationTests(unittest.TestCase):
         for theme in ("ember", "moss"):
             record = self.image(f"terrain_{theme}_v1", (160, 120), "tile_atlas", (16, 16),
                                 [(2 + x * 20, 2, 16, 16) for x in range(4)], (0, 0))
-            record["tile_ids"] = ["solid_fill", "solid_top", "one_way_middle", "hazard_middle"]
+            record["tile_ids"] = ["floor_path_1", "floor_path_2", "floor_grass_1", "floor_grass_2"]
         record = self.records[-1]
         path = self.root / record["path"]
         image = Image.open(path).convert("RGBA")

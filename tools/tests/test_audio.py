@@ -46,9 +46,9 @@ class AudioGenerationTests(unittest.TestCase):
 
     def test_complete_distinct_semantic_inventory(self) -> None:
         self.assertEqual(set(self.sfx), set(audio.CUE_NAMES))
-        self.assertEqual(set(self.music), {"exploration", "boss", "ending"})
-        self.assertEqual(len(self.by_id), 21)
-        self.assertEqual(len({item["sha256"] for item in self.records}), 21)
+        self.assertEqual(set(self.music), {"exploration", "boss", "boss_final", "ending"})
+        self.assertEqual(len(self.by_id), 23)
+        self.assertEqual(len({item["sha256"] for item in self.records}), 23)
         self.assertEqual(set(self.by_id), set(self.sfx.values()) | set(self.music.values()))
 
     def test_actual_wave_format_frames_and_provenance(self) -> None:
@@ -85,10 +85,13 @@ class AudioGenerationTests(unittest.TestCase):
                 self.assertLessEqual(int(np.max(np.abs(pcm[-3:].astype(np.int32)))), 3)
 
     def test_music_lengths_stereo_and_real_loop_seams(self) -> None:
-        for name, seconds in (("exploration", 48), ("boss", 36), ("ending", 18)):
+        for name, limits in (("exploration", (45, 90)), ("boss", (45, 60)), ("boss_final", (45, 60)), ("ending", (15, 30))):
             record = self.by_id[self.music[name]]
             _, pcm = read_pcm(self.root / record["path"])
-            self.assertEqual(len(pcm), 44100 * seconds)
+            track = self.tracks[name]
+            expected_frames = round(44100 * track["beats"] * 60 / track["bpm"])
+            self.assertEqual(len(pcm), expected_frames)
+            self.assertTrue(limits[0] <= len(pcm) / 44100 <= limits[1])
             self.assertFalse(np.array_equal(pcm[:, 0], pcm[:, 1]))
             if name == "ending":
                 self.assertIsNone(record["loop_start"])
@@ -99,6 +102,22 @@ class AudioGenerationTests(unittest.TestCase):
             jumps = np.abs(np.diff(join, axis=0))
             self.assertLessEqual(int(jumps[127].max()), 1)
             self.assertLessEqual(int(jumps[126:129].max()), 3)
+
+    def test_roll_cue_fits_the_twelve_tick_move_and_is_distinct(self) -> None:
+        self.assertIn("roll", self.sfx)
+        record = self.by_id[self.sfx["roll"]]
+        params, pcm = read_pcm(self.root / record["path"])
+        self.assertEqual(params.nchannels, 1)
+        self.assertLessEqual(params.nframes, 44100 * 12 // 60)
+        self.assertGreater(params.nframes, 44100 // 20)
+        signal = pcm[:, 0].astype(np.float64) / 32767
+        self.assertGreater(float(np.sqrt(np.mean(signal * signal))), .008)
+        self.assertLess(float(np.max(np.abs(signal))), .25)
+        for other_name in ("jump", "dash"):
+            _, other = read_pcm(self.root / self.by_id[self.sfx[other_name]]["path"])
+            other = other[:len(signal), 0].astype(np.float64) / 32767
+            similarity = abs(float(np.dot(signal, other) / (np.linalg.norm(signal) * np.linalg.norm(other))))
+            self.assertLess(similarity, .75, "roll must not be a shortened copy of " + other_name)
 
     def test_non_looping_cues(self) -> None:
         for asset_id in self.sfx.values():
@@ -121,12 +140,15 @@ class AudioGenerationTests(unittest.TestCase):
 
     def test_representative_simultaneous_boss_events_have_headroom(self) -> None:
         # A bounded offline mix check; this is not proof of the runtime voice mix.
-        _, music = read_pcm(self.root / self.by_id[self.music["boss"]]["path"])
-        mixed = music[44100 * 8:44100 * 10].astype(np.float64) / 32767.0
-        for name in ("ember_arc", "spore_bolt", "enemy_warning", "hit", "hurt"):
-            _, cue = read_pcm(self.root / self.by_id[self.sfx[name]]["path"])
-            mixed[:len(cue)] += cue.astype(np.float64) / 32767.0
-        self.assertLess(float(np.max(np.abs(mixed))), 0.9)
+        for track in ("boss", "boss_final"):
+            _, music = read_pcm(self.root / self.by_id[self.music[track]]["path"])
+            for seconds in (0, 8, 24, 40):
+                with self.subTest(track=track,seconds=seconds):
+                    mixed = music[44100 * seconds:44100 * (seconds + 2)].astype(np.float64) / 32767.0
+                    for name in ("ember_arc", "spore_bolt", "enemy_warning", "hit", "hurt"):
+                        _, cue = read_pcm(self.root / self.by_id[self.sfx[name]]["path"])
+                        mixed[:len(cue)] += cue.astype(np.float64) / 32767.0
+                    self.assertLess(float(np.max(np.abs(mixed))), 0.9)
 
     def test_unknown_instrument_fails_with_context(self) -> None:
         source = copy.deepcopy(self.cues["jump"])
@@ -140,7 +162,7 @@ class AudioGenerationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "extends beyond cue"):
             audio.render_cue("jump", cue, self.instruments, 18427)
         track = copy.deepcopy(self.tracks["ending"])
-        track["parts"][0]["notes"][0][0] = 23.9
+        track["parts"][0]["notes"][0][0] = track["beats"] - 0.1
         with self.assertRaisesRegex(ValueError, "extends beyond score"):
             audio.render_track("ending", track, self.instruments, 18427)
 

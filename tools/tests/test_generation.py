@@ -24,8 +24,9 @@ class GenerationTests(unittest.TestCase):
             self.assertEqual(first, second)
             self.assertEqual(manifest_bytes, (output / "assets/manifest.json").read_bytes())
             self.assertEqual(validate(output, "full"), [])
-            self.assertEqual(len(first["sfx"]), 18)
-            self.assertEqual(len(first["music"]), 3)
+            self.assertEqual(len(first["sfx"]), 19)
+            self.assertEqual(first["content_version"], "overhead-v1")
+            self.assertEqual(len(first["music"]), 4)
             self.assertTrue(all(not item["diagnostic"] for item in first["assets"]))
 
     def test_diagnostic_contract_and_repeatability(self):
@@ -43,7 +44,7 @@ class GenerationTests(unittest.TestCase):
             for courier in ("tavi", "neri"):
                 asset = assets[f"fixed_{courier}_v1"]
                 self.assertEqual(asset["origin"], [16, 43])
-                self.assertEqual(len(asset["animations"]), 11)
+                self.assertEqual(len(asset["animations"]), 36)
                 with Image.open(output / asset["path"]) as image:
                     self.assertEqual(image.size, (32, 48))
             self.assertEqual(len(assets["font_v1"]["glyphs"]), 96)
