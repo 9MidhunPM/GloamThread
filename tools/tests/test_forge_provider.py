@@ -107,6 +107,8 @@ class ForgeProviderTests(unittest.TestCase):
     def make_candidate(self, *args, _stage=None):
         """A structurally valid mocked-converter result, never a runtime fixture."""
         stage = Path(args[3]) if len(args) >= 4 else (_stage or self.job_dir)
+        # A real successful converter always emits an editable rig beside its bundle.
+        (stage / "rig.json").write_text(json.dumps(make_rig(PROPOSAL["rig_id"])))
         target = stage / "candidate"
         target.mkdir(exist_ok=False)
         files = {

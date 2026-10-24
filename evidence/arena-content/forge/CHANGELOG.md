@@ -1,5 +1,13 @@
 # Agent 2 forge changelog
 
+## 2026-10-25T03:47:24+05:30 — Recover retained image boards without another request
+
+- Added safe source-layout staging and a no-rig `bake` bootstrap for received, hash-verified raw boards. Recovery verifies the original/normalized source, frozen approved proposal, received request identity, raw PNGs and output hashes without loading provider settings or constructing the SDK.
+- Both generation and recovery convert immutable staging copies. Existing rig rebakes preserve their normal path; changed source-layout hashes require a separate local correction job instead of silently reusing old parts. Project conversion reasons now reach failed status messages while SDK bodies remain hidden.
+- Candidate and editable-art publication retain rollback protection. Invalid layouts, modified caches, mismatched approvals, conversion errors and publication faults preserve previous previews/provenance and add no reservation.
+- Validation: full Python suite 163/163 PASS; combined provider/recovery suite 51/51 PASS, including 13 recovery scenarios, real authored non-grid/hazy-board rejection → reviewed-layout conversion → unchanged local rebake, bad-layout/cache subcases and publication rollback. Compilation, pack/link and whitespace checks PASS. Independent read-only review found no P0/P1 issue and separately passed all 13 recovery tests; no live API calls or real job/ledger access occurred in this lane.
+- Limitations: synthetic authored fixtures establish the local recovery boundary, not acceptance of the live generated artwork, its drawing fidelity, animation quality or the rendered ROI UI. Root owns those checks and final integration.
+
 ## 2026-10-25T03:11:00+05:30 — Exercise the real offline CLI boundary
 
 - Added a subprocess regression for the same shell-free `bake --job` command launched by Godot, including an absolute job path containing spaces.
