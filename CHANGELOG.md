@@ -364,6 +364,11 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-world -->
 
+### 2026-10-25 02:08:22 +0530 — Budget the campaign for real-time execution
+
+- Declared a 300-second scenario timeout for the ordinary-input campaign, whose verified route takes about 99 seconds at actual 60 Hz. This uses the input worker's coordinated runner API; explicit CLI timeout remains authoritative. Only the budget changes, not route commands, success criteria or test discovery. Whitespace check passes; native timing remains the integrator's pending gate.
+
+
 ### 2026-10-25 02:07:36 +0530 — Full overhead campaign passes through ordinary owned input
 
 - Integrated overhead core 5162c34 and completed the campaign acceptance driver against the actual App/catalog/media. Corrected the test's unit-vector dash mask and waited for captured audio playbacks to retire before exit; no production movement/combat tuning was needed.

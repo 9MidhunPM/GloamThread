@@ -117,6 +117,11 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-world -->
 
+### 2026-10-25 02:08:22 +0530 — Budget the campaign for real-time execution
+
+- OpenAI Codex coordinated the route's 300-second wall-clock budget with the runner owner so the verified 99-second campaign can run without fixed-FPS acceleration. No gameplay or acceptance assertion changes; no new native-run claim.
+
+
 ### 2026-10-25 02:07:36 +0530 — Verify the production overhead route
 
 - Tool: OpenAI Codex merged the published consumer/media branch and ran the authored ordinary-input campaign gate. Fixed only the driver's normalized-direction mask and asynchronous test audio retirement.

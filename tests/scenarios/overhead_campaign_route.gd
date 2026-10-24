@@ -18,6 +18,12 @@ var _dash_from: Array[Vector2] = []
 var _fight_target_ids: Array[int] = [0, 0]
 
 
+func timeout_seconds() -> int:
+	# The successful route is about 99 seconds at the real 60 Hz clock.
+	# The runner's explicit CLI override remains authoritative.
+	return 300
+
+
 func run() -> void:
 	process_physics_priority = -100 # Commands are ready before InputRouter's poll.
 	for slot in 2:
