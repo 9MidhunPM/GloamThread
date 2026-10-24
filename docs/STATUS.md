@@ -16,7 +16,7 @@ Godot 4.7.2 standard import and active suites pass: **12 arena scenarios, 154 cr
 
 Ordinary-input automated routes clear solo twenty waves and co-op twenty-five including the victory/endless transition, without health/position/damage/currency/progression overrides or engine errors. Native Wayland/OpenGL captures cover title, lobby, creator, combat and shops at 1920×1080; the final controlled 32-enemy/67-projectile fixture measured median 6.891 ms, p95 11.779 ms and p99 14.486 ms over ten seconds. This is explicit offscreen native rendering, not scanout FPS or a human playtest. [Evidence and commands](../evidence/arena-runtime/README.md).
 
-An official Linux QA export has also completed twenty-five waves in a network namespace, and the normal package booted outside the checkout without networking. Those earlier export records predate the final generated default/correction UI; final package identity and its independent checks are recorded in [SUBMISSION.md](../SUBMISSION.md) when assembled.
+The final official Linux QA export from `4e6fd56` cleared twenty-five waves in 34,142 physics ticks outside the checkout in a network namespace (loopback down, no routes), selecting Kiln Fox and Thistlepaw. It reports no downs or engine errors. The normal package separately booted offline and its actual fullscreen title was inspected. The published ZIP digest matches the local archive and all 28 entries passed integrity checks. [Exact package identity](../SUBMISSION.md).
 
 ## Live generation and budget
 

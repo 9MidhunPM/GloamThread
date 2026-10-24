@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-25T04:26:31+05:30 — Publish the tested Linux arena candidate
+
+- Merged the authorized wave implementation to main, exported clean implementation4e6fd56 and published v0.2.0-arena with exact BUILD identity/checksum. Replaced stale campaign submission text and linked the current download.
+- Validation: final official QA export clears25waves/34,142ticks from cwd/tmp in a network namespace with Kiln Fox/Thistlepaw and no downs/engine errors; normal package boots offline and its visible fullscreen title was inspected. All28archive entries/payload hashes pass and GitHub digest matches. Captures/network/source records retained under evidence/arena-runtime/.
+- Limits: forced30-frame exit notes two audio ObjectDB instances; no script/resource errors. Physical devices, listening and fresh-human play/balance remain unverified. No organizer submission or new model request occurred.
+
 ### 2026-10-25T04:18:53+05:30 — Ship generated artwork and recover cached layouts in game
 
 - Integrated the reviewed real Kiln Fox as default P1, retained its editable sources/receipts and used all generated material panels. Added six directional special effects and kept fighters/projectiles visible in dense crowds.

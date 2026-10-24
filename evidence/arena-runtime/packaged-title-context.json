@@ -1,0 +1,11 @@
+{
+  "recorded_at": "2026-10-25T04:26:31+05:30",
+  "implementation_commit": "4e6fd56f2e1971c2be7aec1205f10f6b742495eb",
+  "executable_sha256": "1319dac623787c79b1deaa5a40d03cb45d359e6941d072b4d61f9f9f7898f22a",
+  "display": "Wayland, official Godot 4.7.2 Linux export",
+  "capture": "Hypruse lossless window screenshot, visible fullscreen package title. Original 2880x1800 physical capture, 2304x1440 logical monitor at scale 1.25. The 1920x1080 design is integer letterboxed.",
+  "capture_sha256": "05e8e7d4050d12167197564ac86d4969fdd2c490b11ecafd83f897712369995d",
+  "normal_offline_boot": "unshare --user --map-root-user --net /tmp/gloamthread-arena-release-4e6fd56/Gloamthread-0.2.0-arena-linux-x86_64/Gloamthread.x86_64 --headless --quit-after 30 (cwd /tmp); exit 0. Forced exit warns about two audio ObjectDB instances; no script/resource errors.",
+  "visible_log": "Official 4.7.2 startup; compositor lacks optional xdg-toplevel-icon protocol; no script/resource errors.",
+  "human_playtest": false
+}

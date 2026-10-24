@@ -1,0 +1,26 @@
+{
+  "implementation_commit": "4e6fd56f2e1971c2be7aec1205f10f6b742495eb",
+  "command": "unshare --user --map-root-user --net python3 /tmp/gloamthread-arena-offline-final.py",
+  "working_directory": "/tmp",
+  "interfaces": [
+    {
+      "ifindex": 1,
+      "ifname": "lo",
+      "flags": [
+        "LOOPBACK"
+      ],
+      "mtu": 65536,
+      "qdisc": "noop",
+      "operstate": "DOWN",
+      "group": "default",
+      "txqlen": 1000,
+      "link_type": "loopback",
+      "address": "00:00:00:00:00:00",
+      "broadcast": "00:00:00:00:00:00",
+      "addr_info": []
+    }
+  ],
+  "routes": [],
+  "qa_binary_sha256": "525ae65d783d3ca7c62397774f620e0338267f8597f3b9256976c036584ba1a3",
+  "entry": "official Linux QA export with arena_qa observation entry; same production gameplay/content, synthetic owned normal input"
+}
