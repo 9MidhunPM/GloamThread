@@ -230,6 +230,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T02:08:28+05:30 — Actors against production overhead content
+
+- Changed: Added real-profile/atlas actor checks in authored Atrium, Causeway and Gallery geometry, including both-direction shore crossings at three offsets, blocked-roll recovery and simultaneous combat against one actual enemy.
+- Why: Verify the frozen actor seams against integrated room collision and original resources rather than relying only on diagnostic fixtures.
+- Validation: Focused Godot 4.7.2 scenario passes with the full overhead content bundle. Both profiles cross both gap axes, recover into an immediate newly faced attack after wall contact, select the proper original idle bank and produce one Gallery enemy outcome. Exact-neutral assertion was corrected to allow the engine safe margin settling less than 0.1px away from water.
+- Limitations: Controlled starts and progress setup; this does not claim a full campaign route, rendered quality or human combat feel. No runtime actor defect was reproduced.
+
+
 ### 2026-10-25T01:37:34+05:30 — Match traversal fixture to atomic boss rewards
 
 - Changed: Threadstep fixture now grants boss_spoolwarden, threadstep and shortcut_bell together and asserts the reward commit succeeds.
