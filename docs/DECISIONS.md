@@ -69,3 +69,8 @@ Main links: r00↔r01↔r02↔r03↔r04↔r05; boss opens r05↔r01 shortcut. r0
 - Save team progress once: version, fixed character profile IDs, checkpoint ID, explored rooms, team unlocks, restored anchors, boss/secret flags. Settings/device bindings separate. Load at safe checkpoint, never an arbitrary combat-frame snapshot.
 - Content tooling implements `tools/generate_assets.py`, `tools/validate_content.py` and `tools/validate_assets.py`. The runtime branch provides the built-in GDScript scenario runner `tests/run_tests.gd`; no external test addon is mandatory. See the README for checkout-specific commands.
 - Record the branch/version and actual conditions for every import, gameplay, rendering, audio or performance result. Structural asset/content checks do not establish a complete co-op playthrough.
+
+
+### Emergency startup diagnostics
+
+Validate the entire required content catalog before constructing original-font menus. If a required asset, including that font, is unavailable, show a readable engine-default diagnostic and Quit without creating the shared game session. This is an error report, never a substitute gameplay skin/font or permission to continue with an invalid bundle. The engine notice inventory accompanies the export.

@@ -18,7 +18,7 @@ Devin Hack Kochi allows Devin and other AI tools, models and providers without m
 
 ### Run the project
 
-The production game includes title/join, all eight rooms, combat, cooperation, save/Continue, settings and an ending. Nineteen engine scenarios include a complete ordinary-input route; native/export acceptance is recorded separately.
+The production game includes title/join, all eight rooms, combat, cooperation, save/Continue, settings and an ending. Twenty engine scenarios include a complete ordinary-input route; native/export acceptance is recorded separately.
 
 1. **Prerequisites and versions:** Arch Linux (first target), Godot **4.7.2 standard** (`godot --version` → `4.7.2.stable…`, not mono), Python ≥ 3.10 with Pillow and numpy, Git. Install with `sudo pacman -Syu --needed godot git python python-pillow python-numpy`. Details in [docs/SETUP.md](docs/SETUP.md).
 2. **Dependency installation:** none beyond the system packages above. No npm, .NET, C++, database or service.
@@ -36,7 +36,7 @@ The production game includes title/join, all eight rooms, combat, cooperation, s
 ### Current status
 
 - **Content branch:** eight authored rooms, fixed profiles, dialogue, 47 original manifested art/audio/font assets and the complete Python pipeline. Both full validators and 79 Python tests pass after content QA; two seed-18427 rebuilds matched. See [content evidence](evidence/content/README.md).
-- **Runtime branch:** production catalogs/animation/audio, combat, enemies/boss, team progression, anchors/exits/recovery and validated save/settings stores are integrated. Nineteen integrated engine scenarios pass, including the complete actual-App route and UI layout checks; the earlier core staged-copy check passed twelve. See [runtime evidence](evidence/runtime/commands.md) and [movement limits](evidence/runtime/traversal.md).
+- **Runtime branch:** production catalogs/animation/audio, combat, enemies/boss, team progression, anchors/exits/recovery and validated save/settings stores are integrated. Twenty integrated engine scenarios pass, including the complete actual-App route and UI layout checks; the earlier core staged-copy check passed twelve. See [runtime evidence](evidence/runtime/commands.md) and [movement limits](evidence/runtime/traversal.md).
 - **Known limitations:** native/export checks are in progress; gamepad hardware, physical keyboard rollover, audio listening and fresh two-person playtests remain unverified. Human first-clear time, balance and enjoyment are not established by the automated route. Keyboard + keyboard is the primary input mode. [STATUS.md](docs/STATUS.md) records the current boundaries.
 - **Libraries, APIs, and public datasets used:** [Godot Engine](https://godotengine.org/) 4.7.2 (MIT), [Pillow](https://python-pillow.org/) (MIT-CMU), [NumPy](https://numpy.org/) (BSD-3). No game-content packs, stock art, fonts, music or sound libraries: every shipped sprite, tile, glyph, sound and line of dialogue is authored in this repository.
 

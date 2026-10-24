@@ -6,6 +6,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 1 — runtime and integration
 
+### 2026-10-25T00:31:03+05:30 — Keep corrupted startup readable when the original font is missing
+
+- Changed: Check the validated catalog before creating font-dependent menus/toasts. A required-resource failure now displays a bounded emergency diagnostic and Quit control, without creating a playable session or starting music. Only that failure screen uses the engine-default font.
+- Why: Final sandbox review reproduced an invisible error screen when the required original font record was removed. The error UI had depended on the unavailable resource it was reporting.
+- Validation: New startup-failure regression PASS; complete integrated suite PASS20/20 with no script errors. Valid startup/menu/campaign scenarios remain green. Final source is rebuilt and rechecked before publishing; earlier b96ad0e offline route passed, but its artifact is superseded by this correction.
+- Limitations: The emergency screen is diagnostic only and never substitutes missing gameplay content. Physical controller/rollover, listening and fresh-pair acceptance remain unverified.
+
 ### 2026-10-25T00:17:08+05:30 — Polish original-font menus and prepare reproducible Linux packaging
 
 - Changed: True-merged Agent2's complete native UI layout fixes/evidence. Critical values/bindings, scrollbars and long prompts are readable at1x/2x. Added the Linux package command, explicit license/provenance inventory, candidate launch guide, shipping exclusion of UI fixtures, and source/build identification for rendered QA. Toasts now have a readable backplate.

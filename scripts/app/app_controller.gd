@@ -10,6 +10,7 @@ var saves := SaveRepository.new()
 var settings_store := SettingsRepository.new()
 var settings: Dictionary = {}
 var screen: String = "title"
+var _fatal: bool = false
 var menu_owner: int = 0
 var _join_continue: bool = false
 var _swap_characters: bool = false
@@ -30,7 +31,11 @@ func _ready() -> void:
 	var loaded := settings_store.load_settings()
 	settings = loaded.settings
 	_assign_initial_sources()
-	catalog = ContentCatalog.load_bundle()
+	if catalog == null:
+		catalog = ContentCatalog.load_bundle()
+	if not catalog.errors.is_empty():
+		_show_fatal("Required game data could not load.\n" + "\n".join(catalog.errors))
+		return
 	var menu_script: GDScript = load("res://scripts/ui/game_menus.gd") as GDScript
 	if menu_script == null or not menu_script.can_instantiate():
 		_show_fatal("Menu data is missing. Please install a complete build.")
@@ -57,9 +62,6 @@ func _ready() -> void:
 	toast_layer.add_child(_toast_back)
 	toast_layer.add_child(_toast)
 	add_child(toast_layer)
-	if not catalog.errors.is_empty():
-		_show("error", "Game data could not load", "\n".join(catalog.errors), [_row("quit", "Quit")])
-		return
 	AudioDirector.register_bundle(catalog.assets)
 	_apply_settings()
 	InputRouter.device_lost.connect(_device_lost)
@@ -421,6 +423,10 @@ func _back() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if _fatal:
+		if event is InputEventKey and event.pressed and event.physical_keycode == KEY_ESCAPE:
+			_quit_requested()
+		return
 	if screen == "reconnect" and event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_SPACE:
 		for index in 2:
 			if not InputRouter.is_waiting_for_device(index):
@@ -528,10 +534,31 @@ func _notify(message: String) -> void:
 
 
 func _show_fatal(message: String) -> void:
+	# Emergency engine-default text stays readable when the original font itself
+	# is absent. No gameplay/session is created with missing required resources.
+	_fatal = true
+	screen = "error"
+	var background := ColorRect.new()
+	background.size = Vector2(960, 360)
+	background.color = Color("#10141c")
+	add_child(background)
 	var label := Label.new()
-	label.position = Vector2(80, 120)
-	label.text = "Gloamthread: Two Ends\n" + message
+	label.name = "StartupErrorMessage"
+	label.position = Vector2(64, 48)
+	label.size = Vector2(832, 220)
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.add_theme_font_size_override("font_size", 18)
+	label.clip_text = true
+	label.text = "Gloamthread: Two Ends\nPlease install a complete build. Escape exits.\n" + message.left(700)
 	add_child(label)
+	var button := Button.new()
+	button.name = "StartupQuit"
+	button.position = Vector2(64, 292)
+	button.size = Vector2(160, 36)
+	button.text = "Quit"
+	button.pressed.connect(_quit_requested)
+	add_child(button)
+	button.grab_focus()
 
 
 func _notification(what: int) -> void:

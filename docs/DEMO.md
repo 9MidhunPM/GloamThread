@@ -8,10 +8,10 @@ Extract the whole archive, then:
 
 ```sh
 chmod +x Gloamthread.x86_64
-./Gloamthread.x86_64 --display-driver x11
+./Gloamthread.x86_64 --display-driver wayland
 ```
 
-Tested on Arch Linux / Hyprland with XWayland, Intel Core Ultra 7 255H and Intel integrated graphics, Compatibility/OpenGL. Godot, Python, accounts, keys and a network connection are not required by the packaged game. Other Linux distributions/hardware remain unverified. Native Wayland source QA was slower on the build laptop; X11/XWayland is the verified release baseline.
+Tested on Arch Linux / Hyprland with native Wayland and XWayland, Intel Core Ultra 7 255H and Intel integrated graphics, Compatibility/OpenGL. Godot, Python, accounts, keys and a network connection are not required by the packaged game. Other Linux distributions/hardware remain unverified. The official release template is the play baseline; editor/source-build timings differ. On an X11 desktop use `--display-driver x11`.
 
 Choose **New journey**, confirm each player's distinct input source, then **Begin journey**. Use Up/Down to select, Jump or Interact to choose, and Pause to go back. Mouse selection is also available. Only the menu owner navigates a shared screen.
 
