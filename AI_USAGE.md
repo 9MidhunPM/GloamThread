@@ -70,6 +70,11 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-input -->
 
+### 2026-10-25T01:16:49+05:30 — Codex: explicit gamepad admission
+
+Codex guarded negative device indices and verified owned Roll latching across synthetic reconnect/reassignment. Human review is pending. Three overhead input scenarios and editor import passed; physical hardware acceptance remains unverified.
+
+
 ### 2026-10-25T01:15:46+05:30 — Codex: atomic overhead progression and recovery
 
 Codex hardened the live progress mutator against partial traversal rewards and wrote actual-file save/backup/fault/settings regressions. Human review is pending. Two focused save scenarios and editor import passed; physical storage power-loss testing was not performed.

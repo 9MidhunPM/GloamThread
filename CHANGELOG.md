@@ -210,6 +210,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-input -->
 
+### 2026-10-25T01:16:49+05:30 — Require a live gamepad index for input ownership
+
+- Changed: InputRouter rejects negative gamepad indices during assignment/reconnect and keeps invalid indices neutral during polling. Added synthetic reconnect/reassignment checks proving held Roll suppression until release and independent partner ownership.
+- Why: A disconnected index must remain a recovery state, never an admitted input source.
+- Validation: Godot4.7.2 overhead input scenarios PASS3/3, covering Roll migration, planar normalization and device lifecycle; editor import and whitespace checks pass.
+- Limitations: Synthetic notifications/events do not certify physical controller hotplug or menu recovery visuals.
+
+
 ### 2026-10-25T01:15:46+05:30 — Protect live overhead reward transactions
 
 - Changed: TeamProgress validates dependency consistency before changing live flags, sharing the same rule with save admission. Incomplete boss/traversal outcomes leave progress untouched. Added actual-file overhead recovery, fault-boundary and settings-separation regressions.
