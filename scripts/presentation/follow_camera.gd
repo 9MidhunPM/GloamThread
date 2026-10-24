@@ -4,7 +4,7 @@ extends Camera2D
 ## Each instance belongs to its own SubViewport in the one shared World2D.
 
 const HALF_VIEW := Vector2(240.0, 180.0)
-const TARGET_OFFSET := Vector2(0.0, -24.0)
+const TARGET_OFFSET := Vector2(0.0, -5.0)
 const FOLLOW_RATE := 10.0
 
 var target: Node2D

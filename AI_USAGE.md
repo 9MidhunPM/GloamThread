@@ -103,6 +103,13 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-world -->
 
+### 2026-10-25 01:36:43 +0530 — Shared overhead session integration
+
+- Tool: OpenAI Codex connected the exclusive GameSession/SplitPresentation/FollowCamera files to the merged actor/input APIs and authored an isolated session regression. Added completion-based Oru progress and per-slot guidance without changing actor/input sources.
+- Checks: session fixture PASS; combined overhead 17/18 (one stale actor reward fixture reported for correction). Corrected the new test to use the complete boss/unlock/shortcut reward transaction. Null-catalog fixtures are not production-asset or playthrough evidence.
+- Human review: pending; root retains App/catalog/art publication ownership.
+
+
 ### 2026-10-25 01:28:24 +0530 — Overhead validator and admission regressions
 
 - Tool: OpenAI Codex implemented the world lane's overhead schema/route validation and 29 focused Python cases, aligned runtime bridge admission, and corrected opaque-ground draw ordering after source review.

@@ -308,6 +308,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-world -->
 
+### 2026-10-25 01:36:43 +0530 — Overhead session and per-courier guidance
+
+- Integrated actor/input branch ancestry, wired every courier/enemy to the room's planar collision queries and separate water body, and placed props with actors under shared feet sorting. Hazards use the real planar hurt rectangle and knockback; the camera follows the ground-plane centre.
+- Added explicit dialogue completion that commits met_oru once, QuestDirector objective/local-target consumers, separate living/proximity hints, bound Roll and locked-Dash HUD, boss phase/feedback and downed rescue guidance. Existing coordinator/save/revival transaction entry points remain intact.
+- Validation: new overhead_session_foundation scenario PASS, covering dialogue, paired same-tick repair, actor/enemy context, actual owned-input 60px Atrium dash, hazards, pause and local HUD ownership. Combined overhead suite: 17/18 PASS; the remaining actor Threadstep fixture commits an incomplete reward group rejected by the newer save contract (reported to its owner). Editor import has no script errors; sandbox socket-listen errors remain.
+- Limits: fixture placements and null art are explicit; final catalog/art integration, normal-input campaign and native presentation remain pending.
+
+
 ### 2026-10-25 01:28:24 +0530 — Overhead content admission and route guards
 
 - Migrated the public content validator to overhead-v1, the planar collider and exact opaque terrain slots. It now rejects unsafe floor entrances, missing cross-room references, disconnected rallies/interactions, bypassable paired repairs and removed Threadstep lessons. Both bridges require dry banks separated by at least four water tiles in Python and the runtime parser.

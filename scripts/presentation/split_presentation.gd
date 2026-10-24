@@ -32,7 +32,9 @@ func _ready() -> void:
 	viewport_a.add_child(world_root)
 	room_slot = _world_branch("RoomSlot")
 	actors = _world_branch("Actors")
+	actors.y_sort_enabled = true
 	effects = _world_branch("Effects")
+	effects.z_index = 5
 	viewport_b = _make_view("ViewB", 480, 5)
 	# Assign before either camera/CanvasItem enters viewport B's tree.
 	viewport_b.world_2d = viewport_a.world_2d
@@ -42,7 +44,7 @@ func _ready() -> void:
 	camera_b = FollowCamera.new()
 	camera_b.name = "CameraB"
 	viewport_b.add_child(camera_b)
-	_hud_shade(0, 60)
+	_hud_shade(0, 76)
 	_hud_shade(326, 34)
 	hud_a = _make_hud(8)
 	hud_b = _make_hud(488)
@@ -95,8 +97,9 @@ func _hud_shade(y: int, height: int) -> void:
 func _make_hud(x: int) -> Label:
 	var label := Label.new()
 	label.position = Vector2(x, 25)
-	label.size = Vector2(460, 40)
+	label.size = Vector2(460, 48)
 	label.add_theme_font_size_override("font_size", 8)
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(label)
 	return label
@@ -151,7 +154,7 @@ func follow_players(players: Array[PlayerController], bounds: Rect2) -> void:
 	camera_b.configure(players[1], bounds)
 
 
-func update_hud(players: Array[PlayerController], objective_text: String = "", hint: String = "", boss_actor: CombatEnemy = null) -> void:
+func update_hud(players: Array[PlayerController], objective_text: String = "", hints: Array[String] = [], boss_actor: CombatEnemy = null, team: TeamProgress = null, targets: Array[Dictionary] = []) -> void:
 	if players.size() != 2:
 		return
 	for index in 2:
@@ -166,12 +169,52 @@ func update_hud(players: Array[PlayerController], objective_text: String = "", h
 		label.text = "P%d %s | %s | %s" % [index + 1, name_text, device_name, readiness]
 		var bindings := InputRouter.bindings_of(index)
 		if bindings != null:
-			label.text += "\nJump %s  Slash %s  Special %s  Interact %s  Dash %s" % [bindings.prompt_label(CommandSnapshot.Action.JUMP), bindings.prompt_label(CommandSnapshot.Action.ATTACK), bindings.prompt_label(CommandSnapshot.Action.SPECIAL), bindings.prompt_label(CommandSnapshot.Action.INTERACT), bindings.prompt_label(CommandSnapshot.Action.DASH)]
+			var dash := "Dash locked" if team == null or not team.has_flag("threadstep") else "Dash %s" % bindings.prompt_label(CommandSnapshot.Action.DASH)
+			label.text += "\nRoll %s  Slash %s  Special %s  Interact %s  %s" % [bindings.prompt_label(CommandSnapshot.Action.ROLL), bindings.prompt_label(CommandSnapshot.Action.ATTACK), bindings.prompt_label(CommandSnapshot.Action.SPECIAL), bindings.prompt_label(CommandSnapshot.Action.INTERACT), dash]
 		if is_instance_valid(boss_actor):
-			label.text += "\nSpoolwarden %d/%d" % [boss_actor.health, boss_actor.max_health]
+			label.text += "\nSpoolwarden %d/%d | Phase %d" % [boss_actor.health, boss_actor.max_health, boss_actor.phase]
+			var feedback := boss_actor.feedback_text().replace("\n", " / ")
+			if not feedback.is_empty():
+				label.text += " | " + feedback
 		var objective_label: Label = _objective_a if index == 0 else _objective_b
-		objective_label.text = hint.replace("Interact", bindings.prompt_label(CommandSnapshot.Action.INTERACT)) if not hint.is_empty() and bindings != null else objective_text
+		var hint: String = hints[index] if index < hints.size() else ""
+		if player.downed:
+			hint = "Your partner must reach you and hold their Interact to revive"
+		elif players[1 - index].downed and hint.is_empty():
+			hint = "Reach your partner before the thread fades"
+		if bindings != null:
+			hint = hint.replace("Interact", bindings.prompt_label(CommandSnapshot.Action.INTERACT)) if not player.downed else hint
+		objective_label.text = hint if not hint.is_empty() else objective_text
+		if hint.is_empty() and not player.downed:
+			var direction := _target_hint(player, targets)
+			if not direction.is_empty():
+				objective_label.text += "\n" + direction
 		var hearts: Array[TextureRect] = _hearts_a if index == 0 else _hearts_b
 		for heart_index in hearts.size():
 			hearts[heart_index].visible = heart_index < player.max_hearts
 			hearts[heart_index].texture = _catalog.frame_texture("ui_v1", 0 if heart_index < player.hearts else 1)
+
+
+func _target_hint(player: PlayerController, targets: Array[Dictionary]) -> String:
+	var nearest: Dictionary = {}
+	var distance := INF
+	for target: Dictionary in targets:
+		var point: Variant = target.get("feet_position")
+		if not point is Vector2:
+			continue
+		var candidate: float = player.global_position.distance_squared_to(point)
+		if candidate < distance:
+			distance = candidate
+			nearest = target
+	if nearest.is_empty():
+		return ""
+	var delta: Vector2 = nearest.feet_position - player.global_position
+	var direction := ""
+	if absf(delta.y) > 16.0:
+		direction += "N" if delta.y < 0 else "S"
+	if absf(delta.x) > 16.0:
+		direction += "W" if delta.x < 0 else "E"
+	if direction.is_empty():
+		direction = "nearby"
+	var name_text: String = {"npc": "Oru", "exit": "Next exit", "anchor": "Anchor", "station": "Loom station", "spoolwarden": "Spoolwarden"}.get(str(nearest.get("kind", "")), "Goal")
+	return "%s: %s (%d tiles)" % [name_text, direction, ceili(sqrt(distance) / 16.0)]

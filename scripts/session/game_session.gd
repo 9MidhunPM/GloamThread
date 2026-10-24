@@ -8,6 +8,7 @@ signal room_changed(room_id: String)
 
 const PLAYER_SCENE := preload("res://scenes/actors/player.tscn")
 const Action := CommandSnapshot.Action
+const Quest := preload("res://scripts/session/quest_director.gd")
 const DOWNED_TICKS := 720
 const REVIVE_TICKS := 90
 
@@ -32,7 +33,7 @@ var current_room_id: String = "r00"
 var transition_count: int = 0
 var recovery_count: int = 0
 var pause_overlay: CanvasLayer
-var interaction_hint: String = ""
+var interaction_hints: Array[String] = ["", ""]
 var reduced_flash: bool = false
 var reduced_shake: bool = false
 
@@ -95,7 +96,7 @@ func _physics_process(_delta: float) -> void:
 		return
 	_process_interactions()
 	_damaged_slots.clear()
-	presentation.update_hud(players, objective(), interaction_hint, boss())
+	presentation.update_hud(players, objective(), interaction_hints, boss(), progress, local_targets())
 
 
 func _notification(what: int) -> void:
@@ -111,6 +112,18 @@ func request_mode(value: String, requester: int = 0) -> void:
 	get_tree().paused = value != "playing"
 	InputRouter.flush()
 	mode_changed.emit(mode, owner_slot)
+
+
+## UI calls this only after the complete authored sequence has been shown.
+func complete_dialogue() -> bool:
+	if mode != "dialogue":
+		return false
+	if dialogue_id == "oru_intro":
+		_commit_flags(["met_oru"])
+	dialogue_id = ""
+	request_mode("playing", owner_slot)
+	_refresh_hud()
+	return true
 
 
 func set_paused(value: bool) -> void:
@@ -138,9 +151,12 @@ func _load_room(room_id: String, entrance: String, restore_health: bool) -> bool
 	var next_room := Room.build(definition, not fixture_mode, catalog.assets if catalog != null else null, progress.flags)
 	_clear_encounter()
 	if is_instance_valid(room):
+		if is_instance_valid(room.entity_visuals) and not room.is_ancestor_of(room.entity_visuals):
+			room.entity_visuals.free()
 		room.free()
 	room = next_room
 	presentation.room_slot.add_child(room)
+	room.entity_visuals.reparent(presentation.actors)
 	current_room_id = definition.id
 	_latches.clear()
 	_hazards.clear()
@@ -165,7 +181,7 @@ func _load_room(room_id: String, entrance: String, restore_health: bool) -> bool
 			presentation.actors.add_child(player)
 			players.append(player)
 	for index in 2:
-		players[index].room_bounds = room.bounds()
+		players[index].set_room_context(room.bounds(), room.can_stand_at, room.can_threadstep, room.water_body)
 		if restore_health:
 			players[index].restore(positions[index])
 		else:
@@ -181,25 +197,20 @@ func _load_room(room_id: String, entrance: String, restore_health: bool) -> bool
 			enemy.configure(type, players, catalog.assets if catalog != null else null, room.bounds())
 			enemy.defeated.connect(_on_enemy_defeated)
 			presentation.actors.add_child(enemy)
+			enemy.set_room_context(room.bounds(), room.can_stand_at, room.can_threadstep, room.water_body)
 			enemies.append(enemy)
 		elif type == "checkpoint" and str(entity.checkpoint_id) == progress.checkpoint_id:
 			room.set_entity_state(str(entity.id), "checkpoint_lit")
-		elif type == "diagnostic_mover":
-			mover = DiagnosticMover.new()
-			mover.name = str(entity.id)
-			mover.origin_position = _feet(entity.tile)
-			mover.position = mover.origin_position
-			mover.range_pixels = float(entity.get("range_tiles", 6)) * 16.0
-			if not fixture_mode:
-				mover.sprite_texture = load("res://assets/generated/diagnostic/mover_diag.png") as Texture2D
-			presentation.actors.add_child(mover)
 	presentation.follow_players(players, room.bounds())
 	if catalog != null:
 		presentation.set_themes(catalog.assets, str(catalog.profiles[progress.profile_ids[0]].theme_id), str(catalog.profiles[progress.profile_ids[1]].theme_id))
-	progress.visit(room_id)
-	AudioDirector.play_music("ending" if progress.has_flag("loom_restored") else ("boss" if room_id == "r05" and not progress.has_flag("boss_spoolwarden") else "exploration"))
+	progress.visit(current_room_id)
+	if not fixture_mode:
+		AudioDirector.play_music("ending" if progress.has_flag("loom_restored") else ("boss" if room_id == "r05" and not progress.has_flag("boss_spoolwarden") else "exploration"))
 	_apply_charms()
-	room_changed.emit(room_id)
+	interaction_hints.assign(["", ""])
+	_refresh_hud()
+	room_changed.emit(current_room_id)
 	return true
 
 
@@ -225,10 +236,13 @@ func _process_hazards() -> void:
 	for player in players:
 		if player.downed:
 			continue
-		var body := Rect2(player.global_position + Vector2(-6, -24), Vector2(12, 24))
+		var body := player.hurt_rect()
 		for hazard in _hazards:
 			if body.intersects(hazard):
-				player.take_hit(1, Vector2(-player.facing * 60, -140))
+				var away := body.get_center() - hazard.get_center()
+				if away.is_zero_approx():
+					away = -player.facing_vector
+				player.take_hit(1, away.normalized() * 60.0)
 				break
 
 
@@ -259,11 +273,11 @@ func _process_revival() -> void:
 
 
 func _process_interactions() -> void:
-	interaction_hint = ""
+	interaction_hints.assign(["", ""])
 	for entity: Dictionary in room.definition.entities:
 		if entity.type == "secret" and not progress.has_flag(str(entity.flag)):
 			for player in players:
-				if not player.downed and player.position.distance_to(_centre(entity.tile)) < 28.0:
+				if not player.downed and player.position.distance_to(_feet(entity.tile)) < 28.0:
 					if _commit_flags([str(entity.flag)]):
 						AudioDirector.play_cue("checkpoint")
 						notice.emit("Lantern charm found. Both couriers carry its light.")
@@ -275,7 +289,7 @@ func _process_interactions() -> void:
 			continue
 		var partner := players[1 - slot]
 		if partner.downed and player.position.distance_to(partner.position) <= 40.0:
-			interaction_hint = "Hold Interact to revive your partner"
+			interaction_hints[slot] = "Hold Interact to revive your partner"
 			continue
 		var pressed := InputRouter.snapshot(slot).just_pressed(Action.INTERACT)
 		for entity: Dictionary in room.definition.entities:
@@ -286,13 +300,15 @@ func _process_interactions() -> void:
 						for flag: String in entity.requires_all:
 							open = open and progress.has_flag(flag)
 						if open:
-							interaction_hint = "Both couriers: rally here, then Interact"
+							interaction_hints[slot] = "Both couriers: rally here, then Interact"
+						else:
+							interaction_hints[slot] = _locked_hint(entity.requires_all)
 						if pressed:
 							request_transition(str(entity.id), slot)
 							return
 				"checkpoint", "npc":
-					if player.position.distance_to(_centre(entity.tile)) <= 40.0:
-						interaction_hint = "Interact: checkpoint" if entity.type == "checkpoint" else "Interact: talk to Oru"
+					if player.position.distance_to(_feet(entity.tile)) <= 40.0:
+						interaction_hints[slot] = "Interact: checkpoint" if entity.type == "checkpoint" else "Interact: talk to Oru"
 						if pressed:
 							if entity.type == "checkpoint":
 								_activate_checkpoint(entity)
@@ -306,8 +322,9 @@ func _process_interactions() -> void:
 						continue
 					var points: Array = entity.anchors if entity.type == "anchor_pair" else entity.stations
 					for point: Dictionary in points:
-						if player.position.distance_to(_centre(point.tile)) <= 36.0:
-							interaction_hint = "Interact: hold your end; partner takes the other"
+						if player.position.distance_to(_feet(point.tile)) <= 36.0:
+							var held: Dictionary = _latches.get(flag, {})
+							interaction_hints[slot] = "Your end is held. Your partner takes the other." if held.has(point.id) else "Interact: hold this end; partner takes the other"
 							if pressed:
 								_latch(entity, point, slot)
 								# Both owned edges may latch in one tick; do not discard P2.
@@ -366,6 +383,9 @@ func request_transition(exit_id: String, requester: int = 0) -> bool:
 		if player.downed or not _tile_rect(exit.rect).has_point(player.position):
 			notice.emit("Both living couriers must rally at the exit.")
 			return false
+	if catalog == null:
+		notice.emit("Fixture route: no campaign destination is loaded.")
+		return false
 	var destination := catalog.room(str(exit.target_room))
 	if destination == null or not destination.is_valid() or destination.spawn_positions(str(exit.target_entrance)).size() != 2:
 		notice.emit("The destination could not load. The current room is safe.")
@@ -460,16 +480,37 @@ func _apply_charms() -> void:
 		player.add_child(charm)
 
 
+func guidance() -> Dictionary:
+	if catalog == null:
+		return {"text": "Geometry fixture: campaign guidance unavailable", "reachable": false}
+	return Quest.describe(progress, current_room_id, catalog.world)
+
+
+func local_targets() -> Array[Dictionary]:
+	if not is_instance_valid(room):
+		return []
+	return Quest.local_targets(room.definition, guidance())
+
+
 func objective() -> String:
-	if progress.has_flag("loom_restored"):
-		return "Return together to Lantern Rest"
-	if progress.has_flag("bridge_causeway"):
-		return "Restore both stations at the Lantern Loom"
-	if progress.has_flag("threadstep"):
-		return "Take the shortcut; dash to Severed Causeway"
-	if progress.has_flag("bridge_spindle"):
-		return "Reach Broken Bell and release the trapped thread"
-	return "Find Oru, then restore the paired anchors at Spindle Steps"
+	return str(guidance().get("text", ""))
+
+
+func _refresh_hud() -> void:
+	if is_instance_valid(presentation):
+		presentation.update_hud(players, objective(), interaction_hints, boss(), progress, local_targets())
+
+
+func _locked_hint(required: Array) -> String:
+	if "met_oru" in required and not progress.has_flag("met_oru"):
+		return "Meet Oru before leaving Lantern Rest"
+	if "threadstep" in required and not progress.has_flag("threadstep"):
+		return "Threadstep locked: free the bell first"
+	if "loom_restored" in required and not progress.has_flag("loom_restored"):
+		return "Restore the Lantern Loom to open this path"
+	if "shortcut_bell" in required and not progress.has_flag("shortcut_bell"):
+		return "The bell shortcut is still sealed"
+	return "Both anchors must be restored to open this path"
 
 
 func boss() -> CombatEnemy:
