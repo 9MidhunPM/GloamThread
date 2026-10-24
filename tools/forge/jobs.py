@@ -327,28 +327,60 @@ class Cancelled(Exception):
     pass
 
 
+def request_key(kind: str, source_hash: str, model: str, quality: str, prompt: str) -> str:
+    return digest(encode({"source": source_hash, "kind": kind, "prompt": prompt,
+                          "version": VERSION, "model": model, "quality": quality}))
+
+
+def cached_request(kind: str, folder: Path, provenance: dict, key: str):
+    record = provenance["requests"].get(kind)
+    if record is None:
+        return None
+    if not isinstance(record, dict) or record.get("cache_key") != key:
+        raise ForgeError("Approved design or request settings changed after a paid attempt. Start a new job; no automatic regeneration.")
+    expected = "raw/proposal.json" if kind == "analyse" else f"raw/{kind}.png"
+    path = folder / expected
+    if record.get("file") != expected:
+        raise ForgeError("Retained request output has an unexpected path; no replacement request was made.")
+    data = read_bytes(path, 32000 if kind == "analyse" else MAX_RAW_BYTES)
+    if digest(data) != record.get("sha256"):
+        raise ForgeError("Retained request output failed its cache hash check; no replacement request was made.")
+    if kind == "analyse":
+        return validate_proposal(read_json(path))
+    raw_image(data, kind == "parts")
+    return path
+
+
+def preflight_images(folder: Path, root: Path, job: Path, cap: int,
+                     provenance: dict, config: dict, proposal: dict) -> None:
+    """Check the whole missing-image cost; each later reserve still owns its race."""
+    missing = []
+    for kind in ("parts", "theme"):
+        key = request_key(kind, provenance["source"]["sha256"], config["model"],
+                          config["quality"], image_prompt(kind, proposal))
+        if cached_request(kind, folder, provenance, key) is None:
+            missing.append(kind)
+    amount = sum(RESERVATIONS[kind] for kind in missing)
+    with lock(budget_path(root).with_suffix(".lock")):
+        records = ledger(root)["reservations"]
+        local_records = [record for record in records if record["job"] == job_id(job)]
+        if any(record["kind"] in missing for record in local_records):
+            raise ForgeError("A missing image request was already attempted. Its reservation is retained; automatic retries are disabled.")
+        total = sum(record["microusd"] for record in records)
+        local = sum(record["microusd"] for record in local_records)
+        if total + amount > SHARED_CAP or local + amount > cap:
+            raise ForgeError("The remaining shared or job budget cannot cover all missing image requests. No image request or new reservation was made.")
+
+
 def request(kind: str, folder: Path, root: Path, job_path: Path, cap: int, source: bytes,
             provenance: dict, config: dict, provider, proposal: dict | None = None, description: str = ""):
     prompt = description if kind == "analyse" else image_prompt(kind, proposal)
     model = config["analysis_model"] if kind == "analyse" else config["model"]
-    key = digest(encode({"source": provenance["source"]["sha256"], "kind": kind, "prompt": prompt,
-                         "version": VERSION, "model": model, "quality": config["quality"]}))
-    record = provenance["requests"].get(kind)
+    key = request_key(kind, provenance["source"]["sha256"], model, config["quality"], prompt)
     check_cancel(folder)
-    if record is not None:
-        if not isinstance(record, dict) or record.get("cache_key") != key:
-            raise ForgeError("Approved design or request settings changed after a paid attempt. Start a new job; no automatic regeneration.")
-        expected = "raw/proposal.json" if kind == "analyse" else f"raw/{kind}.png"
-        path = folder / expected
-        if record.get("file") != expected:
-            raise ForgeError("Retained request output has an unexpected path; no replacement request was made.")
-        data = read_bytes(path, 32000 if kind == "analyse" else MAX_RAW_BYTES)
-        if digest(data) != record.get("sha256"):
-            raise ForgeError("Retained request output failed its cache hash check; no replacement request was made.")
-        if kind == "analyse":
-            return validate_proposal(read_json(path))
-        raw_image(data, kind == "parts")
-        return path
+    cached = cached_request(kind, folder, provenance, key)
+    if cached is not None:
+        return cached
     if provider is None:
         provider = OpenAIProvider(config)
         if not config.get("key"):
@@ -450,8 +482,7 @@ def verified_raw_boards(folder: Path, job: dict) -> tuple[dict, dict, Path, Path
                 or not isinstance(record.get("model"), str) or not 1 <= len(record["model"]) <= 128
                 or not isinstance(record.get("quality"), str) or record["quality"] not in {"low", "medium", "high"}):
             raise ForgeError("Raw recovery requires the matching received parts and theme records; image files alone are insufficient.")
-        expected = digest(encode({"source": provenance["source"]["sha256"], "kind": kind, "prompt": prompt,
-                                  "version": VERSION, "model": record["model"], "quality": record["quality"]}))
+        expected = request_key(kind, provenance["source"]["sha256"], record["model"], record["quality"], prompt)
         if record.get("cache_key") != expected:
             raise ForgeError("Retained image request identity differs from its source or approved design.")
         path = folder / file
@@ -566,6 +597,7 @@ def run_job(command: str, job_path: Path, *, root: Path = ROOT, provider=None, c
                 if provenance.get("candidate_sha256") != digest((folder / "candidate/manifest.json").read_bytes()) or provenance.get("approved_proposal") != proposal:
                     raise ForgeError("Candidate already exists without matching approved-job provenance; it was preserved.")
                 return write_status(folder, root, "complete", "Verified cached candidate is ready for visual review.", candidate_path=str(folder / "candidate"))
+            preflight_images(folder, root, job_path, cap, provenance, config, proposal)
             provenance["approved_proposal"] = proposal
             write_json(folder / "provenance.json", provenance)
             parts = request("parts", folder, root, job_path, cap, source["bytes"], provenance, config, provider, proposal)
