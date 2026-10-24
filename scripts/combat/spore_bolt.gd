@@ -10,6 +10,7 @@ var source_slot: int = 0
 var attack_id: int = 0
 var direction := Vector2.RIGHT
 var catalog: AssetCatalog
+var water_body: PhysicsBody2D
 var _remaining: int = LIFE_TICKS
 
 
@@ -18,6 +19,8 @@ func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	collision_layer = 128
 	collision_mask = 1
+	if is_instance_valid(water_body):
+		add_collision_exception_with(water_body)
 	direction = Vector2.RIGHT if direction.is_zero_approx() else direction.normalized()
 	var collision := CollisionShape2D.new()
 	var shape := CircleShape2D.new()

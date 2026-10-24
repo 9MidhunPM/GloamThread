@@ -45,6 +45,9 @@ static func build_bridge(rect: Rect2i, catalog: AssetCatalog, theme_id: String) 
 
 static func _layer(catalog: AssetCatalog, theme_id: String) -> TileMapLayer:
 	var layer := TileMapLayer.new()
+	# Opaque ground must remain beneath every feet-sorted actor and prop,
+	# independently of Room/shared-entity sibling order.
+	layer.z_index = -20
 	layer.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	var tiles := TileSet.new()
 	tiles.tile_size = Vector2i(16, 16)

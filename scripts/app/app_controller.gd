@@ -245,7 +245,7 @@ func _show_map() -> void:
 func _show_dialogue() -> void:
 	var sequence := catalog.dialogue_sequence(session.dialogue_id)
 	if _dialogue_line >= sequence.size():
-		session.request_mode("playing", menu_owner)
+		session.complete_dialogue()
 		return
 	var line: Dictionary = sequence[_dialogue_line]
 	_show("dialogue", str(line.speaker) if not str(line.speaker).is_empty() else "Gloamthread", str(line.text), [_row("next", "Continue"), _row("skip", "Skip conversation")])
@@ -376,7 +376,7 @@ func _on_action(action: String, payload: Variant = null) -> void:
 		"next":
 			_dialogue_line += 1
 			_show_dialogue()
-		"skip": session.request_mode("playing", menu_owner)
+		"skip": session.complete_dialogue()
 		"settings":
 			if is_instance_valid(session):
 				session.request_mode("settings", menu_owner)
@@ -415,7 +415,9 @@ func _back() -> void:
 				session.request_mode("playing", menu_owner)
 			else:
 				_on_action("finish_reconnect")
-	elif screen in ["pause", "map", "dialogue"]:
+	elif screen == "dialogue":
+		session.complete_dialogue()
+	elif screen in ["pause", "map"]:
 		if _devices_ready():
 			session.request_mode("playing", menu_owner)
 	else:

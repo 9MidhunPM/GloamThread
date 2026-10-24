@@ -36,6 +36,9 @@ func run() -> void:
 	get_tree().paused = false
 	await _steps(6)
 	assert_true(_player.position.distance_to(Vector2(136, 100)) < 0.1, "twelve 180px/s ticks travel exactly 36px")
+	InputRouter.set_test_input(0, 0)
+	await _steps(3)
+	assert_true(_player.position.distance_to(Vector2(136, 100)) < 0.1, "completed roll leaves no unrequested momentum")
 	assert_true(_player.take_hit(1), "roll does not provide immunity after its six-tick window")
 	_player.restore(Vector2(100, 200))
 	InputRouter.set_test_input(0, 0)

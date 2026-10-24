@@ -173,17 +173,11 @@ func _parse_entities(raw: Variant) -> void:
 			if tile.x >= 0:
 				if char_at(tile) not in [CHAR_EMPTY, CHAR_BRIDGE]:
 					errors.append("%s tile must be dry walkable floor" % context)
-				if type in ["diagnostic_mover", "spoolmite", "spoolwarden", "checkpoint", "npc", "secret"] and not is_safe_spawn(tile):
+				if type in ["spoolmite", "spoolwarden", "checkpoint", "npc", "secret"] and not is_safe_spawn(tile):
 					errors.append("%s needs a safe dry footprint" % context)
 				if type in ["spoolmite", "wickwing", "spoolwarden"]:
 					_check_enemy_spacing(tile, context)
 		match type:
-			"diagnostic_mover":
-				var distance: Variant = entity["range_tiles"]
-				if not _is_integer(distance) or distance <= 0:
-					errors.append("%s range_tiles must be a positive integer" % context)
-				elif tile.x >= 0 and (tile.x - distance < 0 or tile.x + distance >= width):
-					errors.append("%s range leaves the room" % context)
 			"exit":
 				_parse_exit(entity, context)
 			"checkpoint":
@@ -270,6 +264,14 @@ func _parse_pair(entity: Dictionary, seen_ids: Dictionary, bridges: Array[Rect2i
 	var span := _rect_from(entity["bridge_rect"], context + "/bridge_rect")
 	if not span.has_area():
 		return
+	var horizontal_banks := false
+	var vertical_banks := false
+	for y in range(span.position.y, span.end.y):
+		horizontal_banks = horizontal_banks or (is_safe_spawn(Vector2i(span.position.x - 1, y)) and is_safe_spawn(Vector2i(span.end.x, y)))
+	for x in range(span.position.x, span.end.x):
+		vertical_banks = vertical_banks or (is_safe_spawn(Vector2i(x, span.position.y - 1)) and is_safe_spawn(Vector2i(x, span.end.y)))
+	if not ((horizontal_banks and span.size.x >= 4) or (vertical_banks and span.size.y >= 4)):
+		errors.append("%s repair needs dry banks separated by at least four water tiles" % context)
 	for y in range(span.position.y, span.end.y):
 		for x in range(span.position.x, span.end.x):
 			if char_at(Vector2i(x, y)) != CHAR_WATER:

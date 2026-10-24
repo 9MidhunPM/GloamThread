@@ -6,6 +6,12 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 1 — runtime and integration
 
+### 2026-10-25T02:01:00+05:30 — Connect overhead rooms, per-player guidance and Oru's mission
+
+- Changed: Integrated the authored overhead world/session/HUD with shared feet sorting, safe water-context cleanup, per-slot local hints/targets and permanent mission flow. Actual App Next/Skip/cancel closes introduction through complete_dialogue, committing met_oru before the first gate. Rewrote Oru's short introduction for clear overhead cooperation.
+- Why: The new world gate must follow the production dialogue UI; fixture-only completion would leave actual players stuck. Nearby hints must belong to the courier who can act.
+- Validation: Full content validator PASS;24overhead engine scenarios PASS, including three actual-App introduction closing paths and durable mission state. These include fixture-controlled physics/transactions and do not yet claim an ordinary complete overhead campaign or native quality.
+
 ### 2026-10-25T01:47:13+05:30 — Admit directional overhead media and fixed profiles
 
 - Changed: Integrated original50asset overhead art/audio/home packet. Runtime now requires overhead-v1,courier_overhead_v1,36directional clips covering128hero frames, exact gameplay-matching visual ticks/pivots and the new48tile inventory. Migrated fixed profile/theme/dialogue headers; retained strict pre-play resource resolution.
@@ -224,6 +230,86 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T01:37:34+05:30 — Match traversal fixture to atomic boss rewards
+
+- Changed: Threadstep fixture now grants boss_spoolwarden, threadstep and shortcut_bell together and asserts the reward commit succeeds.
+- Why: The integrated progress boundary correctly rejects partial boss rewards; a movement test must use a valid team outcome.
+- Validation: Focused Threadstep scenario passes in the isolated actor project using the current integrator TeamProgress source.
+- Limitations: This remains a controlled unlock fixture, not evidence of defeating the boss through ordinary inputs.
+
+
+### 2026-10-25T01:37:07+05:30 — Authored enemy direction warning consumer
+
+- Changed: Enemy windups show effect_enemy_warning_v1 through its non-loop play clip, rotated in quarter turns around its declared pivot. The final frame holds through the warning; active/recovery/stagger/death clears it. A new windup starts a new clip serial.
+- Why: Supply a readable authored direction hint while keeping damage geometry and simulation independent from the marker.
+- Validation: Focused Godot 4.7.2 scenario passes against an explicit atlas fixture: cardinal rotation, pivot, frame progression/hold, pause, new-windup restart and immediate state/death cleanup.
+- Limitations: The production authored warning packet is still pending integration/native review; this marker is not an exact damage-area outline.
+
+
+### 2026-10-25T01:35:23+05:30 — Buffered directional animation regression
+
+- Changed: Added a diagnostic atlas fixture and real player/SpriteAnimator scenario proving that a queued same-facing slash returns through idle and restarts its first windup frame; finished same-state non-loop clips remain held.
+- Why: Test the suspected last-frame restart defect before changing animation guards. The defect did not reproduce, so production play API and guards remain unchanged.
+- Validation: Focused Godot 4.7.2 animation scenario passes, checking actual AtlasTexture regions and physics attack serial timing. New fixture/scenario UIDs generated through isolated import.
+- Limitations: In-memory colour labels prove sequencing only, not authored-art appearance or readability.
+
+
+### 2026-10-25T01:31:49+05:30 — Immediate damage and revive presentation
+
+- Changed: Accepted hurt/down/revive transitions now select their directional pose immediately; revive follows the authored sixteen-tick clip and reset/damage clear stale revival presentation.
+- Why: Keep visual response aligned with the authoritative health transition and ground-plane knockback.
+- Validation: New real-physics damage scenario passes: planar knockback, interrupted windup, exactly-once signals, bounded immunity, steady reduced-flash cue, pause, stationary downed state and two-heart revive timing. Own-clone import generated its UID; sandbox editor socket warnings remain environmental.
+- Limitations: Null-catalog physics/presentation-state assertions; original frame rendering still requires integrated QA.
+
+
+### 2026-10-25T01:30:41+05:30 — Preserve the bounded evasion window
+
+- Changed: Enemy hit sets now record accepted damage, allowing a lingering attack to connect after an initially immune contact expires.
+- Why: A six-tick roll evasion must not accidentally grant immunity for an entire longer boss attack. Accepted damage remains once per attack and player.
+- Validation: Focused boss scenario passes with an immune first contact, later accepted contact and no duplicate damage after artificial immunity removal.
+- Limitations: Controlled active-strike fixture; normal-input difficulty tuning remains pending.
+
+
+### 2026-10-25T01:28:41+05:30 — Shared boss phase and concurrent feedback
+
+- Changed: Half health advances Spoolwarden to phase two, with faster subsequent pursuit/charge and a shorter next idle gap; existing warning/recovery durations stay explicit. Partner-strike feedback takes the first line while slow resistance remains visible below it. Defeat clears stale notices.
+- Why: Add encounter escalation and readable simultaneous feedback without cancelling a co-op stagger opening or changing an already-active charge speed.
+- Validation: Focused boss scenario passes, including half-health transition during stagger, preserved opening timer, concurrent slow-resist notice and cleared defeat text.
+- Limitations: Escalation values need the integrated normal-input route and human balance review; no rendered readability claim yet.
+
+
+### 2026-10-25T01:27:48+05:30 — Overhead boss acceptance and stable script IDs
+
+- Changed: Added a boss-specific scenario covering real sweep/strike/charge clocks, ground-plane reach, immutable walls, shared stagger/Cross-stitch state and exactly-once defeat; retained generated UID sidecars for new actor fixtures/scenarios.
+- Why: Establish runtime evidence for the translated three-pattern encounter and stable imports before parallel integration.
+- Validation: Actor clone Godot 4.7.2 run passes all 8 overhead actor scenarios. Boss ordinary-hit/bonus checks are explicitly controlled API fixtures; pattern geometry/timing use actual physics. Import parsed scripts but reported restricted editor socket/config-write warnings; its unrelated font-import rewrite was restored.
+- Limitations: This is not a normal-input boss route, native art inspection or human balance review.
+
+
+### 2026-10-25T01:25:13+05:30 — Planar enemy movement and room ownership
+
+- Changed: Enemy bodies now use floating ground-plane footprints, XY target/attack vectors and two-axis bounds. Spoolmites telegraph locked charges; Wickwing hover is visual-only and its explicit water flight returns toward dry courier approaches. Added matching set_room_context seam. Boss movement/attack geometry is translated onto the same plane.
+- Why: Remove platform gravity/ground checks and keep flying traversal separate from solid-wall collision.
+- Validation: Focused real-physics enemy scenario passes: vertical charge, locked warning, recovery, pause, slow, Wickwing water/wall collision, dry close-range recovery and exactly-once defeat. Existing six actor scenarios remain green.
+- Limitations: Boss-specific timing, geometry and Cross-stitch checks are the next slice; original enemy art/telegraph rendering is pending the content packet.
+
+
+### 2026-10-25T01:22:30+05:30 — End roll at its declared travel distance
+
+- Changed: Clear roll velocity on its last movement tick instead of letting ordinary motor deceleration add unrequested drift.
+- Why: Keep the promised thirty-six-pixel roll distance true after the action ends, particularly beside water.
+- Validation: Focused roll scenario passes, including three neutral ticks after roll completion with no extra travel.
+- Limitations: Headless physics fixture; human controller feel review remains pending.
+
+
+### 2026-10-25T01:21:52+05:30 — Explicit projectile water flight
+
+- Changed: Couriers pass their known room water body to Spore Bolt; each projectile excepts only that body while retaining wall collision.
+- Why: Allow Neri shots across water without global terrain-mask changes or shots through walls.
+- Validation: The focused real-physics Spore scenario passes, including an owned emitted shot traversing a water span and retiring at the next wall without hitting an enemy beyond it.
+- Limitations: Dedicated water/wall fixtures; full content integration remains pending.
+
+
 ### 2026-10-25T01:21:06+05:30 — Safe team Threadstep crossings
 
 - Changed: Threadstep now travels sixty pixels over twelve ticks with a forty-five-tick cooldown; room callbacks validate dry departure, full-footprint landing and swept walls. Only the known water body is excepted for that courier.
@@ -278,6 +364,43 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-world -->
 
+### 2026-10-25 01:42:11 +0530 — Guide each courier to their remaining paired end
+
+- Filtered transient anchor/Loom targets per living slot while retaining the pure QuestDirector/map result. A courier who has claimed an end receives no second assignment; their partner is guided only to the unclaimed end. Nearby ownership hints distinguish your held end from your partner's.
+- Validation: overhead_session PASS 3/3. New guidance scenario uses real authored coordinates and world metadata to verify both anchor/station assignments, compass direction, immediate onward guidance after repair and passive downed rescue status. The preceding combined actor/input/world/session suite passed 21/21 after the actor fixture correction.
+- Limits: metadata-only controlled placements; final catalog/art and ordinary-input campaign are still independent gates.
+
+
+### 2026-10-25 01:39:12 +0530 — Clear water ownership before recovery replacement
+
+- Fixed a stale physics RID when recovery replaced a room during Threadstep: couriers now cancel their water exceptions while the previous water body still exists, before that room is freed. Null-catalog fixtures also avoid requesting unavailable background music.
+- Validation: both overhead_session scenarios PASS. New controlled regression proves ninety-tick revive completion wins at the 720-tick timeout boundary, rescuer damage interrupts the hold, timeout/wipe recover once, boss/unlock/shortcut commit before a same-tick wipe, cleared boss stays absent, and mid-water recovery clears its exception and restores a complete dry footprint.
+- Limits: explicitly controlled coordinator fixtures and synthetic owned movement; no claim of complete normal-input campaign or final rendered assets.
+
+
+### 2026-10-25 01:36:43 +0530 — Overhead session and per-courier guidance
+
+- Integrated actor/input branch ancestry, wired every courier/enemy to the room's planar collision queries and separate water body, and placed props with actors under shared feet sorting. Hazards use the real planar hurt rectangle and knockback; the camera follows the ground-plane centre.
+- Added explicit dialogue completion that commits met_oru once, QuestDirector objective/local-target consumers, separate living/proximity hints, bound Roll and locked-Dash HUD, boss phase/feedback and downed rescue guidance. Existing coordinator/save/revival transaction entry points remain intact.
+- Validation: new overhead_session_foundation scenario PASS, covering dialogue, paired same-tick repair, actor/enemy context, actual owned-input 60px Atrium dash, hazards, pause and local HUD ownership. Combined overhead suite: 17/18 PASS; the remaining actor Threadstep fixture commits an incomplete reward group rejected by the newer save contract (reported to its owner). Editor import has no script errors; sandbox socket-listen errors remain.
+- Limits: fixture placements and null art are explicit; final catalog/art integration, normal-input campaign and native presentation remain pending.
+
+
+### 2026-10-25 01:28:24 +0530 — Overhead content admission and route guards
+
+- Migrated the public content validator to overhead-v1, the planar collider and exact opaque terrain slots. It now rejects unsafe floor entrances, missing cross-room references, disconnected rallies/interactions, bypassable paired repairs and removed Threadstep lessons. Both bridges require dry banks separated by at least four water tiles in Python and the runtime parser.
+- Kept opaque terrain below feet-sorted props/actors independently of sibling order and retained generated scenario UIDs. Removed obsolete diagnostic-mover parsing.
+- Validation: `python3 -m unittest discover -s tools/tests -p test_content.py` PASS 29 tests using temporary overhead catalog metadata; `godot --headless --fixed-fps 60 --path . --script tests/run_tests.gd -- --filter overhead_world` PASS 2/2; `git diff --check` PASS. Editor import produced no script errors, but sandbox TCP-listen errors remain separate from the clean runtime run.
+- Limits: the branch's full `python3 tools/validate_content.py` correctly fails on eight outstanding manifest/profile/theme/dialogue version or mapping mismatches owned by other lanes. No integrated campaign, native art or controller-quality claim.
+
+
+### 2026-10-25 01:21:27 +0530 — Authored overhead district route
+
+- Reauthored r01-r07 as planar rooms: the remembered Atrium branch, separate Spindle anchor approaches, Gallery encounter/secret alcove, checkpoint respite, roomy Bell arena, vertical Causeway dash lesson and opposing Loom stations. Added dry bank markers, recognizable original props, two-tile mandatory water crossings and four-tile paired repair barriers.
+- Validation: overhead_world scenarios PASS 2/2. All eight strict room definitions/paired entrances and eighteen directed exits resolve; safe route searches reach both anchors/secret/Loom stations and cannot bypass unrepaired spans. Six actual CharacterBody2D probes cross the required water gaps at three launch offsets per axis using exactly 60px motion.
+- Limits: structural reachability plus isolated collision probes; integrated ordinary-input overhead campaign, final directional art and native quality review remain pending.
+
+
 ### 2026-10-25 01:14:36 +0530 — Overhead world foundation
 
 - Added strict overhead-v1 room parsing, planar feet/footprint queries, separate immutable wall and water bodies, named bridge blocker removal, shared sortable prop/NPC branch and opaque terrain slot selection. Reauthored Lantern Rest as a safe overhead plaza and gated the Atrium introduction with met_oru.
@@ -291,6 +414,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 ## Overhead input and persistence lane
 
 <!-- overhead-input -->
+
+### 2026-10-25T01:24:34+05:30 — Derive overhead objectives and local route targets
+
+- Changed: Added pure QuestDirector queries for Oru, Spindle, Spoolwarden, Causeway, Loom and home objectives. Breadth-first routing uses only unlocked declared world connections, including the post-boss shortcut. Local targets expose authored NPC/boss/anchor/station identities and safe exit feet positions; unreachable routes are explicit and yield no invented targets.
+- Why: The integrator needs one reliable guidance boundary for HUD/map/proximity hints without making presentation own progression.
+- Validation: Godot4.7.2 overhead_quest_guidance PASS1/1 using pure fixtures: six stages, backtracking, locked/unlocked shortcuts, unreachable/malformed gates, local targets, canonical feet and no world/progress mutation. Import and whitespace checks pass.
+- Limitations: Root wiring, rendered guidance and ordinary overhead traversal are not acceptance evidence from these fixtures.
+
 
 ### 2026-10-25T01:18:32+05:30 — Preserve foreign backup data before rotation
 

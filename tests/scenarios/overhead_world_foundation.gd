@@ -33,11 +33,12 @@ func run() -> void:
 	var definition := RoomDefinition.new()
 	definition.parse(data)
 	assert_true(definition.is_valid(), "overhead bridge fixture parses: %s" % str(definition.errors))
-	for field: String in ["fractional", "legacy", "water"]:
+	for field: String in ["fractional", "legacy", "water", "short_bridge"]:
 		var invalid: Dictionary = data.duplicate(true)
 		if field == "fractional": invalid.spawns.start[0][0] = 3.5
 		elif field == "legacy": invalid.content_version = "phase1-v1"
-		else: invalid.spawns.start[0] = [12,10]
+		elif field == "water": invalid.spawns.start[0] = [12,10]
+		else: invalid.entities[0].bridge_rect[2] = 2
 		var rejected := RoomDefinition.new()
 		rejected.parse(invalid)
 		assert_true(not rejected.is_valid(), "parser rejects %s spawn/version data" % field)
@@ -47,6 +48,7 @@ func run() -> void:
 	assert_eq(room.theme_gameplay_node_count(), 0, "both opaque skins remain collision free")
 	for theme: Node2D in [room.theme_ember,room.theme_moss]:
 		var terrain := theme.get_node("Terrain") as TileMapLayer
+		assert_true(terrain.z_index < room.entity_visuals.z_index,"opaque terrain is below sortable entities regardless of sibling order")
 		assert_eq(terrain.get_used_cells().size(),definition.width*definition.height,"opaque overhead terrain covers every floor/wall/water cell")
 	assert_true(room.can_stand_at(RoomDefinition.feet_position(Vector2i(4,15))), "hazards are physically walkable")
 	assert_true(not definition.is_safe_spawn(Vector2i(4,15)), "hazards cannot receive safe spawns")

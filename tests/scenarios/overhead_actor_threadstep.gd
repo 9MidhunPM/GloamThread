@@ -32,7 +32,7 @@ func run() -> void:
 	InputRouter.set_test_input(0, Action.RIGHT | Action.DASH)
 	await _steps(1)
 	assert_eq(player.dash_ticks, 0, "Threadstep cannot start before the team unlock")
-	_progress.commit_flags(["threadstep"])
+	assert_true(_progress.commit_flags(["boss_spoolwarden", "threadstep", "shortcut_bell"]), "fixture grants the complete atomic boss reward")
 	await _reset(Vector2(112, 100))
 	InputRouter.set_test_input(0, Action.RIGHT | Action.DASH)
 	InputRouter.set_test_input(1, Action.RIGHT)

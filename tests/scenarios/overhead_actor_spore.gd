@@ -61,8 +61,38 @@ func run() -> void:
 	await _steps(14)
 	assert_eq(emitted.hits.size(), 1, "owned special preserves locked upward facing")
 	assert_eq(player.get("_attack_kind"), "", "Spore Bolt shares the twenty-two-tick special contract")
+	# Known water is the only flight exception; the next solid wall still wins.
+	player.restore(Vector2(600, 100))
+	player.facing = PlayerController.Facing.RIGHT
+	var water := _body_at(Vector2(628, 100), Vector2(16, 40))
+	_body_at(Vector2(680, 100), Vector2(4, 40))
+	player.set_room_context(Rect2(0, 0, 1000, 500), Callable(), Callable(), water)
+	var beyond_wall := _target_at(Vector2(700, 100))
+	InputRouter.set_test_input(0, 0)
+	await _steps(2)
+	InputRouter.set_test_input(0, Action.SPECIAL)
+	await _steps(18)
+	var flights := get_tree().get_nodes_in_group("combat_transients")
+	assert_eq(flights.size(), 1, "room-owned shot flies over its known water body")
+	if flights.size() == 1:
+		assert_true(flights[0].global_position.x > 636.0, "shot has crossed the whole water span")
+		assert_true(flights[0].get_collision_exceptions().has(water), "flight exception is the exact room water body")
+	await _steps(20)
+	assert_eq(beyond_wall.hits.size(), 0, "water flight never disables the wall behind it")
+	assert_eq(get_tree().get_nodes_in_group("combat_transients").size(), 0, "wall still retires the water-crossing shot")
 	InputRouter.clear_test_input()
 	InputRouter.clear(0)
+
+func _body_at(at: Vector2, size: Vector2) -> StaticBody2D:
+	var body := StaticBody2D.new()
+	body.position = at
+	var collision := CollisionShape2D.new()
+	var shape := RectangleShape2D.new()
+	shape.size = size
+	collision.shape = shape
+	body.add_child(collision)
+	add_child(body)
+	return body
 
 func _target_at(at: Vector2) -> Node2D:
 	var target: Node2D = TARGET.new()
