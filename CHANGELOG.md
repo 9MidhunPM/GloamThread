@@ -204,6 +204,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-world -->
 
+### 2026-10-25 01:14:36 +0530 — Overhead world foundation
+
+- Added strict overhead-v1 room parsing, planar feet/footprint queries, separate immutable wall and water bodies, named bridge blocker removal, shared sortable prop/NPC branch and opaque terrain slot selection. Reauthored Lantern Rest as a safe overhead plaza and gated the Atrium introduction with met_oru.
+- Why: establish the real one-room ground-plane contract before expanding the eight-room route.
+- Validation: Godot 4.7.2 focused overhead_world_foundation scenario PASS 1/1; actual bodies stop at water, cross a restored bridge, bypass only water during the optional three-tile boundary probe, and remain blocked by walls. Strict spawn/version, diagonal swept footprint, persistent bridge replay and both collision-free skins pass.
+- Limits: null-catalog geometry/prototype rendering only; directional original art and integrated overhead actors/session remain separate lanes. r01-r07 and whole-bundle Python validation are still being migrated. Editor import completed without script errors but reported sandbox TCP/editor-preference write restrictions; focused runtime exited cleanly.
+
+
 
 
 ## Overhead input and persistence lane

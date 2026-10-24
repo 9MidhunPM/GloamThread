@@ -13,6 +13,8 @@ const MOSS_TINT := Color("#73965d")
 
 var definition: RoomDefinition
 var collision: StaticBody2D
+var water_body: StaticBody2D
+var entity_visuals: Node2D
 var common: Node2D
 var theme_ember: Node2D
 var theme_moss: Node2D
@@ -40,6 +42,7 @@ static func build(room_definition: RoomDefinition, with_visuals: bool = true, as
 func _build_children() -> void:
 	collision = CollisionBuilder.build(definition)
 	add_child(collision)
+	water_body = collision.get_node("WaterCollision") as StaticBody2D
 	common = Node2D.new()
 	common.name = "Common"
 	common.visibility_layer = VISIBILITY_COMMON
@@ -48,6 +51,8 @@ func _build_children() -> void:
 	theme_moss = _theme_root("ThemeMoss", VISIBILITY_MOSS, "moss", MOSS_TINT)
 	entities = Node2D.new()
 	entities.name = "Entities"
+	entities.y_sort_enabled = true
+	entity_visuals = entities
 	common.add_child(entities)
 	if draw_visuals and catalog != null:
 		_build_decor()
@@ -62,7 +67,7 @@ func _theme_root(node_name: String, mask: int, theme_id: String, tint: Color) ->
 		if catalog != null:
 			root.add_child(ThemePainter.build_terrain(definition, catalog, theme_id))
 		else:
-			root.add_child(GrayboxSkin.build_layer(definition, "Graybox", tint))
+			root.add_child(ThemePainter.build_terrain(definition, null, theme_id))
 	add_child(root)
 	return root
 
@@ -91,12 +96,8 @@ func _build_decor() -> void:
 		sprite.z_index = int(item["z"])
 		sprite.set_meta("original_frame", int(item["frame"]))
 		sprite.set_meta("asset_id", item["asset_id"])
-		var parent: Node2D = common
-		if item["theme"] == "ember":
-			parent = theme_ember
-		elif item["theme"] == "moss":
-			parent = theme_moss
-		parent.add_child(sprite)
+		sprite.visibility_layer = {"common": VISIBILITY_COMMON, "ember": VISIBILITY_EMBER, "moss": VISIBILITY_MOSS}[item["theme"]]
+		entity_visuals.add_child(sprite)
 		_decor.append(sprite)
 
 
@@ -131,7 +132,7 @@ func _build_entity_visuals() -> void:
 				_visuals[item["flag"]] = sprites
 			"exit":
 				var rect: Array = item["rect"]
-				var sprite := _prop("sign", Vector2((float(rect[0]) + float(rect[2]) * 0.5) * 16, (float(rect[1]) + float(rect[3]) - 1) * 16))
+				var sprite := _prop("sign", Vector2((float(rect[0]) + float(rect[2]) * 0.5) * 16, (float(rect[1]) + float(rect[3]) * 0.5) * 16 + 5))
 				entities.add_child(sprite)
 				_visuals[id] = sprite
 
@@ -148,20 +149,17 @@ func restore_bridge(flag: String) -> bool:
 			continue
 		var data: Array = item["bridge_rect"]
 		var rect := Rect2i(int(data[0]), int(data[1]), int(data[2]), int(data[3]))
-		var shape := CollisionBuilder._rect_shape("Bridge_" + flag, rect, false)
-		collision.add_child(shape)
+		var blocker := water_body.get_node_or_null("Bridge_" + flag) as CollisionShape2D
+		if blocker == null:
+			return false
+		blocker.disabled = true
 		if draw_visuals:
 			if catalog != null:
 				theme_ember.add_child(ThemePainter.build_bridge(rect, catalog, "ember"))
 				theme_moss.add_child(ThemePainter.build_bridge(rect, catalog, "moss"))
 			else:
-				for root: Node2D in [theme_ember, theme_moss]:
-					var block := Polygon2D.new()
-					var start := Vector2(rect.position) * 16
-					var size := Vector2(rect.size) * 16
-					block.polygon = PackedVector2Array([start, start + Vector2(size.x, 0), start + size, start + Vector2(0, size.y)])
-					block.color = EMBER_TINT if root == theme_ember else MOSS_TINT
-					root.add_child(block)
+				theme_ember.add_child(ThemePainter.build_bridge(rect, null, "ember"))
+				theme_moss.add_child(ThemePainter.build_bridge(rect, null, "moss"))
 		restored_bridges[flag] = true
 		progress[flag] = true
 		set_entity_state(flag, "restored")
@@ -230,3 +228,65 @@ static func _count_gameplay_nodes(node: Node) -> int:
 			count += 1
 		count += _count_gameplay_nodes(child)
 	return count
+
+
+## Root may nest this y-sorted branch under its shared actor/prop sort space.
+## The room still owns those visuals when its simulation is replaced.
+func _exit_tree() -> void:
+	if is_instance_valid(entity_visuals) and not is_ancestor_of(entity_visuals):
+		entity_visuals.queue_free()
+
+
+func can_stand_at(feet: Vector2) -> bool:
+	if not feet.is_finite():
+		return false
+	# Physics safe_margin leaves a subpixel shore separation. This tolerance is
+	# smaller than one tenth pixel; it never admits a wall/water cell crossing.
+	var footprint := RoomDefinition.footprint(feet).grow(-0.1)
+	if not bounds().encloses(footprint):
+		return false
+	var first := Vector2i(floori(footprint.position.x / 16), floori(footprint.position.y / 16))
+	var last := Vector2i(floori((footprint.end.x - 0.0001) / 16), floori((footprint.end.y - 0.0001) / 16))
+	for y in range(first.y, last.y + 1):
+		for x in range(first.x, last.x + 1):
+			if not _dry_tile(Vector2i(x, y)):
+				return false
+	return true
+
+
+func _dry_tile(tile: Vector2i) -> bool:
+	if definition.is_ground(tile):
+		return true
+	if not definition.is_water(tile):
+		return false
+	for entity: Dictionary in definition.entities:
+		if entity["type"] == "anchor_pair" and restored_bridges.has(entity["flag"]) and CollisionBuilder.bridge_rect(entity).has_point(tile):
+			return true
+	return false
+
+
+func can_threadstep(from: Vector2, to: Vector2) -> bool:
+	if not can_stand_at(from) or not can_stand_at(to):
+		return false
+	var start := from + Vector2(0, -5)
+	var finish := to + Vector2(0, -5)
+	var swept := RoomDefinition.footprint(from).merge(RoomDefinition.footprint(to))
+	var first := Vector2i(floori(swept.position.x / 16), floori(swept.position.y / 16))
+	var last := Vector2i(floori(swept.end.x / 16), floori(swept.end.y / 16))
+	for y in range(first.y, last.y + 1):
+		for x in range(first.x, last.x + 1):
+			if definition.is_solid(Vector2i(x, y)):
+				var wall := Rect2(x * 16, y * 16, 16, 16).grow_individual(6, 5, 6, 5)
+				if _segment_hits_rect(start, finish, wall):
+					return false
+	return true
+
+
+static func _segment_hits_rect(start: Vector2, finish: Vector2, rect: Rect2) -> bool:
+	if rect.has_point(start) or rect.has_point(finish):
+		return true
+	var corners := [rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)]
+	for index in 4:
+		if Geometry2D.segment_intersects_segment(start, finish, corners[index], corners[(index + 1) % 4]) != null:
+			return true
+	return false

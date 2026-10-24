@@ -15,14 +15,14 @@ const MAX_WIDTH := 90
 const MAX_HEIGHT := 30
 
 const CHAR_SOLID := "#"
-const CHAR_ONE_WAY := "="
+const CHAR_BRIDGE := "="
+const CHAR_WATER := "~"
 const CHAR_EMPTY := "."
 const CHAR_HAZARD := "^"
-const VALID_CHARS := "#=.^"
+const VALID_CHARS := "#=.~^"
 const ROOM_IDS := ["r00", "r01", "r02", "r03", "r04", "r05", "r06", "r07"]
-const PROGRESS_FLAGS := ["bridge_spindle", "bridge_causeway", "boss_spoolwarden", "threadstep", "shortcut_bell", "loom_restored", "lantern_charm"]
+const PROGRESS_FLAGS := ["bridge_spindle", "bridge_causeway", "boss_spoolwarden", "threadstep", "shortcut_bell", "loom_restored", "lantern_charm", "met_oru"]
 const ENTITY_FIELDS := {
-	"diagnostic_mover": ["tile", "range_tiles"],
 	"spoolmite": ["tile"],
 	"wickwing": ["tile"],
 	"spoolwarden": ["tile"],
@@ -75,10 +75,12 @@ func parse(data: Dictionary) -> void:
 	spawns = {}
 	entities = []
 	decor = []
-	var room_fields := ["schema_version", "id", "name", "tiles", "spawns", "entities"]
+	var room_fields := ["schema_version", "content_version", "id", "name", "tiles", "spawns", "entities"]
 	if data.has("decor"):
 		room_fields.append("decor")
 	_check_fields(data, room_fields, "room")
+	if data.get("content_version") != "overhead-v1":
+		errors.append("content_version must be overhead-v1")
 	if not _is_integer(data.get("schema_version")) or data.get("schema_version") != SCHEMA_VERSION:
 		errors.append("schema_version must be %d" % SCHEMA_VERSION)
 	id = data.get("id", "") if data.get("id") is String else ""
@@ -135,7 +137,7 @@ func _parse_spawns(raw: Variant) -> void:
 			if tile.x < 0:
 				continue
 			if not is_safe_spawn(tile):
-				errors.append("spawn '%s' tile (%d, %d) is not an empty tile over solid ground" % [entrance, tile.x, tile.y])
+				errors.append("spawn '%s' tile (%d, %d) is not a safe dry floor cell" % [entrance, tile.x, tile.y])
 				continue
 			tiles.append(tile)
 		if tiles.size() == 2:
@@ -169,10 +171,10 @@ func _parse_entities(raw: Variant) -> void:
 		if entity.has("tile"):
 			tile = _tile_from(entity["tile"], context)
 			if tile.x >= 0:
-				if char_at(tile) != CHAR_EMPTY:
-					errors.append("%s tile must be empty" % context)
+				if char_at(tile) not in [CHAR_EMPTY, CHAR_BRIDGE]:
+					errors.append("%s tile must be dry walkable floor" % context)
 				if type in ["diagnostic_mover", "spoolmite", "spoolwarden", "checkpoint", "npc", "secret"] and not is_safe_spawn(tile):
-					errors.append("%s needs empty headroom and supporting ground" % context)
+					errors.append("%s needs a safe dry footprint" % context)
 				if type in ["spoolmite", "wickwing", "spoolwarden"]:
 					_check_enemy_spacing(tile, context)
 		match type:
@@ -217,8 +219,8 @@ func _parse_exit(entity: Dictionary, context: String) -> void:
 		var standing_tiles := 0
 		for y in range(zone.position.y, zone.end.y):
 			for x in range(zone.position.x, zone.end.x):
-				# Rectangles have an exclusive bottom; standing feet are y + 1.
-				if y + 1 < zone.end.y and is_safe_spawn(Vector2i(x, y)):
+				# Feet are tile centre plus five pixels, inside the rally cell.
+				if is_safe_spawn(Vector2i(x, y)):
 					standing_tiles += 1
 		if standing_tiles < 2:
 			errors.append("%s rally rectangle needs two safe standing feet positions" % context)
@@ -259,7 +261,7 @@ func _parse_pair(entity: Dictionary, seen_ids: Dictionary, bridges: Array[Rect2i
 			if tile.x < 0:
 				continue
 			if not is_safe_spawn(tile):
-				errors.append("%s/%s needs a supported empty approach before restoration" % [context, field])
+				errors.append("%s/%s needs a safe dry approach before restoration" % [context, field])
 			if tile in positions:
 				errors.append("%s/%s points must occupy distinct tiles" % [context, field])
 			positions.append(tile)
@@ -268,12 +270,10 @@ func _parse_pair(entity: Dictionary, seen_ids: Dictionary, bridges: Array[Rect2i
 	var span := _rect_from(entity["bridge_rect"], context + "/bridge_rect")
 	if not span.has_area():
 		return
-	if span.size.y != 1:
-		errors.append("%s bridge span must be one tile thick" % context)
 	for y in range(span.position.y, span.end.y):
 		for x in range(span.position.x, span.end.x):
-			if char_at(Vector2i(x, y)) != CHAR_EMPTY:
-				errors.append("%s bridge span must be empty before restoration" % context)
+			if char_at(Vector2i(x, y)) != CHAR_WATER:
+				errors.append("%s bridge span must cover water before restoration" % context)
 				break
 	for previous: Rect2i in bridges:
 		if span.intersects(previous):
@@ -398,8 +398,13 @@ func is_solid(tile: Vector2i) -> bool:
 	return char_at(tile) == CHAR_SOLID
 
 
-func is_one_way(tile: Vector2i) -> bool:
-	return char_at(tile) == CHAR_ONE_WAY
+func is_one_way(_tile: Vector2i) -> bool:
+	# Legacy visual/test callers can ask; overhead rooms have no one-way floors.
+	return false
+
+
+func is_water(tile: Vector2i) -> bool:
+	return char_at(tile) == CHAR_WATER
 
 
 func is_hazard(tile: Vector2i) -> bool:
@@ -407,18 +412,17 @@ func is_hazard(tile: Vector2i) -> bool:
 
 
 func is_ground(tile: Vector2i) -> bool:
-	return is_solid(tile) or is_one_way(tile)
+	return char_at(tile) in [CHAR_EMPTY, CHAR_BRIDGE, CHAR_HAZARD]
 
 
-## A safe spawn is an empty tile with headroom above and ground directly below.
+## The centred 12x10 footprint fits wholly inside one 16px authored cell.
+## Spawn/interaction points exclude hazards even though hazards are walkable.
 func is_safe_spawn(tile: Vector2i) -> bool:
-	# A 12x24 courier needs the feet tile plus the bottom half of the tile
-	# above. Out-of-room cells are query guards, never real supporting bodies.
-	if not in_bounds(tile) or tile.y < 1 or not in_bounds(tile + Vector2i.DOWN):
-		return false
-	if char_at(tile) != CHAR_EMPTY or char_at(tile + Vector2i.UP) != CHAR_EMPTY:
-		return false
-	return is_ground(tile + Vector2i.DOWN)
+	return in_bounds(tile) and char_at(tile) in [CHAR_EMPTY, CHAR_BRIDGE]
+
+
+static func footprint(feet: Vector2) -> Rect2:
+	return Rect2(feet + Vector2(-6, -10), Vector2(12, 10))
 
 
 func pixel_size() -> Vector2:
@@ -429,9 +433,9 @@ func bounds() -> Rect2:
 	return Rect2(Vector2.ZERO, pixel_size())
 
 
-## World position of an actor's feet standing on the floor of [param tile].
+## The visible feet sit five pixels below the cell's collision centre.
 static func feet_position(tile: Vector2i) -> Vector2:
-	return Vector2((tile.x + 0.5) * TILE, (tile.y + 1) * TILE)
+	return tile_center(tile) + Vector2(0, 5)
 
 
 static func tile_center(tile: Vector2i) -> Vector2:

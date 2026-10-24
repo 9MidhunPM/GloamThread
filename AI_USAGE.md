@@ -64,6 +64,13 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-world -->
 
+### 2026-10-25 01:14:36 +0530 — Overhead world foundation
+
+- Tool: OpenAI Codex; authored the owned parser/collision/room/theme lane, overhead r00/world gate and focused physical regression fixtures in feat/overhead-world.
+- Checks: overhead_world_foundation PASS 1/1 on Godot 4.7.2; diff whitespace check. Corrected the initial exact three-tile teaching assumption after integrator chose forgiving two-tile mandatory gaps; three-tile case remains a boundary probe only.
+- Human review: not yet performed. No rendered overhead quality, physical controller or listening claim; other rooms and integrated catalogs remain pending.
+
+
 
 
 ## Overhead input and persistence lane
