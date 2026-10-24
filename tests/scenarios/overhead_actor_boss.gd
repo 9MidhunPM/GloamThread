@@ -109,6 +109,23 @@ func run() -> void:
 	assert_eq(defeats.size(), 1, "boss outcome emits exactly once")
 	assert_true(not boss.receive_hit(1, 1, CombatQuery.next_attack_id()), "late damage cannot repeat a boss outcome")
 	assert_eq(boss.feedback_text(), "", "defeat clears stale phase/stagger prompts")
+	boss.queue_free()
+	await _steps(1)
+	# Controlled active-strike fixture: rejecting an immune contact must not
+	# turn a short evasion window into immunity for the entire enemy attack.
+	boss = _boss_at(Vector2(300, 300))
+	boss.set("_move_name", "strike")
+	boss.call("_begin_active", "active", 14)
+	_players[0].restore(Vector2(330, 300))
+	_players[0].immunity_ticks = 3
+	await _steps(1)
+	assert_eq(_players[0].hearts, 5, "immunity rejects the initial active contact")
+	await _steps(3)
+	assert_eq(_players[0].hearts, 4, "lingering strike may land after bounded immunity expires")
+	_players[0].immunity_ticks = 0
+	_players[0].reset_at(Vector2(330, 300))
+	await _steps(5)
+	assert_eq(_players[0].hearts, 4, "a landed strike is still deduplicated for the remainder of its window")
 	InputRouter.clear_test_input()
 	InputRouter.clear(0)
 	InputRouter.clear(1)

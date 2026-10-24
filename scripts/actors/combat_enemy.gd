@@ -399,9 +399,11 @@ func _hit_players(rectangle: Rect2) -> void:
 
 
 func _damage_player(player: PlayerController) -> void:
-	_hit_slots[player.slot_index] = true
 	var direction := (player.hurt_rect().get_center() - hurt_rect().get_center()).normalized()
-	player.take_hit(1, direction * 140.0)
+	# An evaded contact is not a landed hit. A lingering attack may connect
+	# once the courier's bounded immunity window ends.
+	if player.take_hit(1, direction * 140.0):
+		_hit_slots[player.slot_index] = true
 
 
 func _keep_in_room() -> void:

@@ -58,6 +58,9 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-actors -->
 
+- 2026-10-25T01:30:41+05:30 | Codex | Fixed overlong evasion caused by deduplicating rejected contacts. Human review pending. Focused real-physics boss contact regression passes and retains accepted-hit deduplication.
+
+
 - 2026-10-25T01:28:41+05:30 | Codex | Added shared boss phase state and non-overwriting combat feedback. Human review pending. Focused boss scenario passes; pending integrated route and native feedback review remain disclosed.
 
 

@@ -198,6 +198,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T01:30:41+05:30 — Preserve the bounded evasion window
+
+- Changed: Enemy hit sets now record accepted damage, allowing a lingering attack to connect after an initially immune contact expires.
+- Why: A six-tick roll evasion must not accidentally grant immunity for an entire longer boss attack. Accepted damage remains once per attack and player.
+- Validation: Focused boss scenario passes with an immune first contact, later accepted contact and no duplicate damage after artificial immunity removal.
+- Limitations: Controlled active-strike fixture; normal-input difficulty tuning remains pending.
+
+
 ### 2026-10-25T01:28:41+05:30 — Shared boss phase and concurrent feedback
 
 - Changed: Half health advances Spoolwarden to phase two, with faster subsequent pursuit/charge and a shorter next idle gap; existing warning/recovery durations stay explicit. Partner-strike feedback takes the first line while slow resistance remains visible below it. Defeat clears stale notices.
