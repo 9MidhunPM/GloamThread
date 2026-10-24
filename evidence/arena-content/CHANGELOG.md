@@ -24,3 +24,9 @@
 - Added editable original Copper Rush, The Loom Bites Back and Pocketful of Sparks arrangements, synthesized with the project's own instruments. Added coin,purchase,wave-clear,ready andcombo cues with deliberate headroom and zero endpoints. Audio index records PCM dimensions, loops, source/output hashes.
 - Replaced cosmetic-only coin magnet shop offer with Field Stitch regeneration (.35HP/sec/rank,price8), agreed with runtime integration; retained12general/18kit branches.
 - Validation:15content/art/conversion/audio tests PASS; local rebuild/validator PASS for6kits,30upgrades,20waves,4arenas,2bundles,10enemy atlases,5cues and3scores; git diff --check PASS. Waveform RMS/peaks/format/endpoints checked. Listening, native mix and human rhythm acceptance remain unverified. No paid calls.
+
+## 2026-10-25T03:05:44+05:30 — Six distinct creator drawings across all three rigs
+
+- Added original Kiln Fox/Bucket Knight, Seed Stag/Pebbleback and Lantern Manta/Clock Orb drawings with retained separated parts, expected distinctive features, hashes and deterministic rebuild source. These vary silhouette/anatomy within each supported rig rather than only palette.
+- Replaced the earlier two-palette rig check with six distinct authored designs and exercised all six through the actual generated-board conversion/retained-master boundary.
+- Validation:16content/art/rig/conversion/audio tests PASS; full local rebuild/validator PASS; actual six-design contact sheet inspected. No provider recognition, native animation, human gameplay or audio listening acceptance is claimed by these local fixtures.

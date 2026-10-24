@@ -12,6 +12,7 @@ from tools.forge.art import RIG_PARTS,authored_parts,make_rig,bake_atlas
 from tools.forge.catalog import catalog
 from tools.forge.enemies import validate as validate_enemies
 from tools.forge.audio import validate as validate_audio,arrange
+from tools.forge.fixtures import DESIGNS,parts_for,board_for
 from tools.forge.rigs import emit_bundle,write_json,load_rig,bake_job,convert_generated
 from tools.forge.validation import BundleError,validate_catalog,validate_bundle,sha256
 
@@ -55,11 +56,18 @@ class FighterContentTests(unittest.TestCase):
         for identifier in index['bundles']:
             m=validate_bundle(ROOT/f'assets/arena/builtin/{identifier}');self.assertEqual(m['id'],identifier)
     def test_two_distinct_examples_of_each_rig_bake(self):
-        for rig in RIG_PARTS:
-            for variant in range(2):
-                p=self.proposal(rig);p['theme']['palette']=p['theme']['palette'][::-1] if variant else p['theme']['palette']
-                out=self.folder/f'{rig}-{variant}';emit_bundle(authored_parts(rig,p['theme']['palette']),make_rig(rig),p,out,{'provider_calls':0})
-                self.assertEqual(validate_bundle(out)['rig_id'],rig)
+        for identifier,(rig,name,kit,features) in DESIGNS.items():
+            p=self.proposal(rig);p['name']=name;p['kit_id']=kit;p['features']=features
+            out=self.folder/identifier;emit_bundle(parts_for(identifier),make_rig(rig),p,out,{'provider_calls':0})
+            self.assertEqual(validate_bundle(out)['rig_id'],rig)
+    def test_six_drawing_fixtures_convert_with_recognizable_source_retained(self):
+        for identifier,(rig,name,kit,features) in DESIGNS.items():
+            job=self.folder/identifier;job.mkdir();p=self.proposal(rig);p['name']=name;p['kit_id']=kit;p['features']=features
+            write_json(job/'job.json',{'schema_version':1,'proposal':p});board_for(identifier).save(job/'raw_parts.png')
+            Image.new('RGBA',(1024,1024),(40,60,80,255)).save(job/'raw_theme.png')
+            result=convert_generated(job/'raw_parts.png',job/'raw_theme.png',p,job,{'provider':'local fixture','provider_calls':0})
+            self.assertEqual(validate_bundle(result)['name'],name)
+            self.assertTrue((job/'master.png').is_file())
     def test_bake_is_deterministic(self):
         p=self.proposal();parts=authored_parts('upright',p['theme']['palette']);rig=make_rig('upright')
         first,_=bake_atlas(parts,rig);second,_=bake_atlas(parts,rig);self.assertEqual(first.tobytes(),second.tobytes())

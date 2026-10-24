@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "rig_id": "floating",
+  "parts": [
+    {
+      "id": "torso",
+      "file": "parts/torso.png",
+      "pivot": [
+        32,
+        34
+      ],
+      "anchor": [
+        32,
+        34
+      ]
+    },
+    {
+      "id": "arm_back",
+      "file": "parts/arm_back.png",
+      "pivot": [
+        20,
+        34
+      ],
+      "anchor": [
+        20,
+        34
+      ]
+    },
+    {
+      "id": "arm_front",
+      "file": "parts/arm_front.png",
+      "pivot": [
+        43,
+        34
+      ],
+      "anchor": [
+        43,
+        34
+      ]
+    }
+  ]
+}

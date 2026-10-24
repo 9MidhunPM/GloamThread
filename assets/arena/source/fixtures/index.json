@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "notice": "Original local creator/rig fixtures, not provider recognition evidence.",
+  "drawings": [
+    {
+      "id": "upright_fox",
+      "name": "Kiln Fox",
+      "rig_id": "upright",
+      "kit_id": "ember",
+      "expected_features": [
+        "long pointed ears",
+        "copper mask",
+        "glowing chest core"
+      ],
+      "file": "upright_fox/drawing.png",
+      "sha256": "1281653ee18ee107f604e92512af38a8fa9096bd1834852aa1027b3433b43f72"
+    },
+    {
+      "id": "upright_bucket",
+      "name": "Bucket Knight",
+      "rig_id": "upright",
+      "kit_id": "stone",
+      "expected_features": [
+        "square helmet",
+        "three short helmet studs",
+        "blue chest plate"
+      ],
+      "file": "upright_bucket/drawing.png",
+      "sha256": "627775faffa329a6c853dfdf3a960d4d2faf6ddc36efaf76c686d2f2de48a2e6"
+    },
+    {
+      "id": "quadruped_seed",
+      "name": "Seed Stag",
+      "rig_id": "quadruped",
+      "kit_id": "nature",
+      "expected_features": [
+        "branch antlers",
+        "four thin legs",
+        "luminous seed in flank"
+      ],
+      "file": "quadruped_seed/drawing.png",
+      "sha256": "fe1cc36fa9da8198e88dadf9c8f22d38eca452a6b951fdb4d3bba9f10f84074b"
+    },
+    {
+      "id": "quadruped_pebble",
+      "name": "Pebbleback",
+      "rig_id": "quadruped",
+      "kit_id": "stone",
+      "expected_features": [
+        "low lizard head",
+        "triangular back plates",
+        "paddle tail"
+      ],
+      "file": "quadruped_pebble/drawing.png",
+      "sha256": "14f478459e805b0ecabb75713d4ac315e591a3e0e4b2b1d5256268b8250ea540"
+    },
+    {
+      "id": "floating_manta",
+      "name": "Lantern Manta",
+      "rig_id": "floating",
+      "kit_id": "storm",
+      "expected_features": [
+        "two wide angular fins",
+        "stitched face",
+        "two trailing ribbons"
+      ],
+      "file": "floating_manta/drawing.png",
+      "sha256": "3ac7f3d3eb88788b2c90261f39b5b79e4282e9e22264c3da92edbb29329d6691"
+    },
+    {
+      "id": "floating_orb",
+      "name": "Clock Orb",
+      "rig_id": "floating",
+      "kit_id": "frost",
+      "expected_features": [
+        "round clock body",
+        "one large central eye",
+        "two curly ribbons"
+      ],
+      "file": "floating_orb/drawing.png",
+      "sha256": "89b7d750d89535694a3f6a93fd3c36aa2df0f3d74e41b8fc27989c7929b84fe2"
+    }
+  ],
+  "source": "tools/forge/fixtures.py",
+  "source_sha256": "c1f64fd83c1ebee3220a129bda686352f03e1bae1dea0f634e8bacb48503446d"
+}
