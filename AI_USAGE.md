@@ -120,6 +120,24 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-world -->
 
+### 2026-10-25 02:08:22 +0530 — Budget the campaign for real-time execution
+
+- OpenAI Codex coordinated the route's 300-second wall-clock budget with the runner owner so the verified 99-second campaign can run without fixed-FPS acceleration. No gameplay or acceptance assertion changes; no new native-run claim.
+
+
+### 2026-10-25 02:07:36 +0530 — Verify the production overhead route
+
+- Tool: OpenAI Codex merged the published consumer/media branch and ran the authored ordinary-input campaign gate. Fixed only the driver's normalized-direction mask and asynchronous test audio retirement.
+- Checks: campaign PASS at 5,941 physics ticks with all eight rooms/ending/save and no recovery; combined overhead PASS 25/25 with writable isolated user data; content validator PASS. Actual App menu/dialogue intents and gameplay inputs are exercised, with no fixture repositioning or progression overrides.
+- Human review: pending. Native captures, export behavior, physical devices and listening remain independent integrator gates; side-view evidence is not reused as overhead proof.
+
+
+### 2026-10-25 01:50:17 +0530 — Draft tick-indexed campaign acceptance driver
+
+- Tool: OpenAI Codex authored the newly assigned ordinary-input overhead campaign gate using actual App intents, canonical room queries and physics-indexed commands. No forced flags, actor repositioning, private room loads or direct damage calls.
+- Checks: real runner parsed the scenario; expected production catalog startup failure prevents route verification. This remains WIP until the independent consumer/art bundle lands. Generated UID retained; no fabricated route evidence.
+
+
 ### 2026-10-25 01:42:11 +0530 — Correct transient cooperative guidance
 
 - Tool: OpenAI Codex implemented the peer-reviewed per-slot target filter and ownership wording in Session/HUD, leaving QuestDirector pure. Added controlled anchor/Loom/downed guidance coverage and retained its generated UID.
