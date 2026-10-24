@@ -39,6 +39,9 @@ func _run() -> void:
 		return
 	_environment = {
 		"engine": Engine.get_version_info(),
+		"implementation_commit": OS.get_environment("GLOAMTHREAD_QA_COMMIT"),
+		"debug_build": OS.is_debug_build(),
+		"network_configuration": OS.get_environment("GLOAMTHREAD_QA_NETWORK"),
 		"os": OS.get_name(),
 		"cpu": OS.get_processor_name(),
 		"display_server": DisplayServer.get_name(),
@@ -111,7 +114,13 @@ func _process(delta: float) -> bool:
 		_failures.append("Campaign observation exceeded its 600-second wall-clock limit; inspect the engine log for a stalled route or script error.")
 		_finish(false)
 		return false
-	if not is_instance_valid(_session) or _session.current_room_id != "r05":
+	if not is_instance_valid(_session):
+		return false
+	for flag: String in ["bridge_spindle", "bridge_causeway", "loom_restored"]:
+		var room_id: String = {"bridge_spindle": "r02", "bridge_causeway": "r06", "loom_restored": "r07"}[flag]
+		if _session.current_room_id == room_id and _session.mode == "playing" and _session.progress.has_flag(flag):
+			_request_capture(flag)
+	if _session.current_room_id != "r05":
 		return false
 	var boss: Variant = _session.boss()
 	var boss_state: String = boss.animation_state if is_instance_valid(boss) else "defeated"

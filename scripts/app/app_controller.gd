@@ -17,6 +17,7 @@ var _dialogue_line: int = 0
 var _remap_slot: int = -1
 var _remap_action: int = 0
 var _toast: Label
+var _toast_back: ColorRect
 var _toast_ticks: int = 0
 var _notices: Array[String] = []
 var _reconnect_return: String = "title"
@@ -47,6 +48,13 @@ func _ready() -> void:
 	_toast.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var toast_layer := CanvasLayer.new()
 	toast_layer.layer = 30
+	_toast_back = ColorRect.new()
+	_toast_back.position = Vector2(12, 297)
+	_toast_back.size = Vector2(936, 44)
+	_toast_back.color = Color(0.04, 0.06, 0.09, 0.96)
+	_toast_back.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_toast_back.visible = false
+	toast_layer.add_child(_toast_back)
 	toast_layer.add_child(_toast)
 	add_child(toast_layer)
 	if not catalog.errors.is_empty():
@@ -94,6 +102,7 @@ func _physics_process(_delta: float) -> void:
 		_toast_ticks -= 1
 		if _toast_ticks == 0 and is_instance_valid(_toast):
 			_toast.text = ""
+			_toast_back.visible = false
 			if not _notices.is_empty():
 				_notify(_notices.pop_front())
 
@@ -514,6 +523,7 @@ func _notify(message: String) -> void:
 			_notices.append(message)
 		return
 	_toast.text = message
+	_toast_back.visible = true
 	_toast_ticks = 360
 
 

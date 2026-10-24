@@ -6,6 +6,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 1 — runtime and integration
 
+### 2026-10-25T00:17:08+05:30 — Polish original-font menus and prepare reproducible Linux packaging
+
+- Changed: True-merged Agent2's complete native UI layout fixes/evidence. Critical values/bindings, scrollbars and long prompts are readable at1x/2x. Added the Linux package command, explicit license/provenance inventory, candidate launch guide, shipping exclusion of UI fixtures, and source/build identification for rendered QA. Toasts now have a readable backplate.
+- Why: Make the candidate reproducible from a clean commit and retain the complete notices alongside its executable, with diagnostic tools excluded from the shipping package.
+- Validation: Integrated suite PASS19/19 after full resource import; focused app scenarios PASS after toast styling. Packaging tool compiles and uses only the standard library; its clean-commit export/archive execution follows this commit. Private Xvfb UI captures pass24groups, exact2x pixels and owner-specific window actions; native actual-App campaign already reached ending with original art.
+- Limitations: Final network-isolated export/package/checksum and exact build source are recorded in the subsequent release evidence. Physical controllers, hardware rollover, listening and fresh pairs remain unverified. The earlier release/X11 performance sample is preliminary, not asserted as the final binary.
+
 ### 2026-10-25T00:02:04+05:30 — Connect campaign menus and verify the complete route
 
 - Changed: True-merged Agent 2's owner-controlled menu component and connected title/New/Continue, explicit join, source/character selection, pause/map/dialogue, controls/remapping/deadzone, volume/reduced effects, recovery, reconnect and ending/replay. Added queued notices plus persistent save errors, per-player prompts and readable HUD backplates. Permanent room visuals refresh immediately.
@@ -57,6 +64,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 - Limitations: This checkpoint sets up the work; it does not implement or verify the game. Agent 2 must deliver its diagnostic packet before integrated M0 acceptance can pass.
 
 ## Agent 2 — content and assets
+
+### 2026-10-25T00:06:44+05:30 — Complete UI layout and native-window verification
+
+- Changed: Added the extended UI layout/mouse scenario, explicit preview scene and reproducible private-Xvfb QA helper with real captures. Improved value/binding font size, scrollbar visibility/inset, long-row navigation and two-line footer prompts. Recoverable validation now warns instead of raising engine errors, preserving compatibility with Agent 1's strict error logger.
+- Why: Native review exposed invisible overflow and small critical values; the UI assignment also requires proof that global widget focus cannot bypass player ownership and that pixel scaling remains stable.
+- Validation: Six engine scenarios PASS, including two UI scenarios with 24 behavior groups. Native X11/Godot captures cover eight assigned kinds plus controls; non-owner input left pixels/actions unchanged, owner keyboard/mouse payloads matched, cancel/title/quit exited 0, 2x scaling matched pixels exactly, and the long footer wrapped into two lines. Pack, compilation and diff whitespace PASS. Debug-title matching in the new harness was corrected before its successful run. Temporary GUI processes were stopped.
+- Limitations: Native QA uses software llvmpipe and an isolated UI fixture with Dummy audio. It does not establish full application/campaign semantics, physical gamepads, keyboard rollover, performance or human playtests. Agent 1 owns integration and final release evidence; no application/session/storage files or global import sidecars changed.
 
 ### 2026-10-24T23:40:29+05:30 — Add the shared owner-controlled GameMenus component
 
