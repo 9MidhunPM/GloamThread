@@ -15,6 +15,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 2 — content and assets
 
+### 2026-10-24T22:43:33+05:30 — Author the eight-room cooperative story bundle
+
+- Changed: Authored r00-r07 with canonical bidirectional rally exits, two checkpoints, Oru, both anchor pairs, enemy lessons, secret charm, Spoolwarden arena, dash branch, loom and return. Added shared data-only fixtures, 29 content tests, read-only content validation hardening, labelled authoring previews and exact traversal/presentation requests.
+- Why: Complete Agent 2's Phase 1 content inventory and give Agent 1 explicit integration data without guessing entrance, progression or asset references. Revised ascent stairs against current motor constants, widened rally rectangles to include standing feet, and fixed malformed spawn/path handling plus bridge distribution enforcement.
+- Validation: Both full validators PASS; all 69 Python tests PASS. Pack and diff whitespace PASS. Native r00/r02 authoring compositions and actor sheets inspected. Earlier seed-18427 twice-rebuild hashes remain valid because this drop does not change asset sources.
+- Limitations: Physical traversal, dash tuning, real engine presentation/animation, audio listening, ordinary-input playthrough, gamepads, performance, export and human acceptance remain with integrated runtime verification. Room previews are explicitly labelled authoring-only and exercise no physics. Agent 1 owns true-merge integration and main publication.
+
 ### 2026-10-24T22:40:32+05:30 — Author the complete original art and audio inventory
 
 - Changed: Completed the full generator with courier animation, Oru, two ordinary enemies, Spoolwarden, both terrain themes, layered backgrounds, props/states, effects and UI. Added editable original audio instruments/cues/scores and synthesis for 18 cues and three arrangements. Hardened asset validation and added reproducible rebuild evidence.

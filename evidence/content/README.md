@@ -90,3 +90,50 @@ register all semantic audio names once through the shared mix. Props expose
 `prop_ids` aligned to frames and `logical_props` for inventory checks; the first
 16 frame indices remain stable. Full room delivery follows separately. No
 finished-room, physical-traversal, engine-import or motion gate is claimed.
+
+## Drop C — full story bundle and integration support
+
+Previous packet: `8495efa74c5e1eaefcdbf8305457a9231ca4c42f` (Drop B).
+All eight final room files are now authored; r00's diagnostic mover is replaced
+by Lantern Rest while its start/checkpoint/entrance IDs remain stable. The exact
+earlier diagnostic room survives as a data-only contract fixture.
+
+```sh
+python3 tools/validate_content.py
+python3 tools/validate_assets.py
+python3 -m unittest discover -s tools/tests -p 'test_*.py'
+python3 tools/gen/preview.py
+python3 tools/check_pack.py
+git diff --check
+```
+
+Results: both full validators PASS; all 69 Python tests PASS (27 asset, 29
+content, 11 audio, two generator tests). Pack and whitespace checks PASS.
+The asset rebuild result remains in `rebuild.json`; this drop changes room
+data and validation, not the generated asset inputs.
+
+The bundle includes the canonical nine links/18 directed exits, Oru, both
+checkpoints, two distinct-anchor bridge pairs, both normal enemy lessons,
+Spoolwarden, charm, dash-gated return branch, loom stations and ending dialogue.
+Layouts have at most two-tile ascent steps after comparison with the current
+motor source; no engine traversal measurement is implied. An optional marked
+hazard shelf has a safe route beneath it. Review also fixed exit rectangles to
+include standing feet and tightened malformed-data/required-bridge validation.
+
+`traversal_requests.md` lists exact room checks and presentation changes needed
+from Agent 1. The r01/r06 dash gaps require their measured dash envelope. Both
+anchor approaches, secret ladder, encounter spacing, rally zones and return
+spawns still need normal-input runtime checks. Gameplay, timing and story pacing
+are not established by these structural tests.
+
+`python3 tools/gen/preview.py` rebuilds six PNG contact/composition previews in
+`authoring/`. Each composed room image is labelled **AUTHORING ONLY / NO PHYSICS**.
+They are source-art reviews, never screenshots of the running game. Native
+inspection covered r00/r02 in Ember/Moss and the actor sheets. Motion, shared
+viewport masks, UI fit, audio listening, hardware and human gates remain pending.
+
+Agent 1 should true-merge the cumulative content branch at the appropriate
+runtime checkpoint, run authoritative imports/scenarios, update central setup
+and status documentation, and record actual review findings for focused content
+corrections. Agent 2 has not modified runtime scripts, entry points, import
+sidecars, central status documents or `main`.
