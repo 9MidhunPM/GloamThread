@@ -198,6 +198,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T01:31:49+05:30 — Immediate damage and revive presentation
+
+- Changed: Accepted hurt/down/revive transitions now select their directional pose immediately; revive follows the authored sixteen-tick clip and reset/damage clear stale revival presentation.
+- Why: Keep visual response aligned with the authoritative health transition and ground-plane knockback.
+- Validation: New real-physics damage scenario passes: planar knockback, interrupted windup, exactly-once signals, bounded immunity, steady reduced-flash cue, pause, stationary downed state and two-heart revive timing. Own-clone import generated its UID; sandbox editor socket warnings remain environmental.
+- Limitations: Null-catalog physics/presentation-state assertions; original frame rendering still requires integrated QA.
+
+
 ### 2026-10-25T01:30:41+05:30 — Preserve the bounded evasion window
 
 - Changed: Enemy hit sets now record accepted damage, allowing a lingering attack to connect after an initially immune contact expires.

@@ -187,6 +187,7 @@ func reset_at(feet_position: Vector2) -> void:
 	roll_ticks = 0
 	_roll_immunity_ticks = 0
 	_hurt_ticks = 0
+	_revive_animation_ticks = 0
 	_last_safe_feet = feet_position
 	if is_inside_tree():
 		reset_physics_interpolation()
@@ -214,8 +215,9 @@ func revive() -> void:
 	downed_ticks = 0
 	revive_progress_ticks = 0
 	immunity_ticks = REVIVE_IMMUNITY_TICKS
-	_revive_animation_ticks = 18
+	_revive_animation_ticks = 16
 	velocity = Vector2.ZERO
+	_set_animation("revive")
 	AudioDirector.play_cue(&"revive")
 	CombatQuery.effect(self, _catalog, "effect_revive_v1", global_position)
 
@@ -226,12 +228,14 @@ func take_hit(amount: int, knockback: Vector2 = Vector2.ZERO) -> bool:
 	hearts = maxi(0, hearts - amount)
 	immunity_ticks = DAMAGE_IMMUNITY_TICKS
 	_hurt_ticks = 12
+	_revive_animation_ticks = 0
 	_attack_kind = ""
 	_attack_buffer_ticks = 0
 	_finish_dash(not _standable(global_position))
 	roll_ticks = 0
 	velocity = knockback
 	revive_progress_ticks = 0
+	_set_animation("downed" if hearts == 0 else "hurt")
 	AudioDirector.play_cue(&"hurt")
 	damage_received.emit(self)
 	if hearts == 0:
