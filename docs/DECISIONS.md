@@ -2,7 +2,7 @@
 
 Version 2.0 · 24 October 2026 · Owner: Midhun P M.
 
-This repository includes the planning pack and partial M0 scaffolding with focused input/room scenario evidence. A playable Godot session is still missing; see `STATUS.md`. It supersedes the earlier C++/Raylib single-player production plan. The earlier HTML proof remains a separate, single-player experiment.
+This repository includes the planning pack and an integrated M0 diagnostic co-op room with focused component/session evidence. The complete Phase 1 adventure is still missing; see `STATUS.md`. It supersedes the earlier C++/Raylib single-player production plan. The earlier HTML proof remains a separate, single-player experiment.
 
 ## Product and phases
 
@@ -66,5 +66,5 @@ Main links: r00↔r01↔r02↔r03↔r04↔r05; boss opens r05↔r01 shortcut. r0
 - Fixed content and later generated bundles use the same validated manifest interfaces. Phase 1 only needs to consume fixed manifests; do not implement the Phase 2 backend early.
 - Keep ability IDs allowlisted, stats bounded, colliders fixed, geometry canonical, and presentation separate. An image model never emits executable gameplay code.
 - Save team progress once: version, fixed character profile IDs, checkpoint ID, explored rooms, team unlocks, restored anchors, boss/secret flags. Settings/device bindings separate. Load at safe checkpoint, never an arbitrary combat-frame snapshot.
-- Planned asset/content tools use `tools/generate_assets.py`, `tools/validate_content.py` and `tools/validate_assets.py`. The built-in GDScript scenario runner `tests/run_tests.gd` exists with input/room boundary checks; full gameplay scenarios are still required. No external test addon is mandatory.
+- Asset/content tools use `tools/generate_assets.py`, `tools/validate_content.py` and `tools/validate_assets.py`; the current packet uses explicit `--stage diagnostic`, while default full-stage checks require later complete content. The built-in GDScript runner covers component/session boundaries; full gameplay scenarios are still required. No external test addon is mandatory.
 - No claims of shipped co-op, Godot import, gameplay, rendering, audio or performance tests until actually run. This pack's validation only covers its documents and any example data/tooling explicitly included.

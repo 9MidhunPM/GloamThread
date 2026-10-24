@@ -6,6 +6,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 1 — runtime and integration
 
+### 2026-10-24T22:50:16+05:30 — Refresh diagnostic setup and handoff status
+
+- Changed: Updated setup, decisions, implementation/test plan and submission to reflect the actual integrated diagnostic room instead of stale missing-boot claims. Recorded Agent 2's later cumulative content tip as queued for integration, preserving the distinction between authored content and implemented gameplay.
+- Why: Keep the published agent handoff and launch instructions consistent with the first runtime milestone while both workstreams advance independently.
+- Validation: Documentation/link/example checker and diff whitespace pass; Git remote refs confirm preparation `2fea1ef`, runtime diagnostic merge `b1ff5d6` and queued content `e56d714`. The prior 4 engine scenarios and 15 Python cases remain the current code verification; this change adds no gameplay.
+- Limitations: Full adventure and visible/physical-input acceptance remain incomplete; final assets/rooms require further runtime consumers and integrated checks.
+
 ### 2026-10-24T22:40:57+05:30 — Integrate Agent 2's diagnostic packet and measure movement
 
 - Changed: Merged content checkpoint `34e14c9` through a true merge, retaining both agents' log sections. Imported its original diagnostic sprites/terrain/font and added an engine scenario consuming the actual r00/manifest. Published the measured motor envelope, updated launch/validation instructions and retained an actual initial window capture.

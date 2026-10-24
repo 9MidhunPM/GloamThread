@@ -2,7 +2,7 @@
 
 Version 2.0 · Phase 1 acceptance contract · 24 October 2026.
 
-**Current status:** a built-in scenario runner now passes two focused input/room component cases; see [runtime evidence](../evidence/runtime/commands.md). The boot/session and playable game remain missing, and there are no gameplay captures, performance results or completed co-op playtests. These component checks and the earlier single-player HTML proof do not pass the co-op acceptance gates below.
+**Current status:** four engine scenarios cover input/room boundaries, a shared-session fixture and actual diagnostic r00/assets; see [runtime evidence](../evidence/runtime/commands.md). Boot/session and the diagnostic room exist, with an initial static native-window capture. Continuous visible input, performance and human co-op playtests remain unverified, and the full adventure is incomplete. These focused checks and the earlier single-player HTML proof do not pass the full acceptance gates below.
 
 ## 1. Evidence levels
 

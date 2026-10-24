@@ -56,11 +56,11 @@ python3 tools/preflight.py --godot /path/to/Godot_v4.7.2-stable_linux.x86_64
 4. Paste FIRST_AGENT_PROMPT.md's prompt block and start the build.
 5. Ask for the first one-room two-input proof early, then let the agent continue through the scoped MVP. Inspect visible output at each integration gate.
 
-Project/input/audio/room scripts and the scenario runner exist, but the main scene and playable session are missing. The editor scan registers classes while reporting the missing boot scene. Input/room component scenarios pass; these are not gameplay acceptance. Continue from [the handoff](../HANDOFF.md) and use [STATUS.md](STATUS.md) for current verification evidence.
+The M0 diagnostic room now integrates boot/session/player/cameras and the first original asset/content packet. Import with `godot --headless --path . --editor --import --quit`, then launch with `godot --path .`. Four engine scenarios cover the current component/session boundaries; visible simultaneous input and the complete Phase 1 adventure remain unverified/incomplete. Use [STATUS.md](STATUS.md) for exact evidence.
 
 ## 5. Command contract after implementation
 
-The generation/asset/content tools and playable launch below remain **planned**. The import command scans current scripts but reports the missing main scene; the scenario runner already exercises the focused input/room boundaries:
+The current generator/validators accept `--stage diagnostic` for the first packet. Their default full-stage commands below require the later complete bundle and currently report incomplete content. Import, diagnostic launch and the current scenario runner work; full gameplay acceptance remains a separate gate:
 
 ```sh
 python3 tools/generate_assets.py --seed 18427

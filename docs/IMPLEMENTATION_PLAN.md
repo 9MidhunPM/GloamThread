@@ -12,7 +12,7 @@ Build the fixed-character co-op game first. The first completion target is the e
 4. Keep the current status in the implementation repository: implemented, verified, partially verified, planned, blocked. Include the exact engine version and commands actually run.
 5. Stop after Phase 1 is packaged and playtested. Do not automatically begin image generation, networking, or world expansion.
 
-M0 has started: project configuration, input/audio/room scaffolding and a scenario runner exist. Two component scenarios pass, but the boot scene, playable session, generated assets and integrated smoke case are missing; the editor scan still reports the missing boot resource. See `STATUS.md` and `../HANDOFF.md` for the evidence and next tasks. Commands described as planned in `SETUP.md` become usable only when their targets exist.
+M0's runtime and the first diagnostic content packet are integrated: boot/session/player/cameras, original diagnostic assets/r00 and four engine scenarios exist with clean import and headless startup. Continuous visible/physical-input acceptance remains outstanding before declaring M0 fully passed. See `STATUS.md` and `../HANDOFF.md` for current evidence and next tasks; later milestones still follow the gates below.
 
 ## 2. Dependency path
 
