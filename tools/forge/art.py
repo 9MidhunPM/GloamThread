@@ -6,7 +6,7 @@ these same templates; they never supply gameplay timing or collision geometry.
 from __future__ import annotations
 import math
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageEnhance
+from PIL import Image, ImageDraw, ImageEnhance, ImageColor
 
 RIG_PARTS={
  'upright':['torso','head','arm_back','arm_front','leg_back','leg_front'],
@@ -22,8 +22,18 @@ FRAME_STATES=[('idle',4),('run',6),('rise',2),('fall',2),('land',2),('slash',4),
 OUT='#111622'; BONE='#ffe9ba'
 
 
+
+def normalize_palette(palette:list[str])->list[str]:
+    """Derive highlight swatches locally; keep the accepted proposal unchanged."""
+    result=list(palette[:6])
+    while len(result)<6:
+        rgb=ImageColor.getrgb(result[-1]);amount=.34 if len(result)==4 else .55
+        result.append('#'+''.join(f'{round(channel+(255-channel)*amount):02x}' for channel in rgb))
+    return result
+
+
 def authored_parts(rig_id:str, palette:list[str]) -> dict[str,Image.Image]:
-    p=palette; parts={name:Image.new('RGBA',(64,64)) for name in RIG_PARTS[rig_id]}
+    p=normalize_palette(palette); parts={name:Image.new('RGBA',(64,64)) for name in RIG_PARTS[rig_id]}
     def draw(name): return ImageDraw.Draw(parts[name])
     if rig_id=='upright':
       # A long-eared kiln keeper with a copper mask, split apron and coal-glass heart.
@@ -124,7 +134,7 @@ def bake_atlas(parts:dict,rig:dict,masks:dict|None=None) -> tuple[Image.Image,Im
 
 
 def background(theme:dict) -> Image.Image:
-    p=theme['palette'];image=Image.new('RGB',(640,360),p[0]);d=ImageDraw.Draw(image)
+    p=normalize_palette(theme['palette']);image=Image.new('RGB',(640,360),p[0]);d=ImageDraw.Draw(image)
     # Tall kiln/glasshouse windows, distant tiers and quiet central combat space.
     d.rectangle((0,198,639,319),fill=p[1]);d.polygon([(0,196),(48,158),(89,179),(137,135),(181,174),(231,141),(287,179),(344,130),(399,170),(448,139),(498,173),(553,132),(606,167),(639,153),(639,319),(0,319)],fill=p[1])
     for x in (40,168,296,424,552):
@@ -146,7 +156,7 @@ def background(theme:dict) -> Image.Image:
 
 
 def materials(theme:dict) -> Image.Image:
-    p=theme['palette'];image=Image.new('RGBA',(256,256),p[1]);d=ImageDraw.Draw(image)
+    p=normalize_palette(theme['palette']);image=Image.new('RGBA',(256,256),p[1]);d=ImageDraw.Draw(image)
     for row in range(4):
       for col in range(4):
         x,y=col*64,row*64; d.rectangle((x,y,x+63,y+63),fill=p[1 if row%2==0 else 2]);d.line((x,y,x+63,y),fill=p[3]);d.line((x,y,x,y+63),fill=p[0])
