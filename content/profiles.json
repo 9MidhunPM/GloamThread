@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "collider_contract": "courier_v1",
+  "collider_contract": "courier_overhead_v1",
   "required_team_unlocks_are_separate": true,
   "profiles": [
     {
@@ -20,5 +20,5 @@
       "theme_id": "moss"
     }
   ],
-  "content_version": "phase1-v1"
+  "content_version": "overhead-v1"
 }

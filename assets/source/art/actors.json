@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "content_version": "phase1-v1",
+  "content_version": "overhead-v1",
   "authorship": "Original Gloamthread pixel palettes and pose tables authored with Codex. No downloaded or copied visual assets.",
   "pose_contract": "Feet origins and colliders are fixed externally. Poses and ticks are presentation metadata only; they do not decide gameplay effects.",
   "actors": {
     "oru": {
-      "description": "Broad patched rain cape, copper spectacles and crooked lantern staff; a tired, warm keeper, facing right.",
+      "description": "A broad patched rain cape seen over the hood crown, low copper spectacles and a crooked lantern staff; warm front-facing keeper.",
       "palette": {
         "cape": "#6B8582",
         "cape_dark": "#3D545B",
@@ -19,36 +19,36 @@
         "idle": {
           "poses": [
             {
+              "phase": 0,
               "bob": 0,
-              "hem": 0,
-              "lantern_sway": 0,
-              "staff_lift": 0,
               "hand": 0,
+              "staff_lift": 0,
+              "lantern_sway": 0,
               "mouth": 0
             },
             {
+              "phase": 1,
               "bob": 1,
-              "hem": 0,
+              "hand": 1,
+              "staff_lift": 0,
               "lantern_sway": -1,
-              "staff_lift": 0,
-              "hand": 0,
-              "mouth": 0
+              "mouth": 1
             },
             {
+              "phase": 2,
               "bob": 0,
-              "hem": 1,
-              "lantern_sway": 1,
-              "staff_lift": 0,
               "hand": 0,
-              "mouth": 0
+              "staff_lift": 0,
+              "lantern_sway": 1,
+              "mouth": 2
             },
             {
+              "phase": 3,
               "bob": -1,
-              "hem": 1,
-              "lantern_sway": 0,
+              "hand": 1,
               "staff_lift": 0,
-              "hand": 0,
-              "mouth": 0
+              "lantern_sway": 0,
+              "mouth": 3
             }
           ],
           "ticks": [
@@ -62,19 +62,19 @@
         "talk": {
           "poses": [
             {
+              "phase": 0,
               "bob": 0,
-              "hem": 1,
-              "lantern_sway": 0,
+              "hand": 0,
               "staff_lift": 0,
-              "hand": -1,
+              "lantern_sway": 0,
               "mouth": 0
             },
             {
+              "phase": 1,
               "bob": 1,
-              "hem": 0,
-              "lantern_sway": -1,
+              "hand": 1,
               "staff_lift": 0,
-              "hand": -2,
+              "lantern_sway": -1,
               "mouth": 1
             }
           ],
@@ -87,20 +87,20 @@
         "acknowledge": {
           "poses": [
             {
-              "bob": -1,
-              "hem": 1,
-              "lantern_sway": -1,
+              "phase": 0,
+              "bob": 0,
+              "hand": 7,
               "staff_lift": 2,
-              "hand": 1,
+              "lantern_sway": 0,
               "mouth": 0
             },
             {
-              "bob": -1,
-              "hem": 0,
-              "lantern_sway": 1,
+              "phase": 1,
+              "bob": 1,
+              "hand": 9,
               "staff_lift": 3,
-              "hand": 3,
-              "mouth": 0
+              "lantern_sway": -1,
+              "mouth": 1
             }
           ],
           "ticks": [
@@ -112,7 +112,7 @@
       }
     },
     "spoolmite": {
-      "description": "A wound wooden reel on six hinged twig feet, with a short forward shuttle claw. Its warning is a low crouch and lifted claw.",
+      "description": "A radial top-view wooden reel on six crab-like twig feet, paired side shuttle claws and four rim lights. Coiling, bracing and quick unwinding distinguish its charge; runtime owns the charge heading.",
       "palette": {
         "wood": "#845044",
         "wood_light": "#BC7852",
@@ -125,22 +125,14 @@
         "idle": {
           "poses": [
             {
-              "dx": 0,
+              "phase": 0,
               "bob": 0,
-              "stride": 0,
-              "crouch": 0,
-              "coil": 0,
-              "claw_y": 21,
-              "unwind": 0
+              "stride": 0
             },
             {
-              "dx": 0,
+              "phase": 1,
               "bob": 1,
-              "stride": 0,
-              "crouch": 0,
-              "coil": 22,
-              "claw_y": 22,
-              "unwind": 0
+              "stride": 0
             }
           ],
           "ticks": [
@@ -152,40 +144,24 @@
         "walk": {
           "poses": [
             {
-              "dx": 0,
-              "bob": 0,
-              "stride": -2,
-              "crouch": 0,
-              "coil": 35,
-              "claw_y": 21,
-              "unwind": 0
-            },
-            {
-              "dx": 1,
+              "phase": 0,
               "bob": -1,
-              "stride": 1,
-              "crouch": 0,
-              "coil": 65,
-              "claw_y": 20,
-              "unwind": 0
+              "stride": -2
             },
             {
-              "dx": 0,
+              "phase": 1,
               "bob": 0,
-              "stride": 2,
-              "crouch": 0,
-              "coil": 100,
-              "claw_y": 22,
-              "unwind": 0
+              "stride": 0
             },
             {
-              "dx": -1,
-              "bob": -1,
-              "stride": -1,
-              "crouch": 0,
-              "coil": 135,
-              "claw_y": 21,
-              "unwind": 0
+              "phase": 2,
+              "bob": 1,
+              "stride": 2
+            },
+            {
+              "phase": 3,
+              "bob": 0,
+              "stride": 0
             }
           ],
           "ticks": [
@@ -199,22 +175,14 @@
         "anticipation": {
           "poses": [
             {
-              "dx": -1,
-              "bob": 0,
-              "stride": -1,
-              "crouch": 2,
-              "coil": 170,
-              "claw_y": 16,
-              "unwind": 0
+              "phase": 0,
+              "bob": 1,
+              "stride": 0
             },
             {
-              "dx": -2,
-              "bob": 0,
-              "stride": -2,
-              "crouch": 3,
-              "coil": 200,
-              "claw_y": 12,
-              "unwind": 0
+              "phase": 1,
+              "bob": 2,
+              "stride": 0
             }
           ],
           "ticks": [
@@ -226,22 +194,14 @@
         "charge": {
           "poses": [
             {
-              "dx": 1,
-              "bob": 0,
-              "stride": 2,
-              "crouch": 1,
-              "coil": 240,
-              "claw_y": 19,
-              "unwind": 0
+              "phase": 0,
+              "bob": -1,
+              "stride": -1
             },
             {
-              "dx": 2,
-              "bob": 0,
-              "stride": -2,
-              "crouch": 0,
-              "coil": 280,
-              "claw_y": 18,
-              "unwind": 0
+              "phase": 1,
+              "bob": -1,
+              "stride": 1
             }
           ],
           "ticks": [
@@ -253,22 +213,14 @@
         "recovery": {
           "poses": [
             {
-              "dx": 1,
-              "bob": 0,
-              "stride": -1,
-              "crouch": 3,
-              "coil": 310,
-              "claw_y": 25,
-              "unwind": 0
+              "phase": 4,
+              "bob": 3,
+              "stride": 0
             },
             {
-              "dx": 0,
-              "bob": 0,
-              "stride": 1,
-              "crouch": 1,
-              "coil": 340,
-              "claw_y": 23,
-              "unwind": 0
+              "phase": 5,
+              "bob": 1,
+              "stride": 0
             }
           ],
           "ticks": [
@@ -280,40 +232,24 @@
         "defeat": {
           "poses": [
             {
-              "dx": 0,
+              "phase": 0,
               "bob": 0,
-              "stride": 0,
-              "crouch": 0,
-              "coil": 0,
-              "claw_y": 21,
-              "unwind": 0
+              "stride": 0
             },
             {
-              "dx": -1,
-              "bob": 0,
-              "stride": 0,
-              "crouch": 0,
-              "coil": 0,
-              "claw_y": 21,
-              "unwind": 1
+              "phase": 1,
+              "bob": 1,
+              "stride": 0
             },
             {
-              "dx": 0,
+              "phase": 2,
               "bob": 0,
-              "stride": 0,
-              "crouch": 0,
-              "coil": 0,
-              "claw_y": 21,
-              "unwind": 2
+              "stride": 0
             },
             {
-              "dx": -1,
-              "bob": 0,
-              "stride": 0,
-              "crouch": 0,
-              "coil": 0,
-              "claw_y": 21,
-              "unwind": 3
+              "phase": 3,
+              "bob": 1,
+              "stride": 0
             }
           ],
           "ticks": [
@@ -327,7 +263,7 @@
       }
     },
     "wickwing": {
-      "description": "A small hanging brass bell carried by asymmetrical folded bell-glass wings. Dive poses become a narrow right-facing arrow.",
+      "description": "An overhead bell-glass insect with two folding ribbed fans, a visible brass dome and closed circular dive rim. Runtime supplies attack heading; no directional hit shape is baked into the body.",
       "palette": {
         "glass": "#8FBDB5",
         "glass_dark": "#3C6570",
@@ -341,32 +277,28 @@
         "flap": {
           "poses": [
             {
-              "body_y": 14,
+              "phase": 0,
               "fold": 0,
-              "tip_y": 2,
-              "tail": -1,
-              "drop": 0
+              "bob": 0,
+              "tail": -1
             },
             {
-              "body_y": 13,
-              "fold": 0,
-              "tip_y": 7,
-              "tail": 0,
-              "drop": 0
+              "phase": 1,
+              "fold": 3,
+              "bob": -1,
+              "tail": 1
             },
             {
-              "body_y": 12,
-              "fold": 0,
-              "tip_y": 13,
-              "tail": 1,
-              "drop": 0
-            },
-            {
-              "body_y": 13,
+              "phase": 2,
               "fold": 1,
-              "tip_y": 5,
-              "tail": 0,
-              "drop": 0
+              "bob": 1,
+              "tail": 0
+            },
+            {
+              "phase": 3,
+              "fold": 5,
+              "bob": 0,
+              "tail": 2
             }
           ],
           "ticks": [
@@ -380,18 +312,16 @@
         "anticipation": {
           "poses": [
             {
-              "body_y": 14,
+              "phase": 0,
               "fold": 3,
-              "tip_y": 3,
-              "tail": 1,
-              "drop": 0
+              "bob": 0,
+              "tail": -1
             },
             {
-              "body_y": 15,
+              "phase": 1,
               "fold": 5,
-              "tip_y": 1,
-              "tail": -1,
-              "drop": 0
+              "bob": -1,
+              "tail": 1
             }
           ],
           "ticks": [
@@ -403,18 +333,16 @@
         "dive": {
           "poses": [
             {
-              "body_y": 17,
-              "fold": 5,
-              "tip_y": 5,
-              "tail": 0,
-              "drop": 0
+              "phase": 0,
+              "fold": 7,
+              "bob": 0,
+              "tail": -1
             },
             {
-              "body_y": 16,
-              "fold": 4,
-              "tip_y": 7,
-              "tail": 0,
-              "drop": 0
+              "phase": 1,
+              "fold": 8,
+              "bob": -1,
+              "tail": 1
             }
           ],
           "ticks": [
@@ -426,18 +354,16 @@
         "recovery": {
           "poses": [
             {
-              "body_y": 15,
-              "fold": 2,
-              "tip_y": 14,
-              "tail": 2,
-              "drop": 0
+              "phase": 0,
+              "fold": 3,
+              "bob": 0,
+              "tail": -1
             },
             {
-              "body_y": 14,
-              "fold": 1,
-              "tip_y": 8,
-              "tail": -2,
-              "drop": 0
+              "phase": 1,
+              "fold": 5,
+              "bob": -1,
+              "tail": 1
             }
           ],
           "ticks": [
@@ -449,32 +375,28 @@
         "defeat": {
           "poses": [
             {
-              "body_y": 13,
-              "fold": 0,
-              "tip_y": 4,
-              "tail": 0,
-              "drop": 0
+              "phase": 0,
+              "fold": 3,
+              "bob": 0,
+              "tail": -1
             },
             {
-              "body_y": 13,
-              "fold": 0,
-              "tip_y": 4,
-              "tail": 0,
-              "drop": 1
+              "phase": 1,
+              "fold": 5,
+              "bob": -1,
+              "tail": 1
             },
             {
-              "body_y": 13,
-              "fold": 0,
-              "tip_y": 4,
-              "tail": 0,
-              "drop": 2
+              "phase": 2,
+              "fold": 7,
+              "bob": 1,
+              "tail": 0
             },
             {
-              "body_y": 13,
-              "fold": 0,
-              "tip_y": 4,
-              "tail": 0,
-              "drop": 3
+              "phase": 3,
+              "fold": 9,
+              "bob": 0,
+              "tail": 2
             }
           ],
           "ticks": [
@@ -488,7 +410,7 @@
       }
     },
     "spoolwarden": {
-      "description": "An asymmetric wooden loom tender under a cracked brass bell, dragging a hollow shuttle. Open torso threads become a bright diamond seam during stagger.",
+      "description": "A radial overhead loom chassis on four spreading struts, twin concentric reels, a domed cracked bell crown and an exposed warp bed. Winding sweep, raised spindle strike and compressed coil charge have distinct body tells; directed attack shapes are separate runtime visuals.",
       "palette": {
         "wood": "#845044",
         "wood_light": "#BC7852",
@@ -503,76 +425,48 @@
         "idle": {
           "poses": [
             {
-              "dx": 0,
+              "phase": 0,
+              "dx": -1,
               "bob": 0,
               "stance": 0,
+              "collapse": 0,
               "tilt": 0,
-              "thread": 0,
-              "arm": [
-                48,
-                36
-              ],
-              "weapon": [
-                47,
-                35,
-                59,
-                47
-              ],
-              "collapse": 0
+              "orbit_angle": 25,
+              "weapon_lift": 0,
+              "open_seam": 0
             },
             {
+              "phase": 1,
               "dx": 0,
               "bob": 1,
               "stance": 0,
+              "collapse": 0,
               "tilt": 0,
-              "thread": 1,
-              "arm": [
-                48,
-                37
-              ],
-              "weapon": [
-                47,
-                36,
-                59,
-                48
-              ],
-              "collapse": 0
+              "orbit_angle": 33,
+              "weapon_lift": 0,
+              "open_seam": 0
             },
             {
-              "dx": 0,
+              "phase": 2,
+              "dx": 1,
               "bob": 0,
               "stance": 0,
-              "tilt": 1,
-              "thread": 2,
-              "arm": [
-                49,
-                36
-              ],
-              "weapon": [
-                48,
-                35,
-                60,
-                46
-              ],
-              "collapse": 0
+              "collapse": 0,
+              "tilt": 0,
+              "orbit_angle": 41,
+              "weapon_lift": 0,
+              "open_seam": 0
             },
             {
+              "phase": 3,
               "dx": 0,
-              "bob": -1,
+              "bob": 1,
               "stance": 0,
-              "tilt": -1,
-              "thread": 3,
-              "arm": [
-                48,
-                35
-              ],
-              "weapon": [
-                47,
-                34,
-                59,
-                46
-              ],
-              "collapse": 0
+              "collapse": 0,
+              "tilt": 0,
+              "orbit_angle": 49,
+              "weapon_lift": 0,
+              "open_seam": 0
             }
           ],
           "ticks": [
@@ -586,40 +480,26 @@
         "sweep_anticipation": {
           "poses": [
             {
-              "dx": -1,
-              "bob": 1,
-              "stance": 1,
-              "tilt": -1,
-              "thread": 0,
-              "arm": [
-                27,
-                32
-              ],
-              "weapon": [
-                25,
-                30,
-                7,
-                28
-              ],
-              "collapse": 0
+              "phase": 0,
+              "dx": -2,
+              "bob": 0,
+              "stance": 2,
+              "collapse": 0,
+              "tilt": -2,
+              "orbit_angle": 160,
+              "weapon_lift": 0,
+              "open_seam": 0
             },
             {
-              "dx": -2,
-              "bob": 2,
+              "phase": 1,
+              "dx": -3,
+              "bob": 1,
               "stance": 2,
-              "tilt": -1,
-              "thread": 2,
-              "arm": [
-                25,
-                30
-              ],
-              "weapon": [
-                23,
-                28,
-                4,
-                25
-              ],
-              "collapse": 0
+              "collapse": 0,
+              "tilt": -2,
+              "orbit_angle": 175,
+              "weapon_lift": 0,
+              "open_seam": 0
             }
           ],
           "ticks": [
@@ -631,40 +511,26 @@
         "sweep_active": {
           "poses": [
             {
-              "dx": 2,
-              "bob": 1,
-              "stance": 2,
+              "phase": 0,
+              "dx": 1,
+              "bob": 0,
+              "stance": 3,
+              "collapse": 0,
               "tilt": 1,
-              "thread": 1,
-              "arm": [
-                47,
-                31
-              ],
-              "weapon": [
-                45,
-                32,
-                62,
-                29
-              ],
-              "collapse": 0
+              "orbit_angle": 50,
+              "weapon_lift": 0,
+              "open_seam": 0
             },
             {
-              "dx": 3,
-              "bob": 0,
-              "stance": 1,
-              "tilt": 2,
-              "thread": 2,
-              "arm": [
-                50,
-                37
-              ],
-              "weapon": [
-                48,
-                36,
-                62,
-                43
-              ],
-              "collapse": 0
+              "phase": 1,
+              "dx": 2,
+              "bob": 1,
+              "stance": 3,
+              "collapse": 0,
+              "tilt": 1,
+              "orbit_angle": -50,
+              "weapon_lift": 0,
+              "open_seam": 0
             }
           ],
           "ticks": [
@@ -676,40 +542,26 @@
         "sweep_recovery": {
           "poses": [
             {
+              "phase": 0,
               "dx": 2,
-              "bob": 3,
+              "bob": 0,
               "stance": 2,
+              "collapse": 0,
               "tilt": 0,
-              "thread": 1,
-              "arm": [
-                50,
-                42
-              ],
-              "weapon": [
-                48,
-                41,
-                61,
-                53
-              ],
-              "collapse": 0
+              "orbit_angle": -20,
+              "weapon_lift": 0,
+              "open_seam": 0
             },
             {
+              "phase": 1,
               "dx": 1,
               "bob": 1,
               "stance": 1,
+              "collapse": 0,
               "tilt": 0,
-              "thread": 2,
-              "arm": [
-                49,
-                39
-              ],
-              "weapon": [
-                47,
-                38,
-                60,
-                50
-              ],
-              "collapse": 0
+              "orbit_angle": 25,
+              "weapon_lift": 0,
+              "open_seam": 0
             }
           ],
           "ticks": [
@@ -721,40 +573,26 @@
         "strike_anticipation": {
           "poses": [
             {
-              "dx": 0,
+              "phase": 0,
+              "dx": -1,
               "bob": -1,
-              "stance": 1,
-              "tilt": -1,
-              "thread": 0,
-              "arm": [
-                47,
-                20
-              ],
-              "weapon": [
-                47,
-                19,
-                44,
-                3
-              ],
-              "collapse": 0
+              "stance": 2,
+              "collapse": 0,
+              "tilt": 0,
+              "orbit_angle": -60,
+              "weapon_lift": 5,
+              "open_seam": 0
             },
             {
-              "dx": -1,
+              "phase": 1,
+              "dx": 0,
               "bob": -2,
               "stance": 2,
-              "tilt": -1,
-              "thread": 1,
-              "arm": [
-                48,
-                18
-              ],
-              "weapon": [
-                47,
-                18,
-                43,
-                1
-              ],
-              "collapse": 0
+              "collapse": 0,
+              "tilt": 0,
+              "orbit_angle": -60,
+              "weapon_lift": 7,
+              "open_seam": 0
             }
           ],
           "ticks": [
@@ -766,40 +604,26 @@
         "strike_active": {
           "poses": [
             {
-              "dx": 1,
-              "bob": 2,
-              "stance": 2,
-              "tilt": 1,
-              "thread": 1,
-              "arm": [
-                49,
-                43
-              ],
-              "weapon": [
-                50,
-                42,
-                55,
-                60
-              ],
-              "collapse": 0
+              "phase": 0,
+              "dx": -1,
+              "bob": 3,
+              "stance": 3,
+              "collapse": 0,
+              "tilt": 0,
+              "orbit_angle": 70,
+              "weapon_lift": 0,
+              "open_seam": 0
             },
             {
-              "dx": 1,
+              "phase": 1,
+              "dx": 0,
               "bob": 4,
               "stance": 3,
-              "tilt": 2,
-              "thread": 2,
-              "arm": [
-                50,
-                45
-              ],
-              "weapon": [
-                51,
-                44,
-                57,
-                61
-              ],
-              "collapse": 0
+              "collapse": 0,
+              "tilt": 0,
+              "orbit_angle": 80,
+              "weapon_lift": 0,
+              "open_seam": 0
             }
           ],
           "ticks": [
@@ -811,40 +635,26 @@
         "strike_recovery": {
           "poses": [
             {
-              "dx": 0,
-              "bob": 4,
+              "phase": 0,
+              "dx": -1,
+              "bob": 2,
               "stance": 2,
+              "collapse": 0,
               "tilt": 0,
-              "thread": 3,
-              "arm": [
-                50,
-                44
-              ],
-              "weapon": [
-                51,
-                43,
-                56,
-                59
-              ],
-              "collapse": 0
+              "orbit_angle": 60,
+              "weapon_lift": 0,
+              "open_seam": 0
             },
             {
+              "phase": 1,
               "dx": 0,
-              "bob": 2,
+              "bob": 1,
               "stance": 1,
+              "collapse": 0,
               "tilt": 0,
-              "thread": 2,
-              "arm": [
-                49,
-                40
-              ],
-              "weapon": [
-                49,
-                39,
-                57,
-                55
-              ],
-              "collapse": 0
+              "orbit_angle": 40,
+              "weapon_lift": 0,
+              "open_seam": 0
             }
           ],
           "ticks": [
@@ -856,40 +666,26 @@
         "charge_anticipation": {
           "poses": [
             {
+              "phase": 0,
               "dx": -1,
-              "bob": 4,
-              "stance": 2,
-              "tilt": 2,
-              "thread": 0,
-              "arm": [
-                47,
-                34
-              ],
-              "weapon": [
-                44,
-                33,
-                59,
-                32
-              ],
-              "collapse": 0
+              "bob": 3,
+              "stance": 3,
+              "collapse": 0,
+              "tilt": 0,
+              "orbit_angle": -20,
+              "weapon_lift": 0,
+              "open_seam": 0
             },
             {
-              "dx": -2,
-              "bob": 5,
-              "stance": 3,
-              "tilt": 3,
-              "thread": 1,
-              "arm": [
-                46,
-                35
-              ],
-              "weapon": [
-                43,
-                34,
-                60,
-                33
-              ],
-              "collapse": 0
+              "phase": 1,
+              "dx": 0,
+              "bob": 4,
+              "stance": 4,
+              "collapse": 0,
+              "tilt": 0,
+              "orbit_angle": -15,
+              "weapon_lift": 0,
+              "open_seam": 0
             }
           ],
           "ticks": [
@@ -901,40 +697,26 @@
         "charge_active": {
           "poses": [
             {
-              "dx": 5,
+              "phase": 0,
+              "dx": -1,
               "bob": 1,
-              "stance": 2,
-              "tilt": 2,
-              "thread": 2,
-              "arm": [
-                49,
-                34
-              ],
-              "weapon": [
-                46,
-                33,
-                62,
-                32
-              ],
-              "collapse": 0
+              "stance": -1,
+              "collapse": 0,
+              "tilt": 0,
+              "orbit_angle": -20,
+              "weapon_lift": 0,
+              "open_seam": 0
             },
             {
-              "dx": 6,
+              "phase": 1,
+              "dx": 0,
               "bob": 2,
               "stance": -1,
-              "tilt": 2,
-              "thread": 3,
-              "arm": [
-                50,
-                35
-              ],
-              "weapon": [
-                47,
-                34,
-                62,
-                34
-              ],
-              "collapse": 0
+              "collapse": 0,
+              "tilt": 0,
+              "orbit_angle": -15,
+              "weapon_lift": 0,
+              "open_seam": 0
             }
           ],
           "ticks": [
@@ -946,40 +728,26 @@
         "charge_recovery": {
           "poses": [
             {
-              "dx": 3,
-              "bob": 5,
-              "stance": 3,
-              "tilt": 2,
-              "thread": 1,
-              "arm": [
-                50,
-                42
-              ],
-              "weapon": [
-                48,
-                41,
-                61,
-                49
-              ],
-              "collapse": 0
+              "phase": 0,
+              "dx": -1,
+              "bob": 3,
+              "stance": 2,
+              "collapse": 0,
+              "tilt": 0,
+              "orbit_angle": -20,
+              "weapon_lift": 0,
+              "open_seam": 0
             },
             {
-              "dx": 1,
-              "bob": 3,
-              "stance": 1,
-              "tilt": 1,
-              "thread": 2,
-              "arm": [
-                49,
-                40
-              ],
-              "weapon": [
-                47,
-                39,
-                60,
-                49
-              ],
-              "collapse": 0
+              "phase": 1,
+              "dx": 0,
+              "bob": 1,
+              "stance": 2,
+              "collapse": 0,
+              "tilt": 0,
+              "orbit_angle": -15,
+              "weapon_lift": 0,
+              "open_seam": 0
             }
           ],
           "ticks": [
@@ -991,76 +759,48 @@
         "stagger": {
           "poses": [
             {
-              "dx": -1,
+              "phase": 0,
+              "dx": -2,
               "bob": 2,
-              "stance": 2,
+              "stance": 3,
+              "collapse": 0,
               "tilt": -2,
-              "thread": 0,
-              "arm": [
-                48,
-                43
-              ],
-              "weapon": [
-                48,
-                43,
-                60,
-                54
-              ],
-              "collapse": 0
+              "orbit_angle": 15,
+              "weapon_lift": 2,
+              "open_seam": 2
             },
             {
-              "dx": 0,
-              "bob": 3,
-              "stance": 2,
-              "tilt": -1,
-              "thread": 1,
-              "arm": [
-                49,
-                45
-              ],
-              "weapon": [
-                49,
-                44,
-                60,
-                56
-              ],
-              "collapse": 0
-            },
-            {
+              "phase": 1,
               "dx": 1,
               "bob": 2,
-              "stance": 2,
-              "tilt": -2,
-              "thread": 2,
-              "arm": [
-                50,
-                43
-              ],
-              "weapon": [
-                49,
-                43,
-                61,
-                54
-              ],
-              "collapse": 0
+              "stance": 3,
+              "collapse": 0,
+              "tilt": 2,
+              "orbit_angle": 20,
+              "weapon_lift": 2,
+              "open_seam": 3
             },
             {
-              "dx": 0,
-              "bob": 3,
-              "stance": 2,
+              "phase": 2,
+              "dx": -1,
+              "bob": 2,
+              "stance": 3,
+              "collapse": 0,
               "tilt": -1,
-              "thread": 3,
-              "arm": [
-                49,
-                44
-              ],
-              "weapon": [
-                48,
-                44,
-                60,
-                55
-              ],
-              "collapse": 0
+              "orbit_angle": 25,
+              "weapon_lift": 2,
+              "open_seam": 2
+            },
+            {
+              "phase": 3,
+              "dx": 0,
+              "bob": 2,
+              "stance": 3,
+              "collapse": 0,
+              "tilt": 1,
+              "orbit_angle": 30,
+              "weapon_lift": 2,
+              "open_seam": 3
             }
           ],
           "ticks": [
@@ -1074,112 +814,70 @@
         "defeat": {
           "poses": [
             {
-              "dx": 0,
-              "bob": 2,
+              "phase": 0,
+              "dx": -2,
+              "bob": 0,
               "stance": 2,
+              "collapse": 0,
+              "tilt": 0,
+              "orbit_angle": 35,
+              "weapon_lift": 0,
+              "open_seam": 0
+            },
+            {
+              "phase": 1,
+              "dx": -1,
+              "bob": 0,
+              "stance": 2,
+              "collapse": 2,
               "tilt": -1,
-              "thread": 0,
-              "arm": [
-                48,
-                45
-              ],
-              "weapon": [
-                48,
-                44,
-                60,
-                55
-              ],
-              "collapse": 0
+              "orbit_angle": 40,
+              "weapon_lift": 0,
+              "open_seam": 0
             },
             {
-              "dx": 0,
-              "bob": 2,
-              "stance": 3,
+              "phase": 2,
+              "dx": 1,
+              "bob": 0,
+              "stance": 2,
+              "collapse": 4,
               "tilt": -2,
-              "thread": 1,
-              "arm": [
-                49,
-                49
-              ],
-              "weapon": [
-                48,
-                48,
-                61,
-                56
-              ],
-              "collapse": 2
+              "orbit_angle": 45,
+              "weapon_lift": 0,
+              "open_seam": 1
             },
             {
+              "phase": 3,
               "dx": 0,
-              "bob": 2,
-              "stance": 4,
-              "tilt": -2,
-              "thread": 2,
-              "arm": [
-                50,
-                52
-              ],
-              "weapon": [
-                48,
-                52,
-                61,
-                57
-              ],
-              "collapse": 4
-            },
-            {
-              "dx": 0,
-              "bob": 2,
-              "stance": 4,
+              "bob": 0,
+              "stance": 2,
+              "collapse": 6,
               "tilt": -3,
-              "thread": 3,
-              "arm": [
-                50,
-                54
-              ],
-              "weapon": [
-                47,
-                55,
-                61,
-                58
-              ],
-              "collapse": 6
+              "orbit_angle": 50,
+              "weapon_lift": 0,
+              "open_seam": 1
             },
             {
-              "dx": 0,
-              "bob": 1,
-              "stance": 4,
-              "tilt": -3,
-              "thread": 4,
-              "arm": [
-                50,
-                55
-              ],
-              "weapon": [
-                47,
-                56,
-                61,
-                59
-              ],
-              "collapse": 8
-            },
-            {
-              "dx": 0,
-              "bob": 1,
-              "stance": 4,
+              "phase": 4,
+              "dx": 1,
+              "bob": 0,
+              "stance": 2,
+              "collapse": 8,
               "tilt": -4,
-              "thread": 5,
-              "arm": [
-                50,
-                55
-              ],
-              "weapon": [
-                47,
-                56,
-                61,
-                59
-              ],
-              "collapse": 9
+              "orbit_angle": 55,
+              "weapon_lift": 0,
+              "open_seam": 2
+            },
+            {
+              "phase": 5,
+              "dx": 0,
+              "bob": 0,
+              "stance": 2,
+              "collapse": 10,
+              "tilt": -5,
+              "orbit_angle": 60,
+              "weapon_lift": 0,
+              "open_seam": 2
             }
           ],
           "ticks": [
@@ -1193,6 +891,45 @@
           "loop": false
         }
       }
+    }
+  },
+  "perspective": "Original overhead oblique actors. Enemies and boss are radial bodies; runtime directed weapons and telegraphs own attack heading.",
+  "effects": {
+    "enemy_warning": {
+      "description": "A hollow straight-edged arrow points along local +X in danger coral with a pale gold rim. The complete marker stays visible while a small inner stitch advances once; the actor holds the final frame through its windup. The transparent interior preserves the ground. This is a warning symbol, not a weapon swing.",
+      "palette": {
+        "outline": "#222433",
+        "danger": "#F07865",
+        "light": "#FFE0A1"
+      },
+      "poses": [
+        {
+          "stitch_x": 21
+        },
+        {
+          "stitch_x": 22
+        },
+        {
+          "stitch_x": 23
+        },
+        {
+          "stitch_x": 24
+        },
+        {
+          "stitch_x": 25
+        },
+        {
+          "stitch_x": 26
+        }
+      ],
+      "ticks": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ]
     }
   }
 }

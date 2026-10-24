@@ -46,6 +46,35 @@
         }
       ]
     },
+    "roll": {
+      "description": "A grounded cloth tumble with two soft wooden foot flicks; no rising jump chime and no long dash tail.",
+      "duration_seconds": 0.18,
+      "peak": 0.21,
+      "events": [
+        {
+          "at_seconds": 0,
+          "instrument": "wood_knock",
+          "note": 46,
+          "duration_seconds": 0.075,
+          "gain": 0.44
+        },
+        {
+          "at_seconds": 0.007,
+          "instrument": "thread_air",
+          "note": 56,
+          "end_note": 47,
+          "duration_seconds": 0.15,
+          "gain": 0.85
+        },
+        {
+          "at_seconds": 0.105,
+          "instrument": "wood_knock",
+          "note": 49,
+          "duration_seconds": 0.065,
+          "gain": 0.3
+        }
+      ]
+    },
     "slash": {
       "description": "A short dry cloth sweep with a little shuttle body.",
       "duration_seconds": 0.22,

@@ -23,8 +23,8 @@ static func load_from_path(path: String) -> AssetCatalog:
 		catalog.errors.append("Asset manifest must be a JSON object")
 		return catalog
 	var parsed: Dictionary = parser.data
-	if not RoomDefinition._is_integer(parsed.get("schema_version")) or parsed.schema_version != 1 or not parsed.get("content_version") is String or parsed.content_version != "phase1-v1":
-		catalog.errors.append("Asset manifest requires schema 1 and content phase1-v1")
+	if not RoomDefinition._is_integer(parsed.get("schema_version")) or parsed.schema_version != 1 or not parsed.get("content_version") is String or parsed.content_version != "overhead-v1":
+		catalog.errors.append("Asset manifest requires schema 1 and content overhead-v1")
 		return catalog
 	catalog.stage = str(parsed.get("stage", ""))
 	if catalog.stage not in ["diagnostic", "full"]:

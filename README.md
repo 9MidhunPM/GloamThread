@@ -1,5 +1,7 @@
 # GLOAMTHREAD: TWO ENDS
 
+> **Overhead content branch:** this checkout generates `overhead-v1` assets: 128 frames per courier, 48 terrain slots and four original music arrangements. Agent 1's matching overhead rooms/runtime are required before game launch and the integrated content gate. The preserved playable side-view milestone is on `main` at `651f08b`; this asset delivery does not replace its verification record.
+
 **Two couriers. One unraveling kingdom. Two ways of seeing it.**
 
 **Active direction:** the user has requested an overhead adventure with further UI, music and combat polish. The current verified download below preserves the side-view milestone; overhead work is next.
@@ -20,7 +22,9 @@ Devin Hack Kochi allows Devin and other AI tools, models and providers without m
 - **Working demo:** the eight-room adventure, menus and save/Continue flow are implemented on `feat/phase1-runtime`; the preserved side-view candidate is packaged; the next iteration changes to overhead. See "Current status" below.
 - **Technology stack:** Godot 4.7.2 standard (typed GDScript, Compatibility renderer), Python 3 + Pillow + numpy for original asset/audio generation and validation, Git.
 
-### Run the project
+### Run the preserved side-view milestone
+
+Use the published `v0.1.0-demo` source/release for these preserved launch steps. This branch's new media requires the matching overhead runtime/content integration described above.
 
 The production game includes title/join, all eight rooms, combat, cooperation, save/Continue, settings and an ending. Twenty engine scenarios include a complete ordinary-input route; native/export acceptance is recorded separately.
 
@@ -37,7 +41,19 @@ The production game includes title/join, all eight rooms, combat, cooperation, s
    - `python3 tools/gen/rebuild_check.py --seed 18427` — compare two complete output/manifest rebuilds.
    - Runtime checkout: `godot --headless --path . --editor --import --quit`, then `godot --headless --fixed-fps 60 --path . --script tests/run_tests.gd`.
 
-### Current status
+### Overhead media checkpoint
+
+The new packet has 50 original manifested assets, four-facing 128-frame couriers, a dedicated enemy-warning visual, four music arrangements and 19 SFX including roll. The asset validator, 103 Python tests and Godot media import pass. The old actual-content validator still rejects the new version/terrain; game launch and normal-control overhead acceptance require Agent 1's matching implementation. See [packet evidence](evidence/content/overhead/README.md).
+
+```sh
+python3 tools/generate_assets.py --seed 18427
+python3 tools/validate_assets.py
+python3 -m unittest discover -s tools/tests -p 'test_*.py'
+```
+
+### Preserved side-view status
+
+The following records the earlier fixed-character milestone, not overhead gameplay acceptance.
 
 - **Content branch:** eight authored rooms, fixed profiles, dialogue, 47 original manifested art/audio/font assets and the complete Python pipeline. Both full validators and 79 Python tests pass after content QA; two seed-18427 rebuilds matched. See [content evidence](evidence/content/README.md).
 - **Runtime branch:** production catalogs/animation/audio, combat, enemies/boss, team progression, anchors/exits/recovery and validated save/settings stores are integrated. Twenty integrated engine scenarios pass, including the complete actual-App route and UI layout checks; the earlier core staged-copy check passed twelve. See [runtime evidence](evidence/runtime/commands.md) and [movement limits](evidence/runtime/traversal.md).
