@@ -1,5 +1,12 @@
 # Agent 2 forge changelog
 
+## 2026-10-25T04:05:02+05:30 — Check the complete missing-image allowance before dispatch
+
+- Added a non-mutating generation preflight that verifies both image caches, sums only missing reservations and checks remaining shared/job allowances under the ledger lock. It also refuses an already-attempted image lacking a valid cache; per-request reservations still enforce concurrency after the check.
+- Why: with $0.35 already allocated, a new two-image job could previously reserve/start its first $0.10 request before discovering the second would exceed the shared cap. It now makes zero calls and leaves ledger bytes unchanged.
+- Validation: isolated old commit 98d42a6 reproduces that regression; the patched worker passes all four new cases, including exact $0.20 fresh generation, cached-parts reuse with $0.10 remaining and corrupted-cache rejection. Full Python suite 167/167 and combined forge suites 55/55 PASS; independent source review/mock probe, compilation and whitespace PASS. No actual SDK, job, ledger or credentials were accessed.
+- Limitations: the check does not reserve or lock the whole generation. Another job may consume budget later; the unchanged per-request reservation remains authoritative. Amounts are conservative allocations, not billing measurements.
+
 ## 2026-10-25T03:47:24+05:30 — Recover retained image boards without another request
 
 - Added safe source-layout staging and a no-rig `bake` bootstrap for received, hash-verified raw boards. Recovery verifies the original/normalized source, frozen approved proposal, received request identity, raw PNGs and output hashes without loading provider settings or constructing the SDK.

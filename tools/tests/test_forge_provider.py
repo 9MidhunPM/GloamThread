@@ -430,8 +430,8 @@ class ForgeProviderTests(unittest.TestCase):
                     self.invoke("generate")
                 self.assertEqual(self.status()["state"], "failed")
                 self.assertFalse((self.job_dir / "candidate").exists())
-        self.assertAlmostEqual(self.ledger()["reserved_usd"], 0.50)
-        self.assertEqual(self.provider.image.call_count, 5)
+        self.assertAlmostEqual(self.ledger()["reserved_usd"], 0.40)
+        self.assertEqual(self.provider.image.call_count, 4)
         self.assertEqual(self.converter.call_count, 2)
 
     def test_existing_candidate_is_never_replaced_by_new_generation(self):
