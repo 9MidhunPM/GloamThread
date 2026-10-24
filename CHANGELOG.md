@@ -198,6 +198,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T01:37:34+05:30 — Match traversal fixture to atomic boss rewards
+
+- Changed: Threadstep fixture now grants boss_spoolwarden, threadstep and shortcut_bell together and asserts the reward commit succeeds.
+- Why: The integrated progress boundary correctly rejects partial boss rewards; a movement test must use a valid team outcome.
+- Validation: Focused Threadstep scenario passes in the isolated actor project using the current integrator TeamProgress source.
+- Limitations: This remains a controlled unlock fixture, not evidence of defeating the boss through ordinary inputs.
+
+
 ### 2026-10-25T01:37:07+05:30 — Authored enemy direction warning consumer
 
 - Changed: Enemy windups show effect_enemy_warning_v1 through its non-loop play clip, rotated in quarter turns around its declared pivot. The final frame holds through the warning; active/recovery/stagger/death clears it. A new windup starts a new clip serial.
