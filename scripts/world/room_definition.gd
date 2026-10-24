@@ -79,7 +79,7 @@ func parse(data: Dictionary) -> void:
 	if data.has("decor"):
 		room_fields.append("decor")
 	_check_fields(data, room_fields, "room")
-	if data.get("content_version") != "overhead-v1":
+	if not data.get("content_version") is String or data.content_version != "overhead-v1":
 		errors.append("content_version must be overhead-v1")
 	if not _is_integer(data.get("schema_version")) or data.get("schema_version") != SCHEMA_VERSION:
 		errors.append("schema_version must be %d" % SCHEMA_VERSION)

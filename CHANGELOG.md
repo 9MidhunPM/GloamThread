@@ -6,6 +6,12 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 1 — runtime and integration
 
+### 2026-10-25T02:13:07+05:30 — Reject malformed room epochs without script errors
+
+- Changed: Type-check the room content epoch before string comparison and retain overhead spawn/reference boundary checks.
+- Why: Boolean and integer JSON epochs crashed parsing instead of returning useful validation errors; the expanded boundary scenario reproduced both failures.
+- Validation: Focused room-loading scenario now passes incompatible string, boolean, integer and null epochs plus dry-footprint checks; whitespace and pack checks pass.
+
 ### 2026-10-25T02:06:20+05:30 — Teach current overhead controls at join
 
 - Changed: Join source rows show each selected player's current movement, Roll, combat, interaction/revive and map bindings. Threadstep is visibly locked for New and reflects the saved team unlock for Continue.
