@@ -198,6 +198,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T01:35:23+05:30 — Buffered directional animation regression
+
+- Changed: Added a diagnostic atlas fixture and real player/SpriteAnimator scenario proving that a queued same-facing slash returns through idle and restarts its first windup frame; finished same-state non-loop clips remain held.
+- Why: Test the suspected last-frame restart defect before changing animation guards. The defect did not reproduce, so production play API and guards remain unchanged.
+- Validation: Focused Godot 4.7.2 animation scenario passes, checking actual AtlasTexture regions and physics attack serial timing. New fixture/scenario UIDs generated through isolated import.
+- Limitations: In-memory colour labels prove sequencing only, not authored-art appearance or readability.
+
+
 ### 2026-10-25T01:31:49+05:30 — Immediate damage and revive presentation
 
 - Changed: Accepted hurt/down/revive transitions now select their directional pose immediately; revive follows the authored sixteen-tick clip and reset/damage clear stale revival presentation.
