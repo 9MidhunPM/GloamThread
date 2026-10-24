@@ -10,8 +10,6 @@ enum Action {
 	RIGHT = 2,
 	UP = 4,
 	DOWN = 8,
-	ROLL = 16,
-	## Transitional menu/side-view call sites share the bit; saves name it roll.
 	JUMP = 16,
 	ATTACK = 32,
 	SPECIAL = 64,
@@ -22,7 +20,7 @@ enum Action {
 }
 
 const ALL_ACTIONS: Array[Action] = [
-	Action.LEFT, Action.RIGHT, Action.UP, Action.DOWN, Action.ROLL, Action.ATTACK,
+	Action.LEFT, Action.RIGHT, Action.UP, Action.DOWN, Action.JUMP, Action.ATTACK,
 	Action.SPECIAL, Action.INTERACT, Action.DASH, Action.PAUSE, Action.MAP,
 ]
 
@@ -44,11 +42,8 @@ static func empty() -> CommandSnapshot:
 
 static func from_state(axis_x: float, axis_y: float, held_now: int, held_before: int) -> CommandSnapshot:
 	var snapshot := CommandSnapshot.new()
-	# Limit the complete ground-plane vector, not each axis independently.
-	# Gentle stick input keeps its magnitude; diagonals never gain extra speed.
-	var movement := Vector2(clampf(axis_x, -1.0, 1.0) if is_finite(axis_x) else 0.0, clampf(axis_y, -1.0, 1.0) if is_finite(axis_y) else 0.0).limit_length(1.0)
-	snapshot.move_x = movement.x
-	snapshot.move_y = movement.y
+	snapshot.move_x = clampf(axis_x, -1.0, 1.0)
+	snapshot.move_y = clampf(axis_y, -1.0, 1.0)
 	snapshot.held = held_now
 	snapshot.pressed = held_now & ~held_before
 	snapshot.released = held_before & ~held_now
@@ -77,7 +72,7 @@ static func action_name(action: Action) -> String:
 		Action.RIGHT: return "right"
 		Action.UP: return "up"
 		Action.DOWN: return "down"
-		Action.ROLL: return "roll"
+		Action.JUMP: return "jump"
 		Action.ATTACK: return "attack"
 		Action.SPECIAL: return "special"
 		Action.INTERACT: return "interact"
@@ -88,8 +83,6 @@ static func action_name(action: Action) -> String:
 
 
 static func action_from_name(name: String) -> int:
-	if name == "jump":
-		return Action.ROLL
 	for action: Action in ALL_ACTIONS:
 		if action_name(action) == name:
 			return action

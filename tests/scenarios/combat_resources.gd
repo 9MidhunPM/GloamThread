@@ -31,15 +31,12 @@ func run() -> void:
 		assert_eq(sprite.offset, Vector2(-16, -43), "courier feet origin survives actor integration")
 		assert_eq(player.max_hearts, 5 if slot == 0 else 4, "actor consumes the fixed profile health")
 		player.set_physics_process(false)
-		for direction in PlayerController.Facing.values():
-			player.facing = direction
-			for state: String in ContentCatalog.COURIER_CLIPS:
-				player.call("_set_animation", state)
-				var key := state + "_" + PlayerController.DIRECTION_NAMES[direction]
-				var clip := catalog.animation(str(source["profiles"][slot]["visual_bundle_id"]), key)
-				assert_true(not clip.is_empty(), "courier authored direction/state resolves: " + key)
-				if not clip.is_empty():
-					assert_true(sprite.texture == catalog.frame_texture(str(source["profiles"][slot]["visual_bundle_id"]), int(clip.frames[0])), "actor selects the first frame of " + key)
+		for state: String in ["idle", "run", "jump_rise", "fall", "land", "slash", "special", "hurt", "dash", "downed", "revive"]:
+			player.call("_set_animation", state)
+			var clip := catalog.animation(str(source["profiles"][slot]["visual_bundle_id"]), state)
+			assert_true(not clip.is_empty(), "courier authored state resolves: " + state)
+			if not clip.is_empty():
+				assert_true(sprite.texture == catalog.frame_texture(str(source["profiles"][slot]["visual_bundle_id"]), int(clip.frames[0])), "actor selects the first frame of " + state)
 	for kind: String in ["spoolmite", "wickwing", "spoolwarden"]:
 		var enemy := CombatEnemy.new()
 		enemy.configure(kind, players, catalog, Rect2(0, 0, 1000, 400))

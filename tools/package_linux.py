@@ -11,11 +11,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION_MATCH = re.search(r'^config/version="([A-Za-z0-9][A-Za-z0-9.-]*)"$', (ROOT / "project.godot").read_text(), re.MULTILINE)
-if VERSION_MATCH is None:
-    raise SystemExit("Project version must be a safe nonempty package identifier.")
-VERSION = VERSION_MATCH.group(1)
-NAME = f"Gloamthread-{VERSION}-linux-x86_64"
+NAME = "Gloamthread-0.1.0-demo-linux-x86_64"
 
 
 def digest(path: Path) -> str:
@@ -62,8 +58,8 @@ def main() -> None:
         shutil.copy2(source, target)
     (folder / "Gloamthread.x86_64").chmod(0o755)
     build = {
-        "version": VERSION,
-        "status": "development build" if VERSION.endswith("-dev") else "candidate for playtesting",
+        "version": "0.1.0-demo",
+        "status": "candidate for playtesting",
         "implementation_commit": revision,
         "source": f"https://github.com/9MidhunPM/GloamThread/tree/{revision}",
         "platform": "Linux x86_64",

@@ -8,7 +8,7 @@ func run() -> void:
 	_path = "user://catalog-invalid-%d.json" % Time.get_ticks_usec()
 	var content := ContentCatalog.new()
 	for version: Variant in [true, false, "1", null, [], {}, 1.5, 2]:
-		_write_json({"schema_version": version, "content_version": "overhead-v1"})
+		_write_json({"schema_version": version, "content_version": "phase1-v1"})
 		content.errors.clear()
 		assert_true(content._json(_path).is_empty(), "reject invalid content schema: %s" % str(version))
 		assert_true(not content.errors.is_empty(), "content schema failure is explicit")
@@ -55,7 +55,7 @@ func run() -> void:
 	var valid_manifest := _manifest([atlas, audio])
 	_write_json(valid_manifest)
 	assert_true(AssetCatalog.load_from_path(_path).errors.is_empty(), "valid metadata remains accepted without loading fixture resources")
-	_write_json({"schema_version": 1, "content_version": "overhead-v1"})
+	_write_json({"schema_version": 1, "content_version": "phase1-v1"})
 	content.errors.clear()
 	assert_true(not content._json(_path).is_empty() and content.errors.is_empty(), "valid content version remains accepted")
 	# Metadata validation alone cannot establish that an imported image exists
@@ -75,7 +75,7 @@ func run() -> void:
 
 
 func _manifest(records: Array) -> Dictionary:
-	return {"schema_version": 1, "content_version": "overhead-v1", "stage": "full", "assets": records, "sfx": {}, "music": {}}
+	return {"schema_version": 1, "content_version": "phase1-v1", "stage": "full", "assets": records, "sfx": {}, "music": {}}
 
 
 func _write_json(value: Variant) -> void:

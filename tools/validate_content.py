@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate authored overhead data. Structural reachability is not a playthrough."""
+"""Validate authored Phase 1 data. Structural checks do not prove traversal or fun."""
 from __future__ import annotations
 
 import argparse
@@ -15,23 +15,22 @@ ROOM_NAMES = ['Lantern Rest', 'Mossfoot Atrium', 'Spindle Steps', 'Glasswing Gal
 ROOM_IDS = tuple(f'r{i:02}' for i in range(8))
 REWARDS = {'r02': ['bridge_spindle'], 'r05': ['boss_spoolwarden', 'threadstep', 'shortcut_bell'],
            'r06': ['bridge_causeway'], 'r07': ['loom_restored']}
-EDGES = {('r00', 'r01'): ['met_oru'], ('r01', 'r02'): [], ('r02', 'r03'): ['bridge_spindle'],
+EDGES = {('r00', 'r01'): [], ('r01', 'r02'): [], ('r02', 'r03'): ['bridge_spindle'],
          ('r03', 'r04'): [], ('r04', 'r05'): [], ('r01', 'r05'): ['shortcut_bell'],
          ('r01', 'r06'): ['threadstep'], ('r06', 'r07'): ['bridge_causeway'],
          ('r00', 'r07'): ['loom_restored']}
-TILE_IDS = ['floor_path_1', 'floor_path_2', 'floor_grass_1', 'floor_grass_2']
-TILE_IDS += [f'wall_fill_{i}' for i in range(1, 5)]
-TILE_IDS += [f'wall_edge_{side}' for side in ('north', 'east', 'south', 'west')]
-TILE_IDS += [f'wall_corner_{kind}_{corner}' for kind in ('outer', 'inner') for corner in ('ne', 'se', 'sw', 'nw')]
-TILE_IDS += [f'water_fill_{i}' for i in range(1, 5)]
-TILE_IDS += [f'water_edge_{side}' for side in ('north', 'east', 'south', 'west')]
-TILE_IDS += [f'water_corner_{corner}' for corner in ('ne', 'se', 'sw', 'nw')]
-TILE_IDS += ['bridge_plank_1', 'bridge_plank_2', 'bridge_rail_north', 'bridge_rail_south']
-TILE_IDS += [f'seam_rune_{i}' for i in range(1, 5)]
-TILE_IDS += ['background_earth_1', 'background_earth_2', 'background_roots_1', 'background_roots_2']
-TILE_IDS += ['hazard_glass_1', 'hazard_glass_2', 'hazard_thread_1', 'hazard_thread_2']
-
+TILE_IDS = ['solid_fill', 'solid_top', 'one_way_middle', 'hazard_middle']
+for _base in ('solid_fill', 'solid_top'):
+    TILE_IDS += [f'{_base}_{i}' for i in range(2, 5)]
+for _base in ('solid_bottom', 'solid_left', 'solid_right'):
+    TILE_IDS += [_base] + [f'{_base}_{i}' for i in range(2, 5)]
+TILE_IDS += [f'corner_{kind}_{corner}' for kind in ('outer', 'inner') for corner in ('tl', 'tr', 'bl', 'br')]
+TILE_IDS += [f'{kind}_{part}' for kind in ('one_way', 'hazard') for part in ('left', 'right', 'single')]
+TILE_IDS += [f'bridge_{part}' for part in ('left', 'middle', 'right', 'single')]
+TILE_IDS += [f'seam_{part}' for part in ('horizontal', 'vertical', 'cross', 'knot')]
+TILE_IDS += [f'background_{part}' for part in ('stone', 'brass', 'root', 'cloth')]
 FIELDS = {
+    'diagnostic_mover': {'tile', 'range_tiles'},
     'spoolmite': {'tile'}, 'wickwing': {'tile'}, 'spoolwarden': {'tile'},
     'exit': {'rect', 'target_room', 'target_entrance', 'requires_all'},
     'checkpoint': {'tile', 'checkpoint_id', 'entrance'},
@@ -78,7 +77,7 @@ class Checks:
         return data
 
     def version(self, data: dict, where: str):
-        self.need(data.get('content_version') == 'overhead-v1', where, 'content_version must be overhead-v1')
+        self.need(data.get('content_version') == 'phase1-v1', where, 'content_version must be phase1-v1')
 
     def identifier(self, value: Any, where: str) -> bool:
         return self.need(isinstance(value, str) and IDENTIFIER.fullmatch(value) is not None,
@@ -146,7 +145,7 @@ def _profiles(c: Checks):
     where = 'content/profiles.json'
     data = c.load(where)
     c.version(data, where)
-    c.need(data.get('collider_contract') == 'courier_overhead_v1', where, 'collider_contract must be courier_overhead_v1')
+    c.need(data.get('collider_contract') == 'courier_v1', where, 'collider_contract must be courier_v1')
     c.need(data.get('required_team_unlocks_are_separate') is True, where, 'team traversal must remain separate')
     records = data.get('profiles')
     if not c.need(isinstance(records, list), where + '/profiles', 'must be an array'):
@@ -237,8 +236,7 @@ def _dialogue(c: Checks):
 
 
 def _room(c: Checks, data: dict, where: str) -> bool:
-    c.need(set(data) == {'schema_version', 'content_version', 'id', 'name', 'tiles', 'spawns', 'entities', 'decor'}, where, 'unexpected or missing room fields')
-    c.version(data, where)
+    c.need(set(data) == {'schema_version', 'id', 'name', 'tiles', 'spawns', 'entities', 'decor'}, where, 'unexpected or missing room fields')
     c.identifier(data.get('id'), where + '/id')
     c.string(data.get('name'), where + '/name')
     rows = data.get('tiles')
@@ -248,7 +246,7 @@ def _room(c: Checks, data: dict, where: str) -> bool:
     rectangular = all(len(row) == width for row in rows)
     c.need(rectangular, where + '/tiles', 'tile rows must be rectangular')
     c.need(30 <= width <= 90 and 23 <= height <= 30, where + '/tiles', 'room dimensions must be 30..90 by 23..30')
-    c.need(all(char in '#=.~^' for row in rows for char in row), where + '/tiles', 'unknown tile character')
+    c.need(all(char in '#=.^' for row in rows for char in row), where + '/tiles', 'unknown tile character')
     if not rectangular:
         return False
 
@@ -267,7 +265,7 @@ def _room(c: Checks, data: dict, where: str) -> bool:
 
     def safe(value):
         x, y = value
-        return 0 <= y < height and 0 <= x < width and rows[y][x] in '.='
+        return 1 <= y < height-1 and rows[y][x] == '.' and rows[y-1][x] == '.' and rows[y+1][x] in '#='
 
     spawn_points = []
     spawns = data.get('spawns')
@@ -280,7 +278,7 @@ def _room(c: Checks, data: dict, where: str) -> bool:
             c.need(pair[0] != pair[1], at, 'paired spawn footprints must be distinct')
             for index, point in enumerate(pair):
                 if tile(point, f'{at}/{index}'):
-                    c.need(safe(point), f'{at}/{index}', 'unsafe spawn: require a complete dry nonhazardous footprint')
+                    c.need(safe(point), f'{at}/{index}', 'unsafe spawn: require empty collider headroom and supporting ground')
                     spawn_points.append(point)
     entities = data.get('entities')
     if not c.need(isinstance(entities, list), where + '/entities', 'must be an array'):
@@ -303,18 +301,24 @@ def _room(c: Checks, data: dict, where: str) -> bool:
         point = entity.get('tile')
         valid_tile = tile(point, at + '/tile') if 'tile' in FIELDS[kind] else False
         if valid_tile:
-            c.need(rows[point[1]][point[0]] in '.=', at + '/tile', 'entity tile must be dry walkable floor')
-            if kind in ('spoolmite', 'spoolwarden', 'checkpoint', 'npc', 'secret'):
-                c.need(safe(point), at + '/tile', 'ground entity needs a safe dry footprint')
+            c.need(rows[point[1]][point[0]] == '.', at + '/tile', 'entity tile must be empty')
+            if kind in ('spoolmite', 'spoolwarden', 'checkpoint', 'npc', 'secret', 'diagnostic_mover'):
+                c.need(safe(point), at + '/tile', 'ground entity needs empty headroom and supporting ground')
             if kind in ('spoolmite', 'wickwing', 'spoolwarden'):
                 c.need(all(abs(point[0]-spawn[0]) > 3 or abs(point[1]-spawn[1]) > 3 for spawn in spawn_points), at + '/tile', 'enemy too close to entrance spawn')
-        if kind == 'exit':
+        if kind == 'diagnostic_mover':
+            c.need(c.stage == 'diagnostic', at, 'diagnostic_mover is forbidden in full content')
+            distance = entity.get('range_tiles')
+            c.need(type(distance) is int and distance > 0, at + '/range_tiles', 'must be a positive integer')
+            if valid_tile and type(distance) is int:
+                c.need(point[0]-distance >= 0 and point[0]+distance < width, at, 'mover range leaves room')
+        elif kind == 'exit':
             if rect(entity.get('rect'), at + '/rect'):
                 x, y, w, h = entity['rect']
                 c.need(w >= 3 and h >= 2, at + '/rect', 'rally zone must fit both couriers')
-                # Feet are tile centre + (0,5), wholly inside the named floor cell.
+                # Feet are (tile_y + 1) * 16; the rectangle's bottom is exclusive.
                 safe_cells = [(xx, yy) for yy in range(y, y+h) for xx in range(x, x+w)
-                              if safe([xx, yy])]
+                              if safe([xx, yy]) and yy+1 < y+h]
                 c.need(len(safe_cells) >= 2, at + '/rect', 'rally zone needs two safe standing tiles')
             c.identifier(entity.get('target_room'), at + '/target_room')
             c.identifier(entity.get('target_entrance'), at + '/target_entrance')
@@ -340,15 +344,13 @@ def _room(c: Checks, data: dict, where: str) -> bool:
                         c.need(entry['id'] not in nested_ids and entry['id'] not in ids, entry_at, 'duplicate interaction id')
                         nested_ids.add(entry['id'])
                     if tile(entry.get('tile'), entry_at + '/tile'):
-                        c.need(safe(entry['tile']), entry_at, 'interaction needs a safe dry approach before restoration')
+                        c.need(safe(entry['tile']), entry_at, 'interaction needs supported empty approach before restoration')
                         points.append(entry['tile'])
                 c.need(len(points) == 2 and points[0] != points[1], at + '/' + field, 'interaction points must be distinct')
             if kind == 'anchor_pair' and rect(entity.get('bridge_rect'), at + '/bridge_rect'):
                 x, y, w, h = entity['bridge_rect']
-                c.need(all(rows[yy][xx] == '~' for yy in range(y, y+h) for xx in range(x, x+w)), at + '/bridge_rect', 'bridge span must cover water before restoration')
-                horizontal_banks = x > 0 and x+w < width and any(safe([x-1, yy]) and safe([x+w, yy]) for yy in range(y, y+h))
-                vertical_banks = y > 0 and y+h < height and any(safe([xx, y-1]) and safe([xx, y+h]) for xx in range(x, x+w))
-                c.need((horizontal_banks and w >= 4) or (vertical_banks and h >= 4), at + '/bridge_rect', 'repair needs dry banks separated by at least four water tiles')
+                c.need(h == 1, at + '/bridge_rect', 'bridge span must be one tile thick')
+                c.need(all(rows[yy][xx] == '.' for yy in range(y, y+h) for xx in range(x, x+w)), at + '/bridge_rect', 'bridge span must be empty before restoration')
                 cells = {(xx, yy) for yy in range(y, y+h) for xx in range(x, x+w)}
                 c.need(all(not (cells & previous) for previous in bridges), at + '/bridge_rect', 'bridge spans overlap')
                 bridges.append(cells)
@@ -412,7 +414,7 @@ def _world(c: Checks) -> dict[str, dict]:
             c.need(pair in EDGES and edge['requires_all'] == EDGES.get(pair), at, 'wrong progression connection or gate')
         c.need(seen_edges == set(EDGES) and len(edges) == len(EDGES), where, 'canonical nine connections required')
     paths = sorted((c.root / 'content' / 'rooms').glob('*.json'))
-    expected = set(ROOM_IDS)
+    expected = {'r00'} if c.stage == 'diagnostic' else set(ROOM_IDS)
     c.need({path.stem for path in paths} == expected, 'content/rooms', f'{c.stage} stage requires room files {sorted(expected)}')
     rooms = {}
     for path in paths:
@@ -421,10 +423,20 @@ def _world(c: Checks) -> dict[str, dict]:
         c.need(data.get('id') == path.stem, at, 'room id must match filename')
         if _room(c, data, at):
             rooms[path.stem] = data
+    if c.stage == 'diagnostic':
+        room = rooms.get('r00', {})
+        c.need(len(room.get('tiles', [])) == 23 and all(len(row) == 60 for row in room.get('tiles', [])), 'content/rooms/r00.json', 'diagnostic room must be exactly 60x23')
+        diagnostic_spawns = room.get('spawns')
+        c.need(isinstance(diagnostic_spawns, dict) and diagnostic_spawns.get('start') == [[6, 19], [9, 19]], 'content/rooms/r00.json/spawns/start', 'diagnostic start must remain [[6,19],[9,19]]')
+        c.need(any('=' in row for row in room.get('tiles', [])), 'content/rooms/r00.json/tiles', 'diagnostic needs a one-way platform')
+        c.need(room.get('entities') == [{'type': 'diagnostic_mover', 'id': 'mover', 'tile': [30, 19], 'range_tiles': 6}], 'content/rooms/r00.json/entities', 'diagnostic requires the exact shared mover fixture')
+        c.asset('diagnostic_terrain_v1', 'diagnostic terrain', ('tile_atlas',))
+        c.asset('diagnostic_mover_v1', 'diagnostic mover', ('sprite_atlas',))
+        return rooms
     directed = set()
     counts: dict[str, list[tuple[str, dict]]] = {}
     tile_characters = {char for room in rooms.values() for row in room.get('tiles', []) for char in row}
-    c.need({'~', '=', '^'} <= tile_characters, 'content/rooms/tiles', 'full rooms require water, dry bridges and walkable hazards')
+    c.need({'=', '^'} <= tile_characters, 'content/rooms/tiles', 'full rooms require both one-way surfaces and authored hazards')
     for room_id, room in rooms.items():
         if room_id in ROOM_IDS:
             c.need(room.get('name') == ROOM_NAMES[int(room_id[1:])], f'content/rooms/{room_id}.json/name', 'room name differs from world definition')
@@ -458,99 +470,7 @@ def _world(c: Checks) -> dict[str, dict]:
         c.need(all(key == room_id for key, _ in counts.get(kind, [])), 'content/rooms/' + kind, f'must be in {room_id}')
     for kind in ('spoolmite', 'wickwing'):
         c.need(any(key == 'r03' for key, _ in counts.get(kind, [])), 'content/rooms/r03.json', f'missing {kind} lesson')
-    if not c.errors:
-        _routes(c, rooms)
     return rooms
-
-
-def _reachable(room: dict, start: tuple[int, int], *, repaired: bool, dash: bool) -> set[tuple[int, int]]:
-    """Conservative cardinal footprint connectivity; runtime still proves physics."""
-    from collections import deque
-    import math
-    rows = room['tiles']
-    width, height = len(rows[0]), len(rows)
-    restored = set()
-    if repaired:
-        for entity in room['entities']:
-            if entity['type'] == 'anchor_pair':
-                x, y, w, h = entity['bridge_rect']
-                restored.update((xx, yy) for yy in range(y, y+h) for xx in range(x, x+w))
-
-    def tile_at(x, y):
-        return rows[y][x] if 0 <= x < width and 0 <= y < height else '#'
-
-    def dry_cell(x, y):
-        return tile_at(x, y) in '.=' or (x, y) in restored
-
-    def footprint(cx, cy):
-        return [(x, y) for y in range(math.floor((cy-5)/16), math.floor((cy+5-0.001)/16)+1)
-                for x in range(math.floor((cx-6)/16), math.floor((cx+6-0.001)/16)+1)]
-
-    found = {start}
-    pending = deque([start])
-    while pending:
-        x, y = pending.popleft()
-        for dx, dy in ((0, -1), (1, 0), (0, 1), (-1, 0)):
-            next_cell = (x+dx, y+dy)
-            if dry_cell(*next_cell) and next_cell not in found:
-                found.add(next_cell)
-                pending.append(next_cell)
-            if not dash:
-                continue
-            cx, cy = x*16+8, y*16+8
-            tx, ty = cx+dx*60, cy+dy*60
-            landing = (math.floor(tx/16), math.floor(ty/16))
-            if landing in found or not all(dry_cell(*cell) for cell in footprint(tx, ty)):
-                continue
-            # For the four cardinal directions the swept footprint is exactly
-            # the union rectangle. Water can be crossed; no wall is phased.
-            clear = all(tile_at(xx, yy) != '#'
-                        for yy in range(math.floor((min(cy, ty)-5)/16), math.floor((max(cy, ty)+5-0.001)/16)+1)
-                        for xx in range(math.floor((min(cx, tx)-6)/16), math.floor((max(cx, tx)+6-0.001)/16)+1))
-            if clear:
-                found.add(landing)
-                pending.append(landing)
-    return found
-
-
-def _routes(c: Checks, rooms: dict[str, dict]):
-    for room_id, room in rooms.items():
-        start = tuple(next(iter(room['spawns'].values()))[0])
-        complete = _reachable(room, start, repaired=True, dash=True)
-        for entrance, pair in room['spawns'].items():
-            c.need(all(tuple(point) in complete for point in pair), f'{room_id}/{entrance}',
-                   'paired entrance is disconnected after all room routes open')
-        for entity in room['entities']:
-            if entity['type'] == 'exit':
-                x, y, w, h = entity['rect']
-                c.need(sum((xx, yy) in complete for yy in range(y, y+h) for xx in range(x, x+w)) >= 2,
-                       f"{room_id}/{entity['id']}", 'rally zone needs two safely reachable standing cells')
-            if entity['type'] in ('npc', 'checkpoint', 'secret'):
-                c.need(tuple(entity['tile']) in complete, f"{room_id}/{entity['id']}", 'authored interaction has no safe route')
-            if entity['type'] in ('anchor_pair', 'loom'):
-                before = _reachable(room, start, repaired=False, dash=room_id == 'r06')
-                points = entity.get('anchors', entity.get('stations'))
-                c.need(all(tuple(point['tile']) in before for point in points), f"{room_id}/{entity['id']}",
-                       'both paired interactions need safe approaches before restoration')
-                if entity['type'] == 'anchor_pair':
-                    bypass = _reachable(room, start, repaired=False, dash=True)
-                    far_room = 'r03' if room_id == 'r02' else 'r07'
-                    for exit in room['entities']:
-                        if exit['type'] != 'exit' or exit['target_room'] != far_room:
-                            continue
-                        x, y, w, h = exit['rect']
-                        c.need(not any((xx, yy) in bypass for yy in range(y, y+h) for xx in range(x, x+w)),
-                               f"{room_id}/{entity['id']}", 'paired repair must not have a walking or Threadstep bypass')
-        if room_id in ('r01', 'r06'):
-            walking = _reachable(room, start, repaired=False, dash=False)
-            if room_id == 'r01':
-                gate = next(entity for entity in room['entities'] if entity['type'] == 'exit' and entity['target_room'] == 'r06')
-                x, y, w, h = gate['rect']
-                targets = {(xx, yy) for yy in range(y, y+h) for xx in range(x, x+w)}
-            else:
-                targets = {tuple(point['tile']) for entity in room['entities'] if entity['type'] == 'anchor_pair'
-                           for point in entity['anchors']}
-            c.need(not walking.intersection(targets), room_id, 'authored Threadstep lesson must require crossing water')
 
 
 def _font(c: Checks):
@@ -573,8 +493,8 @@ def _font(c: Checks):
 
 def validate(root: Path, stage: str = 'full') -> list[str]:
     """Return actionable errors; never mutate content or turn incomplete data into success."""
-    if stage != 'full':
-        return [f'stage: overhead content requires full, got {stage!r}']
+    if stage not in ('diagnostic', 'full'):
+        return [f'stage: unsupported stage {stage!r}']
     checks = Checks(root, stage)
     _manifest(checks)
     _profiles(checks)
@@ -587,7 +507,7 @@ def validate(root: Path, stage: str = 'full') -> list[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--stage', choices=('full',), default='full')
+    parser.add_argument('--stage', choices=('diagnostic', 'full'), default='full')
     parser.add_argument('--root', type=Path, default=ROOT, help='repository/bundle root to validate')
     args = parser.parse_args()
     errors = validate(args.root, args.stage)
@@ -597,6 +517,8 @@ def main() -> int:
         print(f'FAIL content stage={args.stage}: {len(errors)} error(s)', file=sys.stderr)
         return 1
     print(f'PASS content stage={args.stage}: authored schemas, references and declared gates')
+    if args.stage == 'diagnostic':
+        print('Diagnostic only: final rooms, terrain/background references and gameplay acceptance are deferred.')
     print('Structural checks only; physical traversal, rendering, listening and human play remain separate gates.')
     return 0
 

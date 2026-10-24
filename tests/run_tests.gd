@@ -2,8 +2,6 @@ extends SceneTree
 ## Built-in scenario runner: one shared engine process, bounded asynchronous
 ## scenarios, no external test addon. A synchronous infinite loop still needs
 ## an external process timeout because it blocks Godot's main thread.
-## Every .gd directly in scenarios/ is active; no filename-prefix whitelist.
-## Historical platform scenarios live outside this directory under legacy/.
 
 const ScenarioBase = preload("res://tests/scenario.gd")
 const SCENARIO_DIRECTORY := "res://tests/scenarios"
@@ -26,8 +24,7 @@ class ErrorCapture extends Logger:
 		return result
 
 var _errors := ErrorCapture.new()
-## Negative means use the scenario's declared budget.
-var _timeout_msec: int = -1
+var _timeout_msec: int = 30_000
 
 var _filter: String = ""
 var _passed: int = 0
@@ -96,11 +93,6 @@ func _run_one(filename: String) -> void:
 		_record_load_failure(filename, "script must extend Scenario")
 		return
 	var scenario: ScenarioBase = instance as ScenarioBase
-	var timeout_msec := _timeout_msec if _timeout_msec > 0 else scenario.timeout_seconds() * 1000
-	if timeout_msec < 1000 or timeout_msec > 600_000:
-		scenario.free()
-		_record_load_failure(filename, "timeout_seconds() must be in 1..600")
-		return
 	scenario.name = filename.get_basename()
 	scenario.process_mode = Node.PROCESS_MODE_ALWAYS
 	paused = false
@@ -109,10 +101,10 @@ func _run_one(filename: String) -> void:
 	var completion: Dictionary = {"done": false}
 	var started: int = Time.get_ticks_msec()
 	_invoke_scenario(scenario, completion)
-	while not completion["done"] and Time.get_ticks_msec() - started < timeout_msec:
+	while not completion["done"] and Time.get_ticks_msec() - started < _timeout_msec:
 		await process_frame
 	if not completion["done"]:
-		scenario.failures.append("timed out after %d seconds" % (timeout_msec / 1000))
+		scenario.failures.append("timed out after %d seconds" % (_timeout_msec / 1000))
 	scenario.failures.append_array(_errors.drain())
 	if scenario.failures.is_empty():
 		_passed += 1

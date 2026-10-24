@@ -1,23 +1,23 @@
 {
   "schema_version": 1,
-  "content_version": "overhead-v1",
+  "content_version": "phase1-v1",
   "sequences": {
     "oru_intro": [
       {
         "speaker": "Oru",
-        "text": "The district is cut off. Restore both ends of the Lantern Loom so everyone can come home."
+        "text": "The far district is still there. The way home isn't."
       },
       {
         "speaker": "Oru",
-        "text": "Follow the brass signs through the Atrium. At Spindle Steps, each courier takes a different anchor."
+        "text": "Restore the Lantern Loom. Follow the path through the Atrium."
       },
       {
         "speaker": "Tavi",
-        "text": "I can clear a path. Keep your thread close."
+        "text": "Then we give them a way home."
       },
       {
         "speaker": "Neri",
-        "text": "And I can reach what you cannot. We take both ends."
+        "text": "Both ends this time."
       }
     ],
     "oru_return": [

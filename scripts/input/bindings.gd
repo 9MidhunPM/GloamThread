@@ -24,7 +24,7 @@ static func defaults_for(device_kind: DeviceSource.Kind) -> Bindings:
 				Action.RIGHT: [KEY_D],
 				Action.UP: [KEY_W],
 				Action.DOWN: [KEY_S],
-				Action.ROLL: [KEY_SPACE],
+				Action.JUMP: [KEY_SPACE],
 				Action.ATTACK: [KEY_F],
 				Action.SPECIAL: [KEY_G],
 				Action.INTERACT: [KEY_E],
@@ -38,7 +38,7 @@ static func defaults_for(device_kind: DeviceSource.Kind) -> Bindings:
 				Action.RIGHT: [KEY_RIGHT],
 				Action.UP: [KEY_UP],
 				Action.DOWN: [KEY_DOWN],
-				Action.ROLL: [KEY_PERIOD],
+				Action.JUMP: [KEY_PERIOD],
 				Action.ATTACK: [KEY_COMMA],
 				Action.SPECIAL: [KEY_SLASH],
 				Action.INTERACT: [KEY_M],
@@ -52,7 +52,7 @@ static func defaults_for(device_kind: DeviceSource.Kind) -> Bindings:
 				Action.RIGHT: [{"button": JOY_BUTTON_DPAD_RIGHT}, {"axis": JOY_AXIS_LEFT_X, "sign": 1}],
 				Action.UP: [{"button": JOY_BUTTON_DPAD_UP}, {"axis": JOY_AXIS_LEFT_Y, "sign": -1}],
 				Action.DOWN: [{"button": JOY_BUTTON_DPAD_DOWN}, {"axis": JOY_AXIS_LEFT_Y, "sign": 1}],
-				Action.ROLL: [{"button": JOY_BUTTON_A}],
+				Action.JUMP: [{"button": JOY_BUTTON_A}],
 				Action.ATTACK: [{"button": JOY_BUTTON_X}],
 				Action.SPECIAL: [{"button": JOY_BUTTON_B}],
 				Action.INTERACT: [{"button": JOY_BUTTON_Y}],
@@ -131,10 +131,6 @@ static func from_dict(data: Dictionary) -> Bindings:
 	if saved is Dictionary:
 		for name: Variant in (saved as Dictionary):
 			if not (name is String):
-				continue
-			# Canonical overhead bindings win over an old alias regardless of
-			# JSON key order when both names are present in an edited settings file.
-			if name == "jump" and saved.has("roll"):
 				continue
 			var action := CommandSnapshot.action_from_name(name as String)
 			if action == 0:

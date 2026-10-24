@@ -1,57 +1,45 @@
 class_name CollisionBuilder
 extends RefCounted
-## Canonical walls and water are separate bodies. Floors never add collision.
+## Builds one canonical collision tree from the room's logical tile grid.
+##
+## Solid cells are merged into the fewest axis-aligned rectangles (greedy row
+## runs, then vertical merge of identical runs) so bodies never catch on tile
+## seams. One-way runs use a child body so a dropping courier can ignore only
+## those platforms briefly. Theme skins never add collision shapes.
 
 const PHYSICS_LAYER_WORLD := 1
 
 
 static func build(definition: RoomDefinition) -> StaticBody2D:
-	var walls := StaticBody2D.new()
-	walls.name = "Collision"
-	walls.collision_layer = PHYSICS_LAYER_WORLD
-	walls.collision_mask = 0
-	var wall_rectangles := solid_rects(definition)
-	for index in wall_rectangles.size():
-		walls.add_child(_rect_shape("Wall%d" % index, wall_rectangles[index]))
-	var water := StaticBody2D.new()
-	water.name = "WaterCollision"
-	water.collision_layer = PHYSICS_LAYER_WORLD
-	water.collision_mask = 0
-	walls.add_child(water)
-	var rectangles := water_rects(definition)
-	for index in rectangles.size():
-		water.add_child(_rect_shape("Water%d" % index, rectangles[index]))
-	for entity: Dictionary in definition.entities:
-		if entity["type"] == "anchor_pair":
-			water.add_child(_rect_shape("Bridge_" + entity["flag"], bridge_rect(entity)))
-	return walls
+	var body := StaticBody2D.new()
+	body.name = "Collision"
+	body.collision_layer = PHYSICS_LAYER_WORLD
+	body.collision_mask = 0
+	var index := 0
+	for rect in solid_rects(definition):
+		body.add_child(_rect_shape("Solid%d" % index, rect, false))
+		index += 1
+	var one_way := StaticBody2D.new()
+	one_way.name = "OneWayCollision"
+	one_way.collision_layer = PHYSICS_LAYER_WORLD
+	one_way.collision_mask = 0
+	body.add_child(one_way)
+	index = 0
+	for rect in one_way_rects(definition):
+		one_way.add_child(_rect_shape("OneWay%d" % index, rect, true))
+		index += 1
+	return body
 
 
-static func bridge_rect(entity: Dictionary) -> Rect2i:
-	var rect: Array = entity["bridge_rect"]
-	return Rect2i(int(rect[0]), int(rect[1]), int(rect[2]), int(rect[3]))
-
-
+## Axis-aligned rectangles (in tiles) covering every solid cell exactly once.
 static func solid_rects(definition: RoomDefinition) -> Array[Rect2i]:
-	return _rectangles(definition, "#", [])
-
-
-static func water_rects(definition: RoomDefinition) -> Array[Rect2i]:
-	var excluded: Array[Rect2i] = []
-	for entity: Dictionary in definition.entities:
-		if entity["type"] == "anchor_pair":
-			excluded.append(bridge_rect(entity))
-	return _rectangles(definition, "~", excluded)
-
-
-static func _rectangles(definition: RoomDefinition, marker: String, excluded: Array[Rect2i]) -> Array[Rect2i]:
 	var runs: Array[Rect2i] = []
 	for y in definition.height:
 		var x := 0
 		while x < definition.width:
-			if _matches(definition, Vector2i(x, y), marker, excluded):
+			if definition.is_solid(Vector2i(x, y)):
 				var start := x
-				while x < definition.width and _matches(definition, Vector2i(x, y), marker, excluded):
+				while x < definition.width and definition.is_solid(Vector2i(x, y)):
 					x += 1
 				runs.append(Rect2i(start, y, x - start, 1))
 			else:
@@ -59,23 +47,30 @@ static func _rectangles(definition: RoomDefinition, marker: String, excluded: Ar
 	return _merge_vertically(runs)
 
 
-static func _matches(definition: RoomDefinition, tile: Vector2i, marker: String, excluded: Array[Rect2i]) -> bool:
-	if definition.char_at(tile) != marker:
-		return false
-	for rect: Rect2i in excluded:
-		if rect.has_point(tile):
-			return false
-	return true
+## One rectangle per horizontal run of one-way cells (never merged vertically).
+static func one_way_rects(definition: RoomDefinition) -> Array[Rect2i]:
+	var runs: Array[Rect2i] = []
+	for y in definition.height:
+		var x := 0
+		while x < definition.width:
+			if definition.is_one_way(Vector2i(x, y)):
+				var start := x
+				while x < definition.width and definition.is_one_way(Vector2i(x, y)):
+					x += 1
+				runs.append(Rect2i(start, y, x - start, 1))
+			else:
+				x += 1
+	return runs
 
 
 static func _merge_vertically(runs: Array[Rect2i]) -> Array[Rect2i]:
 	var merged: Array[Rect2i] = []
-	for run: Rect2i in runs:
+	for run in runs:
 		var extended := false
-		for index in merged.size():
-			var previous := merged[index]
-			if previous.position.x == run.position.x and previous.size.x == run.size.x and previous.end.y == run.position.y:
-				merged[index] = Rect2i(previous.position, Vector2i(previous.size.x, previous.size.y + 1))
+		for i in merged.size():
+			var below := merged[i]
+			if below.position.x == run.position.x and below.size.x == run.size.x and below.end.y == run.position.y:
+				merged[i] = Rect2i(below.position, Vector2i(below.size.x, below.size.y + 1))
 				extended = true
 				break
 		if not extended:
@@ -83,11 +78,15 @@ static func _merge_vertically(runs: Array[Rect2i]) -> Array[Rect2i]:
 	return merged
 
 
-static func _rect_shape(shape_name: String, tiles: Rect2i, _legacy_one_way: bool = false) -> CollisionShape2D:
+static func _rect_shape(shape_name: String, tiles: Rect2i, one_way: bool) -> CollisionShape2D:
 	var shape := CollisionShape2D.new()
 	shape.name = shape_name
-	var rectangle := RectangleShape2D.new()
-	rectangle.size = Vector2(tiles.size) * RoomDefinition.TILE
-	shape.shape = rectangle
-	shape.position = Vector2(tiles.position) * RoomDefinition.TILE + rectangle.size * 0.5
+	var rect := RectangleShape2D.new()
+	var size := Vector2(tiles.size) * RoomDefinition.TILE
+	rect.size = size
+	shape.shape = rect
+	shape.position = Vector2(tiles.position) * RoomDefinition.TILE + size * 0.5
+	if one_way:
+		shape.one_way_collision = true
+		shape.one_way_collision_margin = 4.0
 	return shape

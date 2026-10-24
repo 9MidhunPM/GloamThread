@@ -4,7 +4,7 @@ extends SceneTree
 ## Run without --headless or --fixed-fps. Gameplay uses synthetic owned input;
 ## this harness never moves an actor, changes progress, or drives the route.
 
-const ROUTE_PATH := "res://tests/scenarios/overhead_campaign_route.gd"
+const ROUTE_PATH := "res://tests/scenarios/campaign_route.gd"
 const CAPTURE_ROOMS := ["r00", "r02", "r03", "r05", "r06", "r07"]
 const TIMEOUT_MSEC := 600_000
 

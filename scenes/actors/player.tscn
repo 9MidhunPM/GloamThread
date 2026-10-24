@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/actors/player_controller.gd" id="1_player"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
-size = Vector2(12, 10)
+size = Vector2(12, 24)
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
@@ -11,7 +11,7 @@ collision_mask = 1
 script = ExtResource("1_player")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -5)
+position = Vector2(0, -12)
 shape = SubResource("RectangleShape2D_body")
 
 [node name="Visual" type="Node2D" parent="."]

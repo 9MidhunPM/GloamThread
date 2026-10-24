@@ -8,7 +8,7 @@ import sys
 from gen import art, font
 from gen.common import write_json
 
-GENERATOR_VERSION = "2.1.0"
+GENERATOR_VERSION = "1.0.0"
 
 
 def generate(root: Path, seed: int = 18427, stage: str = "full") -> dict:
@@ -20,7 +20,7 @@ def generate(root: Path, seed: int = 18427, stage: str = "full") -> dict:
         from gen import actors, audio
         audio_assets, sfx, music = audio.generate(root, seed)
         assets = art.production(root, seed) + actors.generate(root) + font.generate(root) + audio_assets
-    manifest = {"schema_version": 1, "content_version": "overhead-v1",
+    manifest = {"schema_version": 1, "content_version": "phase1-v1",
                 "generator_version": GENERATOR_VERSION, "seed": seed, "stage": stage,
                 "assets": sorted(assets, key=lambda item: item["id"]), "sfx": sfx, "music": music}
     write_json(root / "assets/manifest.json", manifest)

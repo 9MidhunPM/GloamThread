@@ -11,394 +11,162 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 from .common import record
 
-TILE_IDS = [
-    'floor_path_1', 'floor_path_2', 'floor_grass_1', 'floor_grass_2',
-    'wall_fill_1', 'wall_fill_2', 'wall_fill_3', 'wall_fill_4',
-    'wall_edge_north', 'wall_edge_east', 'wall_edge_south', 'wall_edge_west',
-    'wall_corner_outer_ne', 'wall_corner_outer_se', 'wall_corner_outer_sw', 'wall_corner_outer_nw',
-    'wall_corner_inner_ne', 'wall_corner_inner_se', 'wall_corner_inner_sw', 'wall_corner_inner_nw',
-    'water_fill_1', 'water_fill_2', 'water_fill_3', 'water_fill_4',
-    'water_edge_north', 'water_edge_east', 'water_edge_south', 'water_edge_west',
-    'water_corner_ne', 'water_corner_se', 'water_corner_sw', 'water_corner_nw',
-    'bridge_plank_1', 'bridge_plank_2', 'bridge_rail_north', 'bridge_rail_south',
-    'seam_rune_1', 'seam_rune_2', 'seam_rune_3', 'seam_rune_4',
-    'background_earth_1', 'background_earth_2', 'background_roots_1', 'background_roots_2',
-    'hazard_glass_1', 'hazard_glass_2', 'hazard_thread_1', 'hazard_thread_2',
-]
+COURIER_CLIPS = {"idle": 4, "run": 6, "jump_rise": 2, "fall": 2, "land": 2,
+                 "slash": 4, "special": 4, "hurt": 2, "dash": 2, "downed": 2, "revive": 2}
+TILE_IDS = ["solid_fill", "solid_top", "one_way_middle", "hazard_middle",
+            "solid_fill_2", "solid_fill_3", "solid_fill_4", "solid_top_2", "solid_top_3", "solid_top_4",
+            "solid_bottom", "solid_bottom_2", "solid_bottom_3", "solid_bottom_4",
+            "solid_left", "solid_left_2", "solid_left_3", "solid_left_4",
+            "solid_right", "solid_right_2", "solid_right_3", "solid_right_4",
+            "corner_outer_tl", "corner_outer_tr", "corner_outer_bl", "corner_outer_br",
+            "corner_inner_tl", "corner_inner_tr", "corner_inner_bl", "corner_inner_br",
+            "one_way_left", "one_way_right", "one_way_single",
+            "hazard_left", "hazard_right", "hazard_single",
+            "bridge_left", "bridge_middle", "bridge_right", "bridge_single",
+            "seam_horizontal", "seam_vertical", "seam_cross", "seam_knot",
+            "background_stone", "background_brass", "background_root", "background_cloth"]
 OUTLINE, SHADOW, BONE = "#293247", "#10141C", "#D5D2B8"
 
 
-# Four authored camera-facing banks; sprites are never rotated into a new view.
-COURIER_DIRECTIONS = ("down", "left", "right", "up")
-COURIER_STATE_COUNTS = {"idle": 4, "run": 6, "slash": 5, "special": 5,
-                        "roll": 4, "dash": 2, "hurt": 2, "downed": 2, "revive": 2}
-COURIER_CLIPS = {f"{state}_{direction}": count for direction in COURIER_DIRECTIONS
-                 for state, count in COURIER_STATE_COUNTS.items()}
-# Presentation durations only. Runtime owns hit windows, invulnerability and moves.
-COURIER_TICKS = {"idle": [10, 10, 10, 10], "run": [5] * 6,
-                 "slash": [3, 3, 3, 3, 6], "special": [4, 4, 3, 4, 7],
-                 "roll": [3, 3, 3, 3], "dash": [6, 6], "hurt": [5, 7],
-                 "downed": [18, 18], "revive": [6, 10]}
-
-
-def _courier_weapon(d: ImageDraw.ImageDraw, identity: str, hand: tuple[int, int],
-                    angle: float, colours: dict, charged: bool = False) -> None:
-    """A hollow cleaving shuttle or needle spindle, drawn in the ground plane."""
-    ux, uy = math.cos(angle), math.sin(angle)
-    nx, ny = -uy, ux
-    def point(length, side=0):
-        return (round(hand[0] + ux * length * 7 / 9 + nx * side),
-                round(hand[1] + uy * length * 7 / 9 + ny * side))
-    if identity == "tavi":
-        d.line([point(-2), point(2)], fill=OUTLINE, width=3)
-        d.polygon([point(1, -2), point(6, -3), point(9, -1), point(7, 3),
-                   point(3, 3), point(4, 1), point(1, 1)], fill=OUTLINE)
-        d.polygon([point(2, -1), point(6, -2), point(8), point(6, 2), point(4, 2)],
-                  fill=colours["spool"])
-        d.line([point(3, -1), point(6, -1)], fill=SHADOW)
-        d.line([point(6, -2), point(8), point(6, 2)], fill=colours["glow"] if charged else BONE)
-    else:
-        d.line([point(-2), point(8)], fill=OUTLINE, width=3)
-        d.line([point(-1), point(8)], fill=BONE)
-        d.polygon([point(1, -2), point(4, -2), point(5), point(3, 2), point(1, 2)],
-                  fill=colours["spool"])
-        d.line([point(2, -1), point(4, 1)], fill=colours["mantle"])
-        d.point(point(8), fill=colours["glow"])
-
-
 def courier(identity: str, state: str, step: int, colours: dict) -> Image.Image:
-    """Original overhead courier: fixed ground anchor, four explicitly drawn views.
-
-    Bare logical states use down-facing for the diagnostic packet. Source poses
-    use no imported character art, image rotation or side-view mirroring.
-    """
-    direction = "down"
-    for candidate in COURIER_DIRECTIONS:
-        if state.endswith("_" + candidate):
-            state, direction = state[:-(len(candidate) + 1)], candidate
-            break
-    if identity not in ("tavi", "neri") or state not in COURIER_STATE_COUNTS:
-        raise ValueError(f"unknown courier pose: {identity}/{state}/{direction}")
-    if not 0 <= step < COURIER_STATE_COUNTS[state]:
-        raise ValueError(f"pose index outside clip: {state}/{step}")
     image = Image.new("RGBA", (32, 48))
     d = ImageDraw.Draw(image)
-    hood, mantle, scarf, spool, glow = (colours[k] for k in ("hood", "mantle", "scarf", "spool", "glow"))
-    fx, fy = {"down": (0, 1), "left": (-1, 0), "right": (1, 0), "up": (0, -1)}[direction]
-    rx, ry = -fy, fx
-    # A compact ground contact, never an alpha shadow or collision silhouette.
-    if state not in ("roll", "downed"):
-        d.ellipse((9, 39, 23, 44), fill=SHADOW)
+    hood, mantle, scarf, spool, glow = (colours[key] for key in ("hood", "mantle", "scarf", "spool", "glow"))
     if state == "downed":
-        # Face and discarded tools remain recoverable, with a loose living thread.
-        cx, cy = 16 + fx, 37 + fy
-        d.ellipse((cx - 9, cy - 5, cx + 9, cy + 6), fill=OUTLINE)
-        d.ellipse((cx - 7, cy - 4, cx + 7, cy + 4), fill=mantle)
-        hx, hy = cx + fx * 5, cy + fy * 4 - 2
-        d.ellipse((hx - 5, hy - 5, hx + 5, hy + 3), fill=hood, outline=OUTLINE)
-        d.line((cx - 6, cy + 1, cx + 5, cy + 4), fill=scarf, width=2)
-        if direction != "up":
-            d.line((hx - 2 + fx, hy + 1, hx + 1 + fx, hy + 1), fill=SHADOW)
-        d.ellipse((cx - rx * 6 - 2, cy - ry * 3 - 2, cx - rx * 6 + 2, cy - ry * 3 + 2), fill=spool)
-        d.line([(cx, cy - 5), (cx - 1, cy - 10), (cx + 2 + step, cy - 12 - step)], fill=glow)
-        d.point((cx + 2 + step, cy - 13 - step), fill=BONE)
-        _courier_weapon(d, identity, (16 - fx * 5, 37 - fy * 3), math.atan2(fy, fx) + 1.2, colours)
+        # A bundled mantle and upright loose thread distinguish recoverable defeat.
+        d.ellipse((5, 31, 27, 42), fill=OUTLINE)
+        d.ellipse((7, 32, 25, 40), fill=mantle)
+        d.polygon([(8, 34), (16, 29), (23, 33), (21, 38)], fill=hood)
+        d.line([(17, 32), (18, 26), (21, 24 - step)], fill=glow)
+        d.ellipse((3, 35, 10, 41), fill=spool, outline=OUTLINE)
+        d.line((6, 36, 6, 40), fill=BONE)
         return image
-    if state == "roll":
-        # Visible somersault phases, not a rotated standing sprite. The spool is
-        # the persistent identity cue while hood, soles and cloth exchange depth.
-        cx, cy = 16 + fx * (-1, 0, 1, 0)[step], 35 + fy * (-1, 0, 1, 0)[step]
-        width, height = ((8, 7), (7, 9), (9, 6), (8, 8))[step]
-        d.ellipse((cx - width, cy - height, cx + width, cy + height), fill=OUTLINE)
-        d.ellipse((cx - width + 2, cy - height + 1, cx + width - 1, cy + height - 2), fill=hood if step in (0, 3) else mantle)
-        d.arc((cx - 6, cy - 6, cx + 6, cy + 6), 35 + step * 85, 230 + step * 85, fill=scarf, width=3)
-        sx, sy = cx - fx * 3 + rx * 3, cy - fy * 3 + ry * 2
-        d.ellipse((sx - 3, sy - 3, sx + 3, sy + 3), fill=spool, outline=OUTLINE)
-        d.line((sx - 1, sy - 2, sx - 1, sy + 2), fill=BONE)
-        if step in (1, 2):
-            for side in (-1, 1):
-                bx, by = cx + rx * side * 4, cy + ry * side * 3 - 5
-                d.line((bx, by, bx + fx * 3, by + fy * 3), fill=BONE, width=2)
-        else:
-            d.point((cx + fx * 3, cy + fy * 4), fill=glow)
-        d.line([(cx - fx * 8, cy - fy * 7), (cx - fx * 10 + rx * 2, cy - fy * 10 + ry * 2)], fill=scarf)
-        return image
-
-    bob = {"idle": (0, 0, 1, 0), "run": (0, -1, 0, 1, -1, 0),
-           "revive": (4, 1), "hurt": (1, 0), "dash": (2, 1)}.get(state, (0,) * COURIER_STATE_COUNTS[state])[step]
-    recoil = (-2, -3, 1, 2, 0)[step] if state == "special" else 0
-    lean = (0, -1, 2, 2, 1)[step] if state == "slash" else (3 if state == "dash" else recoil)
-    cx, cy = 16 + fx * lean, 31 + bob + fy * lean
-    # Cloth falls behind movement; each view keeps its own backpack/face layering.
-    tail = (-2, -1, 1, 3, 1, -1)[step] if state == "run" else (step % 3 - 1)
-    if state in ("dash", "slash", "special"):
-        tail += 3
-    tx, ty = cx - fx * (9 if state == "dash" else 6), cy - fy * 4 + 4
-    d.polygon([(cx - 3, cy - 3), (tx + rx * 4, ty + ry * 3),
-               (tx + rx * (6 + tail), ty + ry * 4 + 3), (tx - rx * 2, ty + 1), (cx + 3, cy)],
-              fill=OUTLINE)
-    d.line([(cx - 2, cy - 2), (tx + rx * 3, ty + ry * 2), (tx + rx * (5 + tail), ty + ry * 3 + 2)], fill=scarf, width=2)
-    # Six independent steps around a fixed foot origin, including diagonal-view gait.
-    stride = (-3, -1, 2, 3, 1, -2)[step] if state == "run" else (2 if state == "dash" else 0)
-    for side in (-1, 1):
-        hip = (cx + side * 4, cy + 5)
-        bx = 16 + side * 4 + fx * stride * side
-        by = 41 + fy * stride * side // 2 - (1 if state == "run" and stride * side < 0 else 0)
-        if state == "revive" and step == 0:
-            by, bx = 42, 16 + side * 6
-        d.line([hip, (bx, by)], fill=OUTLINE, width=4)
-        d.line((bx - 2, by, bx + 2, by), fill=BONE, width=2)
-    # Short shoulder cape, foreshortened hem and visible belt give a ground-plane view.
-    d.polygon([(cx - 6, cy - 7), (cx + 6, cy - 7), (cx + 9, cy + 4),
-               (cx + 5, cy + 9), (cx - 6, cy + 8), (cx - 9, cy + 3)], fill=OUTLINE)
-    d.polygon([(cx - 5, cy - 5), (cx + 5, cy - 5), (cx + 7, cy + 3),
-               (cx + 3, cy + 6), (cx - 6, cy + 5)], fill=mantle)
-    d.line([(cx - 6, cy + 4), (cx, cy + 6), (cx + 5, cy + 4)], fill=scarf)
-    for x in (-4, 0, 4):
-        d.point((cx + x, cy + 5), fill=BONE)
-    pack_x = cx - fx * 4 - rx * 5
-    pack_y = cy - fy * 3 + 1
-    # Rectangular brass reel / living circular spool are deliberately different.
+    bob = (step % 2) if state in ("idle", "run", "revive") else 0
+    crouch = 3 if state == "land" else 0
+    lean = 2 if state in ("dash", "slash") else (-1 if state == "hurt" else 0)
+    oy = bob + crouch
+    # Swing legs independently while keeping the foot reference fixed at y43.
+    stride = [-3, -1, 2, 3, 1, -2][step % 6] if state == "run" else 0
+    if state in ("jump_rise", "fall", "dash"):
+        stride = 3 if step == 0 else 1
+    d.line((13 + lean, 32 + oy, 12 - stride, 40), fill=OUTLINE, width=4)
+    d.line((19 + lean, 32 + oy, 20 + stride, 40), fill=OUTLINE, width=4)
+    d.line((10 - stride, 42, 15 - stride, 42), fill=BONE, width=2)
+    d.line((18 + stride, 42, 23 + stride, 42), fill=BONE, width=2)
+    # Spool silhouette: rectangular brass reel versus a rounded living spool.
     if identity == "tavi":
-        d.rounded_rectangle((pack_x - 3, pack_y - 5, pack_x + 3, pack_y + 4), radius=1, fill=OUTLINE)
-        d.rectangle((pack_x - 2, pack_y - 4, pack_x + 2, pack_y + 3), fill=spool)
-        d.line((pack_x - 2, pack_y - 3, pack_x + 2, pack_y - 3), fill=BONE)
-        d.line((pack_x - 2, pack_y + 2, pack_x + 2, pack_y + 2), fill=BONE)
+        d.rectangle((4 + lean, 20 + oy, 11 + lean, 32 + oy), fill=OUTLINE)
+        d.rectangle((5 + lean, 21 + oy, 10 + lean, 31 + oy), fill=spool)
+        d.line((6 + lean, 23 + oy, 9 + lean, 23 + oy), fill=BONE)
+        d.line((6 + lean, 29 + oy, 9 + lean, 29 + oy), fill=BONE)
     else:
-        d.ellipse((pack_x - 4, pack_y - 4, pack_x + 4, pack_y + 4), fill=OUTLINE)
-        d.ellipse((pack_x - 3, pack_y - 3, pack_x + 3, pack_y + 3), fill=spool)
-        d.arc((pack_x - 2, pack_y - 2, pack_x + 2, pack_y + 2), 0, 290, fill=mantle)
-    # Large visible crown with a small face plane: the overhead projection is
-    # authored per direction, rather than four rotations of a side-view head.
-    hx, hy = cx + fx, cy - 10
+        d.ellipse((3 + lean, 23 + oy, 13 + lean, 34 + oy), fill=OUTLINE)
+        d.ellipse((4 + lean, 24 + oy, 12 + lean, 33 + oy), fill=spool)
+        d.arc((6 + lean, 26 + oy, 10 + lean, 31 + oy), 0, 300, fill=mantle)
+    d.polygon([(11 + lean, 22 + oy), (20 + lean, 21 + oy), (25 + lean, 35 + oy),
+               (19 + lean, 37 + oy), (8 + lean, 34 + oy)], fill=OUTLINE)
+    d.polygon([(12 + lean, 23 + oy), (19 + lean, 23 + oy), (23 + lean, 34 + oy),
+               (18 + lean, 34 + oy), (10 + lean, 32 + oy)], fill=mantle)
+    d.line((12 + lean, 30 + oy, 21 + lean, 32 + oy), fill=scarf)
+    for stitch in range(3):
+        d.point((12 + lean + stitch * 3, 33 + oy), fill=BONE)
     if identity == "tavi":
-        d.polygon([(hx - 8, hy + 3), (hx - 8, hy - 4), (hx - 4, hy - 8),
-                   (hx + 4, hy - 8), (hx + 8, hy - 4), (hx + 8, hy + 4), (hx, hy + 7)], fill=OUTLINE)
-        d.polygon([(hx - 6, hy + 2), (hx - 6, hy - 3), (hx - 3, hy - 6),
-                   (hx + 4, hy - 6), (hx + 6, hy - 2), (hx + 6, hy + 3), (hx, hy + 5)], fill=hood)
-        d.line([(hx - 4, hy - 4), (hx, hy - 5), (hx + 3, hy - 3)], fill=BONE)
+        d.polygon([(9 + lean, 19 + oy), (10 + lean, 9 + oy), (16 + lean, 6 + oy),
+                   (23 + lean, 13 + oy), (22 + lean, 23 + oy)], fill=OUTLINE)
+        d.polygon([(11 + lean, 17 + oy), (12 + lean, 10 + oy), (16 + lean, 8 + oy),
+                   (21 + lean, 14 + oy), (20 + lean, 22 + oy)], fill=hood)
     else:
-        d.polygon([(hx - 8, hy + 4), (hx - 9, hy - 2), (hx - 6, hy - 8),
-                   (hx - 2, hy - 6), (hx + 2, hy - 10), (hx + 5, hy - 6),
-                   (hx + 9, hy - 4), (hx + 8, hy + 4), (hx, hy + 7)], fill=OUTLINE)
-        d.polygon([(hx - 6, hy + 2), (hx - 7, hy - 2), (hx - 5, hy - 6),
-                   (hx - 1, hy - 4), (hx + 2, hy - 8), (hx + 4, hy - 4),
-                   (hx + 7, hy - 2), (hx + 6, hy + 3), (hx, hy + 5)], fill=hood)
-        d.line([(hx + 2, hy - 7), (hx, hy - 1), (hx + 3, hy + 3)], fill=spool)
-        d.line((hx - 5, hy - 5, hx - 2, hy - 1), fill=mantle)
-    if direction == "down":
-        d.polygon([(hx - 5, hy + 1), (hx + 5, hy + 1), (hx + 4, hy + 5), (hx - 3, hy + 5)], fill=SHADOW)
-        for x in (-3, 3):
-            d.point((hx + x, hy + 3), fill=glow)
-    elif direction in ("left", "right"):
-        d.polygon([(hx + fx * 3, hy - 1), (hx + fx * 7, hy),
-                   (hx + fx * 8, hy + 3), (hx + fx * 3, hy + 5)], fill=SHADOW)
-        d.point((hx + fx * 6, hy + 1), fill=glow)
-        d.line((hx - fx * 4, hy - 2, hx - fx * 3, hy + 3), fill=scarf)
-    else:
-        # Back-facing seam and fastener; never paint eyes on the rear crown.
-        d.line([(hx - 3, hy - 5), (hx - 1, hy), (hx, hy + 5)], fill=mantle)
-        d.rectangle((hx - 2, hy + 4, hx + 2, hy + 5), fill=scarf)
-        d.point((hx, hy + 4), fill=BONE)
-    d.line((cx - 5, cy - 3, cx + 5, cy - 3), fill=scarf, width=2)
-    if identity == "tavi":
-        lx, ly = cx + rx * 6 + fx * 2, cy + ry * 3 + 4
-        d.rectangle((lx - 2, ly - 2, lx + 2, ly + 3), fill=OUTLINE)
-        d.rectangle((lx - 1, ly - 1, lx + 1, ly + 1), fill=glow)
-        d.point((lx, ly - 1), fill=BONE)
-    # Weapons have a genuine backswing, two active poses and held follow-through.
-    base_angle = math.atan2(fy, fx)
-    arm_angle = base_angle + (-.45 if identity == "tavi" else .35)
-    if state == "run":
-        arm_angle += (-.28, -.1, .18, .32, .1, -.18)[step]
+        d.polygon([(8 + lean, 22 + oy), (9 + lean, 14 + oy), (12 + lean, 4 + oy),
+                   (22 + lean, 11 + oy), (25 + lean, 21 + oy), (17 + lean, 25 + oy)], fill=OUTLINE)
+        d.polygon([(10 + lean, 20 + oy), (11 + lean, 14 + oy), (13 + lean, 7 + oy),
+                   (21 + lean, 13 + oy), (23 + lean, 20 + oy), (17 + lean, 23 + oy)], fill=hood)
+        d.line((13 + lean, 9 + oy, 17 + lean, 17 + oy), fill=spool)
+    d.rectangle((15 + lean, 15 + oy, 22 + lean, 20 + oy), fill=SHADOW)
+    d.point((20 + lean, 17 + oy), fill=glow)
+    d.line((11 + lean, 23 + oy, 22 + lean, 23 + oy), fill=scarf, width=2)
+    if identity == "neri":
+        d.polygon([(12 + lean, 24 + oy), (8, 27 + oy), (3, 25 + (step % 2)), (8, 30 + oy), (14 + lean, 26 + oy)], fill=scarf)
+    hand_y = 27 + oy
     if state == "slash":
-        arm_angle = base_angle + (-1.9, -1.25, -.2, .85, 1.2)[step]
-    elif state == "special":
-        arm_angle = base_angle + ((-1.3, -1.65, -.2, .65, .9)[step] if identity == "tavi" else (-.6, -.3, 0, .2, .5)[step])
-    elif state in ("dash", "hurt"):
-        arm_angle = base_angle + 1.7 + step * .2
-    arm_center = (cx, cy - (5 if direction == "up" else 0))
-    hand = (round(arm_center[0] + math.cos(arm_angle) * 4), round(arm_center[1] + math.sin(arm_angle) * 4))
-    d.line([arm_center, hand], fill=OUTLINE, width=4)
-    d.line([arm_center, hand], fill=hood, width=2)
-    _courier_weapon(d, identity, hand, arm_angle, colours, state == "special" and step in (1, 2, 3))
-    if state in ("slash", "special") and step in (2, 3):
-        # Embedded small arc complements, but cannot replace, the runtime effect.
-        points = [(round(cx + math.cos(base_angle + angle) * 11), round(cy + math.sin(base_angle + angle) * 10))
-                  for angle in (-.75, -.35, 0, .35, .65)]
-        d.line(points, fill=glow, width=2 if identity == "tavi" else 1)
-    if state == "special" and identity == "neri":
-        # Spore cast gathers a seed, opens a fan, then recoils with trailing cloth.
-        sx, sy = round(cx + fx * (7 + min(step, 2))), round(cy + fy * (7 + min(step, 2)))
-        radius = (1, 3, 4, 2, 1)[step]
-        d.ellipse((sx - radius, sy - radius, sx + radius, sy + radius), fill=mantle, outline=glow)
-        d.line((sx, sy - radius, sx, sy + radius), fill=spool)
-        for offset in (-1, 1):
-            d.point((sx + rx * (radius + 2) * offset, sy + ry * (radius + 2) * offset), fill=BONE)
+        hand_y -= [1, 7, 3, 0][step]
+    if state == "special":
+        hand_y -= [1, 3, 7, 4][step]
+    d.line((20 + lean, 26 + oy, 25, hand_y), fill=hood, width=3)
+    if identity == "tavi":
+        d.line((25, hand_y, 29, hand_y - 5), fill=BONE, width=2)
+        d.line((29, hand_y - 5, 26, hand_y - 5), fill=spool)
+        d.rectangle((6 + lean, 32 + oy, 9 + lean, 37 + oy), fill=OUTLINE)
+        d.rectangle((7 + lean, 33 + oy, 8 + lean, 36 + oy), fill=glow)
+    else:
+        d.line((24, hand_y, 30, hand_y - 7), fill=BONE)
+        d.point((29, hand_y - 6), fill=glow)
+    if state in ("special", "revive"):
+        d.arc((22, hand_y - 9, 31, hand_y), 30 + step * 50, 210 + step * 20, fill=glow)
     if state == "hurt":
-        d.line((cx - 9, cy - 10, cx - 11, cy - 13 + step), fill="#F07865")
-        d.line((cx + 7, cy - 14, cx + 10, cy - 16 + step), fill=BONE)
-    if state == "revive":
-        for side in (-1, 1):
-            x = cx + side * (7 + step)
-            d.line((x, 38, x, 33 - step * 5), fill=glow)
-            d.point((x, 31 - step * 5), fill=BONE)
-    # Idle cloth and lantern breathe without moving the world/foot origin.
-    if state == "idle":
-        d.line((cx - 3, cy + 6, cx - 1 + step, cy + 7), fill=scarf)
+        d.line((8, 16, 5, 12 + step), fill="#F07865")
     return image
 
 
-
 def tile_image(tile_id: str, palette: list[str], variant: int = 0) -> Image.Image:
-    """Opaque overhead material tiles; geometry and collision remain room data.
-
-    Edges/corners separate two opaque ground materials inside a complete cell.
-    No old side-view one-way/transparent terrain semantics survive this recipe.
-    """
-    if tile_id not in TILE_IDS:
-        raise ValueError(f"unknown overhead terrain slot: {tile_id}")
-    dark,edge,stone,light,bone,danger,danger_light,deep,mid,bright,gold=palette[:11]
-    water_dark,water_mid,water_light,reflection=palette[11:15]
-    image=Image.new("RGBA",(16,16),edge);d=ImageDraw.Draw(image)
-    n=int(tile_id[-1])-1 if tile_id[-1].isdigit() else variant%4
-
-    def path_floor():
-        d.rectangle((0,0,15,15),fill=edge)
-        d.polygon([(0,1),(8,0),(15,3),(14,14),(6,15),(0,12)],fill=stone)
-        if n%2:
-            d.line([(0,8),(6,8),(8,15)],fill=edge)
-            d.line([(9,0),(9,6),(15,7)],fill=edge)
-            d.line((1,2,5,2),fill=light)
-        else:
-            d.line([(0,6),(8,5),(10,0)],fill=edge)
-            d.line([(8,5),(9,12),(15,12)],fill=edge)
-            d.line((2,9,5,10),fill=light)
-
-    def wall():
-        d.rectangle((0,0,15,15),fill=deep)
-        # Broad cap stones with a regular, deliberately staggered mortar seam.
-        split=5+n%3
-        d.rectangle((0,0,15,6),fill=mid)
-        d.rectangle((0,8,split,15),fill=bright)
-        d.rectangle((split+2,8,15,15),fill=mid)
-        d.line((0,0,15,0),fill=gold)
-        d.line((0,8,split,8),fill=gold)
-        d.line((split+2,9,15,9),fill=bright)
-        d.line((2+n,2,6+n,2),fill=bright)
-        d.point((12-n,12),fill=gold)
-
-    def water():
-        d.rectangle((0,0,15,15),fill=water_dark)
-        d.polygon([(0,3),(5,2),(9,5),(15,4),(15,12),(8,14),(0,11)],fill=water_mid)
-        y=4+n%3
-        d.line([(1,y),(4,y-1),(7,y),(10,y-1)],fill=water_light)
-        d.line([(7,10+n%2),(10,9+n%2),(14,10+n%2)],fill=water_light)
-        d.line((2+n,12,4+n,12),fill=reflection)
-
-    if tile_id.startswith("floor_path"):
-        path_floor()
-    elif tile_id.startswith("floor_grass"):
-        d.rectangle((0,0,15,15),fill=deep)
-        d.polygon([(0,2),(7,0),(14,3),(15,9),(10,14),(2,15),(0,10)],fill=mid)
-        # Three designed tufts and a quiet worn centre; never per-pixel noise.
-        for x,y in ((3+n*2,4),(11-n,8),(5+n,13)):
-            d.line([(x-2,y-1),(x,y+1),(x+1,y-3)],fill=bright)
-        d.line((8,3,10,3),fill=gold)
-    elif tile_id.startswith("wall_fill"):
-        wall()
-    elif tile_id.startswith("wall_edge"):
-        wall(); side=tile_id.rsplit("_",1)[1]
-        if side=="north":
-            d.rectangle((0,0,15,3),fill=stone);d.line((0,4,15,4),fill=bone);d.line((0,5,15,5),fill=gold)
-        elif side=="east":
-            d.rectangle((12,0,15,15),fill=stone);d.line((11,0,11,15),fill=bone);d.line((10,0,10,15),fill=gold)
-        elif side=="south":
-            d.rectangle((0,12,15,15),fill=stone);d.line((0,11,15,11),fill=dark);d.line((0,10,15,10),fill=gold)
-        else:
-            d.rectangle((0,0,3,15),fill=stone);d.line((4,0,4,15),fill=bone);d.line((5,0,5,15),fill=gold)
-    elif tile_id.startswith("wall_corner"):
-        wall();corner=tile_id.rsplit("_",1)[1]
-        east,north="e" in corner,"n" in corner
-        def corner_point(x,y):return (15-x if east else x,y if north else 15-y)
-        if "outer" in tile_id:
-            shape=[corner_point(x,y) for x,y in ((0,0),(15,0),(15,3),(6,3),(3,6),(3,15),(0,15))]
-            d.polygon(shape,fill=stone)
-            d.line([corner_point(x,y) for x,y in ((15,4),(6,4),(4,6),(4,15))],fill=bone,width=1)
-        else:
-            d.polygon([corner_point(x,y) for x,y in ((0,0),(6,0),(6,4),(4,6),(0,6))],fill=stone)
-            d.line([corner_point(x,y) for x,y in ((7,0),(7,4),(4,7),(0,7))],fill=bone)
-    elif tile_id.startswith("water_fill"):
-        water()
-    elif tile_id.startswith("water_edge"):
-        water();side=tile_id.rsplit("_",1)[1]
-        if side=="north":
-            d.rectangle((0,0,15,3),fill=stone);d.line([(0,4),(4,4),(6,5),(11,4),(15,4)],fill=reflection)
-        elif side=="east":
-            d.rectangle((12,0,15,15),fill=stone);d.line([(11,0),(11,5),(10,7),(11,12),(11,15)],fill=reflection)
-        elif side=="south":
-            d.rectangle((0,12,15,15),fill=stone);d.line([(0,11),(5,11),(7,10),(12,11),(15,11)],fill=reflection)
-        else:
-            d.rectangle((0,0,3,15),fill=stone);d.line([(4,0),(4,4),(5,6),(4,11),(4,15)],fill=reflection)
-    elif tile_id.startswith("water_corner"):
-        water();corner=tile_id.rsplit("_",1)[1]
-        east,north="e" in corner,"n" in corner
-        def corner_point(x,y):return (15-x if east else x,y if north else 15-y)
-        d.polygon([corner_point(x,y) for x,y in ((0,0),(15,0),(15,3),(7,3),(3,7),(3,15),(0,15))],fill=stone)
-        d.line([corner_point(x,y) for x,y in ((15,4),(7,4),(4,7),(4,15))],fill=reflection)
-    elif tile_id.startswith("bridge_"):
-        d.rectangle((0,0,15,15),fill=deep)
-        for y in (0,8):
-            d.rectangle((0,y,15,y+6),fill=mid)
-            d.line((0,y,15,y),fill=gold)
-            d.line((2+n%2,y+3,8+n%3,y+3),fill=bright)
-            d.line((11,y+4,14,y+4),fill=deep)
-            for x in (1,14):d.point((x,y+2),fill=bone)
-        if "rail" in tile_id:
-            y=1 if tile_id.endswith("north") else 11
-            d.rectangle((0,y,15,y+3),fill=edge)
-            d.line((0,y,15,y),fill=bone)
-            d.line((0,y+1,15,y+1),fill=gold)
-            for x in (3,12):d.rectangle((x,y-1,x+1,y+4),fill=bright)
-    elif tile_id.startswith("seam_rune"):
-        path_floor()
-        runes=[[(4,3),(11,3),(11,11),(5,11),(5,6),(8,6)],
-               [(3,5),(8,2),(12,6),(8,12),(4,9),(7,6)],
-               [(3,3),(12,12),(12,4),(4,12)],
-               [(3,8),(8,3),(12,8),(8,12),(8,5)]]
-        points=runes[n%4]
-        d.line(points,fill=deep,width=3)
-        d.line(points,fill=gold)
-        d.point(points[0],fill=bone)
-    elif tile_id.startswith("background_earth"):
-        d.rectangle((0,0,15,15),fill=dark)
-        d.polygon([(0,2),(6,1+n),(14,4),(15,12),(7,14),(1,11)],fill=deep)
-        d.line([(1,8),(5,7),(9,9),(14,8)],fill=edge)
-        d.line((3+n,3,6+n,4),fill=mid)
-    elif tile_id.startswith("background_roots"):
-        d.rectangle((0,0,15,15),fill=dark)
-        d.polygon([(0,3),(7,1),(15,5),(15,14),(3,15)],fill=deep)
-        roots=[[(2+n,0),(5,5),(4,10),(8,15)],[(15,3+n),(9,6),(7,11),(0,13)]]
-        for points in roots:
-            d.line(points,fill=mid,width=3);d.line(points,fill=bright)
-        d.line((5,5,1,7+n),fill=mid)
-    elif tile_id.startswith("hazard_glass"):
-        d.rectangle((0,0,15,15),fill=dark)
-        d.ellipse((1,5,14,14),fill=edge)
-        for x,y,h in ((4+n,10,7),(10,12,10-n)):
-            d.polygon([(x-3,y),(x,y-h),(x+3,y-2),(x,y+2)],fill=danger,outline=edge)
-            d.line((x,y-h+1,x+1,y-1),fill=danger_light)
-            d.point((x,y-h),fill=bone)
-        d.line((1,14,5,14),fill=danger)
-    else:  # hazard_thread: taut barbed fibres have a shared danger contour.
-        d.rectangle((0,0,15,15),fill=dark)
-        d.polygon([(0,3),(7,0),(15,4),(15,13),(5,15),(0,11)],fill=edge)
-        points=[(0,12-n),(5,5),(10,10),(15,2+n)]
-        d.line(points,fill=danger,width=2)
-        for x,y in ((5,5),(10,10)):
-            d.line((x-2,y-2,x+2,y+2),fill=danger_light)
-            d.line((x-2,y+1,x+1,y-2),fill=danger_light)
-            d.point((x,y),fill=bone)
+    image = Image.new("RGBA", (16, 16))
+    d = ImageDraw.Draw(image)
+    dark, edge, stone, light, bone, danger, danger_light, deep, mid, bright, gold = palette[:11]
+    if tile_id.startswith("one_way") or tile_id.startswith("bridge"):
+        left = 2 if tile_id.endswith(("left", "single")) else 0
+        right = 13 if tile_id.endswith(("right", "single")) else 15
+        d.rectangle((left, 1, right, 4), fill=edge)
+        d.line((left, 1, right, 1), fill=bone)
+        d.line((left, 3, right, 3), fill=bright)
+        d.line((left + 2, 5, right - 2, 5), fill=deep)
+        if tile_id.startswith("bridge"):
+            for x in range(left + 2, right, 4):
+                d.point((x, 2), fill=gold)
+        return image
+    if tile_id.startswith("hazard"):
+        # Shared hooked chevron contour in both material interpretations.
+        for x in (0, 8):
+            d.polygon([(x, 15), (x + 3, 4), (x + 5, 11), (x + 7, 15)], fill=edge)
+            d.line([(x + 1, 13), (x + 3, 6), (x + 5, 13)], fill=danger)
+            d.point((x + 3, 6), fill=danger_light)
+        return image
+    d.rectangle((0, 0, 15, 15), fill=deep if not tile_id.startswith("background") else dark)
+    d.polygon([(0, 1), (8, 0), (15, 5), (15, 13), (7, 15), (0, 9)], fill=mid)
+    d.polygon([(1, 2), (7, 1), (13, 5), (6, 7), (1, 6)], fill=bright)
+    d.line([(0, 9), (6, 7), (15, 9)], fill=deep)
+    # Sparse stitched seams, rather than stochastic texture noise.
+    shift = variant % 4
+    for x in range(2 + shift, 15, 5):
+        d.line((x, 11, x + 1, 12), fill=gold)
+    if "top" in tile_id:
+        d.line((0, 0, 15, 0), fill=bone)
+        d.line((0, 1, 15, 1), fill=gold)
+    if "bottom" in tile_id:
+        d.line((0, 15, 15, 15), fill=edge)
+    if "left" in tile_id:
+        d.line((0, 0, 0, 15), fill=bone)
+    if "right" in tile_id:
+        d.line((15, 0, 15, 15), fill=bone)
+    if tile_id.startswith("corner_outer"):
+        corner = tile_id.rsplit("_", 1)[1]
+        cut = [(0, 0), (3, 0), (0, 3)]
+        if corner[0] == "b":
+            cut = [(x, 15 - y) for x, y in cut]
+        if corner[1] == "r":
+            cut = [(15 - x, y) for x, y in cut]
+        d.polygon(cut, fill=(0, 0, 0, 0))
+    if tile_id.startswith("corner_inner"):
+        corner = tile_id.rsplit("_", 1)[1]
+        x, y = (0 if corner[1] == "l" else 15), (0 if corner[0] == "t" else 15)
+        dx, dy = (1 if x == 0 else -1), (1 if y == 0 else -1)
+        d.line((x, y, x + dx * 7, y), fill=bone)
+        d.line((x, y, x, y + dy * 7), fill=bone)
+    if tile_id.startswith("seam"):
+        if tile_id.endswith(("horizontal", "cross", "knot")):
+            d.line((0, 8, 15, 8), fill=bone)
+        if tile_id.endswith(("vertical", "cross", "knot")):
+            d.line((8, 0, 8, 15), fill=bone)
+        if tile_id.endswith("knot"):
+            d.polygon([(8, 4), (12, 8), (8, 12), (4, 8)], outline=gold)
     return image
 
 
@@ -416,8 +184,8 @@ def atlas(root: Path, asset_id: str, images: list[Image.Image], cell: tuple[int,
     animations, index = {}, 0
     for state, count in (clips or {}).items():
         animations[state] = {"frames": list(range(index, index + count)),
-                             "ticks": list(COURIER_TICKS[state.rsplit("_", 1)[0]]) if state in COURIER_CLIPS else [8 if state == "idle" else 5] * count,
-                             "loop": state.rsplit("_", 1)[0] in ("idle", "run", "downed") if state in COURIER_CLIPS else state in ("idle", "run", "walk", "flap", "downed")}
+                             "ticks": [8 if state == "idle" else 5] * count,
+                             "loop": state in ("idle", "run", "walk", "flap", "downed")}
         index += count
     path = root / "assets/generated" / (filename or f"sprites/{asset_id}.png")
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -629,82 +397,45 @@ def background(theme: str, layer: str, palette: list[str], seed: int) -> Image.I
 
 
 def effect_image(name: str, step: int) -> Image.Image:
-    """Six-frame ground-plane effects; directional art points along local +X."""
-    if name not in EFFECT_IDS or not 0 <= step < 6:
-        raise ValueError(f"unknown effect frame: {name}/{step}")
-    size=64 if name=="restoration" else 32
-    image=Image.new("RGBA",(size,size));d=ImageDraw.Draw(image)
-    gold,green,danger="#F5CC83","#B5E5B4","#F07865"
-    if name in ("slash","ember_arc"):
-        radius=(6,10,13,14,13,12)[step]
-        width=(2,4,5,4,2,1)[step]
-        span=(.35,.7,1.1,1.0,.7,.4)[step]
-        def arc_points(r):
-            return [(round(15+math.cos(a)*r),round(16+math.sin(a)*r))
-                    for a in [-span+i*span/6 for i in range(13)]]
-        outer=arc_points(radius);inner=arc_points(radius-width)
-        d.polygon(outer+list(reversed(inner)),fill=danger if name=="ember_arc" else gold)
-        d.line(outer,fill=gold if name=="ember_arc" else BONE,width=1)
-        if name=="ember_arc":
-            # A cleaved seam and hot cinders, never a stationary lightning zigzag.
-            d.line(inner,fill="#E3AD6A")
-            for side in (-1,1):
-                x,y=19+step,16+side*(5+step)
-                d.polygon([(x-2,y),(x,y-side*2),(x+3,y-side),(x+1,y+side)],fill=gold)
-        if step in (1,2,3):d.line((18,16,23+step,16),fill=BONE)
-    elif name=="dash":
-        # Three separate woven ribbons trail behind the local +X burst.
-        head=(18,23,27,27,24,20)[step]
-        for lane,colour in ((-6,gold),(0,BONE),(6,"#6BA49B")):
-            start=2+step*2
-            d.line([(start,16+lane),(max(start+2,head-8),15+lane),(head,16+lane//2)],fill=colour,width=2 if step<4 else 1)
-        d.polygon([(head-4,10),(head+2,16),(head-4,22),(head-1,16)],outline=gold)
-    elif name=="spore_impact":
-        radius=(2,5,8,11,12,13)[step]
-        pod=(2,3,3,2,1,1)[step]
-        for i in range(6):
-            angle=i*math.pi/3+.12*step
-            x,y=16+round(math.cos(angle)*radius),16+round(math.sin(angle)*radius)
-            d.ellipse((x-pod,y-pod,x+pod,y+pod),fill="#3E6B51",outline=green)
-            d.point((x,y-1),fill=BONE)
-        if step<4:
-            d.polygon([(16,11-step),(20+step,16),(16,21+step),(12-step,16)],outline="#BCD184")
-    elif name=="hit":
-        radius=(4,8,12,13,10,6)[step]
-        inner=(2,3,4,3,2,1)[step]
-        points=[]
-        for i in range(16):
-            angle=i*math.pi/8
-            r=radius if i%4==0 else (radius*.65 if i%2==0 else inner)
-            points.append((16+round(math.cos(angle)*r),16+round(math.sin(angle)*r)))
-        d.polygon(points,fill=gold if step<3 else danger)
-        d.line((16-inner,16,16+inner,16),fill=BONE)
-        d.line((16,16-inner,16,16+inner),fill=BONE)
-    elif name=="weave":
-        for offset,colour in ((-2,gold),(2,green)):
-            points=[(x,16+round(math.sin((x+step*3)/5)*(5-step//2))+offset) for x in range(2,30)]
-            d.line(points,fill=colour,width=2 if step in (2,3) else 1)
-        radius=(6,7,8,7,6,5)[step]
-        d.polygon([(16,16-radius),(16+radius,16),(16,16+radius),(16-radius,16)],outline=BONE)
-        d.point((16+step-2,16),fill=gold)
-    elif name=="revive":
-        # Returning threads climb to a compact living knot over the ground ring.
-        lift=(0,2,4,6,8,10)[step]
-        d.arc((3,12,29,29),190+step*20,470+step*20,fill=green,width=2)
-        for side in (-1,1):
-            d.line([(16+side*8,23),(16+side*5,19-lift//2),(16+side*2,16-lift)],fill=green)
-        y=17-lift
-        d.polygon([(16,y-3),(19,y),(16,y+4),(13,y)],fill="#3E6B51",outline=BONE)
+    size = 64 if name == "restoration" else 32
+    image = Image.new("RGBA", (size, size))
+    d = ImageDraw.Draw(image)
+    centre = size // 2
+    glow = "#B5E5B4" if name in ("spore_impact", "revive") else "#F5CC83"
+    if name in ("slash", "ember_arc"):
+        radius = 6 + step * 2
+        d.arc((16 - radius, 16 - radius, 16 + radius, 16 + radius), 280, 430, fill=glow, width=max(1, 4 - step // 2))
+        d.arc((17 - radius, 17 - radius, 15 + radius, 15 + radius), 300, 400, fill="#D5D2B8")
+        if name == "ember_arc":
+            d.line([(14, 12), (23, 6 + step), (21, 14), (30, 17)], fill="#F07865", width=2)
+    elif name == "dash":
+        for y, length in ((10, 20), (16, 27), (23, 18)):
+            x = step * 3
+            d.line((max(0, x - length + 12), y, min(31, x + 12), y - 2), fill=glow)
+        d.polygon([(17 + step, 11), (26, 16), (17 + step, 23), (20, 16)], outline=BONE)
+    elif name in ("spore_impact", "hit"):
+        radius = 3 + step * 2
+        for index in range(6):
+            angle = index * math.pi / 3 + (0.2 if name == "hit" else 0)
+            x, y = 16 + round(math.cos(angle) * radius), 16 + round(math.sin(angle) * radius)
+            d.line((16 + round(math.cos(angle) * (radius - 3)), 16 + round(math.sin(angle) * (radius - 3)), x, y), fill=glow, width=2)
+            if name == "spore_impact":
+                d.ellipse((x - 1, y - 1, x + 1, y + 1), fill=glow)
+    elif name == "weave":
+        for offset, colour in ((-3, "#E3AD6A"), (3, "#B5E5B4")):
+            points = [(x, 16 + round(math.sin((x + step * 3) / 5) * (5 - step // 2)) + offset) for x in range(2, 30)]
+            d.line(points, fill=colour)
+        d.polygon([(16, 9), (22, 16), (16, 23), (10, 16)], outline=BONE)
+    elif name == "revive":
+        d.arc((3, 3 + step, 29, 29), 180 + step * 22, 420 + step * 22, fill=glow, width=2)
+        d.line((16, 9, 16, 23), fill=BONE, width=2)
+        d.line((10, 16, 22, 16), fill=BONE, width=2)
     else:
-        radius=(7,11,16,21,26,29)[step]
-        d.ellipse((32-radius,32-radius//2,32+radius,32+radius//2),outline=gold,width=2)
-        for i in range(8):
-            angle=i*math.pi/4
-            x,y=32+round(math.cos(angle)*radius),32+round(math.sin(angle)*radius)
-            d.line((32+round(math.cos(angle)*(radius-5)),32+round(math.sin(angle)*(radius-5)),x,y),fill=green if i%2 else gold)
-        knot=5+step//2
-        d.polygon([(32,32-knot),(32+knot,32),(32,32+knot),(32-knot,32)],outline=BONE,width=2)
-        d.line((32-knot,32,32+knot,32),fill=gold)
+        radius = 7 + step * 4
+        d.ellipse((centre - radius, centre - radius, centre + radius, centre + radius), outline=glow, width=2)
+        d.polygon([(centre, centre - radius), (centre + radius, centre), (centre, centre + radius), (centre - radius, centre)], outline="#B5E5B4")
+        d.line((centre - 4, centre, centre + 4, centre), fill=BONE)
+        d.line((centre, centre - 4, centre, centre + 4), fill=BONE)
     return image
 
 
@@ -784,7 +515,7 @@ def production(root: Path, seed: int) -> list[dict]:
     for name in ("tavi", "neri"):
         frames = [courier(name, state, step, direction["couriers"][name])
                   for state, count in COURIER_CLIPS.items() for step in range(count)]
-        records.append(atlas(root, f"fixed_{name}_v1", frames, (32, 48), 8, 16, (16, 43), COURIER_CLIPS))
+        records.append(atlas(root, f"fixed_{name}_v1", frames, (32, 48), 8, 4, (16, 43), COURIER_CLIPS))
     for theme in ("ember", "moss"):
         frames = [tile_image(name, direction[theme], index) for index, name in enumerate(TILE_IDS)]
         records.append(atlas(root, f"terrain_{theme}_v1", frames, (16, 16), 8, 6, (0, 0), tile_ids=TILE_IDS))

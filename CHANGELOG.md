@@ -6,6 +6,12 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 1 — runtime and integration
 
+### 2026-10-25T02:20:42+05:30 — Restore the original side-view adventure
+
+- Changed: Restored verified34ccb96side-view simulation, rooms, art/audio, tests and authoring tools as a forward change. Preserved the complete overhead experiment on its branch. Created an ignored private blank.env and documented the newly authorized optional API authoring boundary.
+- Why: The user prefers the earlier side-view perspective and now requests OpenAI-generated sprites/textures using their own key.
+- Validation: Fresh restored import and20/20 engine scenarios pass, plus full asset/content validators and documentation/whitespace checks. No key is present and no live API generation is claimed.
+
 ### 2026-10-25T02:18:24+05:30 — Preserve tested overhead experiment before returning to side view
 
 - Changed: Retained active overhead resource/App/save regressions and archived platform-only fixtures with explicit historical mapping; switched native QA observer to the new ordinary-input overhead route.

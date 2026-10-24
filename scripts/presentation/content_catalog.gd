@@ -2,21 +2,17 @@ class_name ContentCatalog
 extends RefCounted
 ## Loads the complete fixed campaign once before creating any game actors.
 
-const TERRAIN_IDS := ["floor_path_1", "floor_path_2", "floor_grass_1", "floor_grass_2", "wall_fill_1", "wall_fill_2", "wall_fill_3", "wall_fill_4", "wall_edge_north", "wall_edge_east", "wall_edge_south", "wall_edge_west", "wall_corner_outer_ne", "wall_corner_outer_se", "wall_corner_outer_sw", "wall_corner_outer_nw", "wall_corner_inner_ne", "wall_corner_inner_se", "wall_corner_inner_sw", "wall_corner_inner_nw", "water_fill_1", "water_fill_2", "water_fill_3", "water_fill_4", "water_edge_north", "water_edge_east", "water_edge_south", "water_edge_west", "water_corner_ne", "water_corner_se", "water_corner_sw", "water_corner_nw", "bridge_plank_1", "bridge_plank_2", "bridge_rail_north", "bridge_rail_south", "seam_rune_1", "seam_rune_2", "seam_rune_3", "seam_rune_4", "background_earth_1", "background_earth_2", "background_roots_1", "background_roots_2", "hazard_glass_1", "hazard_glass_2", "hazard_thread_1", "hazard_thread_2"]
 const ROOM_IDS := ["r00", "r01", "r02", "r03", "r04", "r05", "r06", "r07"]
 const LINKS := {
-	"r00:r01": ["met_oru"], "r01:r02": [], "r02:r03": ["bridge_spindle"],
+	"r00:r01": [], "r01:r02": [], "r02:r03": ["bridge_spindle"],
 	"r03:r04": [], "r04:r05": [], "r01:r05": ["shortcut_bell"],
 	"r01:r06": ["threadstep"], "r06:r07": ["bridge_causeway"],
 	"r00:r07": ["loom_restored"],
 }
 const REWARDS := {"r02": ["bridge_spindle"], "r05": ["boss_spoolwarden", "threadstep", "shortcut_bell"], "r06": ["bridge_causeway"], "r07": ["loom_restored"]}
-const COURIER_CLIPS := ["idle", "run", "slash", "special", "roll", "dash", "hurt", "downed", "revive"]
-const COURIER_DIRECTIONS := ["down", "left", "right", "up"]
-const COURIER_COUNTS := [4, 6, 5, 5, 4, 2, 2, 2, 2]
-const COURIER_TICKS := [[10,10,10,10], [5,5,5,5,5,5], [3,3,3,3,6], [4,4,3,4,7], [3,3,3,3], [6,6], [5,7], [18,18], [6,10]]
+const COURIER_CLIPS := ["idle", "run", "jump_rise", "fall", "land", "slash", "special", "hurt", "dash", "downed", "revive"]
 const ROOM_NAMES := ["Lantern Rest", "Mossfoot Atrium", "Spindle Steps", "Glasswing Gallery", "Warden's Landing", "Broken Bell", "Severed Causeway", "Lantern Loom"]
-const SFX_CUES := ["roll", "slash", "hit", "hurt", "dash", "ember_arc", "spore_bolt", "enemy_warning", "enemy_defeat", "boss_stagger", "cross_stitch", "anchor_latched", "bridge_restored", "checkpoint", "downed", "revive", "loom_restored"]
+const SFX_CUES := ["jump", "land", "slash", "hit", "hurt", "dash", "ember_arc", "spore_bolt", "enemy_warning", "enemy_defeat", "boss_stagger", "cross_stitch", "anchor_latched", "bridge_restored", "checkpoint", "downed", "revive", "loom_restored"]
 const PROP_IDS := ["anchor", "anchor_latched", "loom", "loom_lit", "bell", "bell_broken", "lantern", "lantern_lit", "sign", "checkpoint", "checkpoint_lit", "spindle", "cloth", "root", "glass", "home_bridge", "bobbin", "bench", "banner", "arch", "boat"]
 
 var profiles: Dictionary = {}
@@ -86,7 +82,7 @@ func dialogue_sequence(id: String) -> Array:
 
 func _validate_required_assets() -> void:
 	var clips := {
-		"fixed_tavi_v1": courier_clip_keys(), "fixed_neri_v1": courier_clip_keys(),
+		"fixed_tavi_v1": COURIER_CLIPS, "fixed_neri_v1": COURIER_CLIPS,
 		"oru_v1": ["idle", "talk", "acknowledge"],
 		"spoolmite_v1": ["idle", "walk", "anticipation", "charge", "recovery", "defeat"],
 		"wickwing_v1": ["flap", "anticipation", "dive", "recovery", "defeat"],
@@ -100,8 +96,6 @@ func _validate_required_assets() -> void:
 		for clip: String in clips[id]:
 			if assets.animation(id, clip).is_empty():
 				errors.append("Required presentation clip is missing: %s/%s" % [id, clip])
-	_validate_courier_atlas("fixed_tavi_v1")
-	_validate_courier_atlas("fixed_neri_v1")
 	var props: Dictionary = assets.entries.get("props_v1", {})
 	if props.get("kind") != "sprite_atlas" or not props.get("prop_ids") is Array or props.prop_ids != PROP_IDS or props.get("frames", []).size() != PROP_IDS.size():
 		errors.append("Required prop frame mapping is incomplete")
@@ -115,44 +109,6 @@ func _validate_required_assets() -> void:
 			errors.append("Required music track is missing: %s" % track)
 
 
-static func courier_clip_keys() -> Array[String]:
-	var result: Array[String] = []
-	for direction: String in COURIER_DIRECTIONS:
-		for state: String in COURIER_CLIPS:
-			result.append(state + "_" + direction)
-	return result
-
-
-func _validate_courier_atlas(id: String) -> void:
-	var entry: Dictionary = assets.entries.get(id, {})
-	var frames: Variant = entry.get("frames")
-	if not frames is Array or frames.size() != 128 or not AssetCatalog.dimensions_match(entry.get("cell_size"), 32, 48) or not AssetCatalog.dimensions_match(entry.get("origin"), 16, 43):
-		errors.append("Overhead courier requires 128 fixed-size frames and stable feet pivot: %s" % id)
-		return
-	var seen := {}
-	for bank in COURIER_DIRECTIONS.size():
-		for index in COURIER_CLIPS.size():
-			var key: String = COURIER_CLIPS[index] + "_" + COURIER_DIRECTIONS[bank]
-			var clip := assets.animation(id, key)
-			var indices: Variant = clip.get("frames")
-			var durations: Variant = clip.get("ticks")
-			if not indices is Array or indices.size() != COURIER_COUNTS[index] or not durations is Array or durations.size() != COURIER_COUNTS[index]:
-				errors.append("Overhead courier clip frame count differs: %s/%s" % [id,key])
-				continue
-			for offset in indices.size():
-				if not RoomDefinition._is_integer(indices[offset]) or int(indices[offset]) < bank*32 or int(indices[offset]) >= (bank+1)*32 or seen.has(int(indices[offset])):
-					errors.append("Courier frame repeats or leaves its direction bank: %s/%s" % [id,key])
-				else:
-					seen[int(indices[offset])] = true
-				if not RoomDefinition._is_integer(durations[offset]) or int(durations[offset]) != COURIER_TICKS[index][offset]:
-					errors.append("Courier clip timing differs from gameplay contract: %s/%s" % [id,key])
-			var loops: bool = COURIER_CLIPS[index] in ["idle", "run", "downed"]
-			if not clip.get("loop") is bool or clip.loop != loops:
-				errors.append("Courier clip loop contract differs: %s/%s" % [id,key])
-	if seen.size() != 128:
-		errors.append("Courier clips must cover every authored directional frame: %s" % id)
-
-
 func _json(path: String, content_version: bool = true) -> Dictionary:
 	if not FileAccess.file_exists(path):
 		errors.append("Content file missing: %s" % path)
@@ -162,7 +118,7 @@ func _json(path: String, content_version: bool = true) -> Dictionary:
 		errors.append("Content must be a JSON object: %s" % path)
 		return {}
 	var parsed: Dictionary = parser.data
-	if not RoomDefinition._is_integer(parsed.get("schema_version")) or parsed.schema_version != 1 or (content_version and (not parsed.get("content_version") is String or parsed.content_version != "overhead-v1")):
+	if not RoomDefinition._is_integer(parsed.get("schema_version")) or parsed.schema_version != 1 or (content_version and (not parsed.get("content_version") is String or parsed.content_version != "phase1-v1")):
 		errors.append("Unsupported content version: %s" % path)
 		return {}
 	return parsed
@@ -170,7 +126,7 @@ func _json(path: String, content_version: bool = true) -> Dictionary:
 
 func _load_profiles() -> void:
 	var data := _json("res://content/profiles.json")
-	if str(data.get("collider_contract")) != "courier_overhead_v1" or not data.get("required_team_unlocks_are_separate") is bool or not data.required_team_unlocks_are_separate:
+	if str(data.get("collider_contract")) != "courier_v1" or not data.get("required_team_unlocks_are_separate") is bool or not data.required_team_unlocks_are_separate:
 		errors.append("Fixed profiles require the shared courier collider and separate team unlocks")
 	var records: Variant = data.get("profiles")
 	if not records is Array:
@@ -187,7 +143,7 @@ func _load_profiles() -> void:
 		if str(raw.get("display_name")) != ("Tavi" if tavi else "Neri") or not RoomDefinition._is_integer(raw.get("max_hearts")) or raw.max_hearts != (5 if tavi else 4) or str(raw.get("special_id")) != ("ember_arc" if tavi else "spore_bolt") or str(raw.get("theme_id")) != ("ember" if tavi else "moss") or str(raw.get("visual_bundle_id")) != ("fixed_tavi_v1" if tavi else "fixed_neri_v1"):
 			errors.append("Invalid fixed profile fields: %s" % id)
 		profiles[id] = raw.duplicate(true)
-		for clip: String in courier_clip_keys():
+		for clip: String in COURIER_CLIPS:
 			if assets.animation(str(raw.get("visual_bundle_id", "")), clip).is_empty():
 				errors.append("Profile animation missing: %s/%s" % [id, clip])
 	if profiles.size() != 2:
@@ -201,7 +157,7 @@ func _load_themes() -> void:
 		errors.append("Invalid canonical theme contract")
 		return
 	var required: Variant = data.get("required_tile_slots")
-	if not required is Array or required != TERRAIN_IDS:
+	if not required is Array or required.size() != 48:
 		errors.append("Themes require all 48 terrain slots")
 		return
 	for raw: Variant in records:

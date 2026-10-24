@@ -2,13 +2,12 @@ class_name TeamProgress
 extends RefCounted
 ## One team owns permanent outcomes. No actor/camera owns a second reward copy.
 
-const SAVE_SCHEMA_VERSION := 2
-const CONTENT_VERSION := "overhead-v1"
+const CONTENT_VERSION := "phase1-v1"
 const FLAG_GROUPS := {
 	"threadstep": "team_unlocks",
 	"bridge_spindle": "restored_pairs", "bridge_causeway": "restored_pairs",
 	"boss_spoolwarden": "boss_flags", "lantern_charm": "secret_flags",
-	"shortcut_bell": "world_flags", "loom_restored": "world_flags", "met_oru": "world_flags",
+	"shortcut_bell": "world_flags", "loom_restored": "world_flags",
 }
 const SAVE_GROUPS := ["team_unlocks", "restored_pairs", "boss_flags", "secret_flags", "world_flags"]
 const ROOM_IDS := ["r00", "r01", "r02", "r03", "r04", "r05", "r06", "r07"]
@@ -24,15 +23,10 @@ func has_flag(flag: String) -> bool:
 
 
 func commit_flags(new_flags: Array[String]) -> bool:
-	var next_flags := flags.duplicate()
 	for flag in new_flags:
 		if not FLAG_GROUPS.has(flag):
 			push_error("Unknown permanent flag: %s" % flag)
 			return false
-		next_flags[flag] = true
-	if not _consistent_flags(next_flags):
-		push_warning("Permanent progress needs a complete traversal/reward transaction; nothing was committed.")
-		return false
 	var changed := false
 	for flag in new_flags:
 		if not has_flag(flag):
@@ -54,7 +48,7 @@ func visit(room_id: String) -> void:
 
 
 func to_save() -> Dictionary:
-	var data := {"schema_version": SAVE_SCHEMA_VERSION, "content_version": CONTENT_VERSION,
+	var data := {"schema_version": 1, "content_version": CONTENT_VERSION,
 		"profile_ids": profile_ids.duplicate(), "checkpoint_id": checkpoint_id,
 		"explored_rooms": explored_rooms.duplicate()}
 	for group: String in SAVE_GROUPS:
@@ -69,7 +63,7 @@ func to_save() -> Dictionary:
 
 func load_save(data: Dictionary) -> bool:
 	var version: Variant = data.get("schema_version")
-	if not (version is int or version is float) or not is_finite(float(version)) or float(version) != SAVE_SCHEMA_VERSION:
+	if not (version is int or version is float) or not is_finite(float(version)) or float(version) != 1.0:
 		return false
 	if not data.get("content_version") is String or data.content_version != CONTENT_VERSION:
 		return false
@@ -100,26 +94,20 @@ func load_save(data: Dictionary) -> bool:
 			if not flag is String or FLAG_GROUPS.get(flag) != group or next_flags.has(flag):
 				return false
 			next_flags[flag] = true
-	if not _consistent_flags(next_flags):
+	if next_flags.has("threadstep") and not next_flags.has("boss_spoolwarden"):
+		return false
+	if next_flags.has("shortcut_bell") and not next_flags.has("boss_spoolwarden"):
+		return false
+	# Defeat, traversal and shortcut are one reward transaction. Accepting only
+	# the defeat would remove the boss while leaving its required ability locked.
+	if next_flags.has("boss_spoolwarden") and (not next_flags.has("threadstep") or not next_flags.has("shortcut_bell")):
+		return false
+	if next_flags.has("bridge_causeway") and not next_flags.has("threadstep"):
+		return false
+	if next_flags.has("loom_restored") and not next_flags.has("bridge_causeway"):
 		return false
 	flags = next_flags
 	profile_ids.assign(roster)
 	checkpoint_id = data["checkpoint_id"]
 	explored_rooms.assign(rooms)
-	return true
-
-
-static func _consistent_flags(candidate: Dictionary) -> bool:
-	if candidate.has("threadstep") and not candidate.has("boss_spoolwarden"):
-		return false
-	if candidate.has("shortcut_bell") and not candidate.has("boss_spoolwarden"):
-		return false
-	# Defeat, traversal and shortcut are one reward transaction. Accepting only
-	# the defeat would remove the boss while leaving its required ability locked.
-	if candidate.has("boss_spoolwarden") and (not candidate.has("threadstep") or not candidate.has("shortcut_bell")):
-		return false
-	if candidate.has("bridge_causeway") and not candidate.has("threadstep"):
-		return false
-	if candidate.has("loom_restored") and not candidate.has("bridge_causeway"):
-		return false
 	return true

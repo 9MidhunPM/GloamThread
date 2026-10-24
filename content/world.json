@@ -61,9 +61,7 @@
     {
       "a": "r00",
       "b": "r01",
-      "requires_all": [
-        "met_oru"
-      ]
+      "requires_all": []
     },
     {
       "a": "r01",
@@ -116,5 +114,5 @@
       ]
     }
   ],
-  "content_version": "overhead-v1"
+  "content_version": "phase1-v1"
 }

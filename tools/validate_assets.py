@@ -13,15 +13,8 @@ import wave
 
 from PIL import Image
 
-COURIER_DIRECTIONS = ("down", "left", "right", "up")
-COURIER_STATES = {"idle": 4, "run": 6, "slash": 5, "special": 5, "roll": 4,
-                  "dash": 2, "hurt": 2, "downed": 2, "revive": 2}
-COURIER_CLIPS = {f"{state}_{direction}": count for direction in COURIER_DIRECTIONS
-                 for state, count in COURIER_STATES.items()}
-COURIER_TICKS = {"idle": [10, 10, 10, 10], "run": [5, 5, 5, 5, 5, 5],
-                 "slash": [3, 3, 3, 3, 6], "special": [4, 4, 3, 4, 7],
-                 "roll": [3, 3, 3, 3], "dash": [6, 6], "hurt": [5, 7],
-                 "downed": [18, 18], "revive": [6, 10]}
+COURIER_CLIPS = {"idle": 4, "run": 6, "jump_rise": 2, "fall": 2, "land": 2,
+                 "slash": 4, "special": 4, "hurt": 2, "dash": 2, "downed": 2, "revive": 2}
 ENEMY_CLIPS = {
     "spoolmite_v1": {"idle": 2, "walk": 4, "anticipation": 2, "charge": 2, "recovery": 2, "defeat": 4},
     "wickwing_v1": {"flap": 4, "anticipation": 2, "dive": 2, "recovery": 2, "defeat": 4},
@@ -29,29 +22,48 @@ ENEMY_CLIPS = {
                                                  for phase in ("anticipation", "active", "recovery")},
                         "stagger": 4, "defeat": 6},
 }
-SFX_NAMES = set("jump roll land slash hit hurt dash ember_arc spore_bolt enemy_warning enemy_defeat "
+SFX_NAMES = set("jump land slash hit hurt dash ember_arc spore_bolt enemy_warning enemy_defeat "
                 "boss_stagger cross_stitch anchor_latched bridge_restored checkpoint downed revive loom_restored".split())
-MUSIC_NAMES = {"exploration", "boss", "boss_final", "ending"}
-EFFECT_NAMES = ("slash", "ember_arc", "spore_impact", "dash", "hit", "weave", "revive", "restoration", "enemy_warning")
-TILE_IDS = ["floor_path_1", "floor_path_2", "floor_grass_1", "floor_grass_2"]
-TILE_IDS += [f"wall_fill_{i}" for i in range(1, 5)]
-TILE_IDS += [f"wall_edge_{side}" for side in ("north", "east", "south", "west")]
-TILE_IDS += [f"wall_corner_{kind}_{corner}" for kind in ("outer", "inner") for corner in ("ne", "se", "sw", "nw")]
-TILE_IDS += [f"water_fill_{i}" for i in range(1, 5)]
-TILE_IDS += [f"water_edge_{side}" for side in ("north", "east", "south", "west")]
-TILE_IDS += [f"water_corner_{corner}" for corner in ("ne", "se", "sw", "nw")]
-TILE_IDS += ["bridge_plank_1", "bridge_plank_2", "bridge_rail_north", "bridge_rail_south"]
-TILE_IDS += [f"seam_rune_{i}" for i in range(1, 5)]
-TILE_IDS += ["background_earth_1", "background_earth_2", "background_roots_1", "background_roots_2"]
-TILE_IDS += ["hazard_glass_1", "hazard_glass_2", "hazard_thread_1", "hazard_thread_2"]
+MUSIC_NAMES = {"exploration", "boss", "ending"}
+EFFECT_NAMES = ("slash", "ember_arc", "spore_impact", "dash", "hit", "weave", "revive", "restoration")
+TILE_IDS = ["solid_fill", "solid_top", "one_way_middle", "hazard_middle"]
+TILE_IDS += [f"solid_fill_{i}" for i in (2, 3, 4)] + [f"solid_top_{i}" for i in (2, 3, 4)]
+for _family in ("solid_bottom", "solid_left", "solid_right"):
+    TILE_IDS += [_family] + [f"{_family}_{i}" for i in (2, 3, 4)]
+TILE_IDS += [f"corner_{kind}_{corner}" for kind in ("outer", "inner") for corner in ("tl", "tr", "bl", "br")]
+TILE_IDS += [f"{family}_{part}" for family in ("one_way", "hazard") for part in ("left", "right", "single")]
+TILE_IDS += [f"bridge_{part}" for part in ("left", "middle", "right", "single")]
+TILE_IDS += [f"seam_{part}" for part in ("horizontal", "vertical", "cross", "knot")]
+TILE_IDS += [f"background_{material}" for material in ("stone", "brass", "root", "cloth")]
+# Canonical physical silhouettes are frozen independently of the drawing recipes.
+# Each integer encodes one left-to-right 16px alpha row. Material colours may
+# change; transparent holes and landing/hazard outlines must keep these shapes.
+TILE_MASK_ROWS = {
+    "opaque": (0xffff,) * 16,
+    "corner_outer_tl": (0x0fff, 0x1fff, 0x3fff, 0x7fff) + (0xffff,) * 12,
+    "corner_outer_tr": (0xfff0, 0xfff8, 0xfffc, 0xfffe) + (0xffff,) * 12,
+    "corner_outer_bl": (0xffff,) * 12 + (0x7fff, 0x3fff, 0x1fff, 0x0fff),
+    "corner_outer_br": (0xffff,) * 12 + (0xfffe, 0xfffc, 0xfff8, 0xfff0),
+    "surface_middle": (0, 0xffff, 0xffff, 0xffff, 0xffff, 0x3ffc) + (0,) * 10,
+    "surface_left": (0, 0x3fff, 0x3fff, 0x3fff, 0x3fff, 0x0ffc) + (0,) * 10,
+    "surface_right": (0, 0xfffc, 0xfffc, 0xfffc, 0xfffc, 0x3ff0) + (0,) * 10,
+    "surface_single": (0, 0x3ffc, 0x3ffc, 0x3ffc, 0x3ffc, 0x0ff0) + (0,) * 10,
+    "hazard": (0, 0, 0, 0, 0x1010, 0x1010, 0x3838, 0x3838, 0x3838, 0x3838,
+               0x7c7c, 0x7c7c, 0x7c7c, 0x7e7e, 0xfefe, 0xffff),
+}
 
 
 def canonical_tile_alpha(tile_id):
     if tile_id not in TILE_IDS:
         return None
-    # Overhead material boundaries lie inside an opaque ground tile.
-    # Collision/water/damage are authored once in canonical room JSON.
-    return bytes([255]) * 256
+    family = "opaque"
+    if tile_id.startswith("corner_outer_"):
+        family = tile_id
+    elif tile_id.startswith(("one_way_", "bridge_")):
+        family = "surface_" + tile_id.rsplit("_", 1)[1]
+    elif tile_id.startswith("hazard_"):
+        family = "hazard"
+    return bytes(255 if row & (1 << (15 - x)) else 0 for row in TILE_MASK_ROWS[family] for x in range(16))
 
 
 GLYPHS = list(range(32, 127)) + [65533]
@@ -325,27 +337,6 @@ class AssetValidator:
             self.check(isinstance(record.get("frames"), list) and len(record["frames"]) == count,
                        f"asset {identifier}.frames", f"requires exactly {count} frames")
 
-    def courier_timing(self, identifier):
-        clips = self.assets.get(identifier, {}).get("animations", {})
-        if not isinstance(clips, dict):
-            return
-        offset = 0
-        for direction in COURIER_DIRECTIONS:
-            for state, count in COURIER_STATES.items():
-                name = f"{state}_{direction}"
-                clip = clips.get(name)
-                if isinstance(clip, dict):
-                    label = f"asset {identifier}.animations.{name}"
-                    frames = clip.get("frames")
-                    self.check(isinstance(frames, list) and bool(frames) and
-                               all(integer(index) and offset <= index < offset + count for index in frames),
-                               label + ".bank", "frames must stay within the declared facing/state bank")
-                    self.check(clip.get("ticks") == COURIER_TICKS[state], label + ".timing",
-                               "timing must match the overhead combat presentation contract")
-                    self.check(clip.get("loop") is (state in {"idle", "run", "downed"}),
-                               label + ".loop", "loop policy differs from the overhead state contract")
-                offset += count
-
     def font(self, record):
         label = f"asset {record['id']}"
         glyphs = record.get("glyphs")
@@ -429,8 +420,6 @@ class AssetValidator:
                 self.font(record)
         for identifier in ("fixed_tavi_v1", "fixed_neri_v1"):
             self.clips(identifier, COURIER_CLIPS, exact_count=self.stage == "full")
-            if self.stage == "full":
-                self.courier_timing(identifier)
         tavi, neri = self.images.get("fixed_tavi_v1"), self.images.get("fixed_neri_v1")
         if tavi is not None and neri is not None:
             self.check(tavi.size != neri.size or visible_pixels(tavi) != visible_pixels(neri), "couriers.visuals",
@@ -477,15 +466,18 @@ class AssetValidator:
             self.dimensions("diagnostic_terrain_v1", size=(160, 120), cell=(16, 16), origin=(0, 0))
             terrain = self.assets.get("diagnostic_terrain_v1", {})
             self.check(isinstance(terrain.get("tile_ids"), list) and terrain["tile_ids"][:4] == TILE_IDS[:4],
-                       "asset diagnostic_terrain_v1.tile_ids", "first four slots must match the canonical overhead floor order")
+                       "asset diagnostic_terrain_v1.tile_ids", "first four slots must be solid_fill, solid_top, one_way_middle, hazard_middle")
             for identifier in ("fixed_tavi_v1", "fixed_neri_v1"):
                 self.dimensions(identifier, size=(32, 48), count=1, cell=(32, 48), origin=(16, 43))
             self.dimensions("diagnostic_mover_v1", size=(32, 32), count=1, cell=(32, 32), origin=(16, 28))
             return
         for identifier in ("fixed_tavi_v1", "fixed_neri_v1"):
-            self.dimensions(identifier, size=(288, 832), count=128, cell=(32, 48), origin=(16, 43))
+            self.dimensions(identifier, size=(288, 208), count=32, cell=(32, 48), origin=(16, 43))
         self.dimensions("oru_v1", size=(288, 52), count=8, cell=(32, 48), origin=(16, 43))
-        self.clips("oru_v1", {"idle": 4, "talk": 2, "acknowledge": 2})
+        oru = self.assets.get("oru_v1", {}).get("animations", {})
+        if isinstance(oru, dict):
+            acknowledgement = next((name for name in ("acknowledge", "restored", "restoration_acknowledgement") if name in oru), "acknowledge")
+            self.clips("oru_v1", {"idle": 4, "talk": 2, acknowledgement: 2})
         for identifier, count in (("spoolmite_v1", 16), ("wickwing_v1", 14)):
             self.dimensions(identifier, size=(288, 72), count=count, cell=(32, 32), origin=(16, 28))
             self.clips(identifier, ENEMY_CLIPS[identifier])
@@ -511,17 +503,13 @@ class AssetValidator:
         for effect in EFFECT_NAMES:
             identifier = f"effect_{effect}_v1"
             self.dimensions(identifier, count=6)
-            self.clips(identifier, {"play": 6})
             cell = self.assets.get(identifier, {}).get("cell_size")
             self.check(cell == [32, 32] or effect == "restoration" and cell == [64, 64],
                        f"asset {identifier}.cell_size", "effect requires 32x32 cells; restoration may use 64x64")
             clips = self.assets.get(identifier, {}).get("animations", {})
-            clip = clips.get("play", {}) if isinstance(clips, dict) else {}
-            self.check(isinstance(clip, dict) and clip.get("loop") is False,
-                       f"asset {identifier}.animations.play.loop", "effect playback must finish without looping")
-            self.check(isinstance(clip, dict) and isinstance(clip.get("frames"), list)
+            self.check(isinstance(clips, dict) and any(isinstance(clip, dict) and isinstance(clip.get("frames"), list)
                        and len(clip["frames"]) == 6 and all(integer(index) for index in clip["frames"])
-                       and set(clip["frames"]) == set(range(6)),
+                       and set(clip["frames"]) == set(range(6)) for clip in clips.values()),
                        f"asset {identifier}.animations", "effect must declare its complete six-frame sequence")
         for theme in ("ember", "moss"):
             for layer in ("far", "middle", "near"):
@@ -541,7 +529,7 @@ class AssetValidator:
             return self.errors
         self.check(integer(manifest.get("schema_version")) and manifest.get("schema_version") == 1,
                    "manifest.schema_version", "unsupported schema; expected integer 1")
-        self.check(manifest.get("content_version") == "overhead-v1", "manifest.content_version", "expected overhead-v1")
+        self.check(manifest.get("content_version") == "phase1-v1", "manifest.content_version", "expected phase1-v1")
         self.check(isinstance(manifest.get("generator_version"), str) and bool(manifest["generator_version"]),
                    "manifest.generator_version", "generator version is required")
         self.check(integer(manifest.get("seed")), "manifest.seed", "seed must be an integer")

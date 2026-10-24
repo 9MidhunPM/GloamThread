@@ -22,12 +22,12 @@ SOURCE_PATHS = (
     "tools/gen/audio.py",
 )
 CUE_NAMES = (
-    "jump", "land", "roll", "slash", "hit", "hurt", "dash", "ember_arc",
+    "jump", "land", "slash", "hit", "hurt", "dash", "ember_arc",
     "spore_bolt", "enemy_warning", "enemy_defeat", "boss_stagger",
     "cross_stitch", "anchor_latched", "bridge_restored", "checkpoint",
     "downed", "revive", "loom_restored",
 )
-MUSIC_NAMES = ("exploration", "boss", "boss_final", "ending")
+MUSIC_NAMES = ("exploration", "boss", "ending")
 
 
 def _read(path: Path) -> dict:
@@ -69,17 +69,7 @@ def render_voice(
     time = np.arange(count, dtype=np.float64) / SAMPLE_RATE
     start_hz = _frequency(note)
     end_hz = start_hz if end_note is None else _frequency(end_note)
-    drop = _number(instrument.get("pitch_drop_semitones", 0.0), "instrument pitch drop", 0.0, 48.0)
-    if drop:
-        drop_seconds = _number(instrument.get("pitch_drop_seconds", 0.04), "instrument pitch drop time", 0.005, 1.0)
-        hz = (start_hz + (end_hz - start_hz) * time / seconds) * 2.0 ** (drop * np.exp(-time / drop_seconds) / 12.0)
-        phase = 2.0 * np.pi * (np.cumsum(hz) - hz) / SAMPLE_RATE
-    else:
-        phase = 2.0 * np.pi * (start_hz * time + 0.5 * (end_hz - start_hz) * time * time / seconds)
-    inharmonicity = _number(instrument.get("inharmonicity", 0.0), "instrument inharmonicity", 0.0, 0.01)
-    detune = _number(instrument.get("detune_cents", 0.0), "instrument detune", 0.0, 12.0)
-    detune_ratio = 2.0 ** (detune / 1200.0)
-    peak_hz = max(start_hz, end_hz) * 2.0 ** (drop / 12.0)
+    phase = 2.0 * np.pi * (start_hz * time + 0.5 * (end_hz - start_hz) * time * time / seconds)
     signal = np.zeros(count, dtype=np.float64)
     partials = instrument.get("partials", [])
     if not isinstance(partials, list):
@@ -91,34 +81,18 @@ def render_voice(
         ratio = _number(partial[0], "partial ratio", 0.125, 12.0)
         gain = _number(partial[1], "partial gain", 0.0, 1.0)
         rate = _number(partial[2], "partial decay rate", 0.0, 16.0)
-        # Stiff strings spread high piano partials slightly; paired strings beat
-        # gently. Both are authored synthesis, with a conservative Nyquist bound.
-        ratio *= math.sqrt(1.0 + inharmonicity * ratio * ratio)
-        if peak_hz * ratio * detune_ratio < SAMPLE_RATE * 0.45:
-            if detune:
-                carrier = (np.sin(phase * ratio * detune_ratio) + np.sin(phase * ratio / detune_ratio)) * 0.5
-            else:
-                carrier = np.sin(phase * ratio)
-            signal += gain * carrier * np.exp(-time * rate / decay)
+        # Omit a partial above Nyquist instead of folding it into an unrelated tone.
+        if max(start_hz, end_hz) * ratio < SAMPLE_RATE * 0.45:
+            signal += gain * np.sin(phase * ratio) * np.exp(-time * rate / decay)
     noise_gain = _number(instrument.get("noise", 0.0), "instrument noise", 0.0, 1.0)
     if noise_gain:
         smoothing = instrument.get("noise_smoothing", 9)
         if isinstance(smoothing, bool) or not isinstance(smoothing, int) or not 1 <= smoothing <= 127:
             raise ValueError("instrument noise_smoothing must be an integer in 1..127")
-        highpass = instrument.get("noise_highpass", False)
-        if not isinstance(highpass, bool):
-            raise ValueError("instrument noise_highpass must be boolean")
         noise = random.uniform(-1.0, 1.0, count + smoothing - 1)
-        if highpass:
-            if smoothing < 2:
-                raise ValueError("highpass noise needs a smoothing width of at least 2")
-            low = np.convolve(noise, np.ones(smoothing) / smoothing, mode="valid")
-            noise = noise[smoothing // 2:smoothing // 2 + count] - low
-        else:
-            kernel = np.ones(smoothing, dtype=np.float64) / math.sqrt(smoothing)
-            noise = np.convolve(noise, kernel, mode="valid")
-        noise_decay = _number(instrument.get("noise_decay", decay), "instrument noise decay", 0.001, 30.0)
-        signal += noise_gain * noise * np.exp(-time / noise_decay)
+        kernel = np.ones(smoothing, dtype=np.float64) / math.sqrt(smoothing)
+        noise = np.convolve(noise, kernel, mode="valid")
+        signal += noise_gain * noise * np.exp(-time / decay)
     attack = _number(instrument.get("attack", 0.005), "instrument attack", 0.001, 2.0)
     release = _number(instrument.get("release", 0.04), "instrument release", 0.002, 5.0)
     attack_frames = max(2, min(count, round(attack * SAMPLE_RATE)))
@@ -209,23 +183,6 @@ def render_track(name: str, source: dict, instruments: dict, seed: int) -> np.nd
             # Constant-power placement keeps the centre from becoming twice as loud.
             stereo_gain = np.array([math.sqrt((1.0 - pan) / 2.0), math.sqrt((1.0 + pan) / 2.0)])
             output[offset:end] += voice[:end - offset, None] * (stereo_gain * gain)
-    # Small crossed early reflections give the original keyboard ensemble width
-    # without loading an impulse response or washing out its rhythmic attacks.
-    taps = source.get("room_taps", [])
-    if not isinstance(taps, list) or len(taps) > 4:
-        raise ValueError(f"{name}: room_taps must contain at most four [seconds,gain] taps")
-    dry = output.copy() if taps else None
-    for tap in taps:
-        if not isinstance(tap, list) or len(tap) != 2:
-            raise ValueError(f"{name}: room tap must be [seconds,gain]")
-        delay = round(_number(tap[0], name + " room delay", 0.002, 0.25) * SAMPLE_RATE)
-        gain = _number(tap[1], name + " room gain", 0.0, 0.25)
-        if delay < len(output):
-            output[delay:, 0] += dry[:-delay, 1] * gain
-            output[delay:, 1] += dry[:-delay, 0] * gain
-    drive = _number(source.get("saturation_drive", 0.0), name + " saturation drive", 0.0, 2.0)
-    if drive:
-        output = np.tanh(output * drive) / drive
     return _finish(output, source.get("peak", 0.22), 0.03)
 
 
@@ -243,15 +200,15 @@ def _hash(path: Path) -> str:
 
 
 def generate(root: Path, seed: int) -> tuple[list[dict], dict[str, str], dict[str, str]]:
-    """Write 19 cues and four original scores, returning records and semantic maps."""
+    """Write 18 cues and 3 scores, returning manifest records and semantic maps."""
     root = Path(root).resolve()
     instruments = _read(root / SOURCE_PATHS[0]).get("instruments", {})
     cues = _read(root / SOURCE_PATHS[1]).get("cues", {})
     tracks = _read(root / SOURCE_PATHS[2]).get("tracks", {})
     if set(cues) != set(CUE_NAMES):
-        raise ValueError("cues.json: expected exactly the 19 overhead semantic cues, including legacy jump")
+        raise ValueError("cues.json: expected exactly the 18 Phase 1 semantic cues")
     if set(tracks) != set(MUSIC_NAMES):
-        raise ValueError("score.json: expected exploration, boss, boss_final and ending arrangements")
+        raise ValueError("score.json: expected exploration, boss and ending arrangements")
     source_records = [{"path": path, "sha256": _hash(root / path)} for path in SOURCE_PATHS]
     destination = root / "assets/generated/audio"
     destination.mkdir(parents=True, exist_ok=True)
@@ -268,7 +225,7 @@ def generate(root: Path, seed: int) -> tuple[list[dict], dict[str, str], dict[st
             path = destination / f"{kind}_{name}.wav"
             _write_wave(path, pcm)
             asset_id = f"{kind}_{name}_v1"
-            loop = kind == "music" and name in ("exploration", "boss", "boss_final")
+            loop = kind == "music" and name in ("exploration", "boss")
             records.append({
                 "id": asset_id,
                 "kind": kind,
