@@ -43,6 +43,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 2 — content and assets
 
+### 2026-10-25T00:15:26+05:30 — Verify every UI capture and expected process lifetime
+
+- Changed: QA now checks the exact nine fixture kinds, fresh expected paths/dimensions, distinct nonblank pixels, and live preview processes before intentional shutdown.
+- Why: Peer review found that record counts could mask repeated/stale captures and cleanup could mask an unexpected preview exit.
+- Validation: Full native helper and Python compilation PASS; regenerated screenshots are byte-identical. Pack/link and whitespace checks PASS.
+- Limitations: This strengthens UI fixture evidence only; production code and full-game acceptance are unchanged.
+
 ### 2026-10-25T00:13:18+05:30 — Guard native UI evidence against blank captures
 
 - Changed: Added explicit window/framebuffer pixel equality and rendered-colour assertions to the private UI QA helper; recorded the result in its evidence.

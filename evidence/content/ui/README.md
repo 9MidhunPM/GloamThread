@@ -116,6 +116,8 @@ python3 tests/ui/native_menu_check.py --xvfb /tmp/gloamthread-ui-x11/runtime/usr
 The helper requires Godot, Xvfb, xdotool, ImageMagick `import` and Pillow. It
 starts its own display, checks window PID ownership, captures actual framebuffer
 and window pixels, sends X11 input, and closes its processes in `finally`.
+It verifies the complete set of nine distinct fixture kinds, fresh nonblank
+960x360 PNGs with distinct pixels, and live processes before intentional shutdown.
 It initially failed to find the debug-suffixed window title; prefix matching
 plus the PID check corrected that harness issue before the successful run.
 
@@ -136,6 +138,8 @@ Results are in [captures/results.json](captures/results.json):
 - Native logs contain no unexpected engine/script errors. The software X11
   driver reports unsupported V-Sync; no performance claim is inferred from it.
 - The helper and the earlier manual display/apps were all stopped after QA.
+- Peer review identified missing kind/freshness and unexpected-exit guards in
+  the helper; these were added and the full native check passed again.
 
 These are actual renders and automated window inputs in an isolated **UI
 fixture**. Its values/actions stay in memory; it does not prove application save,
