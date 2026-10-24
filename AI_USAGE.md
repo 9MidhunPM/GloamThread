@@ -58,6 +58,9 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-actors -->
 
+- 2026-10-25T01:21:06+05:30 | Codex | Implemented room-owned Threadstep validation and per-courier water exceptions with exact-distance and interruption scenarios. Human review pending. Six isolated actor scenarios pass; no full campaign route claim.
+
+
 - 2026-10-25T01:19:15+05:30 | Codex | Migrated Neri projectile movement and swept hit ordering with actual-physics scenarios. Human review pending. Five isolated actor scenarios pass; terrain/target fixtures do not establish full-route balance.
 
 

@@ -198,6 +198,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T01:21:06+05:30 — Safe team Threadstep crossings
+
+- Changed: Threadstep now travels sixty pixels over twelve ticks with a forty-five-tick cooldown; room callbacks validate dry departure, full-footprint landing and swept walls. Only the known water body is excepted for that courier.
+- Why: Allow forgiving bounded water traversal while preserving walls, partner collision and safe interruption/recovery.
+- Validation: Isolated Godot 4.7.2 actor scenarios pass 6/6, including two-tile crossing, unlock/cooldown, partial landing rejection, paused crossing, damage/geometry rollback and room-reset exception cleanup.
+- Limitations: Dedicated callback/physics fixtures; complete authored-room integration remains with the world/session lanes.
+
+
 ### 2026-10-25T01:19:15+05:30 — Swept overhead Spore Bolt
 
 - Changed: Spore Bolt follows a normalized two-axis direction, chooses earliest swept hurtbox contact before terrain, starts at the courier ground centre and expires after forty-eight physics ticks.

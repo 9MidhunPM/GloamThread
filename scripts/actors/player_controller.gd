@@ -12,9 +12,9 @@ const DIRECTION_NAMES: Array[String] = ["down", "left", "right", "up"]
 const MAX_SPEED := 110.0
 const MOVE_ACCEL := 900.0
 const ATTACK_BUFFER_TICKS := 6
-const DASH_SPEED := 360.0
+const DASH_SPEED := 300.0
 const DASH_TICKS := 12
-const DASH_COOLDOWN_TICKS := 30
+const DASH_COOLDOWN_TICKS := 45
 const ROLL_SPEED := 180.0
 const ROLL_TICKS := 12
 const ROLL_COOLDOWN_TICKS := 36
@@ -68,6 +68,10 @@ var _can_stand: Callable
 var _can_threadstep: Callable
 var _water_body: PhysicsBody2D
 var _last_safe_feet := Vector2.ZERO
+var _dash_departure := Vector2.ZERO
+var _dash_landing := Vector2.ZERO
+var _dash_in_progress := false
+var _ignoring_water := false
 
 @onready var _visual: Node2D = $Visual
 @onready var _sprite: Sprite2D = $Visual/Sprite2D
@@ -105,6 +109,7 @@ func _setup_animator() -> void:
 
 ## Room owns ground interpretation. Queries accept world-space feet positions.
 func set_room_context(bounds: Rect2, can_stand: Callable, can_threadstep: Callable, water_body: PhysicsBody2D = null) -> void:
+	_finish_dash(true)
 	room_bounds = bounds
 	_can_stand = can_stand
 	_can_threadstep = can_threadstep
@@ -134,11 +139,7 @@ func _physics_process(delta: float) -> void:
 		elif _attack_buffer_ticks > 0:
 			_start_attack("slash")
 	if dash_ticks > 0:
-		velocity = facing_vector * DASH_SPEED
-		move_and_slide()
-		_keep_in_room()
-		dash_ticks -= 1
-		_set_animation("dash")
+		_tick_dash()
 		return
 	if roll_ticks > 0:
 		velocity = facing_vector * ROLL_SPEED
@@ -174,6 +175,7 @@ func _update_facing(movement: Vector2) -> void:
 
 
 func reset_at(feet_position: Vector2) -> void:
+	_finish_dash(false)
 	global_position = feet_position
 	velocity = Vector2.ZERO
 	_attack_kind = ""
@@ -224,7 +226,7 @@ func take_hit(amount: int, knockback: Vector2 = Vector2.ZERO) -> bool:
 	_hurt_ticks = 12
 	_attack_kind = ""
 	_attack_buffer_ticks = 0
-	dash_ticks = 0
+	_finish_dash(not _standable(global_position))
 	roll_ticks = 0
 	velocity = knockback
 	revive_progress_ticks = 0
@@ -266,15 +268,59 @@ func _start_roll() -> void:
 
 
 func _can_dash() -> bool:
-	return _progress != null and _progress.has_flag("threadstep") and dash_cooldown_ticks == 0
+	if _progress == null or not _progress.has_flag("threadstep") or dash_cooldown_ticks > 0:
+		return false
+	return _standable(global_position) and _can_threadstep.is_valid() and bool(_can_threadstep.call(global_position, global_position + facing_vector * DASH_SPEED * DASH_TICKS / 60.0))
 
 
 func _start_dash(movement: Vector2) -> void:
 	_update_facing(movement)
+	_dash_departure = global_position
+	_dash_landing = global_position + facing_vector * DASH_SPEED * DASH_TICKS / 60.0
+	_dash_in_progress = true
 	dash_ticks = DASH_TICKS
 	dash_cooldown_ticks = DASH_COOLDOWN_TICKS
+	if is_instance_valid(_water_body):
+		add_collision_exception_with(_water_body)
+		_ignoring_water = true
 	AudioDirector.play_cue(&"dash")
 	CombatQuery.effect(self, _catalog, "effect_dash_v1", global_position, facing_vector)
+
+
+func _tick_dash() -> void:
+	# Recheck the fixed destination if terrain changes during a crossing.
+	if not _can_threadstep.is_valid() or not bool(_can_threadstep.call(_dash_departure, _dash_landing)):
+		_finish_dash(true)
+		_update_animation()
+		return
+	velocity = facing_vector * DASH_SPEED
+	move_and_slide()
+	_keep_in_room()
+	dash_ticks -= 1
+	_set_animation("dash")
+	if dash_ticks == 0:
+		var landed := _standable(global_position) and global_position.distance_to(_dash_landing) < 0.5
+		_finish_dash(not landed)
+
+
+func _finish_dash(rollback: bool) -> void:
+	if not _dash_in_progress:
+		return
+	if _ignoring_water and is_instance_valid(_water_body):
+		remove_collision_exception_with(_water_body)
+	_ignoring_water = false
+	_dash_in_progress = false
+	dash_ticks = 0
+	velocity = Vector2.ZERO
+	if rollback:
+		global_position = _dash_departure
+		reset_physics_interpolation()
+	if _standable(global_position):
+		_last_safe_feet = global_position
+
+
+func _exit_tree() -> void:
+	_finish_dash(false)
 
 
 func _start_attack(kind: String) -> void:
