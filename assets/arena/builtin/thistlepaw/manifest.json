@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "kind": "fighter-character",
+  "id": "thistlepaw",
+  "name": "Thistlepaw",
+  "rig_id": "quadruped",
+  "kit_id": "nature",
+  "theme": {
+    "name": "Moonroot Conservatory",
+    "palette": [
+      "#101e2a",
+      "#25434c",
+      "#487b78",
+      "#77b493",
+      "#bce9a0",
+      "#f0e9c5"
+    ],
+    "motif": "Glasshouse arches, braided roots and hanging seed moons"
+  },
+  "files": {
+    "character.png": "0a4af22dc42baccc1eb34f7d16ef40810720466c028a0e9d1f4ec2cf5ac17a7f",
+    "portrait.png": "b0d40c8c480daceffce3e0cd7583802925a0d02953bc6b2408356f1f10a2ebb2",
+    "background.png": "866d7ce5a1d7ba2244c6549fe3f0f22a1ce39c824b7b34e0e9845f177cbf9ba4",
+    "materials.png": "370ca51e20846130b6c61a963b3d5b673f5aeae52dfbbf4c6c1a026a86dd4753",
+    "provenance.json": "d5dee7ad6e9d64dcdd6c224961e0915b5f614e05ae03afe570d2441ccbb2c1fb"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "kind": "fighter-character",
+  "id": "cinderjack",
+  "name": "Cinderjack",
+  "rig_id": "upright",
+  "kit_id": "ember",
+  "theme": {
+    "name": "The Furnace Orchard",
+    "palette": [
+      "#111925",
+      "#243340",
+      "#536574",
+      "#b06a42",
+      "#ff9858",
+      "#ffe4a3"
+    ],
+    "motif": "Copper kiln arches, hanging orchard lanterns and blackened apple boughs"
+  },
+  "files": {
+    "character.png": "78c4819ede868d245dbadf0526ef681b5685c6c1244529e03494a1a54a5c2cb3",
+    "portrait.png": "bdc7d7b07576ee5eef312a68e48fe66c21aba8819bd8d8032593c49a9e351abc",
+    "background.png": "c4944faf508bd403ee40b9e9d29ca79cf03c0f275966201724e0e6e313240906",
+    "materials.png": "789ff55105bf8f5dca84aab513cb004b503644077caab4917f9857c8bd212b73",
+    "provenance.json": "d5dee7ad6e9d64dcdd6c224961e0915b5f614e05ae03afe570d2441ccbb2c1fb"
+  }
+}
