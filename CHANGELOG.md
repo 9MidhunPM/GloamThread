@@ -198,6 +198,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T01:21:52+05:30 — Explicit projectile water flight
+
+- Changed: Couriers pass their known room water body to Spore Bolt; each projectile excepts only that body while retaining wall collision.
+- Why: Allow Neri shots across water without global terrain-mask changes or shots through walls.
+- Validation: The focused real-physics Spore scenario passes, including an owned emitted shot traversing a water span and retiring at the next wall without hitting an enemy beyond it.
+- Limitations: Dedicated water/wall fixtures; full content integration remains pending.
+
+
 ### 2026-10-25T01:21:06+05:30 — Safe team Threadstep crossings
 
 - Changed: Threadstep now travels sixty pixels over twelve ticks with a forty-five-tick cooldown; room callbacks validate dry departure, full-footprint landing and swept walls. Only the known water body is excepted for that courier.

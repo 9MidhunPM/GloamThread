@@ -355,6 +355,7 @@ func _update_attack() -> void:
 			bolt.attack_id = _attack_id
 			bolt.direction = _attack_direction
 			bolt.catalog = _catalog
+			bolt.water_body = _water_body
 			get_parent().add_child(bolt)
 			bolt.global_position = hurt_rect().get_center()
 	if _attack_tick >= (18 if _attack_kind == "slash" else 22):

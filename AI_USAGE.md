@@ -58,6 +58,9 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-actors -->
 
+- 2026-10-25T01:21:52+05:30 | Codex | Added explicitly authorized projectile water flight through the room-context body. Human review pending. Focused Spore scenario passes with water traversal and retained wall rejection.
+
+
 - 2026-10-25T01:21:06+05:30 | Codex | Implemented room-owned Threadstep validation and per-courier water exceptions with exact-distance and interruption scenarios. Human review pending. Six isolated actor scenarios pass; no full campaign route claim.
 
 
