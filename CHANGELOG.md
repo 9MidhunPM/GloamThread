@@ -198,6 +198,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T01:12:16+05:30 — Overhead courier motor and room context
+
+- Changed: Replaced gravity/platform movement with floating XY movement, 12x10 feet collision, cardinal facing and directional animation keys; introduced set_room_context(bounds, can_stand, can_threadstep, water_body).
+- Why: Establish the actor-side ground-plane contract before world integration. Existing health/revive APIs and owned snapshots remain intact.
+- Validation: Godot 4.7.2 isolated import and overhead_actor_motor scenario pass; actual bodies prove equal diagonal speed, analogue magnitude, wall/bounds collision, owner isolation, pause and stationary downing.
+- Limitations: Null-catalog physics fixture only; roll, new attack timing, water dash and planar enemies remain subsequent actor slices. No overhead art/rendered/full-route claim.
+
+
 
 
 ## Overhead world lane

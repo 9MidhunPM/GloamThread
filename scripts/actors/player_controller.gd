@@ -6,15 +6,11 @@ extends CharacterBody2D
 signal damage_received(player: PlayerController)
 signal downed_started(player: PlayerController)
 
-const GRAVITY := 1400.0
-const JUMP_SPEED := -330.0
+enum Facing { DOWN, LEFT, RIGHT, UP }
+const FACING_VECTORS: Array[Vector2] = [Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT, Vector2.UP]
+const DIRECTION_NAMES: Array[String] = ["down", "left", "right", "up"]
 const MAX_SPEED := 110.0
-const GROUND_ACCEL := 900.0
-const AIR_ACCEL := 600.0
-const MAX_FALL := 400.0
-const JUMP_RELEASE_SPEED := -140.0
-const COYOTE_TICKS := 6
-const JUMP_BUFFER_TICKS := 6
+const MOVE_ACCEL := 900.0
 const DASH_SPEED := 360.0
 const DASH_TICKS := 12
 const DASH_COOLDOWN_TICKS := 30
@@ -31,7 +27,11 @@ var downed_ticks: int = 0
 var revive_progress_ticks: int = 0
 var room_bounds: Rect2 = Rect2()
 var animation_state: String = "idle"
-var facing: int = 1
+var facing: Facing = Facing.DOWN
+var facing_vector: Vector2:
+	get:
+		return FACING_VECTORS[facing]
+var animation_key: String = "idle_down"
 var immunity_ticks: int = 0
 var special_cooldown_ticks: int = 0
 var dash_cooldown_ticks: int = 0
@@ -44,12 +44,8 @@ var sprite_texture: Texture2D:
 		if is_node_ready():
 			_sprite.texture = value
 
-var _coyote_ticks: int = 0
-var _jump_buffer_ticks: int = 0
 var _hurt_ticks: int = 0
 var _revive_animation_ticks: int = 0
-var _land_ticks: int = 0
-var _air_dash_available: bool = true
 var _attack_kind: String = ""
 var _attack_tick: int = 0
 var _attack_id: int = 0
@@ -59,8 +55,9 @@ var _catalog: AssetCatalog
 var _progress: TeamProgress
 var _visual_id: String = ""
 var _animator: Node
-var _drop_body: PhysicsBody2D
-var _drop_ticks: int = 0
+var _can_stand: Callable
+var _can_threadstep: Callable
+var _water_body: PhysicsBody2D
 var _last_safe_feet := Vector2.ZERO
 
 @onready var _visual: Node2D = $Visual
@@ -68,6 +65,7 @@ var _last_safe_feet := Vector2.ZERO
 
 
 func _ready() -> void:
+	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	add_to_group("couriers")
 	_sprite.texture = sprite_texture
 	_last_safe_feet = global_position
@@ -93,100 +91,75 @@ func _setup_animator() -> void:
 	_animator = animator_script.new()
 	_visual.add_child(_animator)
 	_animator.call("configure", _sprite, _catalog, _visual_id)
-	_animator.call("play", animation_state)
+	_animator.call("play", animation_key)
+
+
+## Room owns ground interpretation. Queries accept world-space feet positions.
+func set_room_context(bounds: Rect2, can_stand: Callable, can_threadstep: Callable, water_body: PhysicsBody2D = null) -> void:
+	room_bounds = bounds
+	_can_stand = can_stand
+	_can_threadstep = can_threadstep
+	_water_body = water_body
+	if _standable(global_position):
+		_last_safe_feet = global_position
 
 
 func _physics_process(delta: float) -> void:
 	_tick_cooldowns()
 	if downed:
-		velocity.x = 0.0
-		velocity.y = minf(velocity.y + GRAVITY * delta, MAX_FALL)
-		move_and_slide()
-		_keep_in_room()
+		velocity = Vector2.ZERO
 		_set_animation("downed")
 		return
 	var commands: CommandSnapshot = InputRouter.snapshot(slot_index)
-	# A buffered landing can already have queued upward velocity for this tick.
-	var grounded := is_on_floor() and velocity.y >= 0.0
-	if grounded:
-		# The departure tick is still grounded; retain six subsequent air ticks.
-		_coyote_ticks = COYOTE_TICKS + 1
-		_last_safe_feet = global_position
-		if dash_ticks == 0:
-			_air_dash_available = true
-	if commands.just_pressed(Action.JUMP):
-		if commands.is_held(Action.DOWN) and grounded and _start_drop_through():
-			grounded = false
-		else:
-			_jump_buffer_ticks = JUMP_BUFFER_TICKS
+	var movement := Vector2(commands.move_x, commands.move_y).limit_length(1.0)
 	if _attack_kind.is_empty() and _hurt_ticks == 0 and dash_ticks == 0:
+		_update_facing(movement)
 		if commands.just_pressed(Action.DASH) and _can_dash():
-			_start_dash(commands.move_x)
+			_start_dash(movement)
 		elif commands.just_pressed(Action.SPECIAL) and special_cooldown_ticks == 0:
 			_start_attack(special_id)
 		elif commands.just_pressed(Action.ATTACK):
 			_start_attack("slash")
 	if dash_ticks > 0:
-		velocity = Vector2(facing * DASH_SPEED, 0.0)
+		velocity = facing_vector * DASH_SPEED
 		move_and_slide()
 		_keep_in_room()
 		dash_ticks -= 1
 		_set_animation("dash")
 		return
-
-	var acceleration := GROUND_ACCEL if grounded else AIR_ACCEL
-	if _hurt_ticks == 0:
+	if _hurt_ticks > 0:
+		velocity = velocity.move_toward(Vector2.ZERO, MOVE_ACCEL * delta)
+	else:
 		var move_scale := 1.0 if _attack_kind.is_empty() else 0.4
-		velocity.x = move_toward(velocity.x, commands.move_x * MAX_SPEED * move_scale, acceleration * delta)
-	velocity.y = minf(velocity.y + GRAVITY * delta, MAX_FALL)
-	if not is_zero_approx(commands.move_x) and _attack_kind.is_empty() and _hurt_ticks == 0:
-		facing = -1 if commands.move_x < 0.0 else 1
-	_visual.scale.x = facing
-
-	if _jump_buffer_ticks > 0 and _coyote_ticks > 0 and _hurt_ticks == 0:
-		_start_jump()
-	_cut_released_jump(commands)
+		velocity = velocity.move_toward(movement * MAX_SPEED * move_scale, MOVE_ACCEL * delta)
 	move_and_slide()
 	_keep_in_room()
-
-	# Consume a buffered press on the landing tick, before its grace expires.
-	# Motion starts next tick; never run a second physics move in this frame.
-	if not grounded and is_on_floor():
-		AudioDirector.play_cue(&"land")
-		_land_ticks = 10
-		if _jump_buffer_ticks > 0 and _hurt_ticks == 0:
-			_start_jump()
-			_cut_released_jump(commands)
-	_coyote_ticks = maxi(0, _coyote_ticks - 1)
-	_jump_buffer_ticks = maxi(0, _jump_buffer_ticks - 1)
+	if _standable(global_position):
+		_last_safe_feet = global_position
 	_update_attack()
 	_update_animation()
 
 
-func _start_jump() -> void:
-	velocity.y = JUMP_SPEED
-	_coyote_ticks = 0
-	_jump_buffer_ticks = 0
-	AudioDirector.play_cue(&"jump")
-
-
-func _cut_released_jump(commands: CommandSnapshot) -> void:
-	if not commands.is_held(Action.JUMP) and velocity.y < JUMP_RELEASE_SPEED:
-		velocity.y = JUMP_RELEASE_SPEED
+func _update_facing(movement: Vector2) -> void:
+	if movement.is_zero_approx():
+		return
+	var horizontal := absf(movement.x)
+	var vertical := absf(movement.y)
+	if is_equal_approx(horizontal, vertical) and movement.dot(facing_vector) > 0.0:
+		return
+	if horizontal > vertical:
+		facing = Facing.RIGHT if movement.x > 0.0 else Facing.LEFT
+	else:
+		facing = Facing.DOWN if movement.y > 0.0 else Facing.UP
 
 
 func reset_at(feet_position: Vector2) -> void:
-	_end_drop_through()
 	global_position = feet_position
 	velocity = Vector2.ZERO
-	_coyote_ticks = 0
-	_jump_buffer_ticks = 0
 	_attack_kind = ""
 	_hit_targets.clear()
 	dash_ticks = 0
-	_air_dash_available = true
 	_hurt_ticks = 0
-	_land_ticks = 0
 	_last_safe_feet = feet_position
 	if is_inside_tree():
 		reset_physics_interpolation()
@@ -240,7 +213,7 @@ func take_hit(amount: int, knockback: Vector2 = Vector2.ZERO) -> bool:
 
 
 func hurt_rect() -> Rect2:
-	return Rect2(global_position + Vector2(-6, -24), Vector2(12, 24))
+	return Rect2(global_position + Vector2(-6, -10), Vector2(12, 10))
 
 
 func _tick_cooldowns() -> void:
@@ -249,11 +222,6 @@ func _tick_cooldowns() -> void:
 	dash_cooldown_ticks = maxi(0, dash_cooldown_ticks - 1)
 	_hurt_ticks = maxi(0, _hurt_ticks - 1)
 	_revive_animation_ticks = maxi(0, _revive_animation_ticks - 1)
-	_land_ticks = maxi(0, _land_ticks - 1)
-	if _drop_ticks > 0:
-		_drop_ticks -= 1
-		if _drop_ticks == 0:
-			_end_drop_through()
 	if is_instance_valid(_sprite):
 		if immunity_ticks > 0:
 			_sprite.modulate.a = 0.65 if reduced_flash else (0.45 if immunity_ticks % 8 < 4 else 1.0)
@@ -262,27 +230,22 @@ func _tick_cooldowns() -> void:
 
 
 func _can_dash() -> bool:
-	return _progress != null and _progress.has_flag("threadstep") and dash_cooldown_ticks == 0 and _air_dash_available
+	return _progress != null and _progress.has_flag("threadstep") and dash_cooldown_ticks == 0
 
 
-func _start_dash(move_axis: float) -> void:
-	if not is_zero_approx(move_axis):
-		facing = -1 if move_axis < 0.0 else 1
-	_visual.scale.x = facing
+func _start_dash(movement: Vector2) -> void:
+	_update_facing(movement)
 	dash_ticks = DASH_TICKS
 	dash_cooldown_ticks = DASH_COOLDOWN_TICKS
-	_air_dash_available = false
-	_coyote_ticks = 0
-	_jump_buffer_ticks = 0
 	AudioDirector.play_cue(&"dash")
-	CombatQuery.effect(self, _catalog, "effect_dash_v1", global_position, facing)
+	CombatQuery.effect(self, _catalog, "effect_dash_v1", global_position, -1 if facing == Facing.LEFT else 1)
 
 
 func _start_attack(kind: String) -> void:
 	_attack_kind = kind
 	_attack_tick = 0
 	_attack_id = CombatQuery.next_attack_id()
-	_attack_facing = facing
+	_attack_facing = -1 if facing == Facing.LEFT else 1
 	_hit_targets.clear()
 	if kind != "slash":
 		special_cooldown_ticks = 90 if kind == "ember_arc" else 75
@@ -329,53 +292,32 @@ func _update_animation() -> void:
 		_set_animation("revive")
 	elif not _attack_kind.is_empty():
 		_set_animation("slash" if _attack_kind == "slash" else "special")
-	elif not is_on_floor():
-		_set_animation("jump_rise" if velocity.y < 0 else "fall")
-	elif _land_ticks > 0:
-		_set_animation("land")
 	else:
-		_set_animation("run" if absf(velocity.x) > 5.0 else "idle")
+		_set_animation("run" if velocity.length() > 5.0 else "idle")
 
 
 func _set_animation(state: String) -> void:
-	if animation_state == state:
+	var key: String = state + "_" + DIRECTION_NAMES[facing]
+	if animation_key == key:
 		return
 	animation_state = state
+	animation_key = key
 	if _animator != null:
-		_animator.call("play", state)
+		_animator.call("play", animation_key)
 
 
-func _start_drop_through() -> bool:
-	for index in get_slide_collision_count():
-		var contact := get_slide_collision(index)
-		var body := contact.get_collider() as PhysicsBody2D
-		if body == null or body.name != "OneWayCollision" or contact.get_normal().y > -0.5:
-			continue
-		_drop_body = body
-		_drop_ticks = 12
-		add_collision_exception_with(body)
-		global_position.y += 6.0
-		velocity.y = 50.0
-		_coyote_ticks = 0
-		_jump_buffer_ticks = 0
-		return true
-	return false
-
-
-func _end_drop_through() -> void:
-	if is_instance_valid(_drop_body):
-		remove_collision_exception_with(_drop_body)
-	_drop_body = null
-	_drop_ticks = 0
+func _standable(feet: Vector2) -> bool:
+	if _can_stand.is_valid():
+		return bool(_can_stand.call(feet))
+	return room_bounds.size.is_zero_approx() or room_bounds.encloses(Rect2(feet + Vector2(-6, -10), Vector2(12, 10)))
 
 
 func _keep_in_room() -> void:
 	if room_bounds.size.x <= 0.0 or room_bounds.size.y <= 0.0:
 		return
-	global_position.x = clampf(global_position.x, room_bounds.position.x + 6.0, room_bounds.end.x - 6.0)
-	if global_position.y < room_bounds.position.y + 24.0:
-		global_position.y = room_bounds.position.y + 24.0
-		velocity.y = maxf(0.0, velocity.y)
-	if global_position.y > room_bounds.end.y + 32.0:
-		take_hit(1)
-		reset_at(_last_safe_feet)
+	var before := global_position
+	global_position = Vector2(clampf(before.x, room_bounds.position.x + 6.0, room_bounds.end.x - 6.0), clampf(before.y, room_bounds.position.y + 10.0, room_bounds.end.y))
+	if global_position.x != before.x:
+		velocity.x = 0.0
+	if global_position.y != before.y:
+		velocity.y = 0.0
