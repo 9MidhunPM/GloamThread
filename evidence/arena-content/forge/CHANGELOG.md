@@ -1,5 +1,11 @@
 # Agent 2 forge changelog
 
+## 2026-10-25T03:11:00+05:30 — Exercise the real offline CLI boundary
+
+- Added a subprocess regression for the same shell-free `bake --job` command launched by Godot, including an absolute job path containing spaces.
+- The fixture checkout deliberately rejects SDK/dotenv imports and has unsupported paid settings. Its authored floating rig still bakes and passes shared bundle validation with zero reservation and no ledger creation.
+- Validation: forge suite 38/38 passes; targeted CLI process case, compilation and whitespace pass. This proves the Python process boundary with a local fixture, not a rendered creator interaction, provider success or accepted generated art.
+
 ## 2026-10-25T03:07:52+05:30 — Accept manually approved visual settings
 
 - Allowed an empty visual-features array, matching the approved array contract and the creator's manual body/kit/theme mode. Analysis still proposes descriptive features when used.
