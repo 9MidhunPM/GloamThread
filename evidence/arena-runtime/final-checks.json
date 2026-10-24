@@ -1,0 +1,47 @@
+{
+  "recorded_at": "2026-10-25T04:18:27+05:30",
+  "engine": "4.7.2.stable.arch_linux.ed1daf0bf",
+  "checks": {
+    "import": {
+      "log_sha256": "32d26967e2e458eeabf4e54d932cc39a5f19a9655dfe22912a57f0c739e846fe",
+      "summary": [
+        "\u001b[0m",
+        "[   0% ] \u001b[90m\u001b[1mloading_editor_layout\u001b[22m | Started Loading editor (5 steps)\u001b[39m\u001b[0m",
+        "[   0% ] \u001b[90m\u001b[1mloading_editor_layout\u001b[22m | Loading editor layout...\u001b[39m\u001b[0m",
+        "[  16% ] \u001b[90m\u001b[1mloading_editor_layout\u001b[22m | Loading docks...\u001b[39m\u001b[0m",
+        "\u001b[92m[ DONE ]\u001b[39m \u001b[1mloading_editor_layout\u001b[22m",
+        "\u001b[0m"
+      ]
+    },
+    "arena": {
+      "log_sha256": "80611a34a6994fc7ccc7bad66c8fac3ba621eba67894d791c8d88d23ba0d5eda",
+      "summary": [
+        "PASS run_flow.gd",
+        "RUN run_revival.gd",
+        "PASS run_revival.gd",
+        "RUN run_shop_input.gd",
+        "PASS run_shop_input.gd",
+        "Arena scenarios: 12 passed, 0 failed"
+      ]
+    },
+    "forge": {
+      "log_sha256": "2bfafd2146c9f698d1058c8b82473fcf2a51607dc2bad3b7221ba7c2a813f8b0",
+      "summary": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "Forge boundary/UI checks: 154 assertions, 0 failures; no providers called."
+      ]
+    },
+    "python": {
+      "log_sha256": "4dbeec536d13e979725dd395f0bd2faefdfaeca5b47d6d4ba01515bea3e5ab03",
+      "summary": [
+        ".............................................................................................................................................................................",
+        "----------------------------------------------------------------------",
+        "Ran 173 tests in 26.691s",
+        "",
+        "OK"
+      ]
+    }
+  },
+  "content_validation": "20 waves, 4 arenas, 6 kits, 30 upgrades, 3 bundles; retained kiln-fox-ai sources pass"
+}

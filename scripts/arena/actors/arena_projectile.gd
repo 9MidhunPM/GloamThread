@@ -34,6 +34,7 @@ func setup(world: Node, at: Vector2, direction: Vector2, damage: float, slot: in
 	velocity = _direction * _speed
 
 func _ready() -> void:
+	z_index = 12
 	add_to_group("arena_projectiles")
 	collision_layer = 128
 	collision_mask = 1

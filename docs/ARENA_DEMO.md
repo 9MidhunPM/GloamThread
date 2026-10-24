@@ -27,7 +27,7 @@ Choose **Solo Run** or **Local Co-op**, select fighters and distinct input sourc
 
 Use Down + Jump to drop through platforms. Combat powers come from the selected ember, frost, storm, stone, nature or shadow family; upright, four-legged and floating bodies change appearance and animation. Floating art does not grant flight.
 
-Last hits award personal coins, including damage-over-time and projectile kills. Every active player gets the wave-clear bonus. Between waves, each player operates their own shop: Up/Down selects, Attack/Jump confirms, one reroll is free per wave, and both active players must become ready to continue. Confirm Ready again to resume shopping while the other player is not ready. Nearby partners hold revive for 1.5 seconds; downed players also return on wave completion. Solo death or a team wipe ends the run.
+Last hits award personal coins, including damage-over-time and projectile kills. Every active player gets the wave-clear bonus. Between waves, each player operates their own shop: Up/Down selects, Attack/Jump confirms, one reroll is free per wave, and every active player must become ready to continue. Confirm Ready again to resume shopping while the other player is not ready. Nearby partners hold revive for 1.5 seconds; downed players also return on wave completion. Solo death or a team wipe ends the run.
 
 ## Draw or import a fighter
 
@@ -45,7 +45,9 @@ The helper installs only inside `authoring/.venv`, creates `authoring/.env` only
 
 Analyse and Generate can incur provider charges. The worker reserves costs against a shared $0.50 authoring budget before sending requests. Cancellation prevents later requests but cannot guarantee an in-flight request was unbilled; uncertain reservations remain retained. Starting a new job does not reset that shared ledger. Local mask/pivot rebakes make no model calls. Original inputs, drafts and accepted characters remain local unless you explicitly analyse or generate, which sends the chosen drawing/description to OpenAI.
 
-**Known image-service limitation:** the development account's image request returned HTTP 403 (model/account access denied). Successful generated-art acceptance is therefore not established for that account. An access failure leaves offline play and saved fighters available. Do not repeatedly retry or change models to bypass the error; review account access and the approved budget first.
+**Reviewed generated starter:** Kiln Fox and its forest/materials are retained real model outputs, with explicit local crop correction and authored animation. It is the default P1 preset; Cinderjack and Thistlepaw remain available. Generation was tested with one live character/theme pair, not every possible upload or body family. If an image model returns the wrong layout, use **Correct cached layout**: crop each part/master and scenery/materials, then convert in a fresh local draft without another model request. Existing previews and accepted fighters remain intact. All poses still require inspection before acceptance.
+
+The initial shared experiment retains $0.35 in conservative reservations after one denied image request, one successful analysis and two successful image requests. This is not a billing receipt or an unlimited generation allowance. New paid work remains subject to the shared $0.50 cap; local corrections and accepted fighters are reusable offline. Model access initially returned 403 and was fixed in the API project. Required allowed models are `gpt-6-luna` and `gpt-image-1-mini`.
 
 Accepted fighters and drafts live in Godot's per-user application-data directory (`fighters/` and `forge_jobs/`); settings and scores are separate from run power. The optional helper's budget ledger is under `authoring/build/forge/`. These local files and your key are not part of the distributed archive.
 
@@ -56,7 +58,7 @@ From a source checkout with Godot 4.7.2 standard, its matching Linux export temp
 ```sh
 godot --headless --path . --editor --import --quit
 godot --headless --fixed-fps 60 --path . --script tests/arena/run_tests.gd
-godot --headless --path . --script tests/forge/run_tests.gd
+godot --headless --fixed-fps 60 --path . --script tests/forge/run_tests.gd
 python3 tools/package_arena.py --dry-run
 python3 tools/package_arena.py
 ```

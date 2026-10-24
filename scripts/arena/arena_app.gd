@@ -76,6 +76,11 @@ func _ready() -> void:
 		_show_error("\n".join(catalog.errors) + "\n" + "\n".join(library.errors) + "\n" + "\n".join(assets.errors) + "\n" + "\n".join(audio_errors))
 		return
 	selected = [bundles[0], bundles[mini(1, bundles.size() - 1)]]
+	for slot in mini(2, library.default_players.size()):
+		for bundle: Dictionary in bundles:
+			if bundle.id == library.default_players[slot]:
+				selected[slot] = bundle
+				break
 	_show_title()
 
 

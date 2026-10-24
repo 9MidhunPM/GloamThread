@@ -11,9 +11,13 @@ func _initialize() -> void:
 
 func _run() -> void:
 	var folder := "/tmp/gloamthread-arena-native-qa"
+	var candidate_path := ""
 	var args := OS.get_cmdline_user_args()
-	if args.size() == 2 and args[0] == "--output":
-		folder = args[1]
+	for index in range(0, args.size() - 1, 2):
+		if args[index] == "--output":
+			folder = args[index + 1]
+		elif args[index] == "--candidate":
+			candidate_path = args[index + 1]
 	DirAccess.make_dir_recursive_absolute(folder)
 	root.size = Vector2i(1920, 1080)
 	RenderingServer.viewport_set_update_mode(root.get_viewport_rid(), RenderingServer.VIEWPORT_UPDATE_ALWAYS)
@@ -23,6 +27,13 @@ func _run() -> void:
 	app.records.path = "user://native-qa-records.json"
 	root.add_child(app)
 	await _capture(folder, "title")
+	if not candidate_path.is_empty():
+		var loaded: Dictionary = app.library.load_bundle(candidate_path)
+		if not loaded.ok:
+			printerr("Native candidate rejected: ", loaded.error)
+			quit(1)
+			return
+		app.selected[0] = loaded.bundle
 	app._show_lobby(2)
 	await _capture(folder, "lobby")
 	app._open_creator(0)

@@ -1,34 +1,30 @@
-# Side-view AI asset authoring
+# Arena character and texture authoring
 
-The user's25October2026 instruction restores the side-view game and authorizes optional OpenAI image generation for original sprites/textures. The active game remains local two-player co-op with the existing physics, eight-room story and fixed abilities. The overhead experiment is preserved on `feat/overhead-core`.
+The active workflow is drawing/upload → bounded proposal → generated parts/theme → authored rig bake → preview/correction → accepted local fighter. Read [the current contract](WAVE_FIGHTER_SPEC.md), [worker commands](../evidence/arena-content/forge/README.md) and [Linux setup/play guide](ARENA_DEMO.md). The fixed campaign overlay notes formerly here belong to the preserved side-view experiment in Git history.
 
-## Credentials and first experiment
+## Setup and privacy
 
-Put your own key in the ignored repository `.env` as `OPENAI_API_KEY=...`. Never paste it into chat. `.env.example` documents supported settings. Godot never reads this key or calls OpenAI. The authoring CLI runs separately and keeps the game playable without an account/network. API responses and candidate output stay under ignored `build/ai-assets/`.
+Use the optional `requirements-authoring.txt` environment and put your key in ignored root `.env`; exported packages use `authoring/.env`. Godot never reads the key. The local Python process uses the official SDK with explicit `gpt-6-luna` vision and `gpt-image-1-mini` low square PNG edits. Both models must be enabled for the key's API project. No requests happen during combat, and accepted/built-in fighters work offline.
 
-Default experiment: `gpt-image-1-mini`, low quality,1024x1024, one PNG per request, no automatic retries or model fallback. Two-image smoke = one original material board and one original Tavi animation sheet. No reference game art is uploaded. Use broad side-view pixel-adventure qualities only; all characters, motifs and art are original.
+The initial shared experiment cap is $0.50, with durable conservative reservations, no automatic retries or model fallback. A failed request can retain a reservation. The live fox test retained $0.35 total allowance; this is not actual billed cost. Model changes need a new cost review; mini is scheduled to retire1December2026.
 
-The official [model page](https://developers.openai.com/api/docs/models/gpt-image-1-mini) lists low square output at$0.005/image plus input. It is deprecated and scheduled for [1December2026 retirement](https://developers.openai.com/api/docs/deprecations). Model/quality are configurable, never silently upgraded; account access is checked by the actual request. Price is an estimate, not a billing guarantee. New models/settings require a fresh cost review.
+## Real output and correction
 
-Install with `python3 -m venv --system-site-packages .venv` and `.venv/bin/python -m pip install -r requirements-authoring.txt`. Run `tools/ai_assets.py status`, `plan --kind smoke`, then `generate --kind smoke` using that Python. Generation makes two billable requests; `--kind materials` or `--kind tavi` makes one. No automatic retries or replacement. `prepare build/ai-assets/RUN_ID` converts a completed retained run locally. Dry-run and mocked-provider checks establish local behavior only. Live generation cannot be claimed until a key is present and a real request succeeds; generated quality must be inspected before promotion.
+The successful live input was an original project fox drawing. Luna identified its upright shape, ears, mask and chest light. Mini returned one transparent parts board and one opaque theme board. Its layout differed from the requested grid and included a large hero in the background; strict admission rejected it.
 
-## Candidate/runtime contract
+The creator now exposes an explicit hash-bound crop editor for those retained boards. Assign every required limb/master and scenery/material crop, review alpha cleanup, then **Save corrections & convert locally**. This copies verified raw receipts/source into a fresh local draft and calls SDK-free `bake`; earlier jobs, masks, candidates and the shared ledger remain intact. Changing crops on an existing rig requires a fresh correction draft so old pixels cannot be falsely relabelled. Part masks and pivots remain editable after conversion.
 
-A candidate directory has `manifest.json` plus fixed-ID PNG files. Manifest fields:
+`source_layout.json` contains only bounded crop rectangles, a cutoff and hashes of the fixed input PNGs. It supplies no gameplay, scripts or file paths. The same three rig families and 32 authored clips bake all accepted appearances. Ability IDs/stats/timing/collision are game-owned. Themes decorate fixed geometry; they alternate by stage between players.
 
-```json
-{
-  "schema_version": 1,
-  "content_version": "phase1-v1",
-  "base_manifest_sha256": "64 lowercase hex characters",
-  "assets": [
-    {"id": "terrain_ember_v1", "file": "terrain_ember_v1.png", "sha256": "64 lowercase hex characters"}
-  ]
-}
+## Retained shipped generation
+
+`assets/arena/source/generated_kiln_fox/` retains original/request sources, the real raw pair, approved proposal, genuine sanitized request metadata, crop recipe and editable rig/parts/themes. `assets/arena/builtin/kiln-fox-ai/` is the validated reviewed bundle. The original Cinderjack/Thistlepaw remain available; index defaults select Kiln Fox/Nature.
+
+Rebuild without network or credentials:
+
+```sh
+python3 -m tools.forge.retained --validate
+python3 -m tools.forge.content --build --validate
 ```
 
-Only `terrain_ember_v1`, `terrain_moss_v1`, `fixed_tavi_v1` and `fixed_neri_v1` are permitted. Every file name is exactly`<id>.png`; no scripts, profile/stat changes, arbitrary paths or model-produced runtime manifests. Dimensions match the packaged atlas. Atlas gutters stay transparent. Tile alpha masks must equal the packaged original per pixel. Courier frames preserve32x48cells, all32animation slots and pivot[16,43]; conversion rejects empty/clipped/inconsistent sheet cells rather than inventing frames. Keep recognizable consistent silhouettes and visual attack timing; structural acceptance is not art acceptance.
-
-Python retains raw PNGs, prompts, model/settings, provider usage/request identity when available, source/output hashes and conversion metadata. It converts only to a new candidate directory. A candidate never overwrites source art or installed assets. A generated sheet is not accepted just because it has a grid.
-
-Godot preview is an explicit launch option: `godot --path . -- --ai-assets /absolute/candidate/manifest.json`. The complete overlay is validated before replacing any cached textures. Failure leaves the original bundle intact and displays an error; the ordinary game still launches. No save format, hurtbox, geometry or traversal changes. Shipping retains original assets until a reviewed candidate is explicitly promoted through the project's provenance/asset gates.
+Every rebuilt PNG must match the retained inputs/recipe and current generator. Runtime acceptance validates hashes, dimensions, gutters, pivots and allowed identifiers before atomically installing a candidate with a recoverable backup. Structural checks do not replace animation/native/human review.

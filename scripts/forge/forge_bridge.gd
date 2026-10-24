@@ -6,6 +6,7 @@ const JOB_ROOT := "user://forge_jobs"
 const WORKER := "res://tools/fighter_forge.py"
 const COMMANDS := ["analyse", "generate", "bake"]
 const APPROVAL_FILE := "creator_generation.json"
+const LAYOUT_PARTS := {"upright": ["torso", "head", "arm_back", "arm_front", "leg_back", "leg_front"], "quadruped": ["torso", "head", "leg_back_left", "leg_back_right", "leg_front_left", "leg_front_right", "tail"], "floating": ["torso", "arm_back", "arm_front"]}
 var pid: int = -1
 
 
@@ -107,6 +108,167 @@ func status(job_path: String) -> Dictionary:
 	return read_json(job_path.get_base_dir().path_join("status.json"))
 
 
+func raw_layout_context(path: String) -> Dictionary:
+	if not trusted_job(path):
+		return {"ok": false, "error": "Layout corrections require a retained local job."}
+	var folder := path.get_base_dir()
+	var proposal: Variant = read_json(path).get("proposal")
+	if not proposal is Dictionary or proposal.get("rig_id") not in LAYOUT_PARTS:
+		return {"ok": false, "error": "The retained job has no approved body shape."}
+	var result := {"ok": true, "error": "", "rig_id": proposal["rig_id"]}
+	for board: String in ["parts", "theme"]:
+		var file := FileAccess.open(folder.path_join("raw/" + board + ".png"), FileAccess.READ)
+		if file == null or file.get_length() > 16 * 1024 * 1024:
+			return {"ok": false, "error": "Both retained 1024 × 1024 PNG boards are required."}
+		var bytes := file.get_buffer(file.get_length())
+		# Check the fixed PNG dimensions before allocating a decoded image.
+		if bytes.size() < 33 or bytes.slice(0, 8) != PackedByteArray([137, 80, 78, 71, 13, 10, 26, 10]) or bytes.slice(16, 24) != PackedByteArray([0, 0, 4, 0, 0, 0, 4, 0]):
+			return {"ok": false, "error": "Raw layout correction supports only 1024 × 1024 PNG boards."}
+		var image := Image.new()
+		if image.load_png_from_buffer(bytes) != OK:
+			return {"ok": false, "error": "The retained " + board + " board could not be decoded."}
+		image.convert(Image.FORMAT_RGBA8)
+		result[board] = image
+		var digest := HashingContext.new()
+		digest.start(HashingContext.HASH_SHA256)
+		digest.update(bytes)
+		result["raw_" + board + "_sha256"] = digest.finish().hex_encode()
+	var layout := default_source_layout(result)
+	var retained := read_json(folder.path_join("source_layout.json"))
+	if source_layout_error(retained, result).is_empty():
+		layout = retained
+	result["layout"] = layout
+	return result
+
+
+func default_source_layout(context: Dictionary) -> Dictionary:
+	var parts: Dictionary = {}
+	var ids: Array = LAYOUT_PARTS[context["rig_id"]]
+	for index in ids.size():
+		parts[ids[index]] = {"crop": _grid_crop(index)}
+	return {"schema_version": 1, "raw_parts_sha256": context["raw_parts_sha256"], "raw_theme_sha256": context["raw_theme_sha256"], "alpha_cutoff": 192, "parts": parts, "master_crop": _grid_crop(8), "background_crop": [0, 0, 1024, 576], "material_crops": [[0, 576, 256, 448], [256, 576, 256, 448], [512, 576, 256, 448], [768, 576, 256, 448]]}
+
+
+func _grid_crop(index: int) -> Array:
+	var column := index % 3
+	var row := index / 3
+	var x := column * 1024 / 3
+	var y := row * 1024 / 3
+	return [x, y, (column + 1) * 1024 / 3 - x, (row + 1) * 1024 / 3 - y]
+
+
+func source_layout_error(layout: Dictionary, context: Dictionary) -> String:
+	var allowed := ["schema_version", "raw_parts_sha256", "raw_theme_sha256", "alpha_cutoff", "parts", "master_crop", "background_crop", "material_crops"]
+	for key: Variant in layout:
+		if key not in allowed:
+			return "Layout contains an unsupported field."
+	if not context.get("ok", false) or layout.get("schema_version") != 1 or typeof(layout.get("schema_version")) == TYPE_BOOL:
+		return "Layout schema is invalid."
+	for board: String in ["parts", "theme"]:
+		if layout.get("raw_" + board + "_sha256") != context.get("raw_" + board + "_sha256"):
+			return "Raw artwork changed. Reopen the correction screen before saving."
+	if not _layout_integer(layout.get("alpha_cutoff"), 1, 255):
+		return "Alpha cutoff must be a whole number from 1 to 255."
+	var parts: Variant = layout.get("parts")
+	var ids: Array = LAYOUT_PARTS[context["rig_id"]]
+	if not parts is Dictionary or parts.size() != ids.size():
+		return "Assign one crop to every part of the approved body shape."
+	for id: String in ids:
+		var part: Variant = parts.get(id)
+		if not part is Dictionary or part.size() != 1 or not _layout_crop(part.get("crop")):
+			return "Invalid crop for " + id.replace("_", " ") + "."
+	for field: String in ["master_crop", "background_crop"]:
+		if not _layout_crop(layout.get(field)):
+			return "A bounded crop is required for " + field.replace("_", " ") + "."
+	if layout.has("material_crops"):
+		var materials: Variant = layout["material_crops"]
+		if not materials is Array or materials.size() != 4:
+			return "Assign exactly four material crops."
+		for crop: Variant in materials:
+			if not _layout_crop(crop):
+				return "Material crops must remain inside the theme board."
+	return ""
+
+
+func _layout_integer(value: Variant, minimum: int, maximum: int) -> bool:
+	return typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value)) and float(value) == floor(float(value)) and value >= minimum and value <= maximum
+
+
+func _layout_crop(value: Variant) -> bool:
+	return value is Array and value.size() == 4 and _layout_integer(value[0], 0, 1020) and _layout_integer(value[1], 0, 1020) and _layout_integer(value[2], 4, 1024) and _layout_integer(value[3], 4, 1024) and value[0] + value[2] <= 1024 and value[1] + value[3] <= 1024
+
+
+func save_source_layout(path: String, layout: Dictionary) -> Dictionary:
+	# Re-read/hash both originals immediately before saving; a stale modal cannot
+	# attach its rectangles to replacement artwork. Python validates again at bake.
+	var context := raw_layout_context(path)
+	if not context["ok"]:
+		return context
+	var error := source_layout_error(layout, context)
+	if not error.is_empty():
+		return {"ok": false, "error": error}
+	if not write_json(path.get_base_dir().path_join("source_layout.json"), layout):
+		return {"ok": false, "error": "Could not save layout corrections. No conversion was started."}
+	return {"ok": true, "error": ""}
+
+
+func create_layout_job(path: String, layout: Dictionary) -> Dictionary:
+	var context := raw_layout_context(path)
+	if not context["ok"]:
+		return context
+	var error := source_layout_error(layout, context)
+	if not error.is_empty():
+		return {"ok": false, "error": error}
+	var folder := path.get_base_dir()
+	var job := read_json(path)
+	var provenance := read_json(folder.path_join("provenance.json"))
+	var source: Variant = provenance.get("source")
+	var requests: Variant = provenance.get("requests")
+	if provenance.get("schema_version") != 1 or not source is Dictionary or not requests is Dictionary or not provenance.get("approved_proposal") is Dictionary or proposal_hash(provenance["approved_proposal"]) != proposal_hash(job["proposal"]) or job.get("source_image") != folder.path_join("source.png"):
+		return {"ok": false, "error": "The retained approved design or source provenance is invalid. No new request was made."}
+	var expected := {"source.png": source.get("original_sha256"), "raw/source.png": source.get("sha256"), "raw/parts.png": context["raw_parts_sha256"], "raw/theme.png": context["raw_theme_sha256"]}
+	for board: String in ["parts", "theme"]:
+		var record: Variant = requests.get(board)
+		if not record is Dictionary or record.get("file") != "raw/" + board + ".png" or record.get("sha256") != context["raw_" + board + "_sha256"]:
+			return {"ok": false, "error": "Retained " + board + " pixels do not match their request provenance."}
+	var copies: Dictionary = {}
+	for name: String in expected:
+		var file := FileAccess.open(folder.path_join(name), FileAccess.READ)
+		if file == null or file.get_length() > 20 * 1024 * 1024 or not expected[name] is String or expected[name].length() != 64:
+			return {"ok": false, "error": "The retained source cache is missing or oversized."}
+		var bytes := file.get_buffer(file.get_length())
+		var hash := HashingContext.new()
+		hash.start(HashingContext.HASH_SHA256)
+		hash.update(bytes)
+		if hash.finish().hex_encode() != expected[name]:
+			return {"ok": false, "error": "The retained cache changed. Reopen the correction screen."}
+		copies[name] = bytes
+	var fresh := ProjectSettings.globalize_path(JOB_ROOT).path_join("job-local-%d-%d" % [Time.get_unix_time_from_system(), Time.get_ticks_usec()])
+	if DirAccess.make_dir_recursive_absolute(fresh.path_join("raw")) != OK:
+		return {"ok": false, "error": "Could not create a fresh local correction draft."}
+	for name: String in copies:
+		var file := FileAccess.open(fresh.path_join(name), FileAccess.WRITE)
+		if file == null:
+			return {"ok": false, "error": "Could not retain the correction cache. Previous draft is preserved."}
+		file.store_buffer(copies[name])
+		file.flush()
+		if file.get_error() != OK:
+			return {"ok": false, "error": "Could not finish copying the correction cache."}
+		file.close()
+	# Receipt metadata is retained, but no budget ledger, edited rig or candidate is
+	# copied. Python's shared ledger remains the only authority for paid requests.
+	for kind: String in ["parts", "theme", "analyse"]:
+		var name := "raw/" + kind + ".attempt.json"
+		var attempt := read_json(folder.path_join(name))
+		if not attempt.is_empty():
+			write_json(fresh.path_join(name), attempt)
+	job["source_image"] = fresh.path_join("source.png")
+	var fresh_path := fresh.path_join("job.json")
+	if not write_json(fresh_path, job) or not write_json(fresh.path_join("provenance.json"), provenance) or not write_json(fresh.path_join("proposal.json"), job["proposal"]) or not write_json(fresh.path_join("source_layout.json"), layout) or not freeze_generation_proposal(fresh_path, job["proposal"]):
+		return {"ok": false, "error": "Could not finish the local correction draft. Previous draft is preserved."}
+	return {"ok": true, "error": "", "path": fresh_path}
+
+
 func cancel(job_path: String) -> bool:
 	if not trusted_job(job_path):
 		return false
@@ -136,8 +298,27 @@ func write_json(path: String, value: Dictionary) -> bool:
 	var file := FileAccess.open(temp, FileAccess.WRITE)
 	if file == null:
 		return false
-	file.store_string(JSON.stringify(value, "\t") + "\n")
+	# Godot decodes every JSON number as float. Restore integral tokens when
+	# re-saving schema versions, crop coordinates and rig pivots for Python's
+	# strict integer validators; booleans remain booleans and costs retain fractions.
+	file.store_string(JSON.stringify(_integer_json(value), "\t") + "\n")
 	file.flush()
 	var okay := file.get_error() == OK
 	file.close()
 	return okay and DirAccess.rename_absolute(temp, path) == OK
+
+
+func _integer_json(value: Variant) -> Variant:
+	if value is Dictionary:
+		var result: Dictionary = {}
+		for key: Variant in value:
+			result[key] = _integer_json(value[key])
+		return result
+	if value is Array:
+		var result: Array = []
+		for item: Variant in value:
+			result.append(_integer_json(item))
+		return result
+	if typeof(value) == TYPE_FLOAT and is_finite(value) and absf(value) <= 9007199254740991.0 and value == floor(value):
+		return int(value)
+	return value

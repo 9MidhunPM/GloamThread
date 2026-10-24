@@ -46,6 +46,9 @@ func run(players: int = 1, waves: int = 20, capture_path: String = "", fighter_i
 		report.errors.append("Actual lobby could not start a run.")
 		return report
 	report.kits = []
+	report.selected_fighters = []
+	for appearance: Dictionary in app.selected.slice(0, players):
+		report.selected_fighters.append({"id": appearance.id, "manifest_sha256": FileAccess.get_sha256(appearance.manifest_path)})
 	for fighter: ArenaFighter in session.fighters:
 		report.kits.append(fighter.kit_id)
 		_last_health[fighter.slot_index] = fighter.health

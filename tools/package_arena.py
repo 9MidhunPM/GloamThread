@@ -130,7 +130,7 @@ def write_archive(root: Path, binary: Path, revision: str, tree: str, engine: st
             "authoring": {"optional": True, "root": "authoring", "credentials_included": False,
                           "runtime_requires_python": False},
             "known_unverified": ["physical gamepads and keyboard rollover", "fresh-human balance and clear time",
-                                 "hardware performance beyond the recorded machine", "generated image acceptance when provider access is denied"],
+                                 "hardware performance beyond the recorded machine", "generation quality beyond the reviewed live character/theme pair"],
         }
         (folder / "BUILD.json").write_text(json.dumps(build, indent=2) + "\n", encoding="utf-8")
         pending = Path(staging) / archive.name

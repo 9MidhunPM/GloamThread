@@ -50,6 +50,8 @@ func setup(slot: int, family: String, world: Node, appearance: Dictionary) -> vo
 		_owner_marker.set_slot(slot_index)
 
 func _ready() -> void:
+	# Fighters stay readable when nonblocking enemy bodies overlap them.
+	z_index = 10
 	collision_layer = 2
 	collision_mask = 1
 	var shape := RectangleShape2D.new()

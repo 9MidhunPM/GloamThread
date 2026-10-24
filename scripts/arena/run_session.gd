@@ -78,6 +78,7 @@ func _ready() -> void:
 	add_child(combat_root)
 	effect_root = Node2D.new()
 	effect_root.name = "Effects"
+	effect_root.z_index = 20
 	add_child(effect_root)
 	for slot in appearances.size():
 		var fighter := ArenaFighter.new()
@@ -307,6 +308,12 @@ func effect(at: Vector2, color: Color, kind: String = "burst") -> ArenaEffect:
 	spark.position = at
 	spark.tint = color
 	spark.kind = kind
+	if kind.contains("_special") or kind.contains("_strike"):
+		var nearest_distance := INF
+		for fighter: Node2D in fighters:
+			if kind.begins_with(str(fighter.kit_id) + "_") and fighter.position.distance_squared_to(at) < nearest_distance:
+				nearest_distance = fighter.position.distance_squared_to(at)
+				spark.direction = float(fighter.facing)
 	spark.font = font
 	spark.reduced_flash = reduced_flash
 	spark.lifetime = 42 if kind in ["coin", "damage", "trail"] else 20

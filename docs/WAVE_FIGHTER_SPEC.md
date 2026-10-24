@@ -44,6 +44,8 @@ Filenames are fixed, hashes verified, no provider file paths/code. Character atl
 
 Agent 2 ships two original built-ins at `assets/arena/builtin/<id>/manifest.json` and index `assets/arena/builtin/index.json` = {schema_version:1,bundles:[relative directory names]}. Accepted user creations live below user://fighters/. Failed imports preserve accepted bundles. Built-ins and generated creations cross the same loader.
 
+Implemented extension: the index also admits optional `default_players`, at most two safe bundle IDs. The reviewed retained-generation `kiln-fox-ai` is the third built-in and default P1; Thistlepaw is default P2. Original starter ordering remains stable. Its real raw images, sanitized receipts, explicit crop recipe and editable rig rebuild offline through `tools.forge.retained`.
+
 ## Local authoring worker
 
 Agent 2 owns `tools/fighter_forge.py`. Commands:
@@ -52,6 +54,8 @@ Agent 2 owns `tools/fighter_forge.py`. Commands:
 - `analyse --job PATH`: read job JSON; output proposal/status under that job directory.
 - `generate --job PATH`: consume approved proposal; output candidate bundle under job/candidate/.
 - `bake --job PATH`: bake edited parts/rig into candidate without a paid request.
+
+Cached-layout recovery adds `source_layout.json`: version 1, exact raw-board SHA-256 hashes, bounded integer part/master/background/material crops and opacity cutoff. The in-game editor copies verified source/raw/provenance into a fresh correction draft, preserving previous previews and masks. If no rig exists, `bake` converts these cached boards locally before normal admission; it does not load the SDK, reserve money or send a request.
 
 Job schema_version1: source_image (absolute trusted local file), description, proposal (optional), budget_usd (default0.50). Job directory chosen by Godot, shell-free process launch. `status.json` atomically reports {state:queued|analysing|awaiting_approval|generating|converting|complete|failed|cancelled, message:string, candidate_path:string optional, proposal:object optional, estimated_usd:number, reserved_usd:number}. Cancellation marker `cancel` prevents subsequent calls, never claims an in-flight bill was avoided. `proposal.json`: {name,rig_id,kit_id,theme:{name,palette,motif},features:[string]}. Retain source/prompts/settings/request identity/usage/hash provenance; bound image/text sizes. Use existing optional official SDK/.env loader, Luna structured vision and mini low square PNG. No retries/model fallback. Initial live experiment budget0.50 total; reserve conservative maximum request cost before sending, retain timeout reservations. Only Agent 1 authorizes/runs live requests; Agent 2 uses mocks/local fixtures.
 

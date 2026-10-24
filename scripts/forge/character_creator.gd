@@ -8,6 +8,7 @@ signal cancelled
 const Library = preload("res://scripts/forge/fighter_library.gd")
 const Canvas = preload("res://scripts/forge/forge_canvas.gd")
 const Bridge = preload("res://scripts/forge/forge_bridge.gd")
+const LayoutEditor = preload("res://scripts/forge/forge_layout_editor.gd")
 const CLIPS := {"idle": [0, 4], "run": [4, 6], "rise": [10, 2], "fall": [12, 2], "land": [14, 2], "slash": [16, 4], "special": [20, 4], "hurt": [24, 2], "dash": [26, 2], "downed": [28, 2], "revive": [30, 2]}
 const PART_IDS := {"upright": ["torso", "head", "arm_back", "arm_front", "leg_back", "leg_front"], "quadruped": ["torso", "head", "leg_back_left", "leg_back_right", "leg_front_left", "leg_front_right", "tail"], "floating": ["torso", "arm_back", "arm_front"]}
 
@@ -64,6 +65,11 @@ var _import_bytes := PackedByteArray()
 var _import_extension: String = ""
 var _job_source_hash: String = ""
 var _preview_job_path: String = ""
+var _repair: Button
+var _layout_editor: ForgeLayoutEditor
+var _layout_context: Dictionary = {}
+var _layout_job_path: String = ""
+var _layout_focus: Dictionary = {}
 
 
 func setup(player_slot: int, fighter_library: FighterLibrary) -> void:
@@ -134,6 +140,9 @@ func _build_ui() -> void:
 	page.add_child(action_bar)
 	for button: Button in [_generate, _cancel_job, _retry]:
 		button.reparent(action_bar)
+	_repair = _button("Correct cached layout", _open_layout_editor)
+	_repair.visible = false
+	action_bar.add_child(_repair)
 	_cost.reparent(action_bar)
 	_cost.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_cost.custom_minimum_size.x = 400
@@ -457,6 +466,7 @@ func _start(command: String) -> void:
 		_notice(result["error"])
 		return
 	_operation = command
+	_layout_context = {}
 	_busy = true
 	state = "queued"
 	_started_msec = Time.get_ticks_msec()
@@ -479,6 +489,7 @@ func _process(delta: float) -> void:
 		_busy = false
 		state = "failed"
 		_notice("The authoring worker stopped without a finished result. Your drawing and accepted fighters are preserved.")
+		_offer_layout_correction()
 		_update_controls()
 
 
@@ -501,7 +512,74 @@ func _handle_status(report: Dictionary) -> void:
 		_preview_candidate(report.get("candidate_path", ""))
 	elif state in ["failed", "cancelled"]:
 		_busy = false
+	if state == "failed":
+		_offer_layout_correction()
 	_update_controls()
+
+
+func _offer_layout_correction() -> void:
+	_layout_context = {}
+	if job_path.is_empty() or not FileAccess.file_exists(job_path.get_base_dir().path_join("raw/parts.png")) or not FileAccess.file_exists(job_path.get_base_dir().path_join("raw/theme.png")):
+		return
+	var context := bridge.raw_layout_context(job_path)
+	if not context["ok"]:
+		_notice(_message.text + " " + context["error"])
+		return
+	_layout_context = context
+	_layout_job_path = job_path
+	_open_layout_editor()
+
+
+func _open_layout_editor() -> void:
+	if _busy or _layout_context.is_empty() or job_path != _layout_job_path or is_instance_valid(_layout_editor):
+		return
+	# Mouse blocking alone does not stop Tab reaching hidden paid actions.
+	_layout_focus.clear()
+	for control: Control in find_children("*", "Control", true, false):
+		_layout_focus[control] = control.focus_mode
+		control.focus_mode = Control.FOCUS_NONE
+	_layout_editor = LayoutEditor.new()
+	_layout_editor.setup(_layout_context, _cost.text)
+	_layout_editor.dismissed.connect(_close_layout_editor)
+	_layout_editor.apply_requested.connect(_convert_layout)
+	add_child(_layout_editor)
+	_layout_editor.save_button.grab_focus()
+
+
+func _close_layout_editor() -> void:
+	if is_instance_valid(_layout_editor):
+		_layout_editor.hide()
+		_layout_editor.queue_free()
+	_layout_editor = null
+	for control: Variant in _layout_focus:
+		if is_instance_valid(control):
+			control.focus_mode = _layout_focus[control]
+	_layout_focus.clear()
+	if _repair.visible:
+		_repair.grab_focus()
+
+
+func _convert_layout(layout: Dictionary) -> void:
+	if _busy or job_path != _layout_job_path:
+		return
+	var retained := bridge.read_json(job_path)
+	var current := _proposal()
+	if current.is_empty() or bridge.proposal_hash(current) != bridge.proposal_hash(retained.get("proposal", {})):
+		_layout_editor.notice.text = "Restore the retained draft's approved settings before correcting its cached art. New designs need a separate generation."
+		return
+	var created := bridge.create_layout_job(job_path, layout)
+	if not created["ok"]:
+		_layout_editor.notice.text = created["error"]
+		return
+	job_path = created["path"]
+	_job_source_hash = FileAccess.get_sha256(job_path.get_base_dir().path_join("source.png"))
+	_start("bake")
+	if _busy:
+		_close_layout_editor()
+		_notice("Converting cached crops locally in a new draft. Earlier masks/pivots remain in the old draft; the new candidate starts with fresh joints and masks.")
+	else:
+		_layout_job_path = job_path
+		_layout_editor.notice.text = _message.text
 
 
 func _apply_proposal(proposal: Dictionary) -> void:
@@ -729,6 +807,7 @@ func _update_controls() -> void:
 	_generate.disabled = _busy
 	_cancel_job.disabled = not _busy
 	_retry.disabled = _busy or state not in ["failed", "cancelled"]
+	_repair.visible = not _busy and not _layout_context.is_empty() and job_path == _layout_job_path
 	_accept.disabled = _busy or candidate.is_empty() or _edit_dirty or not _matches_preview()
 	var can_edit_parts := not _busy and not _part_records.is_empty() and job_path == _preview_job_path
 	_bake.disabled = not can_edit_parts or not _edit_dirty

@@ -26,3 +26,14 @@ After the targeted redraw/sweep/HUD optimizations, ordinary-input Ember solo20 c
 The official Linux QA export also completed25waves in a user/network namespace with no network interfaces, no game-state overrides and no engine errors (34,880ticks). This uses the same gameplay/content with the `arena_qa` observation entry point. The ordinary Linux package separately boots outside the source checkout in that network namespace; helper inventory/status/local-bake checks are separate from executable gameplay.
 
 Refreshed native rendering uses explicit offscreen OpenGL draws on an agent workspace, not physical scanout FPS. A10second32enemy/67projectile fixture measured median6.616ms,p9513.253ms,p9915.588ms,max17.567ms; physics/processp95were10.412/9.774ms. The earlier same forced-draw fixture was17.442msp95. CPU redraw/allocation changes plus lower HUD update frequency contributed; this is a short combined-change observation, not a controlled hardware or human performance guarantee. Raw profiles and actual native captures are retained.
+
+
+## Reviewed generated starter and cached recovery
+
+The final generated-default solo source route (`ordinary-generated-solo.json`) clears twenty waves in 24,084 ticks, 326 combat seconds and 454 kills without downs or engine errors. It records the selected generated manifest and runtime source hashes. `ordinary-generated-duo.json` is an earlier generated-default co-op twenty-five-wave route (32,584 ticks); the later layering/effect changes are render-only, and its stored source hashes identify that distinction.
+
+`native-generated/` contains the actual shipping-source title/lobby/creator/shop/crowd captures plus distinct special/cue contact sheets. The controlled ten-second fixture reached 32 enemies/67 projectiles: median 6.891 ms, p95 11.779 ms, p99 14.486 ms, maximum 17.406 ms, physics/process p95 10.465/7.323 ms. Same native Wayland/Mesa conditions and explicit offscreen-draw limitations apply. No scanout-FPS or human-play claim.
+
+`real-forge/` records the real retained image pair passing through the native crop editor, actual Python local conversion, animation preview and validated acceptance. It ran with `unshare --user --map-root-user --net`; the budget ledger was unchanged and no requests occurred. The source-only harness is `tools/forge_native_recovery.gd`, with `--job` pointing to the retained local job, `--layout evidence/arena-content/reviewed_fox_source_layout.json` and `--output` to a temporary directory. Private live jobs are intentionally absent from Git; sanitized sources and recipes remain under `assets/arena/source/generated_kiln_fox/`.
+
+`generated-capture-context.json` retains capture/source hashes and conditions; `final-checks.json` records final import/suite summaries (12 arena, 154 creator, 173 Python). All visuals are actual captures. Complete ordinary-input export evidence is recorded separately for the final package revision.

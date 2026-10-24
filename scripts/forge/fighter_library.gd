@@ -11,14 +11,21 @@ const MAX_FILE_BYTES := 16 * 1024 * 1024
 
 var storage_root: String = "user://fighters"
 var errors: Array[String] = []
+var default_players: PackedStringArray = []
 
 
 func list_bundles() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	errors.clear()
+	default_players.clear()
 	if FileAccess.file_exists(BUILTIN_INDEX):
 		var index: Variant = _read_json(BUILTIN_INDEX, 65536)
 		if index is Dictionary and index.get("schema_version") == 1 and index.get("bundles") is Array:
+			var preferred: Variant = index.get("default_players", [])
+			if preferred is Array and preferred.size() <= 2:
+				for id: Variant in preferred:
+					if id is String and _slug(id):
+						default_players.append(id)
 			for directory: Variant in index["bundles"]:
 				if directory is String and _slug(directory):
 					_append_bundle(result, BUILTIN_INDEX.get_base_dir().path_join(directory).path_join("manifest.json"))

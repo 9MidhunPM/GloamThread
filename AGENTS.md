@@ -1,91 +1,41 @@
-# Gloamthread: Two Ends — agent guide
+# Gloamthread — agent guide
 
-## Latest user direction — wave fighter, 25 October 2026
+## Active mission
 
-Implement the approved solo/two-player shared-screen arena fighter in [docs/WAVE_FIGHTER_SPEC.md](docs/WAVE_FIGHTER_SPEC.md). It supersedes conflicting campaign/split-screen/fixed-character/no-generation requirements below and in older documents. Read that contract before runtime, art, creation or content work. Agent 2 follows [docs/AGENT_2_WAVE_CONTENT.md](docs/AGENT_2_WAVE_CONTENT.md); separate checkout ownership is explicit there. One authoritative world, owned inputs, original content, accurate evidence, private credentials and honest Git history remain mandatory. Only root integrates main. The earlier campaign and overhead evidence remain historical, not acceptance of the wave fighter.
+Build and maintain the approved solo/two-player shared-screen wave fighter in [docs/WAVE_FIGHTER_SPEC.md](docs/WAVE_FIGHTER_SPEC.md). It supersedes the previous campaign/overhead requirements. Read [docs/STATUS.md](docs/STATUS.md) first for actual implementation/evidence; use [README.md](README.md) and [docs/ARENA_DEMO.md](docs/ARENA_DEMO.md) to launch. The old campaign and overhead branches/evidence remain historical references, not acceptance of the current game.
 
-## Mission and current state
+Twenty waves, four stages/bosses, optional endless, personal last-hit wallets and between-wave shops; fixed roster per run. Run power resets. Saved creations/settings/scores persist. Three body rigs and six game-owned ability families support drawn/uploaded characters. Current original and retained-generation content must remain reproducible.
 
-Build the Phase 1 game in MVP.md: an original two-player local co-op action adventure with fixed split screen, two fixed characters and a complete eight-room story. All game content must be authored within this project. Prioritize responsive controls, readable combat and enjoyable cooperation before world size.
+## Runtime boundaries
 
-The eight-room campaign and production content are integrated on the runtime branch. The integrated engine scenarios pass, including an actual-App ordinary-input route to the ending, movement/recovery boundaries and file persistence. Release packaging and native performance checks are underway; physical gamepads, listening and fresh pairs remain unverified. Read `docs/STATUS.md` for current evidence. `HANDOFF.md` retains the original historical M0 context. The earlier single-player HTML proof supplies no co-op acceptance evidence.
+- Godot4.7.2standard, typed GDScript, Compatibility, Python3authoring. One authoritative shared world, one arena camera, one audio mix. Target1920×1080with640×360nearest/integer pixel world; letterbox other aspect ratios.
+- Godot60Hzphysics owns combat/timers. Pause/focus/device loss freezes shared combat without wall-clock catch-up. One owned input source per player; flush held actions at mode transitions, preserve simultaneous shop confirmations.
+- No friendly fire/body blocking. Gameplay-owned colliders, timing, stats and finite ability IDs remain independent of images/body rigs. Generated content never supplies scripts, paths or executable behaviour.
+- Session alone owns wave clear/wipe, rewards, revival, shops and results. Reward each accepted death once to lethal source; DOT/chain/projectiles retain ownership. Resolve final clear before same-tick wipe. Both shop panels must ready before advancing.
+- Network/model calls are optional pregame authoring through a separate local Python worker. Credentials stay in ignored.env, outside Godot/exports/logs. Initial model experiment has a durable0.50USDcap; no automatic retries, fallback or ledger resets. Cached crop/mask/pivot corrections use SDK-free local conversion.
+- A candidate is accepted only after full bundle admission. Preserve previous accepted art/jobs on failure, retain source/provenance and display genuine errors. Save settings/scores/creation libraries separately from run power.
 
-## Context map
+## Content and ownership
 
-For the current two-agent build, read [Agent 1](docs/AGENT_1_RUNTIME.md) or [Agent 2](docs/AGENT_2_CONTENT.md) according to the assigned role. Their separate-checkout ownership replaces the older three-worker split in the handoff. Both agents follow the shared data contract in Agent 2's brief; only Agent 1 integrates to `main`.
+Use [the shared spec](docs/WAVE_FIGHTER_SPEC.md) for interfaces, [Agent2brief](docs/AGENT_2_WAVE_CONTENT.md) for content work and [asset workflow](docs/AI_ASSET_WORKFLOW.md) for generation/correction. Only the integrator changes entry points/contracts/packaging and merges main. Parallel workers need exclusive files and agreed interfaces; preserve other workers' edits.
 
-1. Read README.md, MVP.md and docs/DECISIONS.md before implementing.
-2. Follow docs/IMPLEMENTATION_PLAN.md and docs/TASKS.md for dependency order.
-3. Read docs/ARCHITECTURE.md before changing simulation, inputs, views or saves.
-4. Read docs/ART_AUDIO_PIPELINE.md before authoring content, and docs/STORY_BIBLE.md before adding rooms/dialogue.
-5. Use docs/TEST_PLAN.md for acceptance evidence; use PRD.md for wider product requirements.
-6. Read docs/GENERATION_ROADMAP.md only when working on its later phase. It must not expand the Phase 1 task.
+All art, animation, scenery, font, UI cues, music and sound must be authored here or retained original generation with provenance. No resource packs, downloaded replacements, stock art/audio or copied characters/maps/UI. Use reference games only for broad qualities. Inspect actual native captures/animation; manifest counts alone do not establish quality.
 
-The latest user instruction outranks these documents. For routine gaps, choose the simplest design consistent with the current slice, record the choice and continue. Resolve document inconsistencies against docs/DECISIONS.md rather than silently implementing conflicting variants.
-
-## Scope and original content
-
-- Godot 4.7.2 standard, typed GDScript, Compatibility renderer, Python 3 asset tools; Linux/Arch first. Do not switch to C++, web or .NET without a user-requested scope change.
-- Fixed characters: Tavi and Neri. Threadweave restores predefined bridges through two distinct player-activated anchors. Threadstep is the team dash unlock. Cross-stitch is an optional boss stagger follow-up.
-- Eight rooms r00–r07, two enemy types, Spoolwarden miniboss, Oru, two checkpoints, one secret, two visual theme presets and an ending. See MVP.md for the complete boundary.
-- Phase 1 has no upload UI, image-generation service, runtime model calls, online/LAN networking, dynamic split/merge camera, independent cross-room exploration, crafting or arbitrary rope/terrain physics.
-- No downloaded/bought resource packs, stock sprites, music, sound libraries, game maps or font packs. Tools and engine dependencies are allowed. Original retained image-generation outputs may be used with provenance and asset QA; do not download replacements when generation is unavailable.
-- Author coherent sprite shapes, animation, tiles, scenery, UI glyphs, sound and music in editable sources/generators. Random coloured noise or repeated rectangles are not a finished art direction. Retain source and metadata for every shipped asset.
-- Use named reference games for broad qualities only. Do not reproduce their characters, signature silhouettes, maps, art, writing, music or UI.
-
-## Architectural invariants
-
-- One shared authoritative World2D; one instance of each gameplay actor, collision layout, trigger, reward and progression state. Each player's SubViewport has a camera and HUD, not a second simulation.
-- Render-only Ember/Moss visual layers can vary by viewport. They contain no collision bodies, scripts with gameplay effects, enemy AI or reward triggers. Validate masks and parent visibility rules in the real engine.
-- Logical composite 960×360; each view 480×360; overlay divider. Tiles 16×16; character frames 32×48. Nearest sampling, integer scaling/letterboxing and pixel-stable render origins. Simulation positions may remain floating point.
-- Physics at 60 Hz. Godot physics processing owns gameplay timers; do not add a second accumulator. Pause, focus loss, device disconnect, dialogue and map pause the shared world consistently. Resume never applies a wall-clock catch-up burst.
-- One input owner per player. Never bind a player's actions to all gamepads or use unfiltered global action state for both players. Flush held actions when entering/leaving menus and reconnecting devices.
-- No friendly fire or player-body blocking. Hurtboxes and collisions are independent of art, theme and animation frame size.
-- Both players stay in one active room. Exit rally zones require both living players; room replacement happens once through the session coordinator, and both spawn safely.
-- Team unlocks, boss outcomes, restored bridges and unique secrets are committed once. Permanent traversal is shared and cannot be removed by a generated character profile later.
-- Death/revive/timeout and checkpoint reset have explicit state transitions. Freeze encounter updates during recovery/transition. Both views observe the same health, boss and reward state.
-- Audio events play once through a shared mix. Do not double audio because there are two cameras/listeners.
-- Save team progress and load at a validated checkpoint; version the format, preserve a last-known-good backup and handle write/corruption failure visibly. Device bindings/settings are separate from campaign progress.
-- Fixed profiles and future generated profiles cross the same validated data boundary. No executable behaviour or arbitrary file paths from generated content. Do not build the future backend to prove this boundary.
-
-## Working rhythm
-
-Inspect the repository and current status before editing. Preserve unrelated user work. Implement a playable one-room co-op foundation before creating all eight rooms. Integrate at each milestone; do not build a generic engine, ECS, custom editor or framework first.
-
-When delegating, give each worker exclusive files/subsystems and agreed interfaces. Only the integrator changes the project entry point, shared session/input contracts and final packaging concurrently. Keep docs/STATUS.md current with implemented, verified, unverified and blocked work.
-
-Prototype visuals may be simple during movement tests. Replace them with the original art target before declaring the slice complete. Inspect real captures at native resolution and watch animation/audio; a manifest count does not prove quality.
-
-## Commands and evidence
-
-Available content/tool checks:
+## Verification and completion
 
 ```sh
-python3 tools/preflight.py
 python3 tools/check_pack.py
-python3 tools/generate_assets.py --seed 18427
-python3 tools/validate_assets.py
-python3 tools/validate_content.py
 python3 -m unittest discover -s tools/tests -p 'test_*.py'
-```
-
-Run these engine commands in the runtime/integrated checkout; Agent 1 owns authoritative imports and runtime evidence:
-
-```sh
+python3 -m tools.forge.content --validate
+python3 -m tools.forge.retained --validate
 godot --headless --path . --editor --import --quit
-godot --headless --path . --script tests/run_tests.gd
-godot --path .
+godot --headless --fixed-fps 60 --path . --script tests/arena/run_tests.gd
+godot --headless --fixed-fps 60 --path . --script tests/forge/run_tests.gd
 ```
 
-Use high-level scenario tests around input ownership, simultaneous attacks, one hit per swing, single boss/reward state, revive and team wipe, paired anchors, pre/post-dash routes, exit rally, save/continue, device loss and pause. Check content and provenance separately. A built-in GDScript scenario runner is sufficient; do not require an external testing addon by default.
+Only explicit authoring rebuilds should run `python3 -m tools.forge.content --build --validate` because it replaces deterministic output. `tools/package_arena.py` requires a clean committed checkout and matching Linux templates. Record exact source/command/engine/display/input and limitations. Ordinary-input routes, controlled recovery fixtures, native render profiles, exported offline checks, physical devices and human playtests are distinct evidence. Never fabricate captures, billing, performance, listening or enjoyment.
 
-Record exact commands and outcomes, test configuration, device assignments, engine version and any limitations. A source check or headless import does not prove rendered split screen, correct gamepad behaviour, audio or fun. Debug teleports may isolate a state but never replace a full normal-input playthrough. Never fabricate screenshots, performance numbers or human playtests.
-
-## Completion
-
-Finish the requested milestone, then proceed through the authorized Phase 1 work until the complete MVP passes its gates or a material blocker prevents further progress. Do not stop at a plan or scaffolding when asked to build. Do not expand to the 96-room target or Phase 2 generation before the current authorized scope is complete.
-
-Report what changed, what actually ran, what remains unverified and how to launch. Document a blocker precisely and continue independent useful work where possible. Never label the whole game complete because documents, generated assets or empty rooms exist.
+Finish the requested milestone and authorized scope, keep STATUS current, and report remaining material gates precisely. Preserve the earlier released demo and honest Git history. Do not expand to networking, arbitrary generated behaviour or the obsolete96room plan.
 
 ## Repository workflow (from the hackathon template)
 

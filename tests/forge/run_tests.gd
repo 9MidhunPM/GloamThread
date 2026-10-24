@@ -109,6 +109,8 @@ func _run() -> void:
 	directory.list_dir_end()
 	_check(retained_backup, "valid replacement retains original backup")
 	var bridge := Bridge.new()
+	var round_trip := bridge._integer_json(JSON.parse_string('{"schema_version":1,"crop":[0,2,16,9],"budget_usd":0.5,"flag":true}')) as Dictionary
+	_check(typeof(round_trip["schema_version"]) == TYPE_INT and typeof(round_trip["crop"][0]) == TYPE_INT and round_trip["budget_usd"] == 0.5 and typeof(round_trip["flag"]) == TYPE_BOOL, "JSON writer restores strict integer tokens after Godot parsing without changing fractional costs or booleans")
 	_check(not bridge.trusted_job("/tmp/outside/job.json"), "worker rejects jobs outside trusted cache")
 	_check(not bridge.start("arbitrary", "/tmp/outside/job.json")["ok"], "worker rejects untrusted command before process launch")
 	var drawing := Image.create(64, 64, false, Image.FORMAT_RGBA8)
@@ -211,6 +213,7 @@ func _run() -> void:
 	creator.bake_edits()
 	_check(mock.commands.size() == commands_before, "old preview parts cannot be baked into a newly created job")
 	_check_proposal_revisions(view, library, loaded["bundle"], drawing)
+	await _check_layout_correction(view, library, loaded["bundle"], drawing)
 	var args := OS.get_cmdline_user_args()
 	if args.size() == 2 and args[0] == "--capture":
 		await RenderingServer.frame_post_draw
@@ -314,6 +317,144 @@ func _check_proposal_revisions(view: SubViewport, library: FighterLibrary, previ
 	mock.write_json(cached_path, cached_job)
 	_make_bundle(cached_path.get_base_dir().path_join("candidate"))
 	_check(mock.generation_proposal_hash(cached_path) == mock.proposal_hash(suggested), "a retained candidate freezes its original approved proposal without attempt metadata")
+	creator.free()
+
+
+func _check_layout_correction(view: SubViewport, library: FighterLibrary, previous: Dictionary, drawing: Image) -> void:
+	var creator := Creator.new()
+	creator.setup(0, library)
+	view.add_child(creator)
+	var mock := FakeBridge.new()
+	creator.bridge = mock
+	creator.candidate = previous
+	creator._apply_proposal(previous)
+	creator._canvas.set_image(drawing)
+	creator._tabs.current_tab = 1
+	var job := mock.create_job(drawing, "Synthetic cached conversion, never contact a provider.")
+	var path: String = job["path"]
+	var folder := path.get_base_dir()
+	var original_job := mock.read_json(path)
+	original_job["proposal"] = creator._proposal()
+	mock.write_json(path, original_job)
+	creator.job_path = path
+	creator._handle_status({"state": "failed", "message": "Fixture without retained images"})
+	_check(not is_instance_valid(creator._layout_editor), "generation failure without both raw images never opens correction UI")
+	DirAccess.make_dir_recursive_absolute(folder.path_join("raw"))
+	var board := Image.create(1024, 1024, false, Image.FORMAT_RGBA8)
+	board.fill(Color(0.4, 0.5, 0.6, 0.3))
+	board.fill_rect(Rect2i(20, 30, 90, 150), Color("#e4a85b"))
+	board.save_png(folder.path_join("raw/parts.png"))
+	board.fill(Color("#203344"))
+	board.save_png(folder.path_join("raw/theme.png"))
+	DirAccess.copy_absolute(folder.path_join("source.png"), folder.path_join("raw/source.png"))
+	var source_hash := FileAccess.get_sha256(folder.path_join("source.png"))
+	var provenance := {"schema_version": 1, "worker_version": "arena-forge-1", "approved_proposal": original_job["proposal"], "source": {"original_sha256": source_hash, "sha256": source_hash, "file": "raw/source.png"}, "requests": {}}
+	for kind: String in ["parts", "theme"]:
+		provenance["requests"][kind] = {"file": "raw/" + kind + ".png", "sha256": FileAccess.get_sha256(folder.path_join("raw/" + kind + ".png"))}
+	mock.write_json(folder.path_join("provenance.json"), provenance)
+	_make_rig(folder, "upright")
+	mock.write_json(folder.path_join("rig_edits.json"), {"schema_version": 1, "parts": {"torso": {"pivot": [20, 21]}}})
+	_make_bundle(folder.path_join("candidate"))
+	var saved_original := FileAccess.get_sha256(path)
+	var saved_provenance := FileAccess.get_sha256(folder.path_join("provenance.json"))
+	var saved_edits := FileAccess.get_sha256(folder.path_join("rig_edits.json"))
+	var saved_candidate := FileAccess.get_sha256(folder.path_join("candidate/manifest.json"))
+	var raw := mock.raw_layout_context(path)
+	_check(raw["ok"] and raw["rig_id"] == "upright", "fixed retained PNG boards expose their approved rig and image hashes")
+	var layout: Dictionary = raw["layout"].duplicate(true)
+	_check(layout["alpha_cutoff"] == 192 and layout["parts"]["torso"]["crop"] == [0, 0, 341, 341] and layout["master_crop"] == [682, 682, 342, 342], "correction defaults match strict grid slots and reviewed alpha cutoff")
+	_check(mock.source_layout_error(layout, raw).is_empty(), "default complete layout passes boundary validation")
+	for mutation: Array in [["alpha_cutoff", true], ["alpha_cutoff", 0], ["alpha_cutoff", 256], ["alpha_cutoff", 1.5], ["master_crop", [-1, 0, 32, 32]], ["master_crop", [1000, 0, 25, 30]], ["background_crop", [0, 0, 0, 1]], ["background_crop", [0, 0, 24.5, 30]], ["material_crops", []], ["raw_parts_sha256", "wrong"], ["raw_theme_sha256", "wrong"], ["path", "../outside.png"]]:
+		var bad := layout.duplicate(true)
+		bad[mutation[0]] = mutation[1]
+		_check(not mock.source_layout_error(bad, raw).is_empty(), "reject invalid source layout " + str(mutation))
+	var missing_part := layout.duplicate(true)
+	missing_part["parts"].erase("head")
+	_check(not mock.source_layout_error(missing_part, raw).is_empty(), "layout requires every approved rig part")
+	var extra_part := layout.duplicate(true)
+	extra_part["parts"]["script"] = {"crop": [1, 2, 3, 4]}
+	_check(not mock.source_layout_error(extra_part, raw).is_empty(), "layout rejects extra part names")
+	var no_materials := layout.duplicate(true)
+	no_materials.erase("material_crops")
+	_check(mock.source_layout_error(no_materials, raw).is_empty(), "optional material crops can retain strict defaults")
+	_check(not mock.raw_layout_context("/tmp/outside/job.json")["ok"], "raw correction cannot read arbitrary job paths")
+	creator._handle_status({"state": "failed", "message": "Fixture conversion rejected its grid", "reserved_usd": 0.25})
+	await process_frame
+	await process_frame
+	var editor: ForgeLayoutEditor = creator._layout_editor
+	_check(is_instance_valid(editor) and creator._repair.visible, "retained conversion failure opens a recoverable local correction modal")
+	_check(creator._generate.focus_mode == Control.FOCUS_NONE and creator._name.focus_mode == Control.FOCUS_NONE, "correction modal removes underlying creator controls from keyboard focus")
+	var confined := true
+	for reverse: bool in [false, true]:
+		editor.save_button.grab_focus()
+		for step in 30:
+			var tab := InputEventKey.new()
+			tab.keycode = KEY_TAB
+			tab.pressed = true
+			tab.shift_pressed = reverse
+			view.push_input(tab, true)
+			await process_frame
+			var focused := view.gui_get_focus_owner()
+			confined = confined and is_instance_valid(focused) and editor.is_ancestor_of(focused)
+	_check(confined, "repeated Tab and Shift-Tab remain inside the correction editor")
+	_check(editor.save_button.get_global_rect().end.y <= 1080 and editor.canvas.get_global_rect().end.x <= 1920, "correction modal and local conversion action fit 1920 by 1080")
+	_check(editor.target.item_count == 7, "upright parts board exposes six parts and whole-character master")
+	_check(editor.canvas.source_point(Vector2(-200, -200)) == Vector2i.ZERO and editor.canvas.source_point(Vector2(10000, 10000)) == Vector2i(1023, 1023), "canvas coordinates clamp to raw bounds including letterbox edges")
+	var rect := editor.canvas.image_rect()
+	var press := InputEventMouseButton.new()
+	press.button_index = MOUSE_BUTTON_LEFT
+	press.pressed = true
+	press.position = rect.position + Vector2(20.1, 30.1) / 1024.0 * rect.size
+	editor.canvas._gui_input(press)
+	var release := InputEventMouseButton.new()
+	release.button_index = MOUSE_BUTTON_LEFT
+	release.pressed = false
+	release.position = rect.position + Vector2(109.1, 179.1) / 1024.0 * rect.size
+	editor.canvas._gui_input(release)
+	_check(editor.layout["parts"]["torso"]["crop"] == [20, 30, 90, 150], "mouse drag assigns exact source pixels to the selected part")
+	editor.board_tabs.current_tab = 1
+	_check(editor.target.item_count == 5 and editor.canvas.lock_widescreen, "theme board exposes background and four materials with optional 16:9 drag")
+	editor.canvas.select_between(Vector2i(0, 140), Vector2i(575, 463))
+	var crop := editor.canvas.crop
+	editor._crop_selected([crop.position.x, crop.position.y, crop.size.x, crop.size.y])
+	_check(editor.layout["background_crop"] == [0, 140, 576, 324], "16:9 scenery crop can exclude a generated foreground character")
+	editor.canvas.select_between(Vector2i(1023, 1023), Vector2i(1023, 1023))
+	_check(editor.canvas.crop.end.x <= 1024 and editor.canvas.crop.end.y <= 1024 and editor.canvas.crop.size.x * 9 == editor.canvas.crop.size.y * 16, "edge drag keeps a nonempty bounded 16:9 crop")
+	editor._target_changed(1)
+	editor._crop_selected([10, 600, 128, 128])
+	_check(editor.layout["material_crops"][0] == [10, 600, 128, 128], "theme material targets save independently of scenery crop")
+	editor._coordinates[0].value = 1023
+	_check(editor.layout["material_crops"][0][0] == 1020 and editor.layout["material_crops"][0][2] == 4, "numeric crop origin and width clamp to the converter's four-pixel minimum")
+	editor.cutoff.value = 230
+	_check(editor.layout["alpha_cutoff"] == 230, "opacity correction remains a bounded integer in the saved layout")
+	creator._name.text = "Changed design"
+	editor._apply()
+	_check(mock.commands.is_empty() and creator.job_path == path, "layout correction cannot reuse cached art for a changed approved design")
+	creator._apply_proposal(original_job["proposal"])
+	creator._edit_dirty = true
+	editor._apply()
+	_check(mock.commands == ["bake"] and creator.job_path != path, "correction starts only local bake in a new trusted job")
+	_check(creator._generate.focus_mode == Control.FOCUS_ALL and creator._name.focus_mode == Control.FOCUS_ALL, "closing correction restores the creator keyboard focus modes")
+	var local_path := creator.job_path
+	var local_folder := local_path.get_base_dir()
+	_check(mock.trusted_job(local_path) and mock.read_json(local_path)["proposal"] == original_job["proposal"], "new local draft retains exactly the approved proposal")
+	_check(FileAccess.get_file_as_string(local_path).contains('"schema_version": 1,') and FileAccess.get_file_as_string(local_folder.path_join("provenance.json")).contains('"schema_version": 1,'), "cloned job and provenance serialize schema versions as Python integer tokens")
+	_check(mock.read_json(local_folder.path_join("source_layout.json"))["background_crop"] == [0.0, 140.0, 576.0, 324.0], "new draft retains the corrected hash-bound crop annotation")
+	_check(FileAccess.get_sha256(path) == saved_original and FileAccess.get_sha256(folder.path_join("provenance.json")) == saved_provenance and FileAccess.get_sha256(folder.path_join("rig_edits.json")) == saved_edits and FileAccess.get_sha256(folder.path_join("candidate/manifest.json")) == saved_candidate, "local correction preserves old job, provenance, masks/pivots and candidate byte-for-byte")
+	_check(not FileAccess.file_exists(local_folder.path_join("rig.json")) and not FileAccess.file_exists(local_folder.path_join("rig_edits.json")) and not DirAccess.dir_exists_absolute(local_folder.path_join("candidate")) and not FileAccess.file_exists(local_folder.path_join("budget.json")), "fresh correction excludes previous rig, edits, candidate and ledger")
+	_check(creator.candidate["manifest_path"] == previous["manifest_path"], "local conversion keeps previous valid preview until replacement validates")
+	_make_bundle(local_folder.path_join("candidate"))
+	creator._handle_status({"state": "complete", "message": "Synthetic local conversion", "candidate_path": local_folder.path_join("candidate")})
+	_check(creator.candidate["manifest_path"] == local_folder.path_join("candidate/manifest.json") and not creator._edit_dirty, "valid local conversion replaces the preview and clears stale part edit state")
+	var bad_provenance := provenance.duplicate(true)
+	bad_provenance["requests"]["parts"]["sha256"] = "wrong"
+	mock.write_json(folder.path_join("provenance.json"), bad_provenance)
+	_check(not mock.create_layout_job(path, layout)["ok"], "local clone rejects a raw image inconsistent with request provenance")
+	mock.write_json(folder.path_join("provenance.json"), provenance)
+	board.set_pixel(0, 0, Color.WHITE)
+	board.save_png(folder.path_join("raw/theme.png"))
+	_check(not mock.save_source_layout(path, layout)["ok"] and not mock.create_layout_job(path, layout)["ok"], "raw hash change after opening blocks both annotation save and local cloning")
+	_check(mock.commands == ["bake"], "all layout correction regressions perform no generation or analysis calls")
 	creator.free()
 
 

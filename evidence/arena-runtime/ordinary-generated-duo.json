@@ -1,0 +1,2081 @@
+{
+	"bot": "State-aware bot reads target positions and attack phases, then uses normal move/jump/attack/special/dodge/revive commands. Random critical hits and shop rolls remain enabled.",
+	"captures": [],
+	"display": "headless",
+	"downs": [
+		0,
+		0
+	],
+	"engine": "4.7.2-stable (arch_linux)",
+	"engine_errors": [],
+	"errors": [],
+	"final_actors": [
+		{
+			"health": 160.0,
+			"max_health": 160.0,
+			"position": [
+				375.521911621094,
+				319.925262451172
+			],
+			"slot": 0,
+			"stats": {
+				"area": 2.0,
+				"attack_speed": 1.36,
+				"burn": 4.0,
+				"chain": 0.0,
+				"crit": 0.23,
+				"damage": 21.0,
+				"dodge_cooldown": 30.0,
+				"freeze": 0.0,
+				"lifesteal": 0.075,
+				"max_health": 160.0,
+				"move_speed": 175.0,
+				"pierce": 0.0,
+				"projectile_count": 1.0,
+				"regen": 1.05,
+				"special_cooldown": 60.0,
+				"stagger": 0.0,
+				"thorns": 0.36
+			}
+		},
+		{
+			"health": 160.0,
+			"max_health": 160.0,
+			"position": [
+				269.145263671875,
+				319.925262451172
+			],
+			"slot": 1,
+			"stats": {
+				"area": 1.45,
+				"attack_speed": 1.36,
+				"burn": 0.0,
+				"chain": 0.0,
+				"crit": 0.23,
+				"damage": 19.0,
+				"dodge_cooldown": 30.0,
+				"freeze": 3.0,
+				"lifesteal": 0.075,
+				"max_health": 160.0,
+				"move_speed": 165.0,
+				"pierce": 3.0,
+				"projectile_count": 4.0,
+				"regen": 3.35,
+				"special_cooldown": 192.0,
+				"stagger": 0.0,
+				"thorns": 0.36
+			}
+		}
+	],
+	"final_phase": "clear",
+	"final_summary": {
+		"best_combo": 173,
+		"endless": true,
+		"players": [
+			{
+				"coins": 231,
+				"kills": 428,
+				"kit": "ember",
+				"spent": 664,
+				"upgrades": {
+					"barbed_guard": 3,
+					"bellows": 3,
+					"blood_bloom": 3,
+					"field_stitch": 3,
+					"heartwood": 3,
+					"hot_coals": 3,
+					"keen_edge": 3,
+					"light_feet": 3,
+					"lucky_thread": 3,
+					"quick_hands": 3,
+					"second_wind": 3,
+					"slipstream": 3,
+					"wide_arc": 3,
+					"wildfire": 3
+				}
+			},
+			{
+				"coins": 42,
+				"kills": 331,
+				"kit": "nature",
+				"spent": 708,
+				"upgrades": {
+					"barbed_guard": 3,
+					"blood_bloom": 3,
+					"deep_roots": 3,
+					"field_stitch": 3,
+					"green_pulse": 3,
+					"heartwood": 3,
+					"keen_edge": 3,
+					"light_feet": 2,
+					"lucky_thread": 3,
+					"quick_hands": 3,
+					"second_wind": 3,
+					"slipstream": 3,
+					"thornline": 3,
+					"twin_stitch": 3,
+					"wide_arc": 3
+				}
+			}
+		],
+		"seconds": 451,
+		"wave": 25,
+		"won": false
+	},
+	"fixed_fps": false,
+	"human_playtest": false,
+	"input": "Synthetic owned keyboard snapshots; no actor position, health, damage, currency, timer, or progression writes.",
+	"kits": [
+		"ember",
+		"nature"
+	],
+	"menu": "Production App title/lobby/start, actual shop offers and purchase/ready methods.",
+	"physics_hz": 60,
+	"players": 2,
+	"purchases": [
+		{
+			"after_wave": 1,
+			"id": "keen_edge",
+			"slot": 0
+		},
+		{
+			"after_wave": 1,
+			"id": "heartwood",
+			"slot": 0
+		},
+		{
+			"after_wave": 1,
+			"id": "deep_roots",
+			"slot": 1
+		},
+		{
+			"after_wave": 1,
+			"id": "slipstream",
+			"slot": 1
+		},
+		{
+			"after_wave": 2,
+			"id": "bellows",
+			"slot": 0
+		},
+		{
+			"after_wave": 2,
+			"id": "wide_arc",
+			"slot": 1
+		},
+		{
+			"after_wave": 2,
+			"id": "thornline",
+			"slot": 1
+		},
+		{
+			"after_wave": 3,
+			"id": "wildfire",
+			"slot": 0
+		},
+		{
+			"after_wave": 3,
+			"id": "hot_coals",
+			"slot": 0
+		},
+		{
+			"after_wave": 3,
+			"id": "field_stitch",
+			"slot": 1
+		},
+		{
+			"after_wave": 3,
+			"id": "barbed_guard",
+			"slot": 1
+		},
+		{
+			"after_wave": 4,
+			"id": "field_stitch",
+			"slot": 0
+		},
+		{
+			"after_wave": 4,
+			"id": "wildfire",
+			"slot": 0
+		},
+		{
+			"after_wave": 4,
+			"id": "blood_bloom",
+			"slot": 1
+		},
+		{
+			"after_wave": 5,
+			"id": "bellows",
+			"slot": 0
+		},
+		{
+			"after_wave": 5,
+			"id": "lucky_thread",
+			"slot": 0
+		},
+		{
+			"after_wave": 5,
+			"id": "green_pulse",
+			"slot": 1
+		},
+		{
+			"after_wave": 5,
+			"id": "second_wind",
+			"slot": 1
+		},
+		{
+			"after_wave": 6,
+			"id": "keen_edge",
+			"slot": 0
+		},
+		{
+			"after_wave": 6,
+			"id": "keen_edge",
+			"slot": 1
+		},
+		{
+			"after_wave": 6,
+			"id": "slipstream",
+			"slot": 1
+		},
+		{
+			"after_wave": 7,
+			"id": "heal",
+			"slot": 0
+		},
+		{
+			"after_wave": 7,
+			"id": "field_stitch",
+			"slot": 0
+		},
+		{
+			"after_wave": 7,
+			"id": "wildfire",
+			"slot": 0
+		},
+		{
+			"after_wave": 7,
+			"id": "quick_hands",
+			"slot": 1
+		},
+		{
+			"after_wave": 7,
+			"id": "deep_roots",
+			"slot": 1
+		},
+		{
+			"after_wave": 8,
+			"id": "wide_arc",
+			"slot": 0
+		},
+		{
+			"after_wave": 8,
+			"id": "second_wind",
+			"slot": 0
+		},
+		{
+			"after_wave": 8,
+			"id": "hot_coals",
+			"slot": 0
+		},
+		{
+			"after_wave": 8,
+			"id": "keen_edge",
+			"slot": 1
+		},
+		{
+			"after_wave": 8,
+			"id": "lucky_thread",
+			"slot": 1
+		},
+		{
+			"after_wave": 9,
+			"id": "quick_hands",
+			"slot": 0
+		},
+		{
+			"after_wave": 9,
+			"id": "blood_bloom",
+			"slot": 0
+		},
+		{
+			"after_wave": 9,
+			"id": "heartwood",
+			"slot": 1
+		},
+		{
+			"after_wave": 9,
+			"id": "twin_stitch",
+			"slot": 1
+		},
+		{
+			"after_wave": 9,
+			"id": "thornline",
+			"slot": 1
+		},
+		{
+			"after_wave": 10,
+			"id": "wide_arc",
+			"slot": 0
+		},
+		{
+			"after_wave": 10,
+			"id": "field_stitch",
+			"slot": 1
+		},
+		{
+			"after_wave": 10,
+			"id": "green_pulse",
+			"slot": 1
+		},
+		{
+			"after_wave": 11,
+			"id": "quick_hands",
+			"slot": 0
+		},
+		{
+			"after_wave": 11,
+			"id": "bellows",
+			"slot": 0
+		},
+		{
+			"after_wave": 11,
+			"id": "slipstream",
+			"slot": 0
+		},
+		{
+			"after_wave": 11,
+			"id": "deep_roots",
+			"slot": 1
+		},
+		{
+			"after_wave": 12,
+			"id": "heartwood",
+			"slot": 0
+		},
+		{
+			"after_wave": 12,
+			"id": "second_wind",
+			"slot": 0
+		},
+		{
+			"after_wave": 12,
+			"id": "hot_coals",
+			"slot": 0
+		},
+		{
+			"after_wave": 12,
+			"id": "keen_edge",
+			"slot": 1
+		},
+		{
+			"after_wave": 13,
+			"id": "quick_hands",
+			"slot": 0
+		},
+		{
+			"after_wave": 13,
+			"id": "slipstream",
+			"slot": 0
+		},
+		{
+			"after_wave": 13,
+			"id": "wide_arc",
+			"slot": 1
+		},
+		{
+			"after_wave": 13,
+			"id": "second_wind",
+			"slot": 1
+		},
+		{
+			"after_wave": 14,
+			"id": "heartwood",
+			"slot": 0
+		},
+		{
+			"after_wave": 14,
+			"id": "slipstream",
+			"slot": 0
+		},
+		{
+			"after_wave": 14,
+			"id": "quick_hands",
+			"slot": 1
+		},
+		{
+			"after_wave": 14,
+			"id": "twin_stitch",
+			"slot": 1
+		},
+		{
+			"after_wave": 15,
+			"id": "light_feet",
+			"slot": 0
+		},
+		{
+			"after_wave": 15,
+			"id": "lucky_thread",
+			"slot": 0
+		},
+		{
+			"after_wave": 15,
+			"id": "green_pulse",
+			"slot": 1
+		},
+		{
+			"after_wave": 16,
+			"id": "field_stitch",
+			"slot": 0
+		},
+		{
+			"after_wave": 16,
+			"id": "lucky_thread",
+			"slot": 0
+		},
+		{
+			"after_wave": 16,
+			"id": "quick_hands",
+			"slot": 1
+		},
+		{
+			"after_wave": 16,
+			"id": "wide_arc",
+			"slot": 1
+		},
+		{
+			"after_wave": 17,
+			"id": "keen_edge",
+			"slot": 0
+		},
+		{
+			"after_wave": 17,
+			"id": "blood_bloom",
+			"slot": 0
+		},
+		{
+			"after_wave": 17,
+			"id": "heartwood",
+			"slot": 1
+		},
+		{
+			"after_wave": 17,
+			"id": "second_wind",
+			"slot": 1
+		},
+		{
+			"after_wave": 18,
+			"id": "second_wind",
+			"slot": 0
+		},
+		{
+			"after_wave": 18,
+			"id": "light_feet",
+			"slot": 0
+		},
+		{
+			"after_wave": 18,
+			"id": "twin_stitch",
+			"slot": 1
+		},
+		{
+			"after_wave": 18,
+			"id": "thornline",
+			"slot": 1
+		},
+		{
+			"after_wave": 19,
+			"id": "wide_arc",
+			"slot": 0
+		},
+		{
+			"after_wave": 19,
+			"id": "light_feet",
+			"slot": 0
+		},
+		{
+			"after_wave": 19,
+			"id": "blood_bloom",
+			"slot": 1
+		},
+		{
+			"after_wave": 19,
+			"id": "lucky_thread",
+			"slot": 1
+		},
+		{
+			"after_wave": 20,
+			"id": "heal",
+			"slot": 0
+		},
+		{
+			"after_wave": 20,
+			"id": "blood_bloom",
+			"slot": 0
+		},
+		{
+			"after_wave": 20,
+			"id": "barbed_guard",
+			"slot": 0
+		},
+		{
+			"after_wave": 20,
+			"id": "heartwood",
+			"slot": 1
+		},
+		{
+			"after_wave": 20,
+			"id": "light_feet",
+			"slot": 1
+		},
+		{
+			"after_wave": 21,
+			"id": "barbed_guard",
+			"slot": 0
+		},
+		{
+			"after_wave": 21,
+			"id": "lucky_thread",
+			"slot": 1
+		},
+		{
+			"after_wave": 21,
+			"id": "barbed_guard",
+			"slot": 1
+		},
+		{
+			"after_wave": 22,
+			"id": "barbed_guard",
+			"slot": 0
+		},
+		{
+			"after_wave": 22,
+			"id": "field_stitch",
+			"slot": 1
+		},
+		{
+			"after_wave": 22,
+			"id": "slipstream",
+			"slot": 1
+		},
+		{
+			"after_wave": 23,
+			"id": "blood_bloom",
+			"slot": 1
+		},
+		{
+			"after_wave": 24,
+			"id": "light_feet",
+			"slot": 1
+		},
+		{
+			"after_wave": 24,
+			"id": "barbed_guard",
+			"slot": 1
+		}
+	],
+	"source_hashes": {
+		"res://content/arena/catalog.json": "0837d9a9bbae2688190b0b0bc62979a3f454b3e36078c379d05db87714ac8fab",
+		"res://scripts/arena/actors/arena_enemy.gd": "0cb0e73f937eca386cea1e983c9fd38fcfc7fc995375865fe0e2b171e198a10b",
+		"res://scripts/arena/actors/arena_fighter.gd": "b0716c24f2aea4add5c121e45474bca41cbfae103612297ea08393225bd83b7c",
+		"res://scripts/arena/actors/arena_projectile.gd": "e7a8db67d8edca59968554cfa4e49edcd01beb68bb0225ed87ca2af3be771b20",
+		"res://scripts/arena/arena_player_state.gd": "ba5d4a3602f4367de0c261dc9b0876fa0eb4aaae8359a670054ff775c0f0cff0",
+		"res://scripts/arena/run_session.gd": "ff321dbc63816fbb00c04e28f791803608304097db43682ab8c1158cde450349",
+		"res://tests/arena/route_driver.gd": "3a2c9dd10210b4f010434b3800eb3a6d23267f775eb7a03689cffbc5d018f0b2"
+	},
+	"success": true,
+	"target_waves": 25,
+	"ticks": 32584,
+	"wall_seconds": 36.329,
+	"waves": [
+		{
+			"boss": "",
+			"health": [
+				100.0,
+				100.0
+			],
+			"observed_health_loss": [
+				0.0,
+				0.0
+			],
+			"summary": {
+				"best_combo": 12,
+				"endless": false,
+				"players": [
+					{
+						"coins": 14,
+						"kills": 6,
+						"kit": "ember",
+						"spent": 0,
+						"upgrades": {}
+					},
+					{
+						"coins": 14,
+						"kills": 6,
+						"kit": "nature",
+						"spent": 0,
+						"upgrades": {}
+					}
+				],
+				"seconds": 12,
+				"wave": 1,
+				"won": false
+			},
+			"ticks": 872,
+			"wave": 1
+		},
+		{
+			"boss": "",
+			"health": [
+				120.0,
+				100.0
+			],
+			"observed_health_loss": [
+				0.0,
+				0.0
+			],
+			"summary": {
+				"best_combo": 27,
+				"endless": false,
+				"players": [
+					{
+						"coins": 14,
+						"kills": 12,
+						"kit": "ember",
+						"spent": 14,
+						"upgrades": {
+							"heartwood": 1,
+							"keen_edge": 1
+						}
+					},
+					{
+						"coins": 17,
+						"kills": 15,
+						"kit": "nature",
+						"spent": 14,
+						"upgrades": {
+							"deep_roots": 1,
+							"slipstream": 1
+						}
+					}
+				],
+				"seconds": 26,
+				"wave": 2,
+				"won": false
+			},
+			"ticks": 965,
+			"wave": 2
+		},
+		{
+			"boss": "",
+			"health": [
+				120.0,
+				100.0
+			],
+			"observed_health_loss": [
+				0.0,
+				0.0
+			],
+			"summary": {
+				"best_combo": 45,
+				"endless": false,
+				"players": [
+					{
+						"coins": 23,
+						"kills": 22,
+						"kit": "ember",
+						"spent": 23,
+						"upgrades": {
+							"bellows": 1,
+							"heartwood": 1,
+							"keen_edge": 1
+						}
+					},
+					{
+						"coins": 16,
+						"kills": 23,
+						"kit": "nature",
+						"spent": 31,
+						"upgrades": {
+							"deep_roots": 1,
+							"slipstream": 1,
+							"thornline": 1,
+							"wide_arc": 1
+						}
+					}
+				],
+				"seconds": 41,
+				"wave": 3,
+				"won": false
+			},
+			"ticks": 1056,
+			"wave": 3
+		},
+		{
+			"boss": "",
+			"health": [
+				120.0,
+				100.0
+			],
+			"observed_health_loss": [
+				0.0,
+				0.0
+			],
+			"summary": {
+				"best_combo": 66,
+				"endless": false,
+				"players": [
+					{
+						"coins": 25,
+						"kills": 34,
+						"kit": "ember",
+						"spent": 41,
+						"upgrades": {
+							"bellows": 1,
+							"heartwood": 1,
+							"hot_coals": 1,
+							"keen_edge": 1,
+							"wildfire": 1
+						}
+					},
+					{
+						"coins": 18,
+						"kills": 32,
+						"kit": "nature",
+						"spent": 46,
+						"upgrades": {
+							"barbed_guard": 1,
+							"deep_roots": 1,
+							"field_stitch": 1,
+							"slipstream": 1,
+							"thornline": 1,
+							"wide_arc": 1
+						}
+					}
+				],
+				"seconds": 56,
+				"wave": 4,
+				"won": false
+			},
+			"ticks": 1050,
+			"wave": 4
+		},
+		{
+			"boss": "warden",
+			"health": [
+				105.008333333332,
+				100.0
+			],
+			"observed_health_loss": [
+				26.2541666666667,
+				32.0
+			],
+			"summary": {
+				"best_combo": 66,
+				"endless": false,
+				"players": [
+					{
+						"coins": 28,
+						"kills": 39,
+						"kit": "ember",
+						"spent": 65,
+						"upgrades": {
+							"bellows": 1,
+							"field_stitch": 1,
+							"heartwood": 1,
+							"hot_coals": 1,
+							"keen_edge": 1,
+							"wildfire": 2
+						}
+					},
+					{
+						"coins": 18,
+						"kills": 34,
+						"kit": "nature",
+						"spent": 56,
+						"upgrades": {
+							"barbed_guard": 1,
+							"blood_bloom": 1,
+							"deep_roots": 1,
+							"field_stitch": 1,
+							"slipstream": 1,
+							"thornline": 1,
+							"wide_arc": 1
+						}
+					}
+				],
+				"seconds": 66,
+				"wave": 5,
+				"won": false
+			},
+			"ticks": 769,
+			"wave": 5
+		},
+		{
+			"boss": "",
+			"health": [
+				120.0,
+				100.0
+			],
+			"observed_health_loss": [
+				0.0,
+				9.40000000000001
+			],
+			"summary": {
+				"best_combo": 66,
+				"endless": false,
+				"players": [
+					{
+						"coins": 27,
+						"kills": 54,
+						"kit": "ember",
+						"spent": 91,
+						"upgrades": {
+							"bellows": 2,
+							"field_stitch": 1,
+							"heartwood": 1,
+							"hot_coals": 1,
+							"keen_edge": 1,
+							"lucky_thread": 1,
+							"wildfire": 2
+						}
+					},
+					{
+						"coins": 22,
+						"kills": 46,
+						"kit": "nature",
+						"spent": 74,
+						"upgrades": {
+							"barbed_guard": 1,
+							"blood_bloom": 1,
+							"deep_roots": 1,
+							"field_stitch": 1,
+							"green_pulse": 1,
+							"second_wind": 1,
+							"slipstream": 1,
+							"thornline": 1,
+							"wide_arc": 1
+						}
+					}
+				],
+				"seconds": 86,
+				"wave": 6,
+				"won": false
+			},
+			"ticks": 1338,
+			"wave": 6
+		},
+		{
+			"boss": "",
+			"health": [
+				95.0508333333295,
+				100.0
+			],
+			"observed_health_loss": [
+				38.7025,
+				9.68000000000001
+			],
+			"summary": {
+				"best_combo": 66,
+				"endless": false,
+				"players": [
+					{
+						"coins": 45,
+						"kills": 73,
+						"kit": "ember",
+						"spent": 105,
+						"upgrades": {
+							"bellows": 2,
+							"field_stitch": 1,
+							"heartwood": 1,
+							"hot_coals": 1,
+							"keen_edge": 2,
+							"lucky_thread": 1,
+							"wildfire": 2
+						}
+					},
+					{
+						"coins": 26,
+						"kills": 56,
+						"kit": "nature",
+						"spent": 93,
+						"upgrades": {
+							"barbed_guard": 1,
+							"blood_bloom": 1,
+							"deep_roots": 1,
+							"field_stitch": 1,
+							"green_pulse": 1,
+							"keen_edge": 1,
+							"second_wind": 1,
+							"slipstream": 2,
+							"thornline": 1,
+							"wide_arc": 1
+						}
+					}
+				],
+				"seconds": 104,
+				"wave": 7,
+				"won": false
+			},
+			"ticks": 1253,
+			"wave": 7
+		},
+		{
+			"boss": "",
+			"health": [
+				120.0,
+				100.0
+			],
+			"observed_health_loss": [
+				0.0,
+				0.0
+			],
+			"summary": {
+				"best_combo": 92,
+				"endless": false,
+				"players": [
+					{
+						"coins": 36,
+						"kills": 93,
+						"kit": "ember",
+						"spent": 150,
+						"upgrades": {
+							"bellows": 2,
+							"field_stitch": 2,
+							"heartwood": 1,
+							"hot_coals": 1,
+							"keen_edge": 2,
+							"lucky_thread": 1,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 28,
+						"kills": 68,
+						"kit": "nature",
+						"spent": 116,
+						"upgrades": {
+							"barbed_guard": 1,
+							"blood_bloom": 1,
+							"deep_roots": 2,
+							"field_stitch": 1,
+							"green_pulse": 1,
+							"keen_edge": 1,
+							"quick_hands": 1,
+							"second_wind": 1,
+							"slipstream": 2,
+							"thornline": 1,
+							"wide_arc": 1
+						}
+					}
+				],
+				"seconds": 127,
+				"wave": 8,
+				"won": false
+			},
+			"ticks": 1493,
+			"wave": 8
+		},
+		{
+			"boss": "",
+			"health": [
+				120.0,
+				100.0
+			],
+			"observed_health_loss": [
+				0.0,
+				0.0
+			],
+			"summary": {
+				"best_combo": 127,
+				"endless": false,
+				"players": [
+					{
+						"coins": 31,
+						"kills": 108,
+						"kit": "ember",
+						"spent": 186,
+						"upgrades": {
+							"bellows": 2,
+							"field_stitch": 2,
+							"heartwood": 1,
+							"hot_coals": 2,
+							"keen_edge": 2,
+							"lucky_thread": 1,
+							"second_wind": 1,
+							"wide_arc": 1,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 39,
+						"kills": 88,
+						"kit": "nature",
+						"spent": 138,
+						"upgrades": {
+							"barbed_guard": 1,
+							"blood_bloom": 1,
+							"deep_roots": 2,
+							"field_stitch": 1,
+							"green_pulse": 1,
+							"keen_edge": 2,
+							"lucky_thread": 1,
+							"quick_hands": 1,
+							"second_wind": 1,
+							"slipstream": 2,
+							"thornline": 1,
+							"wide_arc": 1
+						}
+					}
+				],
+				"seconds": 147,
+				"wave": 9,
+				"won": false
+			},
+			"ticks": 1357,
+			"wave": 9
+		},
+		{
+			"boss": "artillery",
+			"health": [
+				118.921266666668,
+				120.0
+			],
+			"observed_health_loss": [
+				18.0,
+				28.52
+			],
+			"summary": {
+				"best_combo": 127,
+				"endless": false,
+				"players": [
+					{
+						"coins": 29,
+						"kills": 110,
+						"kit": "ember",
+						"spent": 203,
+						"upgrades": {
+							"bellows": 2,
+							"blood_bloom": 1,
+							"field_stitch": 2,
+							"heartwood": 1,
+							"hot_coals": 2,
+							"keen_edge": 2,
+							"lucky_thread": 1,
+							"quick_hands": 1,
+							"second_wind": 1,
+							"wide_arc": 1,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 36,
+						"kills": 98,
+						"kit": "nature",
+						"spent": 175,
+						"upgrades": {
+							"barbed_guard": 1,
+							"blood_bloom": 1,
+							"deep_roots": 2,
+							"field_stitch": 1,
+							"green_pulse": 1,
+							"heartwood": 1,
+							"keen_edge": 2,
+							"lucky_thread": 1,
+							"quick_hands": 1,
+							"second_wind": 1,
+							"slipstream": 2,
+							"thornline": 2,
+							"twin_stitch": 1,
+							"wide_arc": 1
+						}
+					}
+				],
+				"seconds": 160,
+				"wave": 10,
+				"won": false
+			},
+			"ticks": 937,
+			"wave": 10
+		},
+		{
+			"boss": "",
+			"health": [
+				120.0,
+				120.0
+			],
+			"observed_health_loss": [
+				32.3883333333333,
+				75.3166666666666
+			],
+			"summary": {
+				"best_combo": 127,
+				"endless": false,
+				"players": [
+					{
+						"coins": 65,
+						"kills": 135,
+						"kit": "ember",
+						"spent": 219,
+						"upgrades": {
+							"bellows": 2,
+							"blood_bloom": 1,
+							"field_stitch": 2,
+							"heartwood": 1,
+							"hot_coals": 2,
+							"keen_edge": 2,
+							"lucky_thread": 1,
+							"quick_hands": 1,
+							"second_wind": 1,
+							"wide_arc": 2,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 28,
+						"kills": 114,
+						"kit": "nature",
+						"spent": 211,
+						"upgrades": {
+							"barbed_guard": 1,
+							"blood_bloom": 1,
+							"deep_roots": 2,
+							"field_stitch": 2,
+							"green_pulse": 2,
+							"heartwood": 1,
+							"keen_edge": 2,
+							"lucky_thread": 1,
+							"quick_hands": 1,
+							"second_wind": 1,
+							"slipstream": 2,
+							"thornline": 2,
+							"twin_stitch": 1,
+							"wide_arc": 1
+						}
+					}
+				],
+				"seconds": 182,
+				"wave": 11,
+				"won": false
+			},
+			"ticks": 1461,
+			"wave": 11
+		},
+		{
+			"boss": "",
+			"health": [
+				98.6238066666704,
+				118.834160000002
+			],
+			"observed_health_loss": [
+				88.57,
+				99.4366666666666
+			],
+			"summary": {
+				"best_combo": 127,
+				"endless": false,
+				"players": [
+					{
+						"coins": 72,
+						"kills": 162,
+						"kit": "ember",
+						"spent": 266,
+						"upgrades": {
+							"bellows": 3,
+							"blood_bloom": 1,
+							"field_stitch": 2,
+							"heartwood": 1,
+							"hot_coals": 2,
+							"keen_edge": 2,
+							"lucky_thread": 1,
+							"quick_hands": 2,
+							"second_wind": 1,
+							"slipstream": 1,
+							"wide_arc": 2,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 33,
+						"kills": 131,
+						"kit": "nature",
+						"spent": 235,
+						"upgrades": {
+							"barbed_guard": 1,
+							"blood_bloom": 1,
+							"deep_roots": 3,
+							"field_stitch": 2,
+							"green_pulse": 2,
+							"heartwood": 1,
+							"keen_edge": 2,
+							"lucky_thread": 1,
+							"quick_hands": 1,
+							"second_wind": 1,
+							"slipstream": 2,
+							"thornline": 2,
+							"twin_stitch": 1,
+							"wide_arc": 1
+						}
+					}
+				],
+				"seconds": 208,
+				"wave": 12,
+				"won": false
+			},
+			"ticks": 1719,
+			"wave": 12
+		},
+		{
+			"boss": "",
+			"health": [
+				140.0,
+				120.0
+			],
+			"observed_health_loss": [
+				68.1250000000001,
+				22.6633333333333
+			],
+			"summary": {
+				"best_combo": 127,
+				"endless": false,
+				"players": [
+					{
+						"coins": 72,
+						"kills": 195,
+						"kit": "ember",
+						"spent": 326,
+						"upgrades": {
+							"bellows": 3,
+							"blood_bloom": 1,
+							"field_stitch": 2,
+							"heartwood": 2,
+							"hot_coals": 3,
+							"keen_edge": 2,
+							"lucky_thread": 1,
+							"quick_hands": 2,
+							"second_wind": 2,
+							"slipstream": 1,
+							"wide_arc": 2,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 38,
+						"kills": 145,
+						"kit": "nature",
+						"spent": 256,
+						"upgrades": {
+							"barbed_guard": 1,
+							"blood_bloom": 1,
+							"deep_roots": 3,
+							"field_stitch": 2,
+							"green_pulse": 2,
+							"heartwood": 1,
+							"keen_edge": 3,
+							"lucky_thread": 1,
+							"quick_hands": 1,
+							"second_wind": 1,
+							"slipstream": 2,
+							"thornline": 2,
+							"twin_stitch": 1,
+							"wide_arc": 1
+						}
+					}
+				],
+				"seconds": 231,
+				"wave": 13,
+				"won": false
+			},
+			"ticks": 1503,
+			"wave": 13
+		},
+		{
+			"boss": "",
+			"health": [
+				140.0,
+				120.0
+			],
+			"observed_health_loss": [
+				29.1,
+				0.0
+			],
+			"summary": {
+				"best_combo": 127,
+				"endless": false,
+				"players": [
+					{
+						"coins": 96,
+						"kills": 225,
+						"kit": "ember",
+						"spent": 359,
+						"upgrades": {
+							"bellows": 3,
+							"blood_bloom": 1,
+							"field_stitch": 2,
+							"heartwood": 2,
+							"hot_coals": 3,
+							"keen_edge": 2,
+							"lucky_thread": 1,
+							"quick_hands": 3,
+							"second_wind": 2,
+							"slipstream": 2,
+							"wide_arc": 2,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 41,
+						"kills": 165,
+						"kit": "nature",
+						"spent": 288,
+						"upgrades": {
+							"barbed_guard": 1,
+							"blood_bloom": 1,
+							"deep_roots": 3,
+							"field_stitch": 2,
+							"green_pulse": 2,
+							"heartwood": 1,
+							"keen_edge": 3,
+							"lucky_thread": 1,
+							"quick_hands": 1,
+							"second_wind": 2,
+							"slipstream": 2,
+							"thornline": 2,
+							"twin_stitch": 1,
+							"wide_arc": 2
+						}
+					}
+				],
+				"seconds": 250,
+				"wave": 14,
+				"won": false
+			},
+			"ticks": 1338,
+			"wave": 14
+		},
+		{
+			"boss": "tempest",
+			"health": [
+				160.0,
+				120.0
+			],
+			"observed_health_loss": [
+				20.0,
+				51.8066666666667
+			],
+			"summary": {
+				"best_combo": 127,
+				"endless": false,
+				"players": [
+					{
+						"coins": 76,
+						"kills": 232,
+						"kit": "ember",
+						"spent": 398,
+						"upgrades": {
+							"bellows": 3,
+							"blood_bloom": 1,
+							"field_stitch": 2,
+							"heartwood": 3,
+							"hot_coals": 3,
+							"keen_edge": 2,
+							"lucky_thread": 1,
+							"quick_hands": 3,
+							"second_wind": 2,
+							"slipstream": 3,
+							"wide_arc": 2,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 41,
+						"kills": 174,
+						"kit": "nature",
+						"spent": 326,
+						"upgrades": {
+							"barbed_guard": 1,
+							"blood_bloom": 1,
+							"deep_roots": 3,
+							"field_stitch": 2,
+							"green_pulse": 2,
+							"heartwood": 1,
+							"keen_edge": 3,
+							"lucky_thread": 1,
+							"quick_hands": 2,
+							"second_wind": 2,
+							"slipstream": 2,
+							"thornline": 2,
+							"twin_stitch": 2,
+							"wide_arc": 2
+						}
+					}
+				],
+				"seconds": 262,
+				"wave": 15,
+				"won": false
+			},
+			"ticks": 833,
+			"wave": 15
+		},
+		{
+			"boss": "",
+			"health": [
+				160.0,
+				120.0
+			],
+			"observed_health_loss": [
+				60.9766666666666,
+				61.0
+			],
+			"summary": {
+				"best_combo": 127,
+				"endless": false,
+				"players": [
+					{
+						"coins": 118,
+						"kills": 267,
+						"kit": "ember",
+						"spent": 420,
+						"upgrades": {
+							"bellows": 3,
+							"blood_bloom": 1,
+							"field_stitch": 2,
+							"heartwood": 3,
+							"hot_coals": 3,
+							"keen_edge": 2,
+							"light_feet": 1,
+							"lucky_thread": 2,
+							"quick_hands": 3,
+							"second_wind": 2,
+							"slipstream": 3,
+							"wide_arc": 2,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 58,
+						"kills": 195,
+						"kit": "nature",
+						"spent": 356,
+						"upgrades": {
+							"barbed_guard": 1,
+							"blood_bloom": 1,
+							"deep_roots": 3,
+							"field_stitch": 2,
+							"green_pulse": 3,
+							"heartwood": 1,
+							"keen_edge": 3,
+							"lucky_thread": 1,
+							"quick_hands": 2,
+							"second_wind": 2,
+							"slipstream": 2,
+							"thornline": 2,
+							"twin_stitch": 2,
+							"wide_arc": 2
+						}
+					}
+				],
+				"seconds": 287,
+				"wave": 16,
+				"won": false
+			},
+			"ticks": 1654,
+			"wave": 16
+		},
+		{
+			"boss": "",
+			"health": [
+				160.0,
+				120.0
+			],
+			"observed_health_loss": [
+				103.662212500006,
+				124.466666666667
+			],
+			"summary": {
+				"best_combo": 127,
+				"endless": false,
+				"players": [
+					{
+						"coins": 142,
+						"kills": 307,
+						"kit": "ember",
+						"spent": 468,
+						"upgrades": {
+							"bellows": 3,
+							"blood_bloom": 1,
+							"field_stitch": 3,
+							"heartwood": 3,
+							"hot_coals": 3,
+							"keen_edge": 2,
+							"light_feet": 1,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 2,
+							"slipstream": 3,
+							"wide_arc": 2,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 54,
+						"kills": 213,
+						"kit": "nature",
+						"spent": 401,
+						"upgrades": {
+							"barbed_guard": 1,
+							"blood_bloom": 1,
+							"deep_roots": 3,
+							"field_stitch": 2,
+							"green_pulse": 3,
+							"heartwood": 1,
+							"keen_edge": 3,
+							"lucky_thread": 1,
+							"quick_hands": 3,
+							"second_wind": 2,
+							"slipstream": 2,
+							"thornline": 2,
+							"twin_stitch": 2,
+							"wide_arc": 3
+						}
+					}
+				],
+				"seconds": 312,
+				"wave": 17,
+				"won": false
+			},
+			"ticks": 1637,
+			"wave": 17
+		},
+		{
+			"boss": "",
+			"health": [
+				160.0,
+				140.0
+			],
+			"observed_health_loss": [
+				102.01,
+				47.85
+			],
+			"summary": {
+				"best_combo": 173,
+				"endless": false,
+				"players": [
+					{
+						"coins": 164,
+						"kills": 341,
+						"kit": "ember",
+						"spent": 509,
+						"upgrades": {
+							"bellows": 3,
+							"blood_bloom": 2,
+							"field_stitch": 3,
+							"heartwood": 3,
+							"hot_coals": 3,
+							"keen_edge": 3,
+							"light_feet": 1,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 2,
+							"slipstream": 3,
+							"wide_arc": 2,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 72,
+						"kills": 240,
+						"kit": "nature",
+						"spent": 439,
+						"upgrades": {
+							"barbed_guard": 1,
+							"blood_bloom": 1,
+							"deep_roots": 3,
+							"field_stitch": 2,
+							"green_pulse": 3,
+							"heartwood": 2,
+							"keen_edge": 3,
+							"lucky_thread": 1,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 2,
+							"thornline": 2,
+							"twin_stitch": 2,
+							"wide_arc": 3
+						}
+					}
+				],
+				"seconds": 337,
+				"wave": 18,
+				"won": false
+			},
+			"ticks": 1697,
+			"wave": 18
+		},
+		{
+			"boss": "",
+			"health": [
+				160.0,
+				140.0
+			],
+			"observed_health_loss": [
+				78.24,
+				26.08
+			],
+			"summary": {
+				"best_combo": 173,
+				"endless": false,
+				"players": [
+					{
+						"coins": 209,
+						"kills": 381,
+						"kit": "ember",
+						"spent": 545,
+						"upgrades": {
+							"bellows": 3,
+							"blood_bloom": 2,
+							"field_stitch": 3,
+							"heartwood": 3,
+							"hot_coals": 3,
+							"keen_edge": 3,
+							"light_feet": 2,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 3,
+							"wide_arc": 2,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 50,
+						"kills": 264,
+						"kit": "nature",
+						"spent": 502,
+						"upgrades": {
+							"barbed_guard": 1,
+							"blood_bloom": 1,
+							"deep_roots": 3,
+							"field_stitch": 2,
+							"green_pulse": 3,
+							"heartwood": 2,
+							"keen_edge": 3,
+							"lucky_thread": 1,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 2,
+							"thornline": 3,
+							"twin_stitch": 3,
+							"wide_arc": 3
+						}
+					}
+				],
+				"seconds": 361,
+				"wave": 19,
+				"won": false
+			},
+			"ticks": 1585,
+			"wave": 19
+		},
+		{
+			"boss": "loom",
+			"health": [
+				86.0963000000026,
+				140.0
+			],
+			"observed_health_loss": [
+				128.715,
+				70.59
+			],
+			"summary": {
+				"best_combo": 173,
+				"endless": false,
+				"players": [
+					{
+						"coins": 186,
+						"kills": 386,
+						"kit": "ember",
+						"spent": 587,
+						"upgrades": {
+							"bellows": 3,
+							"blood_bloom": 2,
+							"field_stitch": 3,
+							"heartwood": 3,
+							"hot_coals": 3,
+							"keen_edge": 3,
+							"light_feet": 3,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 3,
+							"wide_arc": 3,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 66,
+						"kills": 279,
+						"kit": "nature",
+						"spent": 538,
+						"upgrades": {
+							"barbed_guard": 1,
+							"blood_bloom": 2,
+							"deep_roots": 3,
+							"field_stitch": 2,
+							"green_pulse": 3,
+							"heartwood": 2,
+							"keen_edge": 3,
+							"lucky_thread": 2,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 2,
+							"thornline": 3,
+							"twin_stitch": 3,
+							"wide_arc": 3
+						}
+					}
+				],
+				"seconds": 380,
+				"wave": 20,
+				"won": false
+			},
+			"ticks": 1287,
+			"wave": 20
+		},
+		{
+			"boss": "",
+			"health": [
+				160.0,
+				160.0
+			],
+			"observed_health_loss": [
+				0.0,
+				0.0
+			],
+			"summary": {
+				"best_combo": 173,
+				"endless": true,
+				"players": [
+					{
+						"coins": 166,
+						"kills": 392,
+						"kit": "ember",
+						"spent": 629,
+						"upgrades": {
+							"barbed_guard": 1,
+							"bellows": 3,
+							"blood_bloom": 3,
+							"field_stitch": 3,
+							"heartwood": 3,
+							"hot_coals": 3,
+							"keen_edge": 3,
+							"light_feet": 3,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 3,
+							"wide_arc": 3,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 65,
+						"kills": 289,
+						"kit": "nature",
+						"spent": 565,
+						"upgrades": {
+							"barbed_guard": 1,
+							"blood_bloom": 2,
+							"deep_roots": 3,
+							"field_stitch": 2,
+							"green_pulse": 3,
+							"heartwood": 3,
+							"keen_edge": 3,
+							"light_feet": 1,
+							"lucky_thread": 2,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 2,
+							"thornline": 3,
+							"twin_stitch": 3,
+							"wide_arc": 3
+						}
+					}
+				],
+				"seconds": 393,
+				"wave": 21,
+				"won": false
+			},
+			"ticks": 929,
+			"wave": 21
+		},
+		{
+			"boss": "",
+			"health": [
+				160.0,
+				160.0
+			],
+			"observed_health_loss": [
+				0.0,
+				0.0
+			],
+			"summary": {
+				"best_combo": 173,
+				"endless": true,
+				"players": [
+					{
+						"coins": 175,
+						"kills": 399,
+						"kit": "ember",
+						"spent": 643,
+						"upgrades": {
+							"barbed_guard": 2,
+							"bellows": 3,
+							"blood_bloom": 3,
+							"field_stitch": 3,
+							"heartwood": 3,
+							"hot_coals": 3,
+							"keen_edge": 3,
+							"light_feet": 3,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 3,
+							"wide_arc": 3,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 55,
+						"kills": 301,
+						"kit": "nature",
+						"spent": 603,
+						"upgrades": {
+							"barbed_guard": 2,
+							"blood_bloom": 2,
+							"deep_roots": 3,
+							"field_stitch": 2,
+							"green_pulse": 3,
+							"heartwood": 3,
+							"keen_edge": 3,
+							"light_feet": 1,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 2,
+							"thornline": 3,
+							"twin_stitch": 3,
+							"wide_arc": 3
+						}
+					}
+				],
+				"seconds": 408,
+				"wave": 22,
+				"won": false
+			},
+			"ticks": 1027,
+			"wave": 22
+		},
+		{
+			"boss": "",
+			"health": [
+				160.0,
+				160.0
+			],
+			"observed_health_loss": [
+				0.0,
+				0.0
+			],
+			"summary": {
+				"best_combo": 173,
+				"endless": true,
+				"players": [
+					{
+						"coins": 181,
+						"kills": 410,
+						"kit": "ember",
+						"spent": 664,
+						"upgrades": {
+							"barbed_guard": 3,
+							"bellows": 3,
+							"blood_bloom": 3,
+							"field_stitch": 3,
+							"heartwood": 3,
+							"hot_coals": 3,
+							"keen_edge": 3,
+							"light_feet": 3,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 3,
+							"wide_arc": 3,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 41,
+						"kills": 313,
+						"kit": "nature",
+						"spent": 645,
+						"upgrades": {
+							"barbed_guard": 2,
+							"blood_bloom": 2,
+							"deep_roots": 3,
+							"field_stitch": 3,
+							"green_pulse": 3,
+							"heartwood": 3,
+							"keen_edge": 3,
+							"light_feet": 1,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 3,
+							"thornline": 3,
+							"twin_stitch": 3,
+							"wide_arc": 3
+						}
+					}
+				],
+				"seconds": 424,
+				"wave": 23,
+				"won": false
+			},
+			"ticks": 1093,
+			"wave": 23
+		},
+		{
+			"boss": "",
+			"health": [
+				160.0,
+				160.0
+			],
+			"observed_health_loss": [
+				0.0,
+				0.0
+			],
+			"summary": {
+				"best_combo": 173,
+				"endless": true,
+				"players": [
+					{
+						"coins": 212,
+						"kills": 425,
+						"kit": "ember",
+						"spent": 664,
+						"upgrades": {
+							"barbed_guard": 3,
+							"bellows": 3,
+							"blood_bloom": 3,
+							"field_stitch": 3,
+							"heartwood": 3,
+							"hot_coals": 3,
+							"keen_edge": 3,
+							"light_feet": 3,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 3,
+							"wide_arc": 3,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 39,
+						"kills": 325,
+						"kit": "nature",
+						"spent": 675,
+						"upgrades": {
+							"barbed_guard": 2,
+							"blood_bloom": 3,
+							"deep_roots": 3,
+							"field_stitch": 3,
+							"green_pulse": 3,
+							"heartwood": 3,
+							"keen_edge": 3,
+							"light_feet": 1,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 3,
+							"thornline": 3,
+							"twin_stitch": 3,
+							"wide_arc": 3
+						}
+					}
+				],
+				"seconds": 443,
+				"wave": 24,
+				"won": false
+			},
+			"ticks": 1277,
+			"wave": 24
+		},
+		{
+			"boss": "warden",
+			"health": [
+				160.0,
+				160.0
+			],
+			"observed_health_loss": [
+				0.0,
+				24.0
+			],
+			"summary": {
+				"best_combo": 173,
+				"endless": true,
+				"players": [
+					{
+						"coins": 231,
+						"kills": 428,
+						"kit": "ember",
+						"spent": 664,
+						"upgrades": {
+							"barbed_guard": 3,
+							"bellows": 3,
+							"blood_bloom": 3,
+							"field_stitch": 3,
+							"heartwood": 3,
+							"hot_coals": 3,
+							"keen_edge": 3,
+							"light_feet": 3,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 3,
+							"wide_arc": 3,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 42,
+						"kills": 331,
+						"kit": "nature",
+						"spent": 708,
+						"upgrades": {
+							"barbed_guard": 3,
+							"blood_bloom": 3,
+							"deep_roots": 3,
+							"field_stitch": 3,
+							"green_pulse": 3,
+							"heartwood": 3,
+							"keen_edge": 3,
+							"light_feet": 2,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 3,
+							"thornline": 3,
+							"twin_stitch": 3,
+							"wide_arc": 3
+						}
+					}
+				],
+				"seconds": 451,
+				"wave": 25,
+				"won": false
+			},
+			"ticks": 628,
+			"wave": 25
+		}
+	]
+}

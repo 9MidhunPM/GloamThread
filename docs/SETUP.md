@@ -1,5 +1,7 @@
 # Setup and validation
 
+> Current arena setup and commands are in [README](../README.md) and [the Linux guide](ARENA_DEMO.md). The campaign-specific notes below are historical.
+
 Version 2.0 · verified sources on 24 October 2026. These instructions prepare the user's machine; no system packages have been installed by this starter pack.
 
 ## 1. Minimal Arch Linux installation

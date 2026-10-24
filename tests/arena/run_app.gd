@@ -7,6 +7,8 @@ func run() -> void:
 	await ticks(2)
 	assert_eq(app.screen, "title", "actual new App starts on arena title")
 	assert_true(app.font != null and app.bundles.size() >= 2, "original font and fighters loaded")
+	if not app.library.default_players.is_empty():
+		assert_eq(app.selected[0].id, app.library.default_players[0], "first launch selects the reviewed generated starter from data")
 	app._show_lobby(1)
 	assert_eq(app.roster_size, 1, "solo choice fixes roster")
 	app._begin_run()

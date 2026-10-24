@@ -1,5 +1,12 @@
 # Change log
 
+### 2026-10-25T04:18:53+05:30 — Ship generated artwork and recover cached layouts in game
+
+- Integrated the reviewed real Kiln Fox as default P1, retained its editable sources/receipts and used all generated material panels. Added six directional special effects and kept fighters/projectiles visible in dense crowds.
+- Added the native raw-board crop editor and fresh local correction drafts. Confined Tab/Shift-Tab focus to the crop modal and corrected integer JSON serialization across Godot/Python; cached conversion, masks and pivots remain offline and preserve previous candidates. Updated export exclusions and current launch/agent guidance.
+- Validation: Godot 4.7.2 import; 12 arena scenarios; 154 creator assertions; 173 Python tests; both content validators pass. Generated-default solo clears 20 waves in 24,084 ticks with no overrides/errors. Real correction UI → Python → preview → acceptance passes in a network namespace with unchanged ledger. Final native 1080p controlled crowd: 32 enemies/67 projectiles, p95 11.779 ms offscreen frame interval. Retained actual captures and source hashes.
+- Live generation: one successful Luna analysis and two successful mini images after a denied attempt. Explicit crops corrected the nonconforming board without more requests; $0.35 conservative reservation retained within the shared $0.50 cap, not a billing receipt. Physical controllers, listening, human balance/clear time and final packaged-revision checks remain separate gates.
+
 ### 2026-10-25T03:39:54+05:30 — Reduce crowd overhead and verify the exported wave route
 
 - Retained projectile/enemy draw commands between visual changes, removed avoidable sweep/target allocations, and throttled HUD text updates while using cached fighter stats. Preserved terrain-first swept hit order and combat rules. Added the dedicated arena QA export entry point; fixed shop clipping/contrast and added a shared boss bar.
