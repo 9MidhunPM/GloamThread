@@ -12,6 +12,13 @@ var camera_a: FollowCamera
 var camera_b: FollowCamera
 var hud_a: Label
 var hud_b: Label
+var _catalog: AssetCatalog
+var _background_a: CanvasLayer
+var _background_b: CanvasLayer
+var _objective_a: Label
+var _objective_b: Label
+var _hearts_a: Array[TextureRect] = []
+var _hearts_b: Array[TextureRect] = []
 
 
 func _ready() -> void:
@@ -37,6 +44,8 @@ func _ready() -> void:
 	viewport_b.add_child(camera_b)
 	hud_a = _make_hud(8)
 	hud_b = _make_hud(488)
+	_objective_a = _make_objective(8)
+	_objective_b = _make_objective(488)
 	var divider := ColorRect.new()
 	divider.name = "Divider"
 	divider.position = Vector2(479, 0)
@@ -74,11 +83,56 @@ func _world_branch(branch_name: String) -> Node2D:
 
 func _make_hud(x: int) -> Label:
 	var label := Label.new()
-	label.position = Vector2(x, 6)
-	label.add_theme_font_size_override("font_size", 12)
+	label.position = Vector2(x, 25)
+	label.size = Vector2(460, 34)
+	label.add_theme_font_size_override("font_size", 8)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(label)
 	return label
+
+
+func _make_objective(x: int) -> Label:
+	var label := _make_hud(x)
+	label.position.y = 330
+	label.size.y = 28
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	return label
+
+
+func set_themes(catalog: AssetCatalog, theme_a: String, theme_b: String) -> void:
+	_catalog = catalog
+	viewport_a.canvas_cull_mask = 1 | (2 if theme_a == "ember" else 4)
+	viewport_b.canvas_cull_mask = 1 | (2 if theme_b == "ember" else 4)
+	if is_instance_valid(_background_a):
+		_background_a.free()
+	if is_instance_valid(_background_b):
+		_background_b.free()
+	_background_a = ThemePresenter.build_background(catalog, theme_a)
+	_background_b = ThemePresenter.build_background(catalog, theme_b)
+	viewport_a.add_child(_background_a)
+	viewport_b.add_child(_background_b)
+	for label in [hud_a, hud_b, _objective_a, _objective_b]:
+		label.add_theme_font_override("font", catalog.font())
+	if _hearts_a.is_empty():
+		for index in 6:
+			_hearts_a.append(_make_heart(8 + index * 18))
+			_hearts_b.append(_make_heart(488 + index * 18))
+
+
+func _make_heart(x: int) -> TextureRect:
+	var icon := TextureRect.new()
+	icon.position = Vector2(x, 6)
+	icon.size = Vector2(16, 16)
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(icon)
+	return icon
+
+
+func _physics_process(_delta: float) -> void:
+	if _catalog != null and is_instance_valid(_background_a) and is_instance_valid(camera_a.target):
+		ThemePresenter.update_background(_background_a, camera_a.position, camera_a.room_bounds)
+		ThemePresenter.update_background(_background_b, camera_b.position, camera_b.room_bounds)
 
 
 func follow_players(players: Array[PlayerController], bounds: Rect2) -> void:
@@ -86,11 +140,24 @@ func follow_players(players: Array[PlayerController], bounds: Rect2) -> void:
 	camera_b.configure(players[1], bounds)
 
 
-func update_hud(players: Array[PlayerController]) -> void:
+func update_hud(players: Array[PlayerController], objective_text: String = "", hint: String = "", boss_actor: CombatEnemy = null) -> void:
 	if players.size() != 2:
 		return
 	for index in 2:
 		var source: DeviceSource = InputRouter.source_of(index)
-		var device_name: String = source.display_name() if source != null else "Unassigned"
+		var device_name: String = source.short_label() if source != null else "Unassigned"
 		var label: Label = hud_a if index == 0 else hud_b
-		label.text = "P%d %s | %s\nx %d y %d" % [index + 1, players[index].profile_id, device_name, players[index].position.x, players[index].position.y]
+		var player := players[index]
+		var name_text := "Tavi" if player.profile_id == "tavi_fixed" else "Neri"
+		var readiness := "Special ready" if player.special_cooldown_ticks == 0 else "Special %.1fs" % (player.special_cooldown_ticks / 60.0)
+		if player.downed:
+			readiness = "Downed %.1fs | Revive %d%%" % [maxf(0, 720 - player.downed_ticks) / 60.0, player.revive_progress_ticks * 100 / 90]
+		label.text = "P%d %s | %s | %s" % [index + 1, name_text, device_name, readiness]
+		if is_instance_valid(boss_actor):
+			label.text += "\nSpoolwarden %d/%d" % [boss_actor.health, boss_actor.max_health]
+		var objective_label: Label = _objective_a if index == 0 else _objective_b
+		objective_label.text = hint if not hint.is_empty() else objective_text
+		var hearts: Array[TextureRect] = _hearts_a if index == 0 else _hearts_b
+		for heart_index in hearts.size():
+			hearts[heart_index].visible = heart_index < player.max_hearts
+			hearts[heart_index].texture = _catalog.frame_texture("ui_v1", 0 if heart_index < player.hearts else 1)

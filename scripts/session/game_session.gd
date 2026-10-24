@@ -1,108 +1,484 @@
 class_name GameSession
 extends Node
-## Session ownership, including pause, stays above the pausable world subtree.
+## The only owner of campaign transactions, room changes and recovery.
+
+signal mode_changed(mode: String, owner_slot: int)
+signal notice(message: String)
+signal room_changed(room_id: String)
 
 const PLAYER_SCENE := preload("res://scenes/actors/player.tscn")
+const Action := CommandSnapshot.Action
+const DOWNED_TICKS := 720
+const REVIVE_TICKS := 90
 
 @export var room_path: String = "res://content/rooms/r00.json"
-## Only engine scenarios opt in; normal startup never substitutes test content.
 var fixture_mode: bool = false
+var catalog: ContentCatalog
+var progress: TeamProgress
+var save_repository: SaveRepository
+var continue_at_checkpoint: bool = false
 var presentation: SplitPresentation
 var room: Room
 var players: Array[PlayerController] = []
+var enemies: Array[CombatEnemy] = []
 var mover: DiagnosticMover
 var startup_error: String = ""
+var last_save_error: String = ""
 var session_ready: bool = false
+var mode: String = "playing"
+var owner_slot: int = 0
+var dialogue_id: String = ""
+var current_room_id: String = "r00"
+var transition_count: int = 0
+var recovery_count: int = 0
 var pause_overlay: CanvasLayer
+var interaction_hint: String = ""
+var reduced_flash: bool = false
+var reduced_shake: bool = false
+
+var _transaction_pending: bool = false
+var _latches: Dictionary = {}
+var _damaged_slots: Dictionary = {}
+var _hazards: Array[Rect2] = []
+var _ending_presented: bool = false
+var _focus_pause_enabled: bool = true
+
+
+func configure(bundle: ContentCatalog, team: TeamProgress, saves: SaveRepository = null, continuing: bool = false) -> void:
+	catalog = bundle
+	progress = team
+	save_repository = saves
+	continue_at_checkpoint = continuing
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	process_physics_priority = 100
 	presentation = $Presentation as SplitPresentation
-	var definition := RoomDefinition.load_from_path(room_path)
-	if not definition.is_valid():
-		startup_error = "\n".join(definition.errors)
+	if progress == null:
+		progress = TeamProgress.new()
+	if not fixture_mode and catalog == null:
+		catalog = ContentCatalog.load_bundle()
+	if not fixture_mode and not catalog.errors.is_empty():
+		startup_error = "\n".join(catalog.errors)
 		return
-	var textures: Array[Texture2D] = []
-	if not fixture_mode:
-		var catalog := AssetCatalog.load_from_path("res://assets/manifest.json")
-		if catalog.errors.is_empty():
-			textures.append(catalog.frame_texture("fixed_tavi_v1"))
-			textures.append(catalog.frame_texture("fixed_neri_v1"))
-		if not catalog.errors.is_empty():
-			startup_error = "\n".join(catalog.errors)
-			return
-		if not FileAccess.file_exists(GrayboxSkin.DIAG_TILES):
-			startup_error = "Diagnostic terrain is missing"
-			return
-	room = Room.build(definition, not fixture_mode)
-	presentation.room_slot.add_child(room)
-	var positions := definition.spawn_positions("start")
+	if not fixture_mode and not AudioDirector.register_bundle(catalog.assets):
+		startup_error = "Audio data could not load."
+		return
+	var initial_room := "r00"
+	var initial_entrance := "start"
+	if continue_at_checkpoint and not fixture_mode:
+		initial_room = str(catalog.world.checkpoints[progress.checkpoint_id])
+		initial_entrance = progress.checkpoint_id
+	if not _load_room(initial_room, initial_entrance, true):
+		return
+	InputRouter.device_lost.connect(_on_device_lost)
+	session_ready = true
+	request_mode("playing", 0)
+
+
+func _physics_process(_delta: float) -> void:
+	if not session_ready or _transaction_pending:
+		return
+	if mode == "playing":
+		var pause_owner := InputRouter.who_just_pressed(Action.PAUSE)
+		var map_owner := InputRouter.who_just_pressed(Action.MAP)
+		if pause_owner >= 0:
+			request_mode("pause", pause_owner)
+		elif map_owner >= 0:
+			request_mode("map", map_owner)
+	if mode != "playing" or get_tree().paused:
+		return
+	_process_hazards()
+	_process_revival()
+	if _transaction_pending:
+		return
+	_process_interactions()
+	_damaged_slots.clear()
+	presentation.update_hud(players, objective(), interaction_hint, boss())
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and session_ready and _focus_pause_enabled and mode == "playing":
+		request_mode("pause", owner_slot)
+
+
+func request_mode(value: String, requester: int = 0) -> void:
+	if value not in ["playing", "pause", "map", "dialogue", "reconnect", "ending", "transition", "recovery", "settings"]:
+		return
+	mode = value
+	owner_slot = clampi(requester, 0, 1)
+	get_tree().paused = value != "playing"
+	InputRouter.flush()
+	mode_changed.emit(mode, owner_slot)
+
+
+func set_paused(value: bool) -> void:
+	request_mode("pause" if value else "playing", owner_slot)
+
+
+func _on_device_lost(slot: int, _source: DeviceSource) -> void:
+	if session_ready:
+		request_mode("reconnect", 1 - slot)
+
+
+func _load_room(room_id: String, entrance: String, restore_health: bool) -> bool:
+	var definition: RoomDefinition
+	if fixture_mode:
+		definition = RoomDefinition.load_from_path(room_path)
+	else:
+		definition = catalog.room(room_id)
+	if definition == null or not definition.is_valid():
+		startup_error = "Room data could not load: %s" % room_id
+		return false
+	var positions := definition.spawn_positions(entrance)
 	if positions.size() != 2:
-		startup_error = "The start entrance must contain two safe spawns"
-		return
+		startup_error = "Missing paired room entrance: %s/%s" % [room_id, entrance]
+		return false
+	var next_room := Room.build(definition, not fixture_mode, catalog.assets if catalog != null else null, progress.flags)
+	_clear_encounter()
+	if is_instance_valid(room):
+		room.free()
+	room = next_room
+	presentation.room_slot.add_child(room)
+	current_room_id = definition.id
+	_latches.clear()
+	_hazards.clear()
+	for y in definition.height:
+		for x in definition.width:
+			if definition.is_hazard(Vector2i(x, y)):
+				_hazards.append(Rect2(x * 16, y * 16, 16, 16))
+	if players.is_empty():
+		for index in 2:
+			var player := PLAYER_SCENE.instantiate() as PlayerController
+			player.name = "Courier%d" % (index + 1)
+			player.slot_index = index
+			var profile: Dictionary = {"id": progress.profile_ids[index], "max_hearts": 5 if index == 0 else 4,
+				"special_id": "ember_arc" if index == 0 else "spore_bolt"}
+			if catalog != null:
+				profile = catalog.profiles[progress.profile_ids[index]]
+			player.configure(profile, catalog.assets if catalog != null else null, progress)
+			player.position = positions[index]
+			player.room_bounds = room.bounds()
+			player.reduced_flash = reduced_flash
+			player.damage_received.connect(_on_player_damage)
+			presentation.actors.add_child(player)
+			players.append(player)
 	for index in 2:
-		var player := PLAYER_SCENE.instantiate() as PlayerController
-		player.name = "Tavi" if index == 0 else "Neri"
-		player.slot_index = index
-		player.profile_id = "tavi_fixed" if index == 0 else "neri_fixed"
-		if not fixture_mode:
-			player.sprite_texture = textures[index]
-		player.position = positions[index]
-		presentation.actors.add_child(player)
-		players.append(player)
+		players[index].room_bounds = room.bounds()
+		if restore_health:
+			players[index].restore(positions[index])
+		else:
+			players[index].reset_at(positions[index])
 	for entity: Dictionary in definition.entities:
-		if entity.get("type") == "diagnostic_mover":
-			if mover != null:
-				startup_error = "The tracer accepts exactly one diagnostic mover"
-				return
+		var type := str(entity.type)
+		if type in ["spoolmite", "wickwing", "spoolwarden"]:
+			if type == "spoolwarden" and progress.has_flag("boss_spoolwarden"):
+				continue
+			var enemy := CombatEnemy.new()
+			enemy.name = str(entity.id)
+			enemy.position = _feet(entity.tile)
+			enemy.configure(type, players, catalog.assets if catalog != null else null, room.bounds())
+			enemy.defeated.connect(_on_enemy_defeated)
+			presentation.actors.add_child(enemy)
+			enemies.append(enemy)
+		elif type == "diagnostic_mover":
 			mover = DiagnosticMover.new()
-			mover.name = str(entity["id"])
-			mover.origin_position = RoomDefinition.feet_position(Vector2i(entity["tile"][0], entity["tile"][1]))
+			mover.name = str(entity.id)
+			mover.origin_position = _feet(entity.tile)
 			mover.position = mover.origin_position
-			mover.range_pixels = float(entity.get("range_tiles", 6)) * RoomDefinition.TILE
+			mover.range_pixels = float(entity.get("range_tiles", 6)) * 16.0
 			if not fixture_mode:
 				mover.sprite_texture = load("res://assets/generated/diagnostic/mover_diag.png") as Texture2D
 			presentation.actors.add_child(mover)
 	presentation.follow_players(players, room.bounds())
-	_make_pause_overlay()
-	session_ready = true
+	if catalog != null:
+		presentation.set_themes(catalog.assets, str(catalog.profiles[progress.profile_ids[0]].theme_id), str(catalog.profiles[progress.profile_ids[1]].theme_id))
+	progress.visit(room_id)
+	AudioDirector.play_music("ending" if progress.has_flag("loom_restored") else ("boss" if room_id == "r05" and not progress.has_flag("boss_spoolwarden") else "exploration"))
+	_apply_charms()
+	room_changed.emit(room_id)
+	return true
 
 
-func _physics_process(_delta: float) -> void:
-	if not session_ready:
+func _clear_encounter() -> void:
+	for enemy in enemies:
+		if is_instance_valid(enemy):
+			enemy.free()
+	enemies.clear()
+	if is_instance_valid(mover):
+		mover.free()
+	mover = null
+	for node in get_tree().get_nodes_in_group("combat_transients"):
+		if is_ancestor_of(node):
+			node.free()
+	_damaged_slots.clear()
+
+
+func _on_player_damage(player: PlayerController) -> void:
+	_damaged_slots[player.slot_index] = true
+
+
+func _process_hazards() -> void:
+	for player in players:
+		if player.downed:
+			continue
+		var body := Rect2(player.global_position + Vector2(-6, -24), Vector2(12, 24))
+		for hazard in _hazards:
+			if body.intersects(hazard):
+				player.take_hit(1, Vector2(-player.facing * 60, -140))
+				break
+
+
+func _process_revival() -> void:
+	for index in 2:
+		var downed_player := players[index]
+		if not downed_player.downed:
+			continue
+		var rescuer := players[1 - index]
+		var can_revive := not rescuer.downed and rescuer.global_position.distance_to(downed_player.global_position) <= 40.0
+		can_revive = can_revive and InputRouter.snapshot(1 - index).is_held(Action.INTERACT) and not _damaged_slots.has(1 - index)
+		if can_revive:
+			downed_player.revive_progress_ticks += 1
+		else:
+			downed_player.revive_progress_ticks = 0
+		if downed_player.revive_progress_ticks >= REVIVE_TICKS:
+			downed_player.revive()
+	for player in players:
+		if player.downed:
+			player.downed_ticks += 1
+	if players[0].downed and players[1].downed:
+		request_recovery("Both couriers are down")
 		return
-	if InputRouter.any_just_pressed(CommandSnapshot.Action.PAUSE):
-		set_paused(not get_tree().paused)
-	presentation.update_hud(players)
+	for player in players:
+		if player.downed and player.downed_ticks >= DOWNED_TICKS:
+			request_recovery("The thread needs a checkpoint")
+			return
 
 
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and session_ready:
-		set_paused(true)
+func _process_interactions() -> void:
+	interaction_hint = ""
+	for entity: Dictionary in room.definition.entities:
+		if entity.type == "secret" and not progress.has_flag(str(entity.flag)):
+			for player in players:
+				if not player.downed and player.position.distance_to(_centre(entity.tile)) < 28.0:
+					_commit_flags([str(entity.flag)])
+					AudioDirector.play_cue("checkpoint")
+					notice.emit("Lantern charm found. Both couriers carry its light.")
+					_apply_charms()
+	for slot in 2:
+		var player := players[slot]
+		if player.downed:
+			continue
+		var partner := players[1 - slot]
+		if partner.downed and player.position.distance_to(partner.position) <= 40.0:
+			interaction_hint = "Hold Interact to revive your partner"
+			continue
+		var pressed := InputRouter.snapshot(slot).just_pressed(Action.INTERACT)
+		for entity: Dictionary in room.definition.entities:
+			match str(entity.type):
+				"exit":
+					if _tile_rect(entity.rect).has_point(player.position):
+						interaction_hint = "Both couriers: rally here, then Interact"
+						if pressed:
+							request_transition(str(entity.id), slot)
+							return
+				"checkpoint", "npc":
+					if player.position.distance_to(_centre(entity.tile)) <= 40.0:
+						interaction_hint = "Interact: checkpoint" if entity.type == "checkpoint" else "Interact: talk to Oru"
+						if pressed:
+							if entity.type == "checkpoint":
+								_activate_checkpoint(entity)
+							else:
+								dialogue_id = str(entity.restored_dialogue_id if progress.has_flag("loom_restored") else entity.dialogue_id)
+								request_mode("dialogue", slot)
+							return
+				"anchor_pair", "loom":
+					var flag := str(entity.flag)
+					if progress.has_flag(flag):
+						continue
+					var points: Array = entity.anchors if entity.type == "anchor_pair" else entity.stations
+					for point: Dictionary in points:
+						if player.position.distance_to(_centre(point.tile)) <= 36.0:
+							interaction_hint = "Interact: hold your end; partner takes the other"
+							if pressed:
+								_latch(entity, point, slot)
+								# Both owned edges may latch in one tick; do not discard P2.
+								break
 
 
-func set_paused(value: bool) -> void:
-	get_tree().paused = value
-	InputRouter.flush()
-	if pause_overlay != null:
-		pause_overlay.visible = value
+func _activate_checkpoint(entity: Dictionary) -> void:
+	progress.set_checkpoint(str(entity.checkpoint_id))
+	for player in players:
+		player.restore(player.position)
+	room.set_entity_state(str(entity.id), "checkpoint_lit")
+	AudioDirector.play_cue("checkpoint")
+	_save()
+	notice.emit("Checkpoint lit. Both couriers are restored.")
 
 
-func _make_pause_overlay() -> void:
-	pause_overlay = CanvasLayer.new()
-	pause_overlay.name = "PauseOverlay"
-	pause_overlay.process_mode = Node.PROCESS_MODE_ALWAYS
-	pause_overlay.layer = 10
-	var shade := ColorRect.new()
-	shade.size = Vector2(960, 360)
-	shade.color = Color(0.04, 0.06, 0.09, 0.8)
-	pause_overlay.add_child(shade)
-	var label := Label.new()
-	label.text = "Paused\nPress your pause key to resume"
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.position = Vector2(260, 150)
-	label.size = Vector2(440, 60)
-	pause_overlay.add_child(label)
-	add_child(pause_overlay)
-	pause_overlay.visible = false
+func _latch(entity: Dictionary, point: Dictionary, slot: int) -> void:
+	var flag := str(entity.flag)
+	var latch: Dictionary = _latches.get(flag, {})
+	if latch.has(point.id):
+		return
+	if slot in latch.values():
+		notice.emit("Your partner must take the other end.")
+		return
+	latch[point.id] = slot
+	_latches[flag] = latch
+	room.set_entity_state(str(point.id), "anchor_latched" if entity.type == "anchor_pair" else "loom_lit")
+	AudioDirector.play_cue("anchor_latched")
+	if latch.size() == 2:
+		_commit_flags([flag])
+		room.set_progress(progress.flags)
+		if entity.type == "anchor_pair":
+			room.restore_bridge(flag)
+			AudioDirector.play_cue("bridge_restored")
+		else:
+			AudioDirector.play_cue("loom_restored")
+			AudioDirector.play_music("ending")
+			dialogue_id = "ending"
+			request_mode("dialogue", slot)
+
+
+func request_transition(exit_id: String, requester: int = 0) -> bool:
+	if _transaction_pending or mode != "playing":
+		return false
+	var exit: Dictionary = {}
+	for entity: Dictionary in room.definition.entities:
+		if entity.type == "exit" and entity.id == exit_id:
+			exit = entity
+	if exit.is_empty():
+		return false
+	for flag: String in exit.requires_all:
+		if not progress.has_flag(flag):
+			notice.emit("This path needs %s." % flag.replace("_", " "))
+			return false
+	for player in players:
+		if player.downed or not _tile_rect(exit.rect).has_point(player.position):
+			notice.emit("Both living couriers must rally at the exit.")
+			return false
+	var destination := catalog.room(str(exit.target_room))
+	if destination == null or not destination.is_valid() or destination.spawn_positions(str(exit.target_entrance)).size() != 2:
+		notice.emit("The destination could not load. The current room is safe.")
+		return false
+	_transaction_pending = true
+	request_mode("transition", requester)
+	_perform_transition.call_deferred(str(exit.target_room), str(exit.target_entrance))
+	return true
+
+
+func _perform_transition(room_id: String, entrance: String) -> void:
+	var loaded := _load_room(room_id, entrance, false)
+	_transaction_pending = false
+	if not loaded:
+		notice.emit(startup_error)
+		request_mode("pause", owner_slot)
+		return
+	transition_count += 1
+	_save()
+	_apply_charms()
+	if room_id == "r00" and progress.has_flag("loom_restored") and not _ending_presented:
+		_ending_presented = true
+		request_mode("ending", owner_slot)
+	else:
+		request_mode("playing", owner_slot)
+
+
+func request_recovery(reason: String = "Checkpoint recovery") -> void:
+	if _transaction_pending:
+		return
+	_transaction_pending = true
+	request_mode("recovery", owner_slot)
+	_perform_recovery.call_deferred(reason)
+
+
+func _perform_recovery(reason: String) -> void:
+	var room_id := "r00" if fixture_mode else str(catalog.world.checkpoints[progress.checkpoint_id])
+	var entrance := "start" if fixture_mode else progress.checkpoint_id
+	var restored := _load_room(room_id, entrance, true)
+	_transaction_pending = false
+	recovery_count += 1
+	request_mode("playing" if restored else "pause", owner_slot)
+	notice.emit(reason if restored else startup_error)
+	_apply_charms()
+
+
+func _on_enemy_defeated(enemy: CombatEnemy) -> void:
+	if enemy.kind == "spoolwarden":
+		_commit_flags(["boss_spoolwarden", "threadstep", "shortcut_bell"])
+		AudioDirector.play_music("exploration")
+		notice.emit("Threadstep unlocked for both couriers. Dash opens the old path.")
+
+
+func _commit_flags(flags: Array[String]) -> bool:
+	if not progress.commit_flags(flags):
+		return false
+	if is_instance_valid(room):
+		room.set_progress(progress.flags)
+	_save()
+	return true
+
+
+func _save() -> void:
+	if save_repository == null or fixture_mode:
+		return
+	var result := save_repository.save_campaign(progress.to_save())
+	last_save_error = "" if result.ok else str(result.message)
+	if not result.ok:
+		notice.emit(last_save_error)
+
+
+func save_now() -> void:
+	if save_repository == null or fixture_mode:
+		return
+	var result := save_repository.save_campaign(progress.to_save())
+	last_save_error = "" if result.ok else str(result.message)
+	notice.emit("Checkpoint progress saved." if result.ok else last_save_error)
+
+
+func _apply_charms() -> void:
+	if catalog == null or not progress.has_flag("lantern_charm"):
+		return
+	for player in players:
+		if player.has_node("LanternCharm"):
+			continue
+		var charm := Sprite2D.new()
+		charm.name = "LanternCharm"
+		charm.texture = catalog.assets.frame_texture("ui_v1", 16)
+		charm.scale = Vector2(0.5, 0.5)
+		charm.position = Vector2(8, -28)
+		charm.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		player.add_child(charm)
+
+
+func objective() -> String:
+	if progress.has_flag("loom_restored"):
+		return "Return together to Lantern Rest"
+	if progress.has_flag("bridge_causeway"):
+		return "Restore both stations at the Lantern Loom"
+	if progress.has_flag("threadstep"):
+		return "Take the shortcut; dash to Severed Causeway"
+	if progress.has_flag("bridge_spindle"):
+		return "Reach Broken Bell and release the trapped thread"
+	return "Find Oru, then restore the paired anchors at Spindle Steps"
+
+
+func boss() -> CombatEnemy:
+	for enemy in enemies:
+		if is_instance_valid(enemy) and enemy.kind == "spoolwarden" and not enemy.dead:
+			return enemy
+	return null
+
+
+static func _feet(tile: Array) -> Vector2:
+	return RoomDefinition.feet_position(Vector2i(int(tile[0]), int(tile[1])))
+
+
+static func _centre(tile: Array) -> Vector2:
+	return RoomDefinition.tile_center(Vector2i(int(tile[0]), int(tile[1])))
+
+
+static func _tile_rect(rect: Array) -> Rect2:
+	return Rect2(float(rect[0]) * 16, float(rect[1]) * 16, float(rect[2]) * 16, float(rect[3]) * 16)

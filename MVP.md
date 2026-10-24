@@ -8,7 +8,7 @@ Two players carry opposite ends of the last living thread through a kingdom that
 
 Build a short, complete, original pixel-art action adventure first. The initial characters are fixed: Tavi and Neri. Fixed split screen and cooperative interactions are essential; drawing interpretation and live image generation belong to Phase 2.
 
-**Status:** this pack is a specification and handoff, with no implemented Godot gameplay. The earlier single-player HTML proof is a separate experiment. Its tests do not establish co-op, Godot, controller, rendering, or audio correctness.
+**Status:** this document specifies the complete MVP target. A diagnostic Godot runtime tracer and the full authored content bundle exist on separate branches; [STATUS.md](docs/STATUS.md) records remaining integration and acceptance. The earlier single-player HTML proof is separate evidence and establishes no co-op, Godot, controller, rendering or audio result.
 
 ## Phase boundaries
 

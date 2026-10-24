@@ -17,7 +17,9 @@ def generate(root: Path, seed: int = 18427, stage: str = "full") -> dict:
     if stage == "diagnostic":
         assets, sfx, music = art.diagnostic(root) + font.generate(root), {}, {}
     else:
-        raise ValueError("Full asset authoring is in progress; use --stage diagnostic for Drop A")
+        from gen import actors, audio
+        audio_assets, sfx, music = audio.generate(root, seed)
+        assets = art.production(root, seed) + actors.generate(root) + font.generate(root) + audio_assets
     manifest = {"schema_version": 1, "content_version": "phase1-v1",
                 "generator_version": GENERATOR_VERSION, "seed": seed, "stage": stage,
                 "assets": sorted(assets, key=lambda item: item["id"]), "sfx": sfx, "music": music}

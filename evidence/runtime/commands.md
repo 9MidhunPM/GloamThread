@@ -48,3 +48,19 @@ The integrated suite `godot --headless --fixed-fps 60 --path . --script tests/ru
 An actual app was launched on a hidden Hypruse agent workspace using `godot --path /home/midhun/Coading/Gloamthread --log-file /tmp/gloamthread-visible.log`; renderer was Compatibility/OpenGL 4.6, Mesa 26.2.5, Intel Arc (ARL). [Initial window capture](captures/m0-initial-window.png) is the unmodified window PNG at 2840×1713 pixels; monitor scale 1.25, compositor logical window 2272×1370. It shows equal letterboxed views, both diagnostic couriers, divider and Ember/Moss terrain tints. Because the window was hidden, this proves a rendered initial state, not continuous playback or actual input. The compositor may return stale hidden-window frames.
 
 Hypruse refused background keys to the XWayland window to protect the human's focus. A second launch with `--display-driver wayland` accepted one addressed `d` sendshortcut while leaving human focus untouched, but its subsequent hidden-window screenshot was black. Therefore visible ordinary-key movement, simultaneous physical keyboard actions and motion/pause capture remain unverified. No foreground takeover or human playtest was performed.
+
+
+## 2026-10-24T23:36:24+05:30 — Production content/core integration
+
+Configuration: Godot `4.7.2.stable.arch_linux.ed1daf0bf`, Compatibility renderer, shared 60 Hz physics, synthetic owned keyboard snapshots for engine scenarios. No physical pads connected.
+
+- `godot --headless --path . --editor --import --quit --log-file /tmp/gloamthread-full-boundary-import.log` — clean resource/script import.
+- `godot --headless --fixed-fps 60 --path . --script tests/run_tests.gd` — 10/10 at this checkpoint (`/tmp/gloamthread-integrated-suite-final.log`); includes actual production room/catalog, four combat scenarios, input ownership, room parser, fixture smoke and actual-file persistence. Later scenarios are recorded separately.
+- `python3 tools/validate_assets.py`, `python3 tools/validate_content.py` — PASS full schemas/provenance/structure; no traversal/render/listening inference.
+- `python3 -m unittest discover -s tools/tests` — 79 tests PASS.
+- `python3 tools/check_pack.py` — event/docs/examples PASS (116 links before this update).
+- Matching official standard export archive SHA-256 verified, Linux x86_64 release/debug templates installed. Export itself remains pending.
+
+Physics scenarios use controlled placements where labelled. These are not an ordinary-input campaign playthrough. Accelerated whole-suite shutdown retained WAV playback objects; focused catalog/content tests retire playback cleanly. Native input, motion/audio review, full route and packaged launch are separate gates still in progress.
+
+Fresh staged-file verification: `git checkout-index -a -f --prefix=/tmp/gloamthread-core-index-rhvjupv7/`, fresh editor import, then the full engine runner — **12/12 PASS**, no script/resource errors or audio leak warnings. This exposed the BMFont importer embedding its PNG page and marking it skip; eager validation and the catalog test now validate that dependency through the imported original font. Runner engine-error capture and bounded audio retirement are included. Standards/Spec review found and fixed unsafe catalog scalar types, unresolved visual resources, stale reward visuals and hidden save errors (App queue is in the next UI integration).

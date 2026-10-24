@@ -109,9 +109,16 @@ class Checks:
             return None
         path = PurePosixPath(value)
         safe = (not path.is_absolute() and not any(part in ('', '.', '..') for part in value.split('/'))
-                and '\\' not in value and ':' not in value and path.parts[:2] == ('assets', 'generated'))
-        full = (self.root / value).resolve()
-        safe = safe and full.is_relative_to(self.root / 'assets' / 'generated')
+                and '\\' not in value and ':' not in value and path.parts[:2] == ('assets', 'generated')
+                and path.suffix.lower() in ('.png', '.fnt', '.wav')
+                and all(ord(char) >= 32 and ord(char) != 127 for char in value))
+        full = None
+        if safe:
+            try:
+                full = (self.root / value).resolve()
+                safe = full.is_relative_to(self.root / 'assets' / 'generated')
+            except (OSError, ValueError):
+                safe = False
         if not self.need(safe, where, 'unsafe asset path; expected assets/generated/...'):
             return None
         return full
@@ -309,7 +316,9 @@ def _room(c: Checks, data: dict, where: str) -> bool:
             if rect(entity.get('rect'), at + '/rect'):
                 x, y, w, h = entity['rect']
                 c.need(w >= 3 and h >= 2, at + '/rect', 'rally zone must fit both couriers')
-                safe_cells = [(xx, yy) for yy in range(y, y+h) for xx in range(x, x+w) if safe([xx, yy])]
+                # Feet are (tile_y + 1) * 16; the rectangle's bottom is exclusive.
+                safe_cells = [(xx, yy) for yy in range(y, y+h) for xx in range(x, x+w)
+                              if safe([xx, yy]) and yy+1 < y+h]
                 c.need(len(safe_cells) >= 2, at + '/rect', 'rally zone needs two safe standing tiles')
             c.identifier(entity.get('target_room'), at + '/target_room')
             c.identifier(entity.get('target_entrance'), at + '/target_entrance')
@@ -321,7 +330,9 @@ def _room(c: Checks, data: dict, where: str) -> bool:
         elif kind in ('anchor_pair', 'loom'):
             field = 'anchors' if kind == 'anchor_pair' else 'stations'
             entries = entity.get(field)
-            expected_flag = {'r02': 'bridge_spindle', 'r06': 'bridge_causeway'}.get(data.get('id')) if kind == 'anchor_pair' else 'loom_restored'
+            room_id = data.get('id')
+            expected_flag = ({'r02': 'bridge_spindle', 'r06': 'bridge_causeway'}.get(room_id)
+                             if isinstance(room_id, str) else None) if kind == 'anchor_pair' else 'loom_restored'
             c.need(entity.get('flag') == expected_flag and expected_flag is not None, at + '/flag', 'incorrect progression flag or room')
             if c.need(isinstance(entries, list) and len(entries) == 2, at + '/' + field, 'requires exactly two distinct points'):
                 points = []
@@ -358,7 +369,8 @@ def _room(c: Checks, data: dict, where: str) -> bool:
                 continue
             record = c.asset(entry.get('asset_id'), at + '/asset_id', ('sprite_atlas', 'tile_atlas'))
             frame = entry.get('frame')
-            c.need(type(frame) is int and 0 <= frame < len(record.get('frames', [])), at + '/frame', 'frame out of bounds')
+            frames = record.get('frames')
+            c.need(isinstance(frames, list) and type(frame) is int and 0 <= frame < len(frames), at + '/frame', 'frame out of bounds')
             position = entry.get('position_px')
             c.need(isinstance(position, list) and len(position) == 2 and all(type(v) is int for v in position) and 0 <= position[0] <= width*16 and 0 <= position[1] <= height*16, at + '/position_px', 'requires in-bounds integer pixel position')
             c.need(entry.get('theme') in ('common', 'ember', 'moss'), at + '/theme', 'unknown theme')
@@ -414,7 +426,8 @@ def _world(c: Checks) -> dict[str, dict]:
     if c.stage == 'diagnostic':
         room = rooms.get('r00', {})
         c.need(len(room.get('tiles', [])) == 23 and all(len(row) == 60 for row in room.get('tiles', [])), 'content/rooms/r00.json', 'diagnostic room must be exactly 60x23')
-        c.need(room.get('spawns', {}).get('start') == [[6, 19], [9, 19]], 'content/rooms/r00.json/spawns/start', 'diagnostic start must remain [[6,19],[9,19]]')
+        diagnostic_spawns = room.get('spawns')
+        c.need(isinstance(diagnostic_spawns, dict) and diagnostic_spawns.get('start') == [[6, 19], [9, 19]], 'content/rooms/r00.json/spawns/start', 'diagnostic start must remain [[6,19],[9,19]]')
         c.need(any('=' in row for row in room.get('tiles', [])), 'content/rooms/r00.json/tiles', 'diagnostic needs a one-way platform')
         c.need(room.get('entities') == [{'type': 'diagnostic_mover', 'id': 'mover', 'tile': [30, 19], 'range_tiles': 6}], 'content/rooms/r00.json/entities', 'diagnostic requires the exact shared mover fixture')
         c.asset('diagnostic_terrain_v1', 'diagnostic terrain', ('tile_atlas',))
@@ -422,9 +435,13 @@ def _world(c: Checks) -> dict[str, dict]:
         return rooms
     directed = set()
     counts: dict[str, list[tuple[str, dict]]] = {}
+    tile_characters = {char for room in rooms.values() for row in room.get('tiles', []) for char in row}
+    c.need({'=', '^'} <= tile_characters, 'content/rooms/tiles', 'full rooms require both one-way surfaces and authored hazards')
     for room_id, room in rooms.items():
+        if room_id in ROOM_IDS:
+            c.need(room.get('name') == ROOM_NAMES[int(room_id[1:])], f'content/rooms/{room_id}.json/name', 'room name differs from world definition')
         for entity in room.get('entities', []):
-            if not isinstance(entity, dict) or entity.get('type') not in FIELDS:
+            if not isinstance(entity, dict) or not isinstance(entity.get('type'), str) or entity['type'] not in FIELDS:
                 continue
             kind = entity['type']
             counts.setdefault(kind, []).append((room_id, entity))
@@ -434,7 +451,8 @@ def _world(c: Checks) -> dict[str, dict]:
                 if not c.need(isinstance(target, str) and target in rooms, at, 'exit target room missing'):
                     continue
                 entrance = entity.get('target_entrance')
-                c.need(isinstance(entrance, str) and entrance in rooms[target].get('spawns', {}), at, 'target entrance does not resolve')
+                target_spawns = rooms[target].get('spawns')
+                c.need(isinstance(entrance, str) and isinstance(target_spawns, dict) and entrance in target_spawns, at, 'target entrance does not resolve')
                 pair = tuple(sorted((room_id, target)))
                 c.need(pair in EDGES and entity.get('requires_all') == EDGES.get(pair), at, 'exit progression gate differs from world graph')
                 c.need((room_id, target) not in directed, at, 'duplicate directed room exit')
@@ -443,7 +461,11 @@ def _world(c: Checks) -> dict[str, dict]:
     c.need(directed == required_directed, 'content/rooms/exits', 'every graph connection needs both directed rally exits')
     for kind, count in [('checkpoint', 2), ('npc', 1), ('secret', 1), ('spoolwarden', 1), ('anchor_pair', 2), ('loom', 1)]:
         c.need(len(counts.get(kind, [])) == count, 'content/rooms/' + kind, f'requires exactly {count}')
-    c.need({(room_id, entity.get('checkpoint_id')) for room_id, entity in counts.get('checkpoint', [])} == {('r00', 'checkpoint_a'), ('r04', 'checkpoint_b')}, 'content/rooms/checkpoint', 'incorrect checkpoint identity/placement')
+    checkpoint_locations = [(room_id, entity.get('checkpoint_id')) for room_id, entity in counts.get('checkpoint', [])]
+    c.need(len(checkpoint_locations) == 2 and ('r00', 'checkpoint_a') in checkpoint_locations and ('r04', 'checkpoint_b') in checkpoint_locations, 'content/rooms/checkpoint', 'incorrect checkpoint identity/placement')
+    anchor_locations = [(room_id, entity.get('flag')) for room_id, entity in counts.get('anchor_pair', [])]
+    c.need(len(anchor_locations) == 2 and ('r02', 'bridge_spindle') in anchor_locations and ('r06', 'bridge_causeway') in anchor_locations,
+           'content/rooms/anchor_pair', 'requires one bridge_spindle in r02 and one bridge_causeway in r06')
     for kind, room_id in [('npc', 'r00'), ('spoolwarden', 'r05'), ('loom', 'r07')]:
         c.need(all(key == room_id for key, _ in counts.get(kind, [])), 'content/rooms/' + kind, f'must be in {room_id}')
     for kind in ('spoolmite', 'wickwing'):

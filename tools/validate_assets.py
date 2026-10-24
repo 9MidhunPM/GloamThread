@@ -35,6 +35,37 @@ TILE_IDS += [f"{family}_{part}" for family in ("one_way", "hazard") for part in 
 TILE_IDS += [f"bridge_{part}" for part in ("left", "middle", "right", "single")]
 TILE_IDS += [f"seam_{part}" for part in ("horizontal", "vertical", "cross", "knot")]
 TILE_IDS += [f"background_{material}" for material in ("stone", "brass", "root", "cloth")]
+# Canonical physical silhouettes are frozen independently of the drawing recipes.
+# Each integer encodes one left-to-right 16px alpha row. Material colours may
+# change; transparent holes and landing/hazard outlines must keep these shapes.
+TILE_MASK_ROWS = {
+    "opaque": (0xffff,) * 16,
+    "corner_outer_tl": (0x0fff, 0x1fff, 0x3fff, 0x7fff) + (0xffff,) * 12,
+    "corner_outer_tr": (0xfff0, 0xfff8, 0xfffc, 0xfffe) + (0xffff,) * 12,
+    "corner_outer_bl": (0xffff,) * 12 + (0x7fff, 0x3fff, 0x1fff, 0x0fff),
+    "corner_outer_br": (0xffff,) * 12 + (0xfffe, 0xfffc, 0xfff8, 0xfff0),
+    "surface_middle": (0, 0xffff, 0xffff, 0xffff, 0xffff, 0x3ffc) + (0,) * 10,
+    "surface_left": (0, 0x3fff, 0x3fff, 0x3fff, 0x3fff, 0x0ffc) + (0,) * 10,
+    "surface_right": (0, 0xfffc, 0xfffc, 0xfffc, 0xfffc, 0x3ff0) + (0,) * 10,
+    "surface_single": (0, 0x3ffc, 0x3ffc, 0x3ffc, 0x3ffc, 0x0ff0) + (0,) * 10,
+    "hazard": (0, 0, 0, 0, 0x1010, 0x1010, 0x3838, 0x3838, 0x3838, 0x3838,
+               0x7c7c, 0x7c7c, 0x7c7c, 0x7e7e, 0xfefe, 0xffff),
+}
+
+
+def canonical_tile_alpha(tile_id):
+    if tile_id not in TILE_IDS:
+        return None
+    family = "opaque"
+    if tile_id.startswith("corner_outer_"):
+        family = tile_id
+    elif tile_id.startswith(("one_way_", "bridge_")):
+        family = "surface_" + tile_id.rsplit("_", 1)[1]
+    elif tile_id.startswith("hazard_"):
+        family = "hazard"
+    return bytes(255 if row & (1 << (15 - x)) else 0 for row in TILE_MASK_ROWS[family] for x in range(16))
+
+
 GLYPHS = list(range(32, 127)) + [65533]
 IMAGE_KINDS = {"sprite_atlas", "tile_atlas", "image"}
 KINDS = IMAGE_KINDS | {"font", "sfx", "music"}
@@ -52,6 +83,13 @@ def integer_list(value, count, minimum=None):
 
 def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def visible_pixels(image):
+    # RGB values under alpha zero do not create a different visible composition.
+    clean = Image.new("RGBA", image.size)
+    clean.alpha_composite(image)
+    return clean.tobytes()
 
 
 def unique_object(pairs):
@@ -85,8 +123,10 @@ class AssetValidator:
                 and PurePosixPath(value).suffix.lower() not in {".gd", ".tscn", ".tres", ".res", ".dll", ".so", ".exe"})
         if output:
             safe = safe and value.startswith("assets/generated/")
+        if not self.check(safe, label, "unsafe path syntax"):
+            return None
         path = (self.root / value).resolve()
-        if not self.check(safe and path.is_relative_to(self.root) and (not output or path.is_relative_to(self.root / "assets/generated")), label, "unsafe path or path outside bundle"):
+        if not self.check(path.is_relative_to(self.root) and (not output or path.is_relative_to(self.root / "assets/generated")), label, "unsafe path or path outside bundle"):
             return None
         if not self.check(path.is_file(), label, "path does not resolve to a file"):
             return None
@@ -108,10 +148,13 @@ class AssetValidator:
         if self.check(identifier not in self.assets, label + ".id", "duplicate asset ID"):
             self.assets[identifier] = record
         kind = record.get("kind")
-        self.check(kind in KINDS if isinstance(kind, str) else False, label + ".kind", "unsupported asset kind")
+        if not self.check(isinstance(kind, str) and kind in KINDS, label + ".kind", "unsupported asset kind"):
+            kind = ""
         self.check(type(record.get("diagnostic")) is bool, label + ".diagnostic", "must be boolean")
         if self.stage == "full":
             self.check(record.get("diagnostic") is False, label + ".diagnostic", "full bundle consumes a diagnostic asset")
+            self.check(not str(record.get("path", "")).startswith("assets/generated/diagnostic/"),
+                       label + ".path", "full bundle cannot consume diagnostic directory outputs")
         path = self.safe_path(record.get("path"), label + ".path", output=True)
         self.file_hash(path, record.get("sha256"), label + ".sha256")
         expected_suffix = ".png" if kind in IMAGE_KINDS else ".wav" if kind in {"sfx", "music"} else ".fnt" if kind == "font" else None
@@ -143,10 +186,12 @@ class AssetValidator:
             with Image.open(path) as opened:
                 self.check(opened.format == "PNG", label + ".path", "image must be PNG")
                 image = opened.convert("RGBA")
-        except (OSError, ValueError) as exc:
+        except (OSError, ValueError, Image.DecompressionBombError) as exc:
             self.errors.append(f"{label}.path: unreadable PNG: {exc}")
             return
         self.images[record["id"]] = image
+        self.check(image.getchannel("A").getbbox() is not None, label + ".visibility",
+                   "image must contain visible pixels")
         self.check(integer_list(record.get("size"), 2, 1) and tuple(record.get("size", [])) == image.size,
                    label + ".size", f"must match actual dimensions {image.size}")
         self.check(sum(image.getchannel("A").histogram()[1:255]) == 0, label + ".alpha", "pixel surfaces require binary alpha")
@@ -173,7 +218,10 @@ class AssetValidator:
                               frame_label, "must contain nonnegative coordinates and positive integer dimensions"):
                 continue
             x, y, width, height = frame
-            self.check(x + width <= image.width and y + height <= image.height, frame_label, "frame rectangle exceeds image bounds")
+            within_image = self.check(x + width <= image.width and y + height <= image.height, frame_label, "frame rectangle exceeds image bounds")
+            if within_image:
+                visible = image.crop((x, y, x + width, y + height)).getchannel("A").getbbox() is not None
+                self.check(visible, frame_label + ".visibility", "frame must contain visible pixels")
             if valid_cell:
                 self.check([width, height] == cell, frame_label, "frame dimensions differ from cell_size")
             for previous in valid_frames:
@@ -181,6 +229,14 @@ class AssetValidator:
                 self.check(x + width <= px or px + pw <= x or y + height <= py or py + ph <= y,
                            frame_label, "frame rectangles overlap")
             valid_frames.append(frame)
+            if self.stage == "full" and valid_cell:
+                stride_x, stride_y = cell[0] + 4, cell[1] + 4
+                columns = image.width // stride_x
+                self.check(columns > 0 and image.width % stride_x == 0 and image.height % stride_y == 0,
+                           frame_label, "atlas dimensions must be whole padded cells")
+                if columns:
+                    self.check(frame == [2 + i % columns * stride_x, 2 + i // columns * stride_y, *cell],
+                               frame_label, "frame must occupy its declared row-major padded atlas slot")
             if self.stage == "full":
                 padded = (x >= 2 and y >= 2 and x + width + 2 <= image.width and y + height + 2 <= image.height)
                 if self.check(padded, frame_label + ".gutter", "requires two transparent padding pixels on every side"):
@@ -202,8 +258,19 @@ class AssetValidator:
                 self.check(type(clip.get("loop")) is bool, clip_label + ".loop", "must be boolean")
         if record["kind"] == "tile_atlas":
             ids = record.get("tile_ids")
-            self.check(isinstance(ids, list) and len(ids) == len(frames) and all(isinstance(i, str) and i for i in ids)
-                       and len(set(ids)) == len(ids), label + ".tile_ids", "requires unique IDs aligned with frames")
+            valid_ids = self.check(isinstance(ids, list) and len(ids) == len(frames) and all(isinstance(i, str) and i for i in ids)
+                                   and len(set(ids)) == len(ids), label + ".tile_ids", "requires unique IDs aligned with frames")
+            if valid_ids:
+                for i, (tile_id, frame) in enumerate(zip(ids, frames)):
+                    expected_alpha = canonical_tile_alpha(tile_id)
+                    if expected_alpha is None or not integer_list(frame, 4) or frame[2:] != [16, 16]:
+                        continue
+                    x, y, width, height = frame
+                    if x < 0 or y < 0 or x + width > image.width or y + height > image.height:
+                        continue
+                    actual_alpha = image.crop((x, y, x + width, y + height)).getchannel("A").tobytes()
+                    self.check(actual_alpha == expected_alpha, f"{label}.frames[{i}].canonical_mask",
+                               f"{tile_id} must preserve its canonical physical silhouette")
 
     def audio(self, record, path):
         label = f"asset {record['id']}"
@@ -229,13 +296,15 @@ class AssetValidator:
             samples.frombytes(data)
             if sys.byteorder != "little":
                 samples.byteswap()
-            self.check(not samples or max(abs(s) for s in samples) / 32768 <= .9, label + ".peak", "PCM peak exceeds conservative 0.9 ceiling")
+            peak = max((abs(s) for s in samples), default=0) / 32768
+            self.check(peak <= .9, label + ".peak", "PCM peak exceeds conservative 0.9 ceiling")
+            self.check(peak >= .001, label + ".peak", "audio must contain a signal above the 0.001 full-scale minimum")
         start, end = record.get("loop_start"), record.get("loop_end")
         self.check("loop_start" in record and "loop_end" in record, label + ".loop", "loop fields are required, null for nonlooping audio")
         if start is None and end is None:
             return
         valid_loop = integer(start) and integer(end) and 0 <= start < end <= actual["sample_frames"]
-        if self.check(valid_loop, label + ".loop", "loop requires valid sample-frame offsets, end exclusive") and samples:
+        if self.check(valid_loop, label + ".loop", "loop requires valid sample-frame offsets, end exclusive") and samples and len(samples) >= end * actual["channels"]:
             channels = actual["channels"]
             seam = max(abs(samples[start * channels + channel] - samples[(end - 1) * channels + channel]) for channel in range(channels)) / 32768
             self.check(seam <= .04, label + ".loop", "loop endpoint discontinuity exceeds 0.04 full scale")
@@ -320,6 +389,10 @@ class AssetValidator:
             x, y, width, height = (char[name] for name in ("x", "y", "width", "height"))
             okay = 0 <= x <= 96 and 0 <= y <= 48 and 0 <= width <= 5 and 0 <= height <= 7 and x + width <= 96 and y + height <= 48
             self.check(okay and char["page"] == 0 and char["xadvance"] == 6, label + ".glyphs", f"glyph {code} violates 5x7/6x8 glyph layout")
+            if code in GLYPHS:
+                slot = GLYPHS.index(code)
+                self.check((x, y) == (slot % 16 * 6, slot // 16 * 8),
+                           label + ".glyphs", f"glyph {code} must occupy its own 6x8 atlas cell")
             if code != 32 and okay and bitmap is not None:
                 self.check(bitmap.crop((x, y, x + width, y + height)).getchannel("A").getbbox() is not None,
                            label + ".glyphs", f"glyph {code} has no visible pixels")
@@ -330,7 +403,8 @@ class AssetValidator:
             if not self.check(isinstance(mapping, dict), "manifest." + name, "must be an object"):
                 continue
             if self.stage == "full":
-                self.check(set(mapping) == permitted, "manifest." + name, "required semantic cue/track names are missing or unknown")
+                self.check(set(mapping) == permitted, "manifest." + name,
+                           f"semantic cue/track names mismatch; missing={sorted(permitted - set(mapping))}, unknown={sorted(set(mapping) - permitted)}")
                 self.check(len(set(str(x) for x in mapping.values())) == len(mapping), "manifest." + name, "semantic cues/tracks require distinct assets")
             for cue, identifier in mapping.items():
                 self.check(cue in permitted, f"manifest.{name}.{cue}", "unknown semantic cue/track name")
@@ -346,6 +420,21 @@ class AssetValidator:
                 self.font(record)
         for identifier in ("fixed_tavi_v1", "fixed_neri_v1"):
             self.clips(identifier, COURIER_CLIPS, exact_count=self.stage == "full")
+        tavi, neri = self.images.get("fixed_tavi_v1"), self.images.get("fixed_neri_v1")
+        if tavi is not None and neri is not None:
+            self.check(tavi.size != neri.size or visible_pixels(tavi) != visible_pixels(neri), "couriers.visuals",
+                       "Tavi and Neri require distinct decoded image pixels")
+        if self.stage == "full":
+            for theme in ("ember", "moss"):
+                layers = [(layer, self.images.get(f"background_{theme}_{layer}_v1")) for layer in ("far", "middle", "near")]
+                for index, (layer, image) in enumerate(layers):
+                    if image is None:
+                        continue
+                    for other_layer, other in layers[:index]:
+                        if other is not None:
+                            self.check(image.size != other.size or visible_pixels(image) != visible_pixels(other),
+                                       f"backgrounds.{theme}.{layer}",
+                                       f"{layer} and {other_layer} must be distinct decoded compositions")
         ember, moss = self.assets.get("terrain_ember_v1"), self.assets.get("terrain_moss_v1")
         if ember is not None and moss is not None:
             self.check(ember.get("tile_ids") == moss.get("tile_ids"), "terrain.tile_ids", "both themes must use identical ordered tile IDs")
@@ -360,9 +449,20 @@ class AssetValidator:
                 "wickwing_v1", "spoolwarden_v1", "props_v1", "ui_v1", "font_v1", "font_texture_v1"}
         full |= {f"background_{theme}_{layer}_v1" for theme in ("ember", "moss") for layer in ("far", "middle", "near")}
         full |= {f"effect_{effect}_v1" for effect in EFFECT_NAMES}
-        for identifier in sorted(diagnostic if self.stage == "diagnostic" else full):
+        required = diagnostic if self.stage == "diagnostic" else full
+        for identifier in sorted(required):
             self.check(identifier in self.assets, f"inventory.{identifier}", "required asset missing")
+            if identifier not in self.assets:
+                continue
+            expected_kind = ("font" if identifier == "font_v1" else "image" if identifier == "font_texture_v1" or identifier.startswith("background_")
+                             else "tile_atlas" if identifier.startswith("terrain_") or identifier == "diagnostic_terrain_v1" else "sprite_atlas")
+            self.check(self.assets[identifier].get("kind") == expected_kind, f"asset {identifier}.kind", f"required kind is {expected_kind}")
         if self.stage == "diagnostic":
+            expected_paths = {"diagnostic_terrain_v1": "tiles_diag.png", "diagnostic_mover_v1": "mover_diag.png",
+                              "fixed_tavi_v1": "courier_tavi_diag.png", "fixed_neri_v1": "courier_neri_diag.png"}
+            for identifier, filename in expected_paths.items():
+                self.check(self.assets.get(identifier, {}).get("path") == "assets/generated/diagnostic/" + filename,
+                           f"asset {identifier}.path", "diagnostic runtime path must match the fixed first-drop contract")
             self.dimensions("diagnostic_terrain_v1", size=(160, 120), cell=(16, 16), origin=(0, 0))
             terrain = self.assets.get("diagnostic_terrain_v1", {})
             self.check(isinstance(terrain.get("tile_ids"), list) and terrain["tile_ids"][:4] == TILE_IDS[:4],
@@ -391,7 +491,14 @@ class AssetValidator:
             self.dimensions(identifier, size=(160, 120), count=48, cell=(16, 16), origin=(0, 0))
             self.check(self.assets.get(identifier, {}).get("tile_ids") == TILE_IDS,
                        f"asset {identifier}.tile_ids", "must implement exact stable 48-slot ordered terrain contract")
-        self.dimensions("props_v1", count=16)
+        props = self.assets.get("props_v1", {})
+        families, prop_ids, frames = props.get("logical_props"), props.get("prop_ids"), props.get("frames")
+        self.check(isinstance(families, list) and len(families) == 16 and all(isinstance(name, str) and name for name in families)
+                   and len(set(families)) == 16 and {"anchor", "loom", "bell", "lantern", "sign", "checkpoint"} <= set(families),
+                   "asset props_v1.logical_props", "requires 16 unique logical prop families including anchor, loom, bell, lantern, sign and checkpoint")
+        self.check(isinstance(prop_ids, list) and isinstance(frames, list) and len(prop_ids) == len(frames) >= 16
+                   and all(isinstance(name, str) and name for name in prop_ids) and len(set(prop_ids)) == len(prop_ids),
+                   "asset props_v1.prop_ids", "requires unique prop/state IDs aligned with all frame rectangles")
         self.dimensions("ui_v1", size=(100, 80), count=20, cell=(16, 16))
         for effect in EFFECT_NAMES:
             identifier = f"effect_{effect}_v1"
@@ -399,6 +506,11 @@ class AssetValidator:
             cell = self.assets.get(identifier, {}).get("cell_size")
             self.check(cell == [32, 32] or effect == "restoration" and cell == [64, 64],
                        f"asset {identifier}.cell_size", "effect requires 32x32 cells; restoration may use 64x64")
+            clips = self.assets.get(identifier, {}).get("animations", {})
+            self.check(isinstance(clips, dict) and any(isinstance(clip, dict) and isinstance(clip.get("frames"), list)
+                       and len(clip["frames"]) == 6 and all(integer(index) for index in clip["frames"])
+                       and set(clip["frames"]) == set(range(6)) for clip in clips.values()),
+                       f"asset {identifier}.animations", "effect must declare its complete six-frame sequence")
         for theme in ("ember", "moss"):
             for layer in ("far", "middle", "near"):
                 identifier = f"background_{theme}_{layer}_v1"

@@ -2,7 +2,7 @@
 
 Version 2.0 · Phase 1 production contract · 24 October 2026.
 
-This document specifies assets to author. No Godot import, sprite set, audio export, generator, or visual review has been completed by creating this planning pack. Read `DECISIONS.md` before changing budgets.
+This document defines the production asset contract. [STATUS.md](STATUS.md) and [content evidence](../evidence/content/README.md) record the authored inventory, validation and pending runtime/motion/listening review. Read `DECISIONS.md` before changing budgets.
 
 ## 1. What the first version must look like
 

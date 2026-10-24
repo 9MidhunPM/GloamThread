@@ -6,6 +6,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 1 — runtime and integration
 
+### 2026-10-24T23:36:24+05:30 — Integrate original production content and campaign core
+
+- Changed: True-merged the complete eight-room content branch. Added strict runtime catalogs, shared terrain/bridge/prop consumers, physics-driven sprite/effect animation and one audio mix. Implemented owned-input combat, both enemy types and boss, cooperative room/recovery/progression transactions, validated campaign backups and independent settings.
+- Why: Replace diagnostic-only consumers with the original authored adventure and real shared gameplay, while retaining one authoritative simulation.
+- Validation: Fresh full editor import had no script/resource errors; full asset/content validators PASS; all 79 Python tests PASS; integrated Godot suite PASS 12/12 from a fresh staged-file copy. Focused combat, catalog and persistence runs pass. Tests caught and fixed simultaneous anchor-edge loss, prop state aliases, orphan-backup handling and invalid save combinations.
+- Limitations: Global menu integration, ordinary-input route, visible motion/listening, packaged offline export, performance and human/controller acceptance are still pending. Accelerated suite audio teardown warnings are recorded separately. Approved official template archive was checksum-verified and Linux templates installed.
+
 ### 2026-10-24T22:50:16+05:30 — Refresh diagnostic setup and handoff status
 
 - Changed: Updated setup, decisions, implementation/test plan and submission to reflect the actual integrated diagnostic room instead of stale missing-boot claims. Recorded Agent 2's later cumulative content tip as queued for integration, preserving the distinction between authored content and implemented gameplay.
@@ -42,6 +49,41 @@ Record each meaningful project change, newest first. Update this file in the sam
 - Limitations: This checkpoint sets up the work; it does not implement or verify the game. Agent 2 must deliver its diagnostic packet before integrated M0 acceptance can pass.
 
 ## Agent 2 — content and assets
+
+### 2026-10-24T23:06:44+05:30 — Tighten asset acceptance and improve room approaches
+
+- Changed: Reject invisible images/frames, changed canonical terrain silhouettes, duplicated decoded courier/background pixels and silent or near-silent PCM, with regression fixtures that update hashes correctly. Widened/inset east footholds in r02/r06, raised r03's optional hazard shelf for 80 px combat clearance, and restricted r06's catch shelf to westward recovery. Expanded labelled authoring previews and updated current content evidence.
+- Why: Manifest counts and matching hashes previously accepted visually empty/cloned bundles. Layout review also exposed narrow boundary approaches, a 48 px combat ceiling and a lower-route ordinary-jump bypass.
+- Validation: All 79 Python tests PASS, both full validators PASS, temporary diagnostic generation/validation PASS, pack/event/link checks and diff whitespace PASS. The transparent-background regression first reproduced the failure, then passed after the fix. Native authoring views inspected; generated asset recipes/outputs remain unchanged and earlier deterministic hashes still apply.
+- Limitations: Geometry corrections use measured ordinary movement as a constraint; real both-character traversal, Threadstep reach, combat readability, listening and the remaining runtime/human MVP gates remain unverified. Source-art views exercise no physics.
+
+### 2026-10-24T23:00:02+05:30 — Correct the project documentation for Devin Hack Kochi
+
+- Changed: Aligned README, event guidance, agent instructions, submission checklist, AI record and PR checklist with the user-linked corrected template at `cb4db78169a8d199b43b077fbcc8f2ff4b798a14`. Removed inherited logistics, participation limits and credit promises; clarified provider-neutral event guidance and the project's own documentation conventions. Refreshed stale setup/status/prompt references against the separate content delivery and runtime checkpoint. Added a read-only event-consistency gate to `tools/check_pack.py`.
+- Why: The organizer-shared template carried the wrong event identity and requirements. The user explicitly requested project-wide correction while preserving truthful project facts and actual tool attribution.
+- Validation: Fetched the corrected template through GitHub at the pinned commit and independently reviewed its event text. The new gate first failed on the stale README, then passed after correction; pack checks PASS with 106 relative links, Python compilation and diff whitespace PASS. Runtime checkpoint `b1ff5d6` evidence was read, not rerun by Agent 2.
+- Limitations: Current organizers still determine eligibility, logistics, deadline and credits. Historical log entries and Git history are preserved. These are documentation/consistency changes; no additional runtime, hardware or human acceptance is claimed.
+
+### 2026-10-24T22:46:23+05:30 — Align the room handoff with measured movement
+
+- Changed: Recorded the exact full-content packet SHA and Agent 1's committed jump/headroom measurements, command and test conditions in content evidence.
+- Why: Replace reliance on source-only ballistic estimates with the available real-physics evidence while keeping diagnostic measurements distinct from full-route acceptance.
+- Validation: Read runtime commit `b1ff5d6` and its traversal evidence; pack/link checks and diff whitespace PASS. No asset or room data changed; previous 69-test and deterministic asset results still apply.
+- Limitations: Dash remains unmeasured at that runtime checkpoint. Both-character room traversal, animation/readability, audio listening and remaining integrated MVP gates are pending Agent 1 verification.
+
+### 2026-10-24T22:43:33+05:30 — Author the eight-room cooperative story bundle
+
+- Changed: Authored r00-r07 with canonical bidirectional rally exits, two checkpoints, Oru, both anchor pairs, enemy lessons, secret charm, Spoolwarden arena, dash branch, loom and return. Added shared data-only fixtures, 29 content tests, read-only content validation hardening, labelled authoring previews and exact traversal/presentation requests.
+- Why: Complete Agent 2's Phase 1 content inventory and give Agent 1 explicit integration data without guessing entrance, progression or asset references. Revised ascent stairs against current motor constants, widened rally rectangles to include standing feet, and fixed malformed spawn/path handling plus bridge distribution enforcement.
+- Validation: Both full validators PASS; all 69 Python tests PASS. Pack and diff whitespace PASS. Native r00/r02 authoring compositions and actor sheets inspected. Earlier seed-18427 twice-rebuild hashes remain valid because this drop does not change asset sources.
+- Limitations: Physical traversal, dash tuning, real engine presentation/animation, audio listening, ordinary-input playthrough, gamepads, performance, export and human acceptance remain with integrated runtime verification. Room previews are explicitly labelled authoring-only and exercise no physics. Agent 1 owns true-merge integration and main publication.
+
+### 2026-10-24T22:40:32+05:30 — Author the complete original art and audio inventory
+
+- Changed: Completed the full generator with courier animation, Oru, two ordinary enemies, Spoolwarden, both terrain themes, layered backgrounds, props/states, effects and UI. Added editable original audio instruments/cues/scores and synthesis for 18 cues and three arrangements. Hardened asset validation and added reproducible rebuild evidence.
+- Why: Give the runtime stable production assets and semantic sound mappings while room geometry and gameplay integration continue independently.
+- Validation: Full generation produces 47 manifested assets; full asset validation PASS. Asset/audio/generator suites pass 40 tests. Two rebuilds at seed 18427 produced identical output and manifest hashes. Native authoring/contact-sheet inspection performed; inner-corner orientation corrected. PCM format, peaks, loop joins and a representative simultaneous-event mix checked structurally.
+- Limitations: Final room delivery follows separately. Authoring previews do not establish Godot rendering/animation; audio has not been listened to, and runtime mix, traversal, gamepads, performance, exports and human review remain unverified. Diagnostic files are retained for early-runtime compatibility but excluded from the full manifest.
 
 ### 2026-10-24T22:29:31+05:30 — Deliver Drop A diagnostic content tracer
 

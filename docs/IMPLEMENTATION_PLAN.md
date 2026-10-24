@@ -12,7 +12,7 @@ Build the fixed-character co-op game first. The first completion target is the e
 4. Keep the current status in the implementation repository: implemented, verified, partially verified, planned, blocked. Include the exact engine version and commands actually run.
 5. Stop after Phase 1 is packaged and playtested. Do not automatically begin image generation, networking, or world expansion.
 
-M0's runtime and the first diagnostic content packet are integrated: boot/session/player/cameras, original diagnostic assets/r00 and four engine scenarios exist with clean import and headless startup. Continuous visible/physical-input acceptance remains outstanding before declaring M0 fully passed. See `STATUS.md` and `../HANDOFF.md` for current evidence and next tasks; later milestones still follow the gates below.
+The diagnostic runtime tracer and the full authored content bundle are now being integrated from separate branches. [STATUS.md](STATUS.md) records verified checkpoints and remaining integration; the original handoff is historical context. [SETUP.md](SETUP.md) and the README distinguish available content commands from runtime-checkout commands. The milestone gates below still require actual integrated evidence.
 
 ## 2. Dependency path
 

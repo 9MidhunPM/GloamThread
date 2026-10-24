@@ -2,6 +2,8 @@
 
 Source: the user-supplied **Devin Hacks Kochi Tracks** PDF, read directly on 24 October 2026. This section interprets that document only; it does not invent event requirements or promise a judging outcome.
 
+Event guidance follows the corrected **Devin Hack Kochi** template referenced in [RULES.md](../RULES.md). The track interpretation below adds no AI provider requirement; current organizer announcements remain authoritative for eligibility and submission.
+
 ## Primary track: Make Room for Play
 
 The track says:
