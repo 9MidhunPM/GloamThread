@@ -19,6 +19,7 @@ import time
 from PIL import Image, ImageChops
 
 ROOT = Path(__file__).resolve().parents[2]
+FIXTURE_KINDS = {"title", "join", "pause", "map", "dialogue", "settings", "controls", "reconnect", "ending"}
 
 
 def wait_until(predicate, timeout=12):
@@ -92,12 +93,30 @@ def main():
                     if capture_all:
                         command += ["--capture-dir", str(output / "1x")]
                     commands.append(command)
+                    started_at_ns = time.time_ns()
                     app = subprocess.Popen(command, cwd=ROOT, env=env, stdout=app_stream, stderr=subprocess.STDOUT)
                     wait_until(lambda: records(log, "UI_PREVIEW_LAYOUT "))
                     if capture_all:
                         wait_until(lambda: len(records(log, "UI_RENDER_CAPTURE ")) == 9)
                         wait_until(lambda: log.read_text().rstrip().endswith("}") and
                                    records(log, "UI_PREVIEW_LAYOUT ")[-1]["kind"] == "settings")
+                        captures = records(log, "UI_RENDER_CAPTURE ")
+                        require(len(captures) == len(FIXTURE_KINDS) and
+                                {item["kind"] for item in captures} == FIXTURE_KINDS,
+                                "Native captures do not cover every unique fixture kind")
+                        pixels = set()
+                        for item in captures:
+                            path = output / "1x" / (item["kind"] + ".png")
+                            require(Path(item["path"]).resolve() == path and path.stat().st_mtime_ns >= started_at_ns,
+                                    f"Native capture is stale or has an unexpected path: {path}")
+                            require((item["width"], item["height"]) == (960, 360), "Capture metadata has invalid dimensions")
+                            with Image.open(path) as saved:
+                                rendered = saved.convert("RGB")
+                            require(rendered.size == (960, 360) and
+                                    len(rendered.getcolors(rendered.width * rendered.height)) > 3,
+                                    f"Native fixture capture lacks rendered content: {path}")
+                            pixels.add(rendered.tobytes())
+                        require(len(pixels) == len(FIXTURE_KINDS), "Different fixture kinds have identical captures")
                     # Debug builds may append a title suffix. PID ownership is
                     # the authority; the prefix only narrows this private display.
                     windows = xdo("search", "--onlyvisible", "--name", "^Gloamthread menu preview").splitlines()
@@ -112,9 +131,11 @@ def main():
                     subprocess.run(["import", "-window", window, str(path)], env=env, check=True)
                     return Image.open(path).convert("RGB")
 
-                def stop_app():
+                def stop_app(expect_running=False):
                     nonlocal app, app_stream
                     if app is not None:
+                        if expect_running:
+                            require(app.poll() is None, f"Native preview exited before intentional shutdown: {app.returncode}")
                         if app.poll() is None:
                             app.terminate()
                         try:
@@ -129,6 +150,9 @@ def main():
 
                 log, window = start(1, capture_all=True)
                 before = capture(window, output / "1x/settings_window.png")
+                framebuffer = Image.open(output / "1x/settings.png").convert("RGB")
+                require(same_pixels(before, framebuffer), "Native window differs from the engine framebuffer")
+                require(len(before.getcolors(before.width * before.height)) > 3, "Native menu capture lacks rendered content")
                 xdo("key", "--clearmodifiers", "--delay", "120", "Down", "period", "m", "Return")
                 time.sleep(0.1)
                 after = capture(window, output / "1x/nonowner_unchanged.png")
@@ -160,19 +184,20 @@ def main():
                 small = large.resize((960, 360), Image.Resampling.NEAREST)
                 require(same_pixels(small, before), "2x menu differs from the 1x logical layout")
                 require(same_pixels(small.resize((1920, 720), Image.Resampling.NEAREST), large), "2x pixels are filtered or unevenly scaled")
-                stop_app()
+                stop_app(expect_running=True)
 
                 log3, window3 = start(1, long_prompts=True)
                 layout = records(log3, "UI_PREVIEW_LAYOUT ")[-1]
                 require(layout["footer_lines"] == 2, "Long prompt fixture did not wrap into exactly two lines")
                 capture(window3, output / "long_prompts.png")
-                stop_app()
+                stop_app(expect_running=True)
                 for log_path in (output / "native-1x.log", log2, log3):
                     text = log_path.read_text()
                     require("SCRIPT ERROR" not in text and "\nERROR:" not in text, f"Unexpected engine error: {log_path}")
                 result = {"engine": subprocess.check_output(["godot", "--version"], text=True).strip(),
                           "renderer": "X11 / Compatibility / Mesa llvmpipe", "private_display": True,
-                          "fixture_states_rendered": 9, "nonowner_pixels_unchanged": True,
+                          "fixture_states_rendered": 9, "native_matches_engine_framebuffer": True,
+                          "nonowner_pixels_unchanged": True,
                           "native_actions": expected, "cancel_title_quit": True,
                           "pixel_exact_integer_2x": True, "long_prompt_footer_lines": 2,
                           "commands": commands,
