@@ -57,7 +57,6 @@ var _revive_animation_ticks: int = 0
 var _attack_kind: String = ""
 var _attack_tick: int = 0
 var _attack_id: int = 0
-var _attack_facing: int = 1
 var _attack_direction := Vector2.DOWN
 var _attack_buffer_ticks: int = 0
 var _hit_targets: Dictionary = {}
@@ -282,7 +281,6 @@ func _start_attack(kind: String) -> void:
 	_attack_kind = kind
 	_attack_tick = 0
 	_attack_id = CombatQuery.next_attack_id()
-	_attack_facing = -1 if facing == Facing.LEFT else 1
 	_attack_direction = facing_vector
 	_attack_buffer_ticks = 0
 	_hit_targets.clear()
@@ -309,10 +307,10 @@ func _update_attack() -> void:
 			var bolt := SporeBolt.new()
 			bolt.source_slot = slot_index
 			bolt.attack_id = _attack_id
-			bolt.direction = _attack_facing
+			bolt.direction = _attack_direction
 			bolt.catalog = _catalog
 			get_parent().add_child(bolt)
-			bolt.global_position = hurt_rect().get_center() + _attack_direction * 10.0
+			bolt.global_position = hurt_rect().get_center()
 	if _attack_tick >= (18 if _attack_kind == "slash" else 22):
 		_attack_kind = ""
 

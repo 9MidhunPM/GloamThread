@@ -198,6 +198,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T01:19:15+05:30 — Swept overhead Spore Bolt
+
+- Changed: Spore Bolt follows a normalized two-axis direction, chooses earliest swept hurtbox contact before terrain, starts at the courier ground centre and expires after forty-eight physics ticks.
+- Why: Prevent tree-order hits, vertical-shot errors, duplicate impacts and close-wall spawn bypasses while retaining Neri slow.
+- Validation: Isolated Godot 4.7.2 actor scenarios pass 5/5: nearest ordering, vertical/diagonal hits, wall rejection, bounded lifetime and owned tick-eight/twenty-two-tick special emission.
+- Limitations: Null-catalog fixtures; water-flight policy and original effect presentation await integration.
+
+
 ### 2026-10-25T01:17:53+05:30 — Ground-plane Ember Arc
 
 - Changed: Ember Arc emits one 120-degree close fan on tick eight, with bounded reach, whole-hurtbox intersection, wall line-of-sight and a twenty-two-tick special sequence.
