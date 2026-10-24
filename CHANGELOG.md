@@ -198,6 +198,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T01:22:30+05:30 — End roll at its declared travel distance
+
+- Changed: Clear roll velocity on its last movement tick instead of letting ordinary motor deceleration add unrequested drift.
+- Why: Keep the promised thirty-six-pixel roll distance true after the action ends, particularly beside water.
+- Validation: Focused roll scenario passes, including three neutral ticks after roll completion with no extra travel.
+- Limitations: Headless physics fixture; human controller feel review remains pending.
+
+
 ### 2026-10-25T01:21:52+05:30 — Explicit projectile water flight
 
 - Changed: Couriers pass their known room water body to Spore Bolt; each projectile excepts only that body while retaining wall collision.

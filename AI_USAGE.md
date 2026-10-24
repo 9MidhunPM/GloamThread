@@ -58,6 +58,9 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-actors -->
 
+- 2026-10-25T01:22:30+05:30 | Codex | Corrected post-roll coasting found while reviewing dash braking. Human review pending. Added and passed a neutral-input completion assertion in the real-physics roll scenario.
+
+
 - 2026-10-25T01:21:52+05:30 | Codex | Added explicitly authorized projectile water flight through the room-context body. Human review pending. Focused Spore scenario passes with water traversal and retained wall rejection.
 
 

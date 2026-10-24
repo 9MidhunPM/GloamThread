@@ -146,6 +146,8 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		_keep_in_room()
 		roll_ticks -= 1
+		if roll_ticks == 0:
+			velocity = Vector2.ZERO
 		_set_animation("roll")
 		return
 	if _hurt_ticks > 0:
