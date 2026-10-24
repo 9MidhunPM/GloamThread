@@ -8,10 +8,10 @@ This project maintains the record for **Devin Hack Kochi** as a repository conve
 
 ## Agent 1 — runtime and integration
 
-| 2026-10-25T02:05:12+05:30 | Codex | Isolate overhead development identity | Set dedicated user data and derive package version from project configuration; corrected launch/evidence guide | Pending human review; preserved prior release and saves | Packaging compilation, documentation and whitespace checks pass; native overhead export pending |
-
 | Date and time with timezone | Tool / model, if known | Task | Assistance and affected files | Human review / corrections | Validation and result |
 | --- | --- | --- | --- | --- | --- |
+| 2026-10-25T02:06:20+05:30 | Codex | Teach overhead join controls | Replaced stale jump/default-key prose with per-slot current bindings and correct team dash availability | Pending human review | Actual-App controls scenario and editor import pass; corrected prior log table formatting |
+| 2026-10-25T02:05:12+05:30 | Codex | Isolate overhead development identity | Set dedicated user data and derive package version from project configuration; corrected launch/evidence guide | Pending human review; preserved prior release and saves | Packaging compilation, documentation and whitespace checks pass; native overhead export pending |
 | 2026-10-25T02:01:00+05:30 | Codex | Connect overhead story/session consumers | Integrated worldworker session/geometry/guidance and peer corrections; wired actual App intro completion and authored concise mission dialogue | Native/fresh-pair review pending; full route driver follows | Content validator and24new overhead engine scenarios PASS; fixture/actual UI boundary evidence distinguished from complete route |
 | 2026-10-25T01:47:13+05:30 | Codex | Integrate overhead media admission | True-merged Agent2 original50asset packet; implemented strict directional/frame/timing/pivot/tile consumer and fixed metadata migration | Human art/music/gameplay review pending | Clean media import + actual boundary/negative scenarios PASS; whole new game still integrating |
 | 2026-10-25T01:03:41+05:30 | Codex | Plan overhead migration and lane contracts | Converted latest user direction into explicit motor/art/terrain/save interfaces and playable milestones; coordinated Agent2 and actor review | User requested overhead perspective and200meaningful commits; implementation review pending | Docs links/whitespace pass; old side-view evidence kept separate |

@@ -6,6 +6,12 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 1 — runtime and integration
 
+### 2026-10-25T02:06:20+05:30 — Teach current overhead controls at join
+
+- Changed: Join source rows show each selected player's current movement, Roll, combat, interaction/revive and map bindings. Threadstep is visibly locked for New and reflects the saved team unlock for Continue.
+- Why: Hardcoded platform jump instructions misled players and ignored remapping/device changes.
+- Validation: Actual-App overhead control scenario passes remapped partner isolation and new/continued unlock states; clean editor import and documentation/whitespace checks pass.
+
 ### 2026-10-25T02:05:12+05:30 — Isolate overhead saves and identify development packages
 
 - Changed: Versioned the new game 0.2.0-dev with a dedicated Gloamthread-overhead user-data directory. Linux packaging derives its archive/build version from the validated project identifier; updated the current launch guide for Roll and actual verification limits.

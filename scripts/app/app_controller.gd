@@ -144,11 +144,26 @@ func _show_join() -> void:
 	var rows: Array[Dictionary] = []
 	for index in 2:
 		var source := InputRouter.source_of(index)
-		rows.append(_row("source_%d" % index, "Player %d: %s" % [index + 1, source.display_name() if source != null else "Choose input"], "Confirm or Left/Right to change", true, true))
+		rows.append(_row("source_%d" % index, "Player %d: %s" % [index + 1, source.display_name() if source != null else "Choose input"], "Confirm or Left/Right to change.\n" + _join_control_guide(index), true, true))
 	rows.append(_row("swap", "Characters: %s" % ("P1 Neri / P2 Tavi" if _swap_characters else "P1 Tavi / P2 Neri"), "Saved character assignment" if _join_continue else "Different colours, one shared world", not _join_continue))
 	rows.append(_row("start", "Continue journey" if _join_continue else "Begin journey", "Both players need distinct inputs", _devices_ready()))
 	rows.append(_row("back", "Back"))
-	_show("join", "Take an end", "Keyboard sharing: simultaneous keys depend on your keyboard's rollover.\nP1 WASD: Space jump, F slash, G special, E interact, Shift dash.\nP2 arrows: Period jump, Comma slash, Slash special, M interact, Apostrophe dash.\nTwo gamepads or keyboard + gamepad are also selectable.", rows)
+	_show("join", "Take an end", "Choose distinct inputs. Roll or Interact confirms; Pause goes back.\nKeyboard sharing depends on hardware rollover. Threadstep unlocks after Spoolwarden.", rows)
+
+
+func _join_control_guide(index: int) -> String:
+	var bindings := InputRouter.bindings_of(index)
+	if bindings == null:
+		return "Choose a source to see its controls."
+	var move := "/".join([bindings.prompt_label(Action.UP), bindings.prompt_label(Action.LEFT), bindings.prompt_label(Action.DOWN), bindings.prompt_label(Action.RIGHT)])
+	var dash_available := false
+	if _join_continue:
+		var loaded := saves.load_campaign()
+		dash_available = loaded.status == "ok" and "threadstep" in loaded.data.get("team_unlocks", [])
+	return "Move %s | [%s] Roll | [%s] Slash | [%s] Special\n[%s] Interact / hold revive | [%s] Threadstep%s | [%s] Map" % [move,
+		bindings.prompt_label(Action.ROLL), bindings.prompt_label(Action.ATTACK), bindings.prompt_label(Action.SPECIAL),
+		bindings.prompt_label(Action.INTERACT), bindings.prompt_label(Action.DASH), "" if dash_available else " (locked)", bindings.prompt_label(Action.MAP)]
+
 
 
 func _devices_ready() -> bool:
