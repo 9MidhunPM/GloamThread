@@ -198,6 +198,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T01:27:48+05:30 — Overhead boss acceptance and stable script IDs
+
+- Changed: Added a boss-specific scenario covering real sweep/strike/charge clocks, ground-plane reach, immutable walls, shared stagger/Cross-stitch state and exactly-once defeat; retained generated UID sidecars for new actor fixtures/scenarios.
+- Why: Establish runtime evidence for the translated three-pattern encounter and stable imports before parallel integration.
+- Validation: Actor clone Godot 4.7.2 run passes all 8 overhead actor scenarios. Boss ordinary-hit/bonus checks are explicitly controlled API fixtures; pattern geometry/timing use actual physics. Import parsed scripts but reported restricted editor socket/config-write warnings; its unrelated font-import rewrite was restored.
+- Limitations: This is not a normal-input boss route, native art inspection or human balance review.
+
+
 ### 2026-10-25T01:25:13+05:30 — Planar enemy movement and room ownership
 
 - Changed: Enemy bodies now use floating ground-plane footprints, XY target/attack vectors and two-axis bounds. Spoolmites telegraph locked charges; Wickwing hover is visual-only and its explicit water flight returns toward dry courier approaches. Added matching set_room_context seam. Boss movement/attack geometry is translated onto the same plane.

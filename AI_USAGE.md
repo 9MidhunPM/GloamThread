@@ -58,6 +58,9 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-actors -->
 
+- 2026-10-25T01:27:48+05:30 | Codex | Added boss phase-pattern acceptance and generated owned script UIDs. Human review pending. Actor clone passes 8/8 scenarios; import environment warnings and controlled boss damage fixtures are disclosed. No normal-route or rendered-quality claim.
+
+
 - 2026-10-25T01:25:13+05:30 | Codex | Migrated enemy movement, ground hurtboxes and explicit room-water flight; added real FSM/physics assertions with controlled placements. Human review pending. Ordinary enemy scenario and six courier scenarios pass; boss-specific acceptance and rendered art remain pending.
 
 
