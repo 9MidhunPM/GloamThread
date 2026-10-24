@@ -52,9 +52,9 @@ def validate_proposal(value: object) -> dict:
     palette, features = theme["palette"], value["features"]
     if (not isinstance(palette, list) or not 4 <= len(palette) <= 8
             or not all(isinstance(c, str) and re.fullmatch(r"#[0-9A-Fa-f]{6}", c) for c in palette)
-            or not isinstance(features, list) or not 1 <= len(features) <= 12
+            or not isinstance(features, list) or len(features) > 12
             or not all(text(f, 160) for f in features)):
-        raise ForgeError("Proposal needs 4-8 hex colors and 1-12 bounded visual features.")
+        raise ForgeError("Proposal needs 4-8 hex colors and at most 12 bounded visual features.")
     # JSON round-trip prevents a caller mutating an approved request after validation.
     return json.loads(json.dumps(value, ensure_ascii=True))
 

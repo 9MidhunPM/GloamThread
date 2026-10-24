@@ -1,5 +1,11 @@
 # Agent 2 forge changelog
 
+## 2026-10-25T03:07:52+05:30 — Accept manually approved visual settings
+
+- Allowed an empty visual-features array, matching the approved array contract and the creator's manual body/kit/theme mode. Analysis still proposes descriptive features when used.
+- Why: drawing and approving settings without analysis previously failed local validation before image generation, with no UI field to repair the mismatch.
+- Validation: the new mocked-provider regression uses the real rig converter, completes with two image calls and no analysis call, and reserves exactly $0.20. The full forge suite passes 37/37; compilation and whitespace pass. No live request or artwork acceptance is claimed.
+
 ## 2026-10-25T03:02:25+05:30 — Bound local drawing-to-fighter jobs
 
 - Added the CLI and official OpenAI adapter, strict proposal approval, bounded/snapshotted drawings, two reference-image edits, exact retained prompts/settings and safe request metadata.
