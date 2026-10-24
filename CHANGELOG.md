@@ -43,6 +43,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 2 — content and assets
 
+### 2026-10-24T23:40:29+05:30 — Add the shared owner-controlled GameMenus component
+
+- Changed: Added the typed CanvasLayer menu renderer and public intent API, original-font layout, scrolling rows/body, owner-specific navigation, disabled/adjustable actions, repeat timing, guarded mouse events and shared-boundary input flushing. Added a real-engine UI scenario and a separate UI integration/evidence record.
+- Why: Agent 1 assigned this exclusive UI vertical to unblock title/join/pause/map/dialogue/settings/reconnect/ending wiring while other workers implement gameplay and persistence. The component emits intents and leaves application decisions with Agent 1.
+- Validation: Baseline import, four existing engine scenarios and 15 Python tests PASS. New UI scenario first failed on missing implementation; final engine suite passes five scenarios including 13 UI behavior groups. Pack/link and diff checks PASS; independent source review found no blocker. Invalid-row fixtures intentionally emit error diagnostics. Direct standalone script checking lacked autoload globals; normal project scenario loading compiles/runs successfully.
+- Limitations: Native rendered layout, extended scrolling/mouse checks and real window input are still pending this core checkpoint. No full application, controller, rollover or human-playtest acceptance is claimed. Global importer sidecars and central application integration remain with Agent 1.
+
 ### 2026-10-24T22:29:31+05:30 — Deliver Drop A diagnostic content tracer
 
 - Changed: Added original diagnostic courier/terrain/mover sources and generator, a retained 96-glyph font source and PNG/BMFont export, provenance manifest, real fixed profiles/themes/world/dialogue and the exact r00 tracer layout. Added read-only staged asset/content validators and Python boundary tests; recorded setup and limitations in `evidence/content/README.md`.
