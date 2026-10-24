@@ -686,6 +686,21 @@ class ForgeProviderTests(unittest.TestCase):
         self.assertEqual(json.loads((self.job_dir / "candidate/manifest.json").read_text())["theme"]["palette"],
                          PROPOSAL["theme"]["palette"])
 
+    def test_manual_approved_proposal_without_features_generates_without_analysis(self):
+        self.approve()
+        self.job["proposal"]["features"] = []
+        self.write_job()
+        self.provider.image.side_effect = [
+            (self.raw_part_board(self.job["proposal"]), {"request_id": "req_mock_manual_parts"}),
+            (self.theme, {"request_id": "req_mock_manual_theme"}),
+        ]
+        status = self.invoke("generate", converter=None)
+        self.assertEqual(status["state"], "complete")
+        self.assertTrue((Path(status["candidate_path"]) / "manifest.json").is_file())
+        self.provider.analyse.assert_not_called()
+        self.assertEqual(self.provider.image.call_count, 2)
+        self.assertAlmostEqual(status["reserved_usd"], 0.20)
+
 
 class ForgeOfficialAdapterTests(unittest.TestCase):
     """The optional SDK adapter is replaced in memory; no SDK/key is required."""
