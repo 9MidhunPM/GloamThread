@@ -1,5 +1,12 @@
 # Change log
 
+### 2026-10-25T03:10:36+05:30 — Build the shared-screen wave game and character forge
+
+- Added the active1080pfullscreen solo/co-op App, shared arena simulation, wave/boss/endless director, run-only personal rewards/upgrades, concurrent shops, recovery and results. Kept the campaign tree intact. Integrated Agent2original fighters/three rigs,20waves,30upgrades,six enemy/four boss atlases and arcade audio.
+- Added draw/import/proposal/generation preview, masks/pivots and atomic accepted library, plus a credential-private budgeted worker with source/cache/provenance and no combat calls. Registered raw bundle export support.
+- Review corrected simultaneous shop confirmations/input ownership, terrain-aware hit rays, duplicated crit/chain application, short palettes and action resets. Current checks:11arena scenarios,107forge assertions,146Python tests and Godot4.7.2import pass. Priorcampaignroutepassedwith180secondlimit.
+- LiveLunaanalysisrecognizedthefoxfixture;firstimageeditreturned403accessdenied, no acceptedgeneratedpixels/retry/fallback.0.15USDreservationretained(notbilling). Ordinary-input bots subsequently cleared both solo20-wave paths and co-op25 including endless without overrides; native1080p32-enemy fixture ran. Export/human gates remain under verification.
+
 ### 2026-10-25T02:47:21+05:30 — Approve shared-screen wave-fighter implementation
 
 - Replaced active product authority with the approved solo/co-op20wave, personal-shop, generated-character specification; assigned runtime/actor/creator/content ownership and exact bundle/job boundaries. Preserved older game requirements as historical references.

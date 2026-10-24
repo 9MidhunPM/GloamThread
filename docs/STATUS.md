@@ -1,11 +1,13 @@
 # Implementation status
 
-Active product: **solo/two-player shared-screen wave fighter**, approved25October2026. See [specification](WAVE_FIGHTER_SPEC.md) and [Agent2brief](AGENT_2_WAVE_CONTENT.md).
+Active product: **solo/two-player shared-screen wave fighter**, approved25October2026. [Contract](WAVE_FIGHTER_SPEC.md), [Agent2brief](AGENT_2_WAVE_CONTENT.md). Updated2026-10-25T03:10:36+05:30.
 
-Implemented: earlier side-view campaign and optional private OpenAI authoring CLI are preserved at a9a0f01. New wave-fighter runtime, creator UI and content are being built in parallel. No new-game acceptance or live generation success is claimed yet.
+Implemented: new fullscreen/shared arena entry point, fixed solo/duo roster, held attacks/dodge, six distinct build families, six enemy roles/four bosses,20waves and optional endless, attributed personal kill coins + both-player clear bonuses, concurrent shops/ready/reset, revival/team wipe, original fighter/enemy/terrain/audio content, drawn/uploaded creation proposals, strict bundle library, mask/pivot correction/bake and optional budgeted Python generation worker.
 
-Current baseline: Godot4.7.2; previous20scenario suite running before edits. Agent1integrates runtime; Agent2owns content and Python forge. Prior campaign/overhead performance and route evidence do not establish this game's behaviour.
+Verified in current integration: Godot4.7.2import;11 active arena scenarios pass, including owned simultaneous shop input and actual-App solo/co-op;107 isolated forge assertions pass;146 Python tests pass. Agent2has16content tests passing and a full deterministic rebuild/validator. Previous campaign baseline19scenariospassed, plus its9,758tickroute passed with180secondtimeoutafterthedefault30secondlimitwasinsufficient.
 
-Remaining gates: shared-screen solo/co-op, five-wave loop/shop, creation-to-combat,20waves/endless, all rig/build checks, native1080p capped crowds, export/offline playback. Physical controllers, keyboard rollover, listening and fresh human balance/fun remain unverified.
+Live API: existing ignored key authenticated; Luna vision successfully recognized the original fox fixture and proposed an Ember/Copper Orchard build. First mini image edit returnedHTTP403model/account access denied, so no live-generated pixels were accepted. No paid retry or model fallback occurred. Ledger retains0.15USDconservative reservation (analysis0.05+oneimage0.10), not actual billing. Image-model access is a material external gate; retained raw/cache/proposal/status remain ignored. Account-specific setup must be corrected before generated sprite/texture quality can be accepted.
 
-Event guidance remains **Devin Hack Kochi** in [RULES.md](../RULES.md).
+Native: original creator UI captured; review moved all costly/cancel/accept actions into a persistent1080pactionbar. Normal-input automated routes now pass: Ember solo20 waves (24,633ticks), Nature solo20 (38,018ticks), co-op25 including endless (32,497ticks); no health/position/damage/currency overrides or engine errors. A10second native Wayland1080p crowd fixture observed32enemies/55projectiles, median8.647ms andp95 14.446ms frames; itsrawprocess/physics metrics and limitations are retained. Native captures exposed shop text overflow/Ready contrast, corrected before export; recapture follows. Exported offline game and source-to-package creator helper are still being verified. No current-game completion or measured fun claim.
+
+Physical controllers, keyboard rollover, audio listening and fresh human balance/enjoyment remain unverified. Prior campaign/overhead release evidence is historical. Event guidance remains **Devin Hack Kochi** in [RULES.md](../RULES.md).
