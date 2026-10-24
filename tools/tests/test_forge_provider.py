@@ -11,7 +11,10 @@ from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import io
 import json
+import os
 from pathlib import Path
+import shutil
+import subprocess
 import sys
 import tempfile
 import threading
@@ -24,7 +27,7 @@ from PIL import Image, ImageDraw
 from tools.forge.jobs import ForgeError, run_job
 from tools.forge.provider import OpenAIProvider, public_settings
 from tools.forge import jobs
-from tools.forge.art import RIG_PARTS, authored_parts
+from tools.forge.art import RIG_PARTS, authored_parts, make_rig
 
 
 PROPOSAL = {
@@ -700,6 +703,43 @@ class ForgeProviderTests(unittest.TestCase):
         self.provider.analyse.assert_not_called()
         self.assertEqual(self.provider.image.call_count, 2)
         self.assertAlmostEqual(status["reserved_usd"], 0.20)
+
+
+class ForgeCLIProcessTests(unittest.TestCase):
+    def test_real_cli_bakes_with_space_paths_and_no_provider_or_env_dependencies(self):
+        with tempfile.TemporaryDirectory(prefix="forge-cli-") as directory:
+            root = Path(directory)
+            checkout = Path(__file__).resolve().parents[2]
+            (root / "tools").mkdir()
+            shutil.copy2(checkout / "tools/fighter_forge.py", root / "tools/fighter_forge.py")
+            shutil.copytree(checkout / "tools/forge", root / "tools/forge",
+                            ignore=shutil.ignore_patterns("__pycache__"))
+            # Any accidental SDK/settings import is a regression in this local command.
+            for name in ("openai.py", "dotenv.py"):
+                (root / "tools" / name).write_text("raise RuntimeError('offline bake imported a provider dependency')\n")
+            (root / ".env").write_text("OPENAI_IMAGE_MODEL=unreviewed-model\nOPENAI_IMAGE_QUALITY=invalid\n")
+            folder = root / "job with spaces"
+            (folder / "parts").mkdir(parents=True)
+            proposal = copy.deepcopy(PROPOSAL)
+            proposal["rig_id"], proposal["kit_id"] = "floating", "storm"
+            for name, image in authored_parts("floating", proposal["theme"]["palette"]).items():
+                image.save(folder / "parts" / (name + ".png"))
+            (folder / "rig.json").write_text(json.dumps(make_rig("floating")))
+            (folder / "source.png").write_bytes(png_bytes())
+            job_path = folder / "job.json"
+            job_path.write_text(json.dumps({"schema_version": 1, "source_image": str(folder / "source.png"),
+                                            "description": "local fixture", "proposal": proposal, "budget_usd": 0}))
+            child_env = {**os.environ, "OPENAI_API_KEY": "", "OPENAI_IMAGE_MODEL": "unreviewed-model"}
+            result = subprocess.run([sys.executable, str(root / "tools/fighter_forge.py"), "bake", "--job", str(job_path)],
+                                    cwd=root, env=child_env, capture_output=True, text=True, timeout=15)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            status = json.loads(result.stdout)
+            self.assertEqual(status["state"], "complete")
+            self.assertEqual(status["reserved_usd"], 0)
+            self.assertEqual(Path(status["candidate_path"]), folder / "candidate")
+            self.assertFalse((root / "build/forge/budget.json").exists())
+            self.assertEqual(jobs.validate_candidate(folder / "candidate")["rig_id"], "floating")
+            self.assertEqual(result.stderr, "")
 
 
 class ForgeOfficialAdapterTests(unittest.TestCase):
