@@ -1,0 +1,838 @@
+{
+  "schema_version": 1,
+  "content_version": "phase1-v1",
+  "generator_version": "1.0.0",
+  "seed": 18427,
+  "stage": "diagnostic",
+  "assets": [
+    {
+      "id": "diagnostic_mover_v1",
+      "kind": "sprite_atlas",
+      "path": "assets/generated/diagnostic/mover_diag.png",
+      "sha256": "5bb1ec9597053bcb0fda32614c2d946273b50de3c2280a7e8cfa2b7630b2f412",
+      "diagnostic": true,
+      "sources": [
+        {
+          "path": "tools/gen/art.py",
+          "sha256": "4aef4e35fc4126bdcb0f3336da8945afd95f1038dbed55c5e205a18d69014e61"
+        }
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "cell_size": [
+        32,
+        32
+      ],
+      "origin": [
+        16,
+        28
+      ],
+      "frames": [
+        [
+          0,
+          0,
+          32,
+          32
+        ]
+      ],
+      "animations": {
+        "idle": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        }
+      }
+    },
+    {
+      "id": "diagnostic_terrain_v1",
+      "kind": "tile_atlas",
+      "path": "assets/generated/diagnostic/tiles_diag.png",
+      "sha256": "02d19f044f422658e392a7d08b638ea6d78f8b19f62df54e25ede2a84e5db483",
+      "diagnostic": true,
+      "sources": [
+        {
+          "path": "assets/source/art/direction.json",
+          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+        },
+        {
+          "path": "tools/gen/art.py",
+          "sha256": "4aef4e35fc4126bdcb0f3336da8945afd95f1038dbed55c5e205a18d69014e61"
+        }
+      ],
+      "size": [
+        160,
+        120
+      ],
+      "cell_size": [
+        16,
+        16
+      ],
+      "origin": [
+        0,
+        0
+      ],
+      "frames": [
+        [
+          2,
+          2,
+          16,
+          16
+        ],
+        [
+          22,
+          2,
+          16,
+          16
+        ],
+        [
+          42,
+          2,
+          16,
+          16
+        ],
+        [
+          62,
+          2,
+          16,
+          16
+        ],
+        [
+          82,
+          2,
+          16,
+          16
+        ],
+        [
+          102,
+          2,
+          16,
+          16
+        ],
+        [
+          122,
+          2,
+          16,
+          16
+        ],
+        [
+          142,
+          2,
+          16,
+          16
+        ],
+        [
+          2,
+          22,
+          16,
+          16
+        ],
+        [
+          22,
+          22,
+          16,
+          16
+        ],
+        [
+          42,
+          22,
+          16,
+          16
+        ],
+        [
+          62,
+          22,
+          16,
+          16
+        ],
+        [
+          82,
+          22,
+          16,
+          16
+        ],
+        [
+          102,
+          22,
+          16,
+          16
+        ],
+        [
+          122,
+          22,
+          16,
+          16
+        ],
+        [
+          142,
+          22,
+          16,
+          16
+        ],
+        [
+          2,
+          42,
+          16,
+          16
+        ],
+        [
+          22,
+          42,
+          16,
+          16
+        ],
+        [
+          42,
+          42,
+          16,
+          16
+        ],
+        [
+          62,
+          42,
+          16,
+          16
+        ],
+        [
+          82,
+          42,
+          16,
+          16
+        ],
+        [
+          102,
+          42,
+          16,
+          16
+        ],
+        [
+          122,
+          42,
+          16,
+          16
+        ],
+        [
+          142,
+          42,
+          16,
+          16
+        ],
+        [
+          2,
+          62,
+          16,
+          16
+        ],
+        [
+          22,
+          62,
+          16,
+          16
+        ],
+        [
+          42,
+          62,
+          16,
+          16
+        ],
+        [
+          62,
+          62,
+          16,
+          16
+        ],
+        [
+          82,
+          62,
+          16,
+          16
+        ],
+        [
+          102,
+          62,
+          16,
+          16
+        ],
+        [
+          122,
+          62,
+          16,
+          16
+        ],
+        [
+          142,
+          62,
+          16,
+          16
+        ],
+        [
+          2,
+          82,
+          16,
+          16
+        ],
+        [
+          22,
+          82,
+          16,
+          16
+        ],
+        [
+          42,
+          82,
+          16,
+          16
+        ],
+        [
+          62,
+          82,
+          16,
+          16
+        ],
+        [
+          82,
+          82,
+          16,
+          16
+        ],
+        [
+          102,
+          82,
+          16,
+          16
+        ],
+        [
+          122,
+          82,
+          16,
+          16
+        ],
+        [
+          142,
+          82,
+          16,
+          16
+        ],
+        [
+          2,
+          102,
+          16,
+          16
+        ],
+        [
+          22,
+          102,
+          16,
+          16
+        ],
+        [
+          42,
+          102,
+          16,
+          16
+        ],
+        [
+          62,
+          102,
+          16,
+          16
+        ],
+        [
+          82,
+          102,
+          16,
+          16
+        ],
+        [
+          102,
+          102,
+          16,
+          16
+        ],
+        [
+          122,
+          102,
+          16,
+          16
+        ],
+        [
+          142,
+          102,
+          16,
+          16
+        ]
+      ],
+      "animations": {},
+      "tile_ids": [
+        "solid_fill",
+        "solid_top",
+        "one_way_middle",
+        "hazard_middle",
+        "solid_fill_2",
+        "solid_fill_3",
+        "solid_fill_4",
+        "solid_top_2",
+        "solid_top_3",
+        "solid_top_4",
+        "solid_bottom",
+        "solid_bottom_2",
+        "solid_bottom_3",
+        "solid_bottom_4",
+        "solid_left",
+        "solid_left_2",
+        "solid_left_3",
+        "solid_left_4",
+        "solid_right",
+        "solid_right_2",
+        "solid_right_3",
+        "solid_right_4",
+        "corner_outer_tl",
+        "corner_outer_tr",
+        "corner_outer_bl",
+        "corner_outer_br",
+        "corner_inner_tl",
+        "corner_inner_tr",
+        "corner_inner_bl",
+        "corner_inner_br",
+        "one_way_left",
+        "one_way_right",
+        "one_way_single",
+        "hazard_left",
+        "hazard_right",
+        "hazard_single",
+        "bridge_left",
+        "bridge_middle",
+        "bridge_right",
+        "bridge_single",
+        "seam_horizontal",
+        "seam_vertical",
+        "seam_cross",
+        "seam_knot",
+        "background_stone",
+        "background_brass",
+        "background_root",
+        "background_cloth"
+      ]
+    },
+    {
+      "id": "fixed_neri_v1",
+      "kind": "sprite_atlas",
+      "path": "assets/generated/diagnostic/courier_neri_diag.png",
+      "sha256": "31bfa7e488e949dbc85a0671942aa26a2b685c4d8d3dfe9a93dacf7dd4360481",
+      "diagnostic": true,
+      "sources": [
+        {
+          "path": "assets/source/art/direction.json",
+          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+        },
+        {
+          "path": "tools/gen/art.py",
+          "sha256": "4aef4e35fc4126bdcb0f3336da8945afd95f1038dbed55c5e205a18d69014e61"
+        }
+      ],
+      "size": [
+        32,
+        48
+      ],
+      "cell_size": [
+        32,
+        48
+      ],
+      "origin": [
+        16,
+        43
+      ],
+      "frames": [
+        [
+          0,
+          0,
+          32,
+          48
+        ]
+      ],
+      "animations": {
+        "idle": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "run": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "jump_rise": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "fall": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "land": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "slash": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "special": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "hurt": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "dash": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "downed": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "revive": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        }
+      }
+    },
+    {
+      "id": "fixed_tavi_v1",
+      "kind": "sprite_atlas",
+      "path": "assets/generated/diagnostic/courier_tavi_diag.png",
+      "sha256": "6562a4ea00061e49567b706a2a7283877e545d6289f9a72211dece8f071cc75e",
+      "diagnostic": true,
+      "sources": [
+        {
+          "path": "assets/source/art/direction.json",
+          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+        },
+        {
+          "path": "tools/gen/art.py",
+          "sha256": "4aef4e35fc4126bdcb0f3336da8945afd95f1038dbed55c5e205a18d69014e61"
+        }
+      ],
+      "size": [
+        32,
+        48
+      ],
+      "cell_size": [
+        32,
+        48
+      ],
+      "origin": [
+        16,
+        43
+      ],
+      "frames": [
+        [
+          0,
+          0,
+          32,
+          48
+        ]
+      ],
+      "animations": {
+        "idle": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "run": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "jump_rise": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "fall": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "land": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "slash": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "special": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "hurt": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "dash": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "downed": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        },
+        "revive": {
+          "frames": [
+            0
+          ],
+          "ticks": [
+            8
+          ],
+          "loop": true
+        }
+      }
+    },
+    {
+      "id": "font_texture_v1",
+      "kind": "image",
+      "path": "assets/generated/font/weft_5x7.png",
+      "sha256": "c6c6aef6ef901e121ce57734523f0f2091797cd4db98472599c6380453ae612d",
+      "diagnostic": false,
+      "sources": [
+        {
+          "path": "assets/source/art/glyphs.json",
+          "sha256": "0f117575111f43d1eb8814c823c0713c858b84746b1d5f615b9067da0eb96e30"
+        },
+        {
+          "path": "tools/gen/font.py",
+          "sha256": "23fe30d808b492013c887f4357a2819d545076668a45aef9fa3a4a767903c6f7"
+        }
+      ],
+      "size": [
+        96,
+        48
+      ]
+    },
+    {
+      "id": "font_v1",
+      "kind": "font",
+      "path": "assets/generated/font/weft_5x7.fnt",
+      "sha256": "9cc934ef663b9adb4389642a2c9ac2f0fb8ad585fc5ffea69325a87c7ad2da1b",
+      "diagnostic": false,
+      "sources": [
+        {
+          "path": "assets/source/art/glyphs.json",
+          "sha256": "0f117575111f43d1eb8814c823c0713c858b84746b1d5f615b9067da0eb96e30"
+        },
+        {
+          "path": "tools/gen/font.py",
+          "sha256": "23fe30d808b492013c887f4357a2819d545076668a45aef9fa3a4a767903c6f7"
+        }
+      ],
+      "texture_id": "font_texture_v1",
+      "glyphs": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        65533
+      ]
+    }
+  ],
+  "sfx": {},
+  "music": {}
+}
