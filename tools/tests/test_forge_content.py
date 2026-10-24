@@ -97,6 +97,12 @@ class FighterContentTests(unittest.TestCase):
             im.paste((0,0,0,0),(0,0,341,341));im.save(job/'raw_parts.png')
         with self.assertRaisesRegex(BundleError,'blank'):convert_generated(job/'raw_parts.png',job/'raw_theme.png',p,job,{})
         self.assertFalse((job/'candidate').exists())
+    def test_four_and_five_colour_proposals_convert_without_mutation(self):
+        for count in (4,5):
+            job=self.folder/f'palette-{count}';job.mkdir();p=self.proposal();p['theme']['palette']=p['theme']['palette'][:count]
+            write_json(job/'job.json',{'schema_version':1,'proposal':p});self.make_raw_boards(job,'upright')
+            result=convert_generated(job/'raw_parts.png',job/'raw_theme.png',p,job,{})
+            manifest=validate_bundle(result);self.assertEqual(len(manifest['theme']['palette']),count);self.assertEqual(len(p['theme']['palette']),count)
     def test_missing_generated_master_is_rejected(self):
         job=self.folder/'master';job.mkdir();p=self.proposal();write_json(job/'job.json',{'schema_version':1,'proposal':p});self.make_raw_boards(job,'upright')
         with Image.open(job/'raw_parts.png') as im:
