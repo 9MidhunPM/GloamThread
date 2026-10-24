@@ -9,3 +9,7 @@ Runtime loads `content/arena/catalog.json` and `assets/arena/builtin/index.json`
 The job folder receives `parts/<id>.png`, `rig.json`, `proposal.json`, theme_background.png, theme_materials.png and source_provenance.json. `rig.json` parts have id/file/pivot/anchor. All parts are64×64PNG. Optional `rig_edits.json` contains schema_version1 and parts:{id:{pivot:[x,y],mask_file:"masks/<id>.png"}}; masks are64×64grayscale or RGBA alpha. Only pivots/masks are edited; source files stay retained. Rebakes create candidate-bake-N siblings so earlier candidates survive.
 
 Current shipped content is original locally authored artwork. Live generated outputs and human/native animation acceptance are separate gates, not implied by bundle validation.
+
+Enemy consumer: `assets/arena/enemies/index.json` has assets keyed swarm/chaser/charger/shooter/flyer/heavy/warden/artillery/tempest/loom. Each record gives file, cell_size, origin,frames16,columns4,sha256. PNG is4×4cells without gutters, nearest sampling. Frames walk0–3,windup4–7,active8–11,recovery12–13,defeat14–15.
+
+Generated parts-board slot8 (bottom-right) must hold a full transparent master design, retained as128square master.png beside rig.json. Rebake staging must copy theme_background.png,theme_materials.png and source_provenance.json as well as rig/parts/masks to preserve generated environment art and provenance.

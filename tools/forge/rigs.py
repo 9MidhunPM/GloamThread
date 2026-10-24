@@ -127,6 +127,12 @@ def convert_generated(raw_parts:Path,raw_theme:Path,proposal:dict,job_dir:Path,p
         silhouette.thumbnail((width,height),Image.Resampling.NEAREST)
         require(silhouette.width>=2 and silhouette.height>=2,f'Generated part {name} is too narrow to rig.')
         part=Image.new('RGBA',(64,64));part.alpha_composite(silhouette,(target[0]+(width-silhouette.width)//2,target[1]+(height-silhouette.height)//2));parts[name]=part
+    # The ninth slot is the approved full design, separate from the rig pieces.
+    raw_master=board.crop((2*1024//3,2*1024//3,1024,1024));master_box=raw_master.getchannel('A').getbbox()
+    require(master_box is not None,'Generated master design in slot8 is blank.')
+    require(master_box[0]>2 and master_box[1]>2 and master_box[2]<raw_master.width-2 and master_box[3]<raw_master.height-2,'Generated master design is clipped by its grid slot.')
+    master=raw_master.crop(master_box);master.thumbnail((116,116),Image.Resampling.NEAREST)
+    master_preview=Image.new('RGBA',(128,128));master_preview.alpha_composite(master,((128-master.width)//2,(128-master.height)//2));master_preview.save(job_dir/'master.png')
     (job_dir/'parts').mkdir();rig=make_rig(proposal['rig_id'])
     for name,image in parts.items():image.save(job_dir/f'parts/{name}.png')
     write_json(job_dir/'rig.json',rig);write_json(job_dir/'proposal.json',proposal)
