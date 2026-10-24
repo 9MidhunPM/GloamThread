@@ -2,13 +2,15 @@
 
 Version 2.0 · Future Phase 2 plan. No image service, provider integration or generated-character runtime is implemented in this pack.
 
+See the [drawing preparation brief](DRAWING_PREPARATION.md) for the inspected fixed-runtime boundaries, a first recognition/animation experiment and ordered follow-up work. It is future design work, separate from the packaged Phase 1 source.
+
 ## 1. Player promise
 
 After the fixed-character adventure works, let each player draw or upload a character before starting. Their image shapes a playable character appearance, a balanced build and their visual interpretation of the shared kingdom.
 
 The promise is a recognisable, stylised adaptation with approved abilities. Do not promise perfect animation of every conceivable drawing, unlimited new mechanics, or a freshly coherent full-world tileset without a validated asset pipeline.
 
-Phase 1 already establishes the correct seam: Tavi and Neri use the same profile/bundle contracts that future generated characters will use. Fixed Ember and Moss theme manifests exercise the two-theme renderer. The base game remains available without a provider.
+Phase 1 establishes the profile, asset and shared-world concepts for that seam. Its implemented catalogs, theme consumers and saves still require fixed Tavi/Neri and Ember/Moss identities; they are not a generated-bundle importer. Future validated bundles must extend these boundaries together. The base game remains available without a provider.
 
 ## 2. Non-negotiable world rules
 

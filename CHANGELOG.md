@@ -65,6 +65,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 2 — content and assets
 
+### 2026-10-25T00:28:37+05:30 — Prepare the drawing-to-character and texture experiment
+
+- Changed: Added a separate future-phase preparation brief, primary-source research note and read-only profile/theme boundary audit. Corrected the roadmap's implication that fixed catalogs already support generated bundles.
+- Why: The user asked for further coordinated work and gradual preparation for player-drawing characters/textures. Agent 1 froze the Phase 1 release source at b96ad0e; this branch adds no runtime, backend, upload flow or generated assets.
+- Validation: Both full validators and all 79 Python tests PASS on the baseline; documentation/link and whitespace checks PASS. Sandbox headless probes reproduced admission differences and a missing-font startup diagnostic defect; Agent 1 reported a focused guard/regression scenario and is verifying it separately. Official Pillow/Godot sources support the proposed intake/render guidance. Independent standards and scope reviews found no blocking documentation issue.
+- Limitations: Sketch corpora, recognition scores, animated previews, generated characters/textures and human acceptance are proposed, not implemented or measured. Phase 1 physical-device/listening/fresh-pair gates remain separate.
+
 ### 2026-10-25T00:15:26+05:30 — Verify every UI capture and expected process lifetime
 
 - Changed: QA now checks the exact nine fixture kinds, fresh expected paths/dimensions, distinct nonblank pixels, and live preview processes before intentional shutdown.
