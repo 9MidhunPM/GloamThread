@@ -44,8 +44,11 @@ static func empty() -> CommandSnapshot:
 
 static func from_state(axis_x: float, axis_y: float, held_now: int, held_before: int) -> CommandSnapshot:
 	var snapshot := CommandSnapshot.new()
-	snapshot.move_x = clampf(axis_x, -1.0, 1.0)
-	snapshot.move_y = clampf(axis_y, -1.0, 1.0)
+	# Limit the complete ground-plane vector, not each axis independently.
+	# Gentle stick input keeps its magnitude; diagonals never gain extra speed.
+	var movement := Vector2(clampf(axis_x, -1.0, 1.0) if is_finite(axis_x) else 0.0, clampf(axis_y, -1.0, 1.0) if is_finite(axis_y) else 0.0).limit_length(1.0)
+	snapshot.move_x = movement.x
+	snapshot.move_y = movement.y
 	snapshot.held = held_now
 	snapshot.pressed = held_now & ~held_before
 	snapshot.released = held_before & ~held_now

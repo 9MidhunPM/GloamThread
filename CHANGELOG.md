@@ -210,6 +210,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-input -->
 
+### 2026-10-25T01:13:15+05:30 — Normalize owned ground-plane commands
+
+- Changed: CommandSnapshot now sanitizes and caps the full two-axis vector while retaining gentle analogue magnitude. Added synthetic keyboard/gamepad checks for diagonal limits, independent devices, simultaneous actions, two-axis release latching and disconnect neutrality.
+- Why: Overhead diagonal movement must not gain speed or lose analogue control.
+- Validation: Godot4.7.2 input scenarios PASS3/3 (existing routing plus two overhead scenarios); non-finite/oversized axis checks and fresh editor import pass. Expected malformed-binding/duplicate-assignment warnings are retained in the legacy negative scenario.
+- Limitations: No actor-motion or physical-controller acceptance is claimed.
+
+
 ### 2026-10-25T01:11:22+05:30 — Separate overhead campaign saves
 
 - Changed: Added public TeamProgress.SAVE_SCHEMA_VERSION=2, content version overhead-v1 and the shared met_oru introduction flag. Campaign reads distinguish schema2 from unsupported newer formats and visibly reject/preserve side-view data; backup notices retain the primary failure explanation.
