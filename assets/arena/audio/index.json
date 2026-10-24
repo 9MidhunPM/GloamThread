@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "sfx": {
+    "coin": {
+      "file": "coin.wav",
+      "sha256": "3298f0384053e70c0ffe6d0e0e3ca70f6a580d2266bf7e689562ed96b1e99b2e",
+      "sample_rate": 44100,
+      "channels": 1,
+      "frames": 7056,
+      "loop": false
+    },
+    "purchase": {
+      "file": "purchase.wav",
+      "sha256": "a5f5507c919d32190a11f7cb467697a56ef2b4370ce5772c21f8c58655a06eae",
+      "sample_rate": 44100,
+      "channels": 1,
+      "frames": 17640,
+      "loop": false
+    },
+    "wave_clear": {
+      "file": "wave_clear.wav",
+      "sha256": "571e5abe293c4aa311a0a3b53b5de79fec36e79831364fe3d4f62a0ad4bab4df",
+      "sample_rate": 44100,
+      "channels": 1,
+      "frames": 35280,
+      "loop": false
+    },
+    "ready": {
+      "file": "ready.wav",
+      "sha256": "5dabe7d5121383db08cfca77fa5ef1bfb14ae9f0e3995d1246ac1c444c87ca26",
+      "sample_rate": 44100,
+      "channels": 1,
+      "frames": 11025,
+      "loop": false
+    },
+    "combo": {
+      "file": "combo.wav",
+      "sha256": "7c46918410bd993af1584294c3f235301f71ac246984d52271fd4c50bf75e18b",
+      "sample_rate": 44100,
+      "channels": 1,
+      "frames": 12348,
+      "loop": false
+    }
+  },
+  "music": {
+    "arena": {
+      "file": "arena.wav",
+      "sha256": "691ac5cd8b1834ac953644e92b4f2400e317fdc027e95769917ff563093850f8",
+      "sample_rate": 44100,
+      "channels": 2,
+      "frames": 1282909,
+      "loop": true
+    },
+    "arena_boss": {
+      "file": "arena_boss.wav",
+      "sha256": "ba0749205a2356b80afae7565eebdd350fa74516d7cacca871e57dd1b047605e",
+      "sample_rate": 44100,
+      "channels": 2,
+      "frames": 1128960,
+      "loop": true
+    },
+    "shop": {
+      "file": "shop.wav",
+      "sha256": "d7c99969d7038fb0edc7c99eedc41a346db5efc2c50d20e84b0bcdce836b5c05",
+      "sample_rate": 44100,
+      "channels": 2,
+      "frames": 830118,
+      "loop": true
+    }
+  },
+  "sources": {
+    "assets/arena/source/audio.json": "702840b4f172226e3525a6e02ed180a73b82b4b01b66074a2573bb6866a7fdc8",
+    "assets/source/audio/instruments.json": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1",
+    "tools/forge/audio.py": "9c0b05130e60cff2c754de7cd919bbc2e17f98c8799c4556c8581dbe1f606fae",
+    "tools/gen/audio.py": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+  },
+  "provider_calls": 0
+}

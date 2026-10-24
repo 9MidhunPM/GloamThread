@@ -1,10 +1,83 @@
 # Change log
 
+### 2026-10-25T04:18:53+05:30 — Ship generated artwork and recover cached layouts in game
+
+- Integrated the reviewed real Kiln Fox as default P1, retained its editable sources/receipts and used all generated material panels. Added six directional special effects and kept fighters/projectiles visible in dense crowds.
+- Added the native raw-board crop editor and fresh local correction drafts. Confined Tab/Shift-Tab focus to the crop modal and corrected integer JSON serialization across Godot/Python; cached conversion, masks and pivots remain offline and preserve previous candidates. Updated export exclusions and current launch/agent guidance.
+- Validation: Godot 4.7.2 import; 12 arena scenarios; 154 creator assertions; 173 Python tests; both content validators pass. Generated-default solo clears 20 waves in 24,084 ticks with no overrides/errors. Real correction UI → Python → preview → acceptance passes in a network namespace with unchanged ledger. Final native 1080p controlled crowd: 32 enemies/67 projectiles, p95 11.779 ms offscreen frame interval. Retained actual captures and source hashes.
+- Live generation: one successful Luna analysis and two successful mini images after a denied attempt. Explicit crops corrected the nonconforming board without more requests; $0.35 conservative reservation retained within the shared $0.50 cap, not a billing receipt. Physical controllers, listening, human balance/clear time and final packaged-revision checks remain separate gates.
+
+### 2026-10-25T03:39:54+05:30 — Reduce crowd overhead and verify the exported wave route
+
+- Retained projectile/enemy draw commands between visual changes, removed avoidable sweep/target allocations, and throttled HUD text updates while using cached fighter stats. Preserved terrain-first swept hit order and combat rules. Added the dedicated arena QA export entry point; fixed shop clipping/contrast and added a shared boss bar.
+- Validation:7actor scenarios,30,000sweep-equivalence cases and post-change normal-input solo20/co-op25 routes pass.11arena scenarios,107forge assertions,147Python tests pass. Official Linux QA export also reaches25waves in a network namespace; ordinary package boots outside source. Native offscreen1080p32enemy/67projectile profile:p9513.253ms versus17.442ms before this combined pass; not a physical-display/human performance claim.
+- Both real image requests now succeed after project access changed; strict conversion correctly rejected the returned layout. Local cached crop correction is in progress; no additional request or accepted generated-art claim.
+
+### 2026-10-25T03:10:36+05:30 — Build the shared-screen wave game and character forge
+
+- Added the active1080pfullscreen solo/co-op App, shared arena simulation, wave/boss/endless director, run-only personal rewards/upgrades, concurrent shops, recovery and results. Kept the campaign tree intact. Integrated Agent2original fighters/three rigs,20waves,30upgrades,six enemy/four boss atlases and arcade audio.
+- Added draw/import/proposal/generation preview, masks/pivots and atomic accepted library, plus a credential-private budgeted worker with source/cache/provenance and no combat calls. Registered raw bundle export support.
+- Review corrected simultaneous shop confirmations/input ownership, terrain-aware hit rays, duplicated crit/chain application, short palettes and action resets. Current checks:11arena scenarios,107forge assertions,146Python tests and Godot4.7.2import pass. Priorcampaignroutepassedwith180secondlimit.
+- LiveLunaanalysisrecognizedthefoxfixture;firstimageeditreturned403accessdenied, no acceptedgeneratedpixels/retry/fallback.0.15USDreservationretained(notbilling). Ordinary-input bots subsequently cleared both solo20-wave paths and co-op25 including endless without overrides; native1080p32-enemy fixture ran. Export/human gates remain under verification.
+
+### 2026-10-25T02:47:21+05:30 — Approve shared-screen wave-fighter implementation
+
+- Replaced active product authority with the approved solo/co-op20wave, personal-shop, generated-character specification; assigned runtime/actor/creator/content ownership and exact bundle/job boundaries. Preserved older game requirements as historical references.
+- Validation: repository clean before work, Godot4.7.2 confirmed; documentation link/whitespace checks follow. Runtime, real generation and new-game acceptance are not yet implemented.
+
 Record each meaningful project change, newest first. Update this file in the same commit as the change. Use a real timestamp with timezone, for example `YYYY-MM-DDTHH:MM:SS+05:30`. Never backdate an entry.
 
 ## Build log
 
 ## Agent 1 — runtime and integration
+
+### 2026-10-25T02:24:23+05:30 — Add bounded OpenAI image-authoring commands
+
+- Changed: Added optional official OpenAI SDK dependency setup, private.env loading/status, explicit model/quality plans, one/two-request generation, retained raw PNG/prompt/usage/hash provenance and local candidate preparation commands. Excluded local build and env data from both exports.
+- Why: Test the user-authorized low-cost image workflow without embedding credentials/network calls in the game or silently retrying billed generation.
+- Validation: Eight mocked-provider/credential/decode/provenance tests pass; SDK2.54.0 installed in ignored.venv; key presence verified without its value. Real requests and converted quality are recorded separately after the shared prompt library lands.
+
+### 2026-10-25T02:20:42+05:30 — Restore the original side-view adventure
+
+- Changed: Restored verified34ccb96side-view simulation, rooms, art/audio, tests and authoring tools as a forward change. Preserved the complete overhead experiment on its branch. Created an ignored private blank.env and documented the newly authorized optional API authoring boundary.
+- Why: The user prefers the earlier side-view perspective and now requests OpenAI-generated sprites/textures using their own key.
+- Validation: Fresh restored import and20/20 engine scenarios pass, plus full asset/content validators and documentation/whitespace checks. No key is present and no live API generation is claimed.
+
+### 2026-10-25T02:18:24+05:30 — Preserve tested overhead experiment before returning to side view
+
+- Changed: Retained active overhead resource/App/save regressions and archived platform-only fixtures with explicit historical mapping; switched native QA observer to the new ordinary-input overhead route.
+- Why: Preserve a complete reviewable experimental checkpoint before the user-requested return to the earlier side-view game.
+- Validation: Full112Python tests, both validators, fresh import and40/40 active Godot scenarios pass. Native first-room split-screen rendered; full overhead native/export and human gates remain unverified.
+
+### 2026-10-25T02:13:07+05:30 — Reject malformed room epochs without script errors
+
+- Changed: Type-check the room content epoch before string comparison and retain overhead spawn/reference boundary checks.
+- Why: Boolean and integer JSON epochs crashed parsing instead of returning useful validation errors; the expanded boundary scenario reproduced both failures.
+- Validation: Focused room-loading scenario now passes incompatible string, boolean, integer and null epochs plus dry-footprint checks; whitespace and pack checks pass.
+
+### 2026-10-25T02:06:20+05:30 — Teach current overhead controls at join
+
+- Changed: Join source rows show each selected player's current movement, Roll, combat, interaction/revive and map bindings. Threadstep is visibly locked for New and reflects the saved team unlock for Continue.
+- Why: Hardcoded platform jump instructions misled players and ignored remapping/device changes.
+- Validation: Actual-App overhead control scenario passes remapped partner isolation and new/continued unlock states; clean editor import and documentation/whitespace checks pass.
+
+### 2026-10-25T02:05:12+05:30 — Isolate overhead saves and identify development packages
+
+- Changed: Versioned the new game 0.2.0-dev with a dedicated Gloamthread-overhead user-data directory. Linux packaging derives its archive/build version from the validated project identifier; updated the current launch guide for Roll and actual verification limits.
+- Why: Preserve the published side-view campaign/settings and prevent a new export from masquerading as the old demo.
+- Validation: Python packaging compilation, planning-pack links and whitespace pass. Native overhead play/export remains a separate pending gate.
+
+### 2026-10-25T02:01:00+05:30 — Connect overhead rooms, per-player guidance and Oru's mission
+
+- Changed: Integrated the authored overhead world/session/HUD with shared feet sorting, safe water-context cleanup, per-slot local hints/targets and permanent mission flow. Actual App Next/Skip/cancel closes introduction through complete_dialogue, committing met_oru before the first gate. Rewrote Oru's short introduction for clear overhead cooperation.
+- Why: The new world gate must follow the production dialogue UI; fixture-only completion would leave actual players stuck. Nearby hints must belong to the courier who can act.
+- Validation: Full content validator PASS;24overhead engine scenarios PASS, including three actual-App introduction closing paths and durable mission state. These include fixture-controlled physics/transactions and do not yet claim an ordinary complete overhead campaign or native quality.
+
+### 2026-10-25T01:47:13+05:30 — Admit directional overhead media and fixed profiles
+
+- Changed: Integrated original50asset overhead art/audio/home packet. Runtime now requires overhead-v1,courier_overhead_v1,36directional clips covering128hero frames, exact gameplay-matching visual ticks/pivots and the new48tile inventory. Migrated fixed profile/theme/dialogue headers; retained strict pre-play resource resolution.
+- Why: Prevent a side-view or incomplete directional bundle from entering the new simulation while original media and runtime advance in separate lanes.
+- Validation: Full media editor import clean; actual overhead catalog/profile/theme/resource scenario PASS, including missing-direction, bank overlap, timing, count, loop and pivot rejection. Producer103Python/asset validation/rebuild evidence retained. Full rooms/session/app integration remains in progress, not claimed by this boundary gate.
 
 ### 2026-10-25T01:03:41+05:30 — Freeze overhead gameplay/art contracts and parallel lanes
 
@@ -85,6 +158,33 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 2 — content and assets
 
+### 2026-10-25T01:49:29+05:30 — Repair the authoring tool for overhead content
+
+- Changed: Replaced side-view preview assumptions with explicit overhead material/pose studies, correct feet/crop/sort rules, strict epoch guards, selected-room/output options and original manifested captions. Versioned the default study directory to preserve old side-view evidence; added nine public-CLI tests and a hashed r00 working-snapshot example.
+- Why: The existing preview command crashed on new terrain names and could overwrite historical authoring proof. A one-room milestone needs a useful study before every room is migrated.
+- Validation: 112 Python tests PASS, including nine CLI cases; Python compilation, independent review, pack/link and whitespace PASS. Evidence-preservation regression first failed then passed. Actual old checkout correctly rejects before output; a read-only Agent 1 r00 snapshot renders a labelled study successfully.
+- Limitations: Pillow studies show basic materials/poses only; no engine/camera/collision/gameplay/audio/performance is exercised. Snapshot hashes identify inputs without claiming a released build or new normal-control route.
+
+### 2026-10-25T01:29:53+05:30 — Separate enemy warnings from attack artwork
+
+- Changed: Added the original six-frame hollow +X warning arrow, editable source, retained atlas/provenance and focused tests. Required transient effect playback to be nonlooping. Generator 2.1.0 produces 50 assets.
+- Why: Agent 1's actor lane needs a readable overhead warning rather than reusing slash artwork; a marker must show danger direction immediately without hiding ground or flashing.
+- Validation: 103 Python tests PASS, two complete deterministic rebuilds, full50asset validation, Godot media import, pack/link and whitespace PASS. New finite-effect regression first failed then passed. Static marker/rotation sheet inspected; all previous49 media files remain byte-identical to e85fc2f.
+- Limitations: Runtime marker placement/rotation/windup holding and ordinary/boss encounter readability remain integration work. A direction arrow is not an exact hitbox contour or a human playtest result.
+
+### 2026-10-25T01:18:03+05:30 — Author the overhead art and active original soundtrack
+
+- Changed: Rebuilt both couriers as four-direction 128-frame sets, radial actors/boss, all eight effects and 48 opaque overhead terrain slots. Added four original keyboard/bass/percussion arrangements including boss_final, plus a grounded roll cue while retaining 18 legacy SFX. Versioned the 49-asset packet as overhead-v1/generator 2.0.0 with source/output provenance. Updated asset admission, focused regressions, pipeline docs and branch integration notice.
+- Why: Implement the user-authorized overhead direction and stronger animation/music while preserving clear movement, attack phases and original content. Broad reference qualities inform energy and perspective; no copied art, melodies, samples or maps are used.
+- Validation: 100 Python tests PASS, including two deterministic full rebuilds, art/source/PCM/headroom tests and negative admission cases; full asset validator PASS; Godot 4.7.2 headless media import PASS; pack/link and whitespace PASS. Static 1× attack/terrain/effect/boss contact sheets inspected; independent source/admission review completed. Two clip-alias regressions first failed then passed after exact Oru/effect names were enforced. Original 18 SFX bytes independently match 34ccb96.
+- Limitations: This is a content packet, not an overhead gameplay completion claim. The old checkout content gate rejects the new epoch/terrain until Agent 1 integrates matching rooms/runtime. New in-engine motion, complete ordinary-control route, exported playback/performance, listening, hardware and human acceptance remain separate. Evidence and actual audio metrics are retained under evidence/content/overhead.
+
+### 2026-10-25T00:55:01+05:30 — Give the home screen an original illustrated composition
+
+- Changed: Added a render-only animated loom/courier vignette, compact home choices, live bound-key guides, operational-menu owner badge and a regression scenario for layout/remapping. Kept the shared menu intent API and owner input rules.
+- Why: The user requested a stronger home screen, clearer controls and continued verified integration. A native overlap and a long-detail overflow were found and fixed before delivery.
+- Validation: Baseline import/20 scenarios PASS; final 21 scenarios PASS including three UI cases. Private native X11 helper PASS at 1×/2×; actual captures retained in evidence/content/ui/polish. Pack/link, design scan and whitespace PASS.
+- Limitations: Captures use a UI fixture and original fixed art before the overhead asset replacement. No overhead gameplay, listening, controller hardware or human playtest claim; Agent 1 owns integrated runtime/main packaging.
 ### 2026-10-25T00:28:37+05:30 — Prepare the drawing-to-character and texture experiment
 
 - Changed: Added a separate future-phase preparation brief, primary-source research note and read-only profile/theme boundary audit. Corrected the roadmap's implication that fixed catalogs already support generated bundles.
@@ -198,14 +298,270 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T02:08:28+05:30 — Actors against production overhead content
+
+- Changed: Added real-profile/atlas actor checks in authored Atrium, Causeway and Gallery geometry, including both-direction shore crossings at three offsets, blocked-roll recovery and simultaneous combat against one actual enemy.
+- Why: Verify the frozen actor seams against integrated room collision and original resources rather than relying only on diagnostic fixtures.
+- Validation: Focused Godot 4.7.2 scenario passes with the full overhead content bundle. Both profiles cross both gap axes, recover into an immediate newly faced attack after wall contact, select the proper original idle bank and produce one Gallery enemy outcome. Exact-neutral assertion was corrected to allow the engine safe margin settling less than 0.1px away from water.
+- Limitations: Controlled starts and progress setup; this does not claim a full campaign route, rendered quality or human combat feel. No runtime actor defect was reproduced.
+
+
+### 2026-10-25T01:37:34+05:30 — Match traversal fixture to atomic boss rewards
+
+- Changed: Threadstep fixture now grants boss_spoolwarden, threadstep and shortcut_bell together and asserts the reward commit succeeds.
+- Why: The integrated progress boundary correctly rejects partial boss rewards; a movement test must use a valid team outcome.
+- Validation: Focused Threadstep scenario passes in the isolated actor project using the current integrator TeamProgress source.
+- Limitations: This remains a controlled unlock fixture, not evidence of defeating the boss through ordinary inputs.
+
+
+### 2026-10-25T01:37:07+05:30 — Authored enemy direction warning consumer
+
+- Changed: Enemy windups show effect_enemy_warning_v1 through its non-loop play clip, rotated in quarter turns around its declared pivot. The final frame holds through the warning; active/recovery/stagger/death clears it. A new windup starts a new clip serial.
+- Why: Supply a readable authored direction hint while keeping damage geometry and simulation independent from the marker.
+- Validation: Focused Godot 4.7.2 scenario passes against an explicit atlas fixture: cardinal rotation, pivot, frame progression/hold, pause, new-windup restart and immediate state/death cleanup.
+- Limitations: The production authored warning packet is still pending integration/native review; this marker is not an exact damage-area outline.
+
+
+### 2026-10-25T01:35:23+05:30 — Buffered directional animation regression
+
+- Changed: Added a diagnostic atlas fixture and real player/SpriteAnimator scenario proving that a queued same-facing slash returns through idle and restarts its first windup frame; finished same-state non-loop clips remain held.
+- Why: Test the suspected last-frame restart defect before changing animation guards. The defect did not reproduce, so production play API and guards remain unchanged.
+- Validation: Focused Godot 4.7.2 animation scenario passes, checking actual AtlasTexture regions and physics attack serial timing. New fixture/scenario UIDs generated through isolated import.
+- Limitations: In-memory colour labels prove sequencing only, not authored-art appearance or readability.
+
+
+### 2026-10-25T01:31:49+05:30 — Immediate damage and revive presentation
+
+- Changed: Accepted hurt/down/revive transitions now select their directional pose immediately; revive follows the authored sixteen-tick clip and reset/damage clear stale revival presentation.
+- Why: Keep visual response aligned with the authoritative health transition and ground-plane knockback.
+- Validation: New real-physics damage scenario passes: planar knockback, interrupted windup, exactly-once signals, bounded immunity, steady reduced-flash cue, pause, stationary downed state and two-heart revive timing. Own-clone import generated its UID; sandbox editor socket warnings remain environmental.
+- Limitations: Null-catalog physics/presentation-state assertions; original frame rendering still requires integrated QA.
+
+
+### 2026-10-25T01:30:41+05:30 — Preserve the bounded evasion window
+
+- Changed: Enemy hit sets now record accepted damage, allowing a lingering attack to connect after an initially immune contact expires.
+- Why: A six-tick roll evasion must not accidentally grant immunity for an entire longer boss attack. Accepted damage remains once per attack and player.
+- Validation: Focused boss scenario passes with an immune first contact, later accepted contact and no duplicate damage after artificial immunity removal.
+- Limitations: Controlled active-strike fixture; normal-input difficulty tuning remains pending.
+
+
+### 2026-10-25T01:28:41+05:30 — Shared boss phase and concurrent feedback
+
+- Changed: Half health advances Spoolwarden to phase two, with faster subsequent pursuit/charge and a shorter next idle gap; existing warning/recovery durations stay explicit. Partner-strike feedback takes the first line while slow resistance remains visible below it. Defeat clears stale notices.
+- Why: Add encounter escalation and readable simultaneous feedback without cancelling a co-op stagger opening or changing an already-active charge speed.
+- Validation: Focused boss scenario passes, including half-health transition during stagger, preserved opening timer, concurrent slow-resist notice and cleared defeat text.
+- Limitations: Escalation values need the integrated normal-input route and human balance review; no rendered readability claim yet.
+
+
+### 2026-10-25T01:27:48+05:30 — Overhead boss acceptance and stable script IDs
+
+- Changed: Added a boss-specific scenario covering real sweep/strike/charge clocks, ground-plane reach, immutable walls, shared stagger/Cross-stitch state and exactly-once defeat; retained generated UID sidecars for new actor fixtures/scenarios.
+- Why: Establish runtime evidence for the translated three-pattern encounter and stable imports before parallel integration.
+- Validation: Actor clone Godot 4.7.2 run passes all 8 overhead actor scenarios. Boss ordinary-hit/bonus checks are explicitly controlled API fixtures; pattern geometry/timing use actual physics. Import parsed scripts but reported restricted editor socket/config-write warnings; its unrelated font-import rewrite was restored.
+- Limitations: This is not a normal-input boss route, native art inspection or human balance review.
+
+
+### 2026-10-25T01:25:13+05:30 — Planar enemy movement and room ownership
+
+- Changed: Enemy bodies now use floating ground-plane footprints, XY target/attack vectors and two-axis bounds. Spoolmites telegraph locked charges; Wickwing hover is visual-only and its explicit water flight returns toward dry courier approaches. Added matching set_room_context seam. Boss movement/attack geometry is translated onto the same plane.
+- Why: Remove platform gravity/ground checks and keep flying traversal separate from solid-wall collision.
+- Validation: Focused real-physics enemy scenario passes: vertical charge, locked warning, recovery, pause, slow, Wickwing water/wall collision, dry close-range recovery and exactly-once defeat. Existing six actor scenarios remain green.
+- Limitations: Boss-specific timing, geometry and Cross-stitch checks are the next slice; original enemy art/telegraph rendering is pending the content packet.
+
+
+### 2026-10-25T01:22:30+05:30 — End roll at its declared travel distance
+
+- Changed: Clear roll velocity on its last movement tick instead of letting ordinary motor deceleration add unrequested drift.
+- Why: Keep the promised thirty-six-pixel roll distance true after the action ends, particularly beside water.
+- Validation: Focused roll scenario passes, including three neutral ticks after roll completion with no extra travel.
+- Limitations: Headless physics fixture; human controller feel review remains pending.
+
+
+### 2026-10-25T01:21:52+05:30 — Explicit projectile water flight
+
+- Changed: Couriers pass their known room water body to Spore Bolt; each projectile excepts only that body while retaining wall collision.
+- Why: Allow Neri shots across water without global terrain-mask changes or shots through walls.
+- Validation: The focused real-physics Spore scenario passes, including an owned emitted shot traversing a water span and retiring at the next wall without hitting an enemy beyond it.
+- Limitations: Dedicated water/wall fixtures; full content integration remains pending.
+
+
+### 2026-10-25T01:21:06+05:30 — Safe team Threadstep crossings
+
+- Changed: Threadstep now travels sixty pixels over twelve ticks with a forty-five-tick cooldown; room callbacks validate dry departure, full-footprint landing and swept walls. Only the known water body is excepted for that courier.
+- Why: Allow forgiving bounded water traversal while preserving walls, partner collision and safe interruption/recovery.
+- Validation: Isolated Godot 4.7.2 actor scenarios pass 6/6, including two-tile crossing, unlock/cooldown, partial landing rejection, paused crossing, damage/geometry rollback and room-reset exception cleanup.
+- Limitations: Dedicated callback/physics fixtures; complete authored-room integration remains with the world/session lanes.
+
+
+### 2026-10-25T01:19:15+05:30 — Swept overhead Spore Bolt
+
+- Changed: Spore Bolt follows a normalized two-axis direction, chooses earliest swept hurtbox contact before terrain, starts at the courier ground centre and expires after forty-eight physics ticks.
+- Why: Prevent tree-order hits, vertical-shot errors, duplicate impacts and close-wall spawn bypasses while retaining Neri slow.
+- Validation: Isolated Godot 4.7.2 actor scenarios pass 5/5: nearest ordering, vertical/diagonal hits, wall rejection, bounded lifetime and owned tick-eight/twenty-two-tick special emission.
+- Limitations: Null-catalog fixtures; water-flight policy and original effect presentation await integration.
+
+
+### 2026-10-25T01:17:53+05:30 — Ground-plane Ember Arc
+
+- Changed: Ember Arc emits one 120-degree close fan on tick eight, with bounded reach, whole-hurtbox intersection, wall line-of-sight and a twenty-two-tick special sequence.
+- Why: Give Tavi a distinct directional close-range stagger tool on the overhead plane.
+- Validation: Isolated Godot 4.7.2 actor scenarios pass 4/4, including fan shoulders, excluded rear/flank/distant targets, emission/recovery ticks, damage/stagger values and wall rejection.
+- Limitations: Null-catalog fixture; Spore Bolt remains the next projectile migration.
+
+
+### 2026-10-25T01:17:03+05:30 — Directional slash and input buffer
+
+- Changed: Slash now uses cardinal ground-plane reach, six windup/active/recovery ticks, a six-tick press buffer and unique per-swing hit sets; directed effects rotate instead of mirroring.
+- Why: Preserve responsive combos and readable four-direction combat without diagonal or shared-player hit ambiguity.
+- Validation: Isolated Godot 4.7.2 scenarios pass 3/3: four facing directions, exact timing, one hit per swing, no held-button repetition, buffer expiry, independent simultaneous swings and no friendly fire.
+- Limitations: Stationary enemy fixtures; directional original-art review and planar special/enemy migration remain pending.
+
+
+### 2026-10-25T01:15:39+05:30 — Bounded overhead roll
+
+- Changed: The former jump bit starts a twelve-tick, 36px cardinal roll with six invulnerable ticks and a 36-tick cooldown; damage, restore and pause retain explicit interruption semantics.
+- Why: Replace platform jumping with a readable, short defensive action that respects water and wall collision.
+- Validation: Isolated Godot 4.7.2 actor scenarios pass 2/2, including exact displacement, direction lock, six-tick evasion, paused timers and real water/wall bodies.
+- Limitations: Null-catalog fixture; the new roll cue is pending the parallel authored audio packet.
+
+
+### 2026-10-25T01:12:16+05:30 — Overhead courier motor and room context
+
+- Changed: Replaced gravity/platform movement with floating XY movement, 12x10 feet collision, cardinal facing and directional animation keys; introduced set_room_context(bounds, can_stand, can_threadstep, water_body).
+- Why: Establish the actor-side ground-plane contract before world integration. Existing health/revive APIs and owned snapshots remain intact.
+- Validation: Godot 4.7.2 isolated import and overhead_actor_motor scenario pass; actual bodies prove equal diagonal speed, analogue magnitude, wall/bounds collision, owner isolation, pause and stationary downing.
+- Limitations: Null-catalog physics fixture only; roll, new attack timing, water dash and planar enemies remain subsequent actor slices. No overhead art/rendered/full-route claim.
+
+
 
 
 ## Overhead world lane
 
 <!-- overhead-world -->
 
+### 2026-10-25 02:08:22 +0530 — Budget the campaign for real-time execution
+
+- Declared a 300-second scenario timeout for the ordinary-input campaign, whose verified route takes about 99 seconds at actual 60 Hz. This uses the input worker's coordinated runner API; explicit CLI timeout remains authoritative. Only the budget changes, not route commands, success criteria or test discovery. Whitespace check passes; native timing remains the integrator's pending gate.
+
+
+### 2026-10-25 02:07:36 +0530 — Full overhead campaign passes through ordinary owned input
+
+- Integrated overhead core 5162c34 and completed the campaign acceptance driver against the actual App/catalog/media. Corrected the test's unit-vector dash mask and waited for captured audio playbacks to retire before exit; no production movement/combat tuning was needed.
+- Validation: `XDG_DATA_HOME=/tmp/gloamthread-world-route-data godot --headless --fixed-fps 60 --path . --script tests/run_tests.gd -- --filter overhead_campaign_route` PASS. Fresh New/Join, completed Oru dialogue, eight rooms, four Gallery enemies, Spoolwarden, secret, both paired repairs, both twelve-tick water dashes, Loom, actual ending card and real save all pass in 5,941 physics ticks (99.02 simulated seconds). Final hearts [5,3], zero checkpoint recovery; no actor warps, forced flags, private room loads or direct damage.
+- Combined overhead gate PASS 25/25 with isolated writable XDG_DATA_HOME; public content validation PASS. An initial combined run without writable user-data isolation failed four file-writing fixtures due sandbox permissions. Focused route exit is clean after explicit asynchronous audio retirement; earlier accelerated standalone runs had intermittent shutdown resource warnings.
+- Limits: headless scripted owned input at fixed 60 FPS, not native rendering, physical controllers, listening or human play. Root retains native/export validation and separate user-data identity changes.
+
+
+### 2026-10-25 01:50:17 +0530 — Pending ordinary-input overhead campaign gate
+
+- Added a bounded fresh-App campaign driver through all eight rooms, secret, paired repairs, both two-tile Threadstep crossings, ordinary combat, ending and real save boundary. It emits owned inputs in _physics_process before input polling; test-only floor-path searches choose commands without changing actors, rooms, damage or progression.
+- Validation: scenario loads/compiles through the real runner with no script errors. Its current run FAILS at App startup because this branch still has the previous catalog/art versions; traversal/combat/ending assertions therefore remain unexecuted. The driver is an explicit work-in-progress acceptance gate, not a successful playthrough record.
+- Next dependency: merge the integrator's overhead consumer metadata and original directional media, then run/debug `--filter overhead_campaign_route`. No final art, campaign or demo-completion claim.
+
+
+### 2026-10-25 01:42:11 +0530 — Guide each courier to their remaining paired end
+
+- Filtered transient anchor/Loom targets per living slot while retaining the pure QuestDirector/map result. A courier who has claimed an end receives no second assignment; their partner is guided only to the unclaimed end. Nearby ownership hints distinguish your held end from your partner's.
+- Validation: overhead_session PASS 3/3. New guidance scenario uses real authored coordinates and world metadata to verify both anchor/station assignments, compass direction, immediate onward guidance after repair and passive downed rescue status. The preceding combined actor/input/world/session suite passed 21/21 after the actor fixture correction.
+- Limits: metadata-only controlled placements; final catalog/art and ordinary-input campaign are still independent gates.
+
+
+### 2026-10-25 01:39:12 +0530 — Clear water ownership before recovery replacement
+
+- Fixed a stale physics RID when recovery replaced a room during Threadstep: couriers now cancel their water exceptions while the previous water body still exists, before that room is freed. Null-catalog fixtures also avoid requesting unavailable background music.
+- Validation: both overhead_session scenarios PASS. New controlled regression proves ninety-tick revive completion wins at the 720-tick timeout boundary, rescuer damage interrupts the hold, timeout/wipe recover once, boss/unlock/shortcut commit before a same-tick wipe, cleared boss stays absent, and mid-water recovery clears its exception and restores a complete dry footprint.
+- Limits: explicitly controlled coordinator fixtures and synthetic owned movement; no claim of complete normal-input campaign or final rendered assets.
+
+
+### 2026-10-25 01:36:43 +0530 — Overhead session and per-courier guidance
+
+- Integrated actor/input branch ancestry, wired every courier/enemy to the room's planar collision queries and separate water body, and placed props with actors under shared feet sorting. Hazards use the real planar hurt rectangle and knockback; the camera follows the ground-plane centre.
+- Added explicit dialogue completion that commits met_oru once, QuestDirector objective/local-target consumers, separate living/proximity hints, bound Roll and locked-Dash HUD, boss phase/feedback and downed rescue guidance. Existing coordinator/save/revival transaction entry points remain intact.
+- Validation: new overhead_session_foundation scenario PASS, covering dialogue, paired same-tick repair, actor/enemy context, actual owned-input 60px Atrium dash, hazards, pause and local HUD ownership. Combined overhead suite: 17/18 PASS; the remaining actor Threadstep fixture commits an incomplete reward group rejected by the newer save contract (reported to its owner). Editor import has no script errors; sandbox socket-listen errors remain.
+- Limits: fixture placements and null art are explicit; final catalog/art integration, normal-input campaign and native presentation remain pending.
+
+
+### 2026-10-25 01:28:24 +0530 — Overhead content admission and route guards
+
+- Migrated the public content validator to overhead-v1, the planar collider and exact opaque terrain slots. It now rejects unsafe floor entrances, missing cross-room references, disconnected rallies/interactions, bypassable paired repairs and removed Threadstep lessons. Both bridges require dry banks separated by at least four water tiles in Python and the runtime parser.
+- Kept opaque terrain below feet-sorted props/actors independently of sibling order and retained generated scenario UIDs. Removed obsolete diagnostic-mover parsing.
+- Validation: `python3 -m unittest discover -s tools/tests -p test_content.py` PASS 29 tests using temporary overhead catalog metadata; `godot --headless --fixed-fps 60 --path . --script tests/run_tests.gd -- --filter overhead_world` PASS 2/2; `git diff --check` PASS. Editor import produced no script errors, but sandbox TCP-listen errors remain separate from the clean runtime run.
+- Limits: the branch's full `python3 tools/validate_content.py` correctly fails on eight outstanding manifest/profile/theme/dialogue version or mapping mismatches owned by other lanes. No integrated campaign, native art or controller-quality claim.
+
+
+### 2026-10-25 01:21:27 +0530 — Authored overhead district route
+
+- Reauthored r01-r07 as planar rooms: the remembered Atrium branch, separate Spindle anchor approaches, Gallery encounter/secret alcove, checkpoint respite, roomy Bell arena, vertical Causeway dash lesson and opposing Loom stations. Added dry bank markers, recognizable original props, two-tile mandatory water crossings and four-tile paired repair barriers.
+- Validation: overhead_world scenarios PASS 2/2. All eight strict room definitions/paired entrances and eighteen directed exits resolve; safe route searches reach both anchors/secret/Loom stations and cannot bypass unrepaired spans. Six actual CharacterBody2D probes cross the required water gaps at three launch offsets per axis using exactly 60px motion.
+- Limits: structural reachability plus isolated collision probes; integrated ordinary-input overhead campaign, final directional art and native quality review remain pending.
+
+
+### 2026-10-25 01:14:36 +0530 — Overhead world foundation
+
+- Added strict overhead-v1 room parsing, planar feet/footprint queries, separate immutable wall and water bodies, named bridge blocker removal, shared sortable prop/NPC branch and opaque terrain slot selection. Reauthored Lantern Rest as a safe overhead plaza and gated the Atrium introduction with met_oru.
+- Why: establish the real one-room ground-plane contract before expanding the eight-room route.
+- Validation: Godot 4.7.2 focused overhead_world_foundation scenario PASS 1/1; actual bodies stop at water, cross a restored bridge, bypass only water during the optional three-tile boundary probe, and remain blocked by walls. Strict spawn/version, diagonal swept footprint, persistent bridge replay and both collision-free skins pass.
+- Limits: null-catalog geometry/prototype rendering only; directional original art and integrated overhead actors/session remain separate lanes. r01-r07 and whole-bundle Python validation are still being migrated. Editor import completed without script errors but reported sandbox TCP/editor-preference write restrictions; focused runtime exited cleanly.
+
+
 
 
 ## Overhead input and persistence lane
 
 <!-- overhead-input -->
+
+### 2026-10-25T01:24:34+05:30 — Derive overhead objectives and local route targets
+
+- Changed: Added pure QuestDirector queries for Oru, Spindle, Spoolwarden, Causeway, Loom and home objectives. Breadth-first routing uses only unlocked declared world connections, including the post-boss shortcut. Local targets expose authored NPC/boss/anchor/station identities and safe exit feet positions; unreachable routes are explicit and yield no invented targets.
+- Why: The integrator needs one reliable guidance boundary for HUD/map/proximity hints without making presentation own progression.
+- Validation: Godot4.7.2 overhead_quest_guidance PASS1/1 using pure fixtures: six stages, backtracking, locked/unlocked shortcuts, unreachable/malformed gates, local targets, canonical feet and no world/progress mutation. Import and whitespace checks pass.
+- Limitations: Root wiring, rendered guidance and ordinary overhead traversal are not acceptance evidence from these fixtures.
+
+
+### 2026-10-25T01:18:32+05:30 — Preserve foreign backup data before rotation
+
+- Changed: Normal save rotation now retains rejected copies of unsupported/newer or damaged existing backup files before installing a validated previous save. Failed preservation keeps the prior active save intact and returns a visible error. Primary replacement uses the same small preservation helper.
+- Why: A valid active campaign must not silently erase unknown backup data during its next autosave.
+- Validation: Godot4.7.2 overhead save scenarios PASS2/2, including actual newer/damaged backup-byte retention and all existing recovery/fault checks; whitespace check passes.
+- Limitations: No physical power-loss testing is claimed.
+
+
+### 2026-10-25T01:16:49+05:30 — Require a live gamepad index for input ownership
+
+- Changed: InputRouter rejects negative gamepad indices during assignment/reconnect and keeps invalid indices neutral during polling. Added synthetic reconnect/reassignment checks proving held Roll suppression until release and independent partner ownership.
+- Why: A disconnected index must remain a recovery state, never an admitted input source.
+- Validation: Godot4.7.2 overhead input scenarios PASS3/3, covering Roll migration, planar normalization and device lifecycle; editor import and whitespace checks pass.
+- Limitations: Synthetic notifications/events do not certify physical controller hotplug or menu recovery visuals.
+
+
+### 2026-10-25T01:15:46+05:30 — Protect live overhead reward transactions
+
+- Changed: TeamProgress validates dependency consistency before changing live flags, sharing the same rule with save admission. Incomplete boss/traversal outcomes leave progress untouched. Added actual-file overhead recovery, fault-boundary and settings-separation regressions.
+- Why: A boss-only live reward could otherwise remove its encounter before granting required team traversal, even though a later save would reject that state.
+- Validation: Godot4.7.2 overhead save scenarios PASS2/2: all four save/recovery failure stages preserve active/backup bytes, orphan backup recovery works, side-view backups are refused, rejected originals are retained, and settings/legacy Roll/device identity remain separate. Negative transaction warnings are expected; import and whitespace checks pass.
+- Limitations: Fault injection verifies local file boundaries, not hardware power-loss behavior.
+
+
+### 2026-10-25T01:13:15+05:30 — Normalize owned ground-plane commands
+
+- Changed: CommandSnapshot now sanitizes and caps the full two-axis vector while retaining gentle analogue magnitude. Added synthetic keyboard/gamepad checks for diagonal limits, independent devices, simultaneous actions, two-axis release latching and disconnect neutrality.
+- Why: Overhead diagonal movement must not gain speed or lose analogue control.
+- Validation: Godot4.7.2 input scenarios PASS3/3 (existing routing plus two overhead scenarios); non-finite/oversized axis checks and fresh editor import pass. Expected malformed-binding/duplicate-assignment warnings are retained in the legacy negative scenario.
+- Limitations: No actor-motion or physical-controller acceptance is claimed.
+
+
+### 2026-10-25T01:11:22+05:30 — Separate overhead campaign saves
+
+- Changed: Added public TeamProgress.SAVE_SCHEMA_VERSION=2, content version overhead-v1 and the shared met_oru introduction flag. Campaign reads distinguish schema2 from unsupported newer formats and visibly reject/preserve side-view data; backup notices retain the primary failure explanation.
+- Why: Overhead progress must never silently adopt the preserved side-view campaign format. The separate application data directory remains an integrator setting.
+- Validation: Godot4.7.2 overhead_save_version PASS1/1 with actual temporary files, swapped profile/checkpoint/met_oru round trip, partial boss reward rejection, schema1/newer protection and explicit replacement retaining rejected bytes; editor import and whitespace checks pass.
+- Limitations: This lane does not change project settings or certify full overhead gameplay.
+
+
+### 2026-10-25T01:10:20+05:30 — Migrate the overhead Roll action
+
+- Changed: Introduced canonical Roll at bit16, retained the transitional Jump alias, migrated legacy saved jump controls, and made canonical roll mappings win independent of JSON key order. Default keyboard/gamepad controls are preserved and the action appears once in polling/settings.
+- Why: The overhead contract replaces jumping with a roll without losing remapped controls or duplicating menu actions.
+- Validation: Clean Godot4.7.2 editor import in the isolated lane; focused `overhead_input_roll` scenario PASS1/1 in the relocated worktree; actual legacy settings serialization, owned action edges and release latching checked.
+- Limitations: This checks input/settings semantics, not overhead actor motion, physical controllers or rendered menus.

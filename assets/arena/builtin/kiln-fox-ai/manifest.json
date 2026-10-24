@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "kind": "fighter-character",
+  "id": "kiln-fox-ai",
+  "name": "Kiln Fox",
+  "rig_id": "upright",
+  "kit_id": "ember",
+  "theme": {
+    "motif": "A small kiln fox with orchard-copper accents and a warm, ember-like glow.",
+    "name": "Copper Orchard",
+    "palette": [
+      "#10171A",
+      "#263B43",
+      "#4E7C82",
+      "#A8C5B7",
+      "#B66E3D",
+      "#F4D58A"
+    ]
+  },
+  "files": {
+    "character.png": "7e12550f557caa2c6702080aff85820d78156dcadcc57a5b80734f78e8d74fac",
+    "portrait.png": "20c22239ae30b2c7a77da34f9467c5b289e03d45f742091907da75baa518474d",
+    "background.png": "b2ee6930c3a50bac83ccb95e8fecdd3797f19f18554b82d71c54eb244f997722",
+    "materials.png": "76cee120c52426950b0a9e3c4f63513bf14d79d962ab51708a1b9e933311bcaa",
+    "provenance.json": "68f10ce1a716c9b6f284c44643d81935abd77d8819b3740fb681369fc042aabd"
+  }
+}

@@ -1,3 +1,5 @@
+> Historical experiment: the user restored the side-view game on 25 October 2026. This document no longer governs active implementation.
+
 # Overhead runtime and content contract
 
 Active from the user's25October2026 request. This replaces side-view movement/terrain/animation assumptions. The preservedv0.1.0-demo tag and evidence remain side-view-only. Root integrates; workers use separate branches/checkouts and exclusive lanes.

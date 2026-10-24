@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "notice": "Original Gloamthread designs authored in tools/forge/art.py. No provider output or external art.",
+  "profiles": [
+    {"id":"cinderjack","name":"Cinderjack","rig_id":"upright","kit_id":"ember","theme":{"name":"The Furnace Orchard","palette":["#111925","#243340","#536574","#b06a42","#ff9858","#ffe4a3"],"motif":"Copper kiln arches, hanging orchard lanterns and blackened apple boughs"}},
+    {"id":"thistlepaw","name":"Thistlepaw","rig_id":"quadruped","kit_id":"nature","theme":{"name":"Moonroot Conservatory","palette":["#101e2a","#25434c","#487b78","#77b493","#bce9a0","#f0e9c5"],"motif":"Glasshouse arches, braided roots and hanging seed moons"}}
+  ]
+}

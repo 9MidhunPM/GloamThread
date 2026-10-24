@@ -1,3 +1,5 @@
+> Historical experiment: the user restored the side-view game on 25 October 2026. This document no longer governs active implementation.
+
 # Overhead adventure implementation and polish plan
 
 User goal: an original overhead adventure, continued coordination with Agent2, better UI/screens/music/combat/experience and clear direction, atomic commits and regular tested main merges. Broad Minish Cap qualities inform perspective and exploration; all content remains original. The side-view milestone is preserved asv0.1.0-demo, not relabeled as overhead evidence.

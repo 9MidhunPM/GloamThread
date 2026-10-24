@@ -1,0 +1,90 @@
+{
+  "exploration": {
+    "path": "assets/generated/audio/music_exploration.wav",
+    "seconds": 48.0,
+    "note_events": 804,
+    "peak": 0.2349925229651784,
+    "rms": 0.050077253046637064,
+    "half_second_rms_10th": 0.04290603099908269,
+    "half_second_rms_90th": 0.05930287677241869,
+    "sha256": "f3cd7b62b52a880c97ab08fa59ae6785d96132a2ecf33b8be5218d6486fdb195"
+  },
+  "boss": {
+    "path": "assets/generated/audio/music_boss.wav",
+    "seconds": 51.2,
+    "note_events": 1345,
+    "peak": 0.26999725333414715,
+    "rms": 0.06411265100972613,
+    "half_second_rms_10th": 0.04685566259875949,
+    "half_second_rms_90th": 0.07046918890595132,
+    "sha256": "4e5baf9364e7e8954209a2927229568259445fcf5b91f0c222455c2ecf75c891"
+  },
+  "boss_final": {
+    "path": "assets/generated/audio/music_boss_final.wav",
+    "seconds": 51.2,
+    "note_events": 1877,
+    "peak": 0.26999725333414715,
+    "rms": 0.07640531162293616,
+    "half_second_rms_10th": 0.060089341514236505,
+    "half_second_rms_90th": 0.0831847574655232,
+    "sha256": "3ad7dc4d3c969bec98e2101cc5494c6a856b09c2e90ebe22814ca5caa08992df"
+  },
+  "ending": {
+    "path": "assets/generated/audio/music_ending.wav",
+    "seconds": 20.0,
+    "note_events": 130,
+    "peak": 0.24500259407330546,
+    "rms": 0.05555074210261149,
+    "half_second_rms_10th": 0.04178929253852174,
+    "half_second_rms_90th": 0.07616764920946846,
+    "sha256": "fc421805260a242d3b8353867a6cf9205f5519a283014f0be0e9e7dcf1165a2b"
+  },
+  "existing_sfx_comparison": {
+    "unchanged": [
+      "jump",
+      "land",
+      "slash",
+      "hit",
+      "hurt",
+      "dash",
+      "ember_arc",
+      "spore_bolt",
+      "enemy_warning",
+      "enemy_defeat",
+      "boss_stagger",
+      "cross_stitch",
+      "anchor_latched",
+      "bridge_restored",
+      "checkpoint",
+      "downed",
+      "revive",
+      "loom_restored"
+    ],
+    "different": []
+  },
+  "source_base": "34ccb96",
+  "configuration": {
+    "seed": 18427,
+    "sample_rate": 44100,
+    "sample_width_bytes": 2,
+    "music_channels": 2,
+    "sfx_channels": 1,
+    "python": "3.14.8",
+    "numpy": "2.5.4",
+    "pillow": "13.0.0"
+  },
+  "roll": {
+    "path": "assets/generated/audio/sfx_roll.wav",
+    "seconds": 0.18,
+    "peak": 0.20999786370433668,
+    "rms": 0.04556673401359516,
+    "similarity": {
+      "jump": 0.00351905738650345,
+      "dash": 0.007332150218193328
+    },
+    "unchanged_legacy_cues": 18,
+    "sfx_count": 19,
+    "music_count": 4,
+    "sha256": "8c8baebeedb402a564f7ca56240de1b7125d2459a2c89f9f3809038dea3350aa"
+  }
+}

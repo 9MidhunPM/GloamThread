@@ -1,0 +1,33 @@
+{
+  "recorded_at": "2026-10-25T04:18:27+05:30",
+  "human_playtest": false,
+  "capture": "Actual native Godot render targets, Wayland Compatibility on hidden agent workspace. Final crowd fixture explicitly forces offscreen draws; not physical scanout FPS. Real forge correction ran in unshare user/network namespace.",
+  "source_sha256": {
+    "tools/arena_native_qa.gd": "f4d6f1972304532892f6715d74fd407ef70d3e0ab3b7b8d9ae378a98862b6538",
+    "tools/forge_native_recovery.gd": "d9fe1b2a1855d3fe4f7ccf4d919a2b7e0d82d452cf0086dba291a59da0bb67ab",
+    "scripts/arena/arena_app.gd": "d33782122e56d9f7927a4e43cbf84b7fe21a76aebeb3142793fe1fa1b206d0b4",
+    "scripts/arena/run_session.gd": "ff321dbc63816fbb00c04e28f791803608304097db43682ab8c1158cde450349",
+    "scripts/arena/arena_backdrop.gd": "3df300eb40fa6fe232414663dbc28183f7584f6ecb0f3ce8fba1d09c3c03a181",
+    "scripts/arena/arena_effect.gd": "864215a61ed46abfca0c83d736b9f3b99ae42f11fb8315ca719532034f8536f9",
+    "scripts/arena/actors/arena_fighter.gd": "b0716c24f2aea4add5c121e45474bca41cbfae103612297ea08393225bd83b7c",
+    "scripts/arena/actors/arena_projectile.gd": "e7a8db67d8edca59968554cfa4e49edcd01beb68bb0225ed87ca2af3be771b20",
+    "scripts/forge/forge_bridge.gd": "6a0834f30a5395a8be2fb9c267dd18eb124b26fb7efc6180a393d03fc93517a4",
+    "scripts/forge/character_creator.gd": "55a020c63167caaa899a849c7bbbc7448a45e035e4a26ff7e71b05302e4dad0b",
+    "scripts/forge/forge_layout_editor.gd": "0bee6b1f1506fe5665ca930f11a3e7b71ec189ee7871c74381c34aa27324e516",
+    "scripts/forge/forge_layout_canvas.gd": "6416979057150ca02ac3d861b90bf0c99c26fd833ca07bf01586d44210882c54",
+    "assets/arena/builtin/index.json": "799d9df301db41db47279a94e47e8ae3f703ab96c61ccc66fdd9ed94a16d62a8"
+  },
+  "captures_sha256": {
+    "native-generated/combat-cues.png": "88b6a77117bc63159ba809d4589013f2f1b6052426a116f2f6a0a2bcc0ca1040",
+    "native-generated/creator.png": "7d7d6f3efdead023dd6f2a02801cec2a9f265c528795b662c840eab255317e4b",
+    "native-generated/crowd_fixture.png": "2ae3539649320b988cc7cd47b6fcee3b51ac8c61562a1bb92e128462ffb15918",
+    "native-generated/lobby.png": "66c92d7d8573b130f69bc572730322392e092bf6f87dff753267a117d6d35750",
+    "native-generated/profile.json": "aa65626e7c7b7b98b82b743631ad7ffe13b4bdd952c90f49e15b070344bb2972",
+    "native-generated/shop.png": "5cce6f745de84d7cb11104dc8841a8ce5268d0beadf977df04eb7b5bdfbc4d61",
+    "native-generated/specials.png": "c2164b7e0065a82f4a62adefdc160813ee9ed7c232a62a377b63a5f84441f7c0",
+    "native-generated/title.png": "0671b02316d70661002220e266602395ac512716f22b3c95c726850725198e39",
+    "real-forge/converted_preview.png": "9ec39afb6a7274fcb85864fcc9c88fc84cb963f10a9e7feff2351827e29dde85",
+    "real-forge/layout_modal.png": "b6a46397a9af3449948ff054d206aa142bd01d8b327781ac15603abb30234308",
+    "real-forge/result.json": "a72df2056ba8ac9ce9e2a16a665043fdf4d0ffec8df7662949bf7cbb18057d67"
+  }
+}

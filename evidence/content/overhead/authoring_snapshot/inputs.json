@@ -1,0 +1,14 @@
+{
+  "evidence_kind": "Pillow authoring material/pose study; no engine or physics",
+  "world_source": "Agent 1 read-only working-tree snapshot; file hashes identify inputs, not a release claim",
+  "world_head_at_copy": "edc6b89582508dc160961262c83a893f475761df",
+  "content_version": "overhead-v1",
+  "selected_room": "r00",
+  "inputs_sha256": {
+    "content/world.json": "2b265a100a052c315c838ee74f405d319b48e7983fbb71d9d94ba874be7d3744",
+    "content/rooms/r00.json": "78845228dba02a5a1ae2b26ab24526a91e18ec5bb86aed06f4d64f62efa299cb",
+    "assets/manifest.json": "02bd327edf180ae47e68b3248780ab2f1e76e112713bc99a78e71f40f3e5150e",
+    "tools/gen/preview.py": "0e9b12adefd7386092159cd0e396100d2db8ac2dd96d9656ff4e50c5092ab087"
+  },
+  "output_sha256": "8ec8e78db90fe1833600fe037b6251fcd423ce2cb1cd1ce3071f8157e7fb3cd5"
+}

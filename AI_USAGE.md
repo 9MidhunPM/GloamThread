@@ -10,6 +10,18 @@ This project maintains the record for **Devin Hack Kochi** as a repository conve
 
 | Date and time with timezone | Tool / model, if known | Task | Assistance and affected files | Human review / corrections | Validation and result |
 | --- | --- | --- | --- | --- | --- |
+| 2026-10-25T04:18:53+05:30 | OpenAI Codex with parallel content/actor/creator/provider workers; live `gpt-6-luna` and `gpt-image-1-mini` | Integrate reviewed generated starter, six special cues and local crop recovery | Added raw-layout UI/fresh drafts, fixed cross-language integer serialization and modal keyboard focus, retained native/offline evidence and refreshed current guidance. | Human review pending. Codex inspected actual generated poses and native captures; corrected provider layout locally without another request. | 12 arena scenarios, 154 creator assertions, 173 Python tests/import/validators pass; generated solo20 and network-isolated actual UI conversion/acceptance pass. Native crowd p95 11.779 ms is offscreen only; physical/human gates remain unverified. |
+| 2026-10-25T03:39:54+05:30 | Codex with actor review | Optimize and verify dense wave combat/export | Reduced retained-canvas redraws, sweep allocations and HUD churn; added official arena QA export and retained current captures/source hashes. | Human/physical-device review pending; source and export runs use state-aware ordinary-input bots. |7actor scenarios plus30,000sweep cases;11arena/107forge/147Python checks; solo20/co-op25 and offline official export25 pass. Native offscreenp9513.253ms under32enemies/67projectiles. Image calls now return PNGs; rejected-layout correction remains separate. |
+| 2026-10-25T03:10:36+05:30 | Codex with parallel Codex actors/creator/Agent2content and provider workers | Implement approved wave arena and local fighter forge | Built run/economy/UI, owned combat actors, creation/library and original generated-by-code content; integrated budgeted official SDK pipeline and review regressions. | Human review pending; fixed simultaneous shop edge loss, duplicate combat effects, terrain/reset and creator layout issues. |11arena scenarios,107forge assertions,146Python tests/import pass; actualLunaanalysisworks, mini image403blocked; no generatedart/nativefullgame/human completion claim. |
+| 2026-10-25T02:47:21+05:30 | Codex | Start approved wave-fighter rebuild | Wrote current product/bundle/job contracts, parallel ownership and superseding documentation. | Human implementation review pending | Clean Git baseline and Godot4.7.2 confirmed; new game and live generation pending. |
+| 2026-10-25T02:24:23+05:30 | Codex | Add bounded OpenAI image-authoring commands | Added optional official OpenAI SDK dependency setup, private.env loading/status, explicit model/quality plans, one/two-request generation, retained raw PNG/prompt/usage/hash provenance and local candidate preparation commands. Excluded local build and env data from both exports. | Pending human review | Eight mocked-provider/credential/decode/provenance tests pass; SDK2.54.0 installed in ignored.venv; key presence verified without its value. Real requests and converted quality are recorded separately after the shared prompt library lands. |
+| 2026-10-25T02:20:42+05:30 | Codex | Restore the original side-view adventure | Restored verified34ccb96side-view simulation, rooms, art/audio, tests and authoring tools as a forward change. Preserved the complete overhead experiment on its branch. Created an ignored private blank.env and documented the newly authorized optional API authoring boundary. | Pending human review | Fresh restored import and20/20 engine scenarios pass, plus full asset/content validators and documentation/whitespace checks. No key is present and no live API generation is claimed. |
+| 2026-10-25T02:18:24+05:30 | Codex | Preserve tested overhead experiment before returning to side view | Retained active overhead resource/App/save regressions and archived platform-only fixtures with explicit historical mapping; switched native QA observer to the new ordinary-input overhead route. | Pending human review | Full112Python tests, both validators, fresh import and40/40 active Godot scenarios pass. Native first-room split-screen rendered; full overhead native/export and human gates remain unverified. |
+| 2026-10-25T02:13:07+05:30 | Codex | Reject malformed room epochs without script errors | Type-check the room content epoch before string comparison and retain overhead spawn/reference boundary checks. | Pending human review | Focused room-loading scenario now passes incompatible string, boolean, integer and null epochs plus dry-footprint checks; whitespace and pack checks pass. |
+| 2026-10-25T02:06:20+05:30 | Codex | Teach overhead join controls | Replaced stale jump/default-key prose with per-slot current bindings and correct team dash availability | Pending human review | Actual-App controls scenario and editor import pass; corrected prior log table formatting |
+| 2026-10-25T02:05:12+05:30 | Codex | Isolate overhead development identity | Set dedicated user data and derive package version from project configuration; corrected launch/evidence guide | Pending human review; preserved prior release and saves | Packaging compilation, documentation and whitespace checks pass; native overhead export pending |
+| 2026-10-25T02:01:00+05:30 | Codex | Connect overhead story/session consumers | Integrated worldworker session/geometry/guidance and peer corrections; wired actual App intro completion and authored concise mission dialogue | Native/fresh-pair review pending; full route driver follows | Content validator and24new overhead engine scenarios PASS; fixture/actual UI boundary evidence distinguished from complete route |
+| 2026-10-25T01:47:13+05:30 | Codex | Integrate overhead media admission | True-merged Agent2 original50asset packet; implemented strict directional/frame/timing/pivot/tile consumer and fixed metadata migration | Human art/music/gameplay review pending | Clean media import + actual boundary/negative scenarios PASS; whole new game still integrating |
 | 2026-10-25T01:03:41+05:30 | Codex | Plan overhead migration and lane contracts | Converted latest user direction into explicit motor/art/terrain/save interfaces and playable milestones; coordinated Agent2 and actor review | User requested overhead perspective and200meaningful commits; implementation review pending | Docs links/whitespace pass; old side-view evidence kept separate |
 | 2026-10-25T00:53:13+05:30 | Codex | Preserve tested milestone and start overhead direction | Packaged34ccb96with source/executable/archive identity; ran native no-network same-source release route and retained captures/raw timings/matrix; updated truthful release/submission/current scope | Pending fresh human/device/listening review; latest user requests overhead rewrite and200meaningful commits | 20engine/79Python tests and full validators pass; offline native route reaches ending; measured120medianFPS at1920x720. Evidence remains side-view-specific |
 | 2026-10-25T00:31:03+05:30 | Codex | Repair missing-font startup reporting | Agent2 sandbox review found the font-dependent invisible failure UI; integrator moved validation before UI and added a diagnostic-only emergency screen plus regression | Pending human review; prior b96ad0e artifact superseded | Startup scenario PASS; all20 integrated scenarios PASS; no gameplay fallback or new content/backend scope |
@@ -26,6 +38,10 @@ This project maintains the record for **Devin Hack Kochi** as a repository conve
 
 | Date and time with timezone | Tool / model, if known | Task | Assistance and affected files | Human review / corrections | Validation and result |
 | --- | --- | --- | --- | --- | --- |
+| 2026-10-25T01:49:29+05:30 | Codex | Repair overhead authoring previews | Updated material/feet/crop/sort rendering, epoch/no-write guards, selected-room CLI and original font captions; protected historical evidence with a versioned default | Pending; independent review found no blocker; default-path clobber regression corrected | Full112Python/nineCLI cases, compilation/pack/whitespace PASS; labelled r00 snapshot study and hashes retained; no gameplay acceptance claim |
+| 2026-10-25T01:29:53+05:30 | Codex | Add a dedicated overhead enemy warning | Authored stable hollow directional marker at actor-lane request; added original source/atlas, finite-effect admission and regression coverage | Pending; independent source/contact review found no blocker | Full50asset validation,103Python/two rebuilds,media import/pack/whitespace PASS; previous49media unchanged; runtime placement/encounter acceptance pending |
+| 2026-10-25T01:18:03+05:30 | Codex | Build original overhead media and active music | Coordinated exact contracts with Agent 1; parallel workers authored directional heroes, radial actors/terrain/effects and original scores/synthesis/roll cue; integrated retained output/provenance and strict admission | Pending; source reviews corrected clip-name admission gaps; no external game content used | 100 Python tests/two rebuilds, full49asset validator and Godot media import PASS; original18SFX match baseline; static sheets inspected; actual overhead gameplay/listening/hardware/human acceptance not claimed |
+| 2026-10-25T00:55:01+05:30 | Codex | Improve home composition and control clarity | Added original render-only title vignette, compact actions, real binding guides, owner badge and UI regression; coordinated runtime/animation/music boundaries with Agent 1 | Pending; native overlap and long-detail overflow corrected before delivery | Import/baseline20 and final21 engine scenarios PASS; native1×/2× fixture/input checks, pack/link/design scan/whitespace PASS; overhead/hardware/listening/human gates remain separate |
 | 2026-10-25T00:28:37+05:30 | Codex | Prepare drawing-derived characters and textures | Coordinated source freeze with Agent 1; authored future brief/research and inspected fixed profile/theme/save boundaries with read-only subagents | Pending; corrected fixed-runtime readiness claims; missing-font startup case escalated to Agent 1 | Both full validators and 79 Python tests PASS; documentation/link/whitespace checks PASS; sandbox probes are diagnostic observations, not new feature acceptance |
 | 2026-10-25T00:15:26+05:30 | Codex | Close peer-review UI harness gaps | Validated exact unique capture kinds, fresh paths/dimensions/nonblank distinct pixels and expected process lifetime | Pending; read-only peer review identified and verified the guard gaps | Full native helper and Python compilation PASS; captures unchanged; pack/link and whitespace PASS |
 | 2026-10-25T00:13:18+05:30 | Codex | Strengthen native UI capture evidence | Added positive framebuffer/colour assertions so matching blank screenshots cannot satisfy input/scaling checks | Pending; physical settings screenshot visually inspected | Native QA helper, pack/link and whitespace checks PASS; fixture-only scope retained |
@@ -58,14 +74,157 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-actors -->
 
+- 2026-10-25T02:08:28+05:30 | Codex | Independently exercised integrated actors against original profiles/assets and authored room geometry after merging core5162c34. Human review pending. Production-content actor scenario passes; corrected a test overconstraint for safe collision-margin settling, with no speculative runtime change.
+
+
+- 2026-10-25T01:37:34+05:30 | Codex | Corrected the traversal fixture after the world worker identified its now-invalid partial boss reward. Human review pending. Focused scenario passes against the integrator progress contract.
+
+
+- 2026-10-25T01:37:07+05:30 | Codex | Added the approved enemy-warning asset consumer and actual-physics animator checks. Human review pending. Fixture-based scenario passes; production art quality and native readability remain integration gates.
+
+
+- 2026-10-25T01:35:23+05:30 | Codex | Investigated buffered same-facing animation restart with actual physics and a diagnostic texture atlas. Human review pending. Regression passes without a source fix; retained existing same-state guards and avoided speculative API changes.
+
+
+- 2026-10-25T01:31:49+05:30 | Codex | Aligned damage/revival presentation with the accepted state transition and added focused damage regressions. Human review pending. Scenario passes; UID generated by own-clone import with known editor socket warnings.
+
+
+- 2026-10-25T01:30:41+05:30 | Codex | Fixed overlong evasion caused by deduplicating rejected contacts. Human review pending. Focused real-physics boss contact regression passes and retains accepted-hit deduplication.
+
+
+- 2026-10-25T01:28:41+05:30 | Codex | Added shared boss phase state and non-overwriting combat feedback. Human review pending. Focused boss scenario passes; pending integrated route and native feedback review remain disclosed.
+
+
+- 2026-10-25T01:27:48+05:30 | Codex | Added boss phase-pattern acceptance and generated owned script UIDs. Human review pending. Actor clone passes 8/8 scenarios; import environment warnings and controlled boss damage fixtures are disclosed. No normal-route or rendered-quality claim.
+
+
+- 2026-10-25T01:25:13+05:30 | Codex | Migrated enemy movement, ground hurtboxes and explicit room-water flight; added real FSM/physics assertions with controlled placements. Human review pending. Ordinary enemy scenario and six courier scenarios pass; boss-specific acceptance and rendered art remain pending.
+
+
+- 2026-10-25T01:22:30+05:30 | Codex | Corrected post-roll coasting found while reviewing dash braking. Human review pending. Added and passed a neutral-input completion assertion in the real-physics roll scenario.
+
+
+- 2026-10-25T01:21:52+05:30 | Codex | Added explicitly authorized projectile water flight through the room-context body. Human review pending. Focused Spore scenario passes with water traversal and retained wall rejection.
+
+
+- 2026-10-25T01:21:06+05:30 | Codex | Implemented room-owned Threadstep validation and per-courier water exceptions with exact-distance and interruption scenarios. Human review pending. Six isolated actor scenarios pass; no full campaign route claim.
+
+
+- 2026-10-25T01:19:15+05:30 | Codex | Migrated Neri projectile movement and swept hit ordering with actual-physics scenarios. Human review pending. Five isolated actor scenarios pass; terrain/target fixtures do not establish full-route balance.
+
+
+- 2026-10-25T01:17:53+05:30 | Codex | Implemented the directed Ember Arc and explicit special timing. Human review pending. Four isolated scenarios pass, including geometric fan and wall checks; authored effects have not been rendered here.
+
+
+- 2026-10-25T01:17:03+05:30 | Codex | Implemented cardinal slash timing and bounded attack buffering, plus real motor/query scenarios. Human review pending. Three isolated actor scenarios pass; checks use stationary enemy fixtures and make no authored-art claim.
+
+
+- 2026-10-25T01:15:39+05:30 | Codex | Added the overhead roll and actual-physics boundary tests. Human review pending. Isolated Godot 4.7.2 actor scenarios pass 2/2; original roll sound/rendered animation remain pending.
+
+
+- 2026-10-25T01:12:16+05:30 | Codex | Implemented floating courier movement, cardinal facing, footprint and room-context API with a real-physics owned-input scenario. Human review pending. Isolated Godot 4.7.2 scenario passes; corrected an inferred-string parse error during verification. Original directional art and combat migration remain pending.
+
+
 
 
 ## Overhead world lane
 
 <!-- overhead-world -->
 
+### 2026-10-25 02:08:22 +0530 — Budget the campaign for real-time execution
+
+- OpenAI Codex coordinated the route's 300-second wall-clock budget with the runner owner so the verified 99-second campaign can run without fixed-FPS acceleration. No gameplay or acceptance assertion changes; no new native-run claim.
+
+
+### 2026-10-25 02:07:36 +0530 — Verify the production overhead route
+
+- Tool: OpenAI Codex merged the published consumer/media branch and ran the authored ordinary-input campaign gate. Fixed only the driver's normalized-direction mask and asynchronous test audio retirement.
+- Checks: campaign PASS at 5,941 physics ticks with all eight rooms/ending/save and no recovery; combined overhead PASS 25/25 with writable isolated user data; content validator PASS. Actual App menu/dialogue intents and gameplay inputs are exercised, with no fixture repositioning or progression overrides.
+- Human review: pending. Native captures, export behavior, physical devices and listening remain independent integrator gates; side-view evidence is not reused as overhead proof.
+
+
+### 2026-10-25 01:50:17 +0530 — Draft tick-indexed campaign acceptance driver
+
+- Tool: OpenAI Codex authored the newly assigned ordinary-input overhead campaign gate using actual App intents, canonical room queries and physics-indexed commands. No forced flags, actor repositioning, private room loads or direct damage calls.
+- Checks: real runner parsed the scenario; expected production catalog startup failure prevents route verification. This remains WIP until the independent consumer/art bundle lands. Generated UID retained; no fabricated route evidence.
+
+
+### 2026-10-25 01:42:11 +0530 — Correct transient cooperative guidance
+
+- Tool: OpenAI Codex implemented the peer-reviewed per-slot target filter and ownership wording in Session/HUD, leaving QuestDirector pure. Added controlled anchor/Loom/downed guidance coverage and retained its generated UID.
+- Checks: overhead_session PASS 3/3. Peer read-only review identified the stale claimed-end compass target; root owns the separate App dialogue-completion wiring. Human/native visual review remains pending.
+
+
+### 2026-10-25 01:39:12 +0530 — Mid-Threadstep recovery diagnosis
+
+- Tool: OpenAI Codex added the controlled transaction scenario, reproduced the stale-water-RID engine error, and fixed lifetime ordering in GameSession without modifying actor physics.
+- Checks: overhead_session PASS 2/2 with no runtime errors. The regression failed before the ordering fix and passes afterward; generated scenario UID retained. Human review and integrated production playthrough remain pending.
+
+
+### 2026-10-25 01:36:43 +0530 — Shared overhead session integration
+
+- Tool: OpenAI Codex connected the exclusive GameSession/SplitPresentation/FollowCamera files to the merged actor/input APIs and authored an isolated session regression. Added completion-based Oru progress and per-slot guidance without changing actor/input sources.
+- Checks: session fixture PASS; combined overhead 17/18 (one stale actor reward fixture reported for correction). Corrected the new test to use the complete boss/unlock/shortcut reward transaction. Null-catalog fixtures are not production-asset or playthrough evidence.
+- Human review: pending; root retains App/catalog/art publication ownership.
+
+
+### 2026-10-25 01:28:24 +0530 — Overhead validator and admission regressions
+
+- Tool: OpenAI Codex implemented the world lane's overhead schema/route validation and 29 focused Python cases, aligned runtime bridge admission, and corrected opaque-ground draw ordering after source review.
+- Checks: all 29 Python cases and both Godot overhead world scenarios pass. Temporary synthetic metadata isolates this lane from pending original-art/catalog work; production validation remains visibly failing until those bundles are integrated. Import-only sandbox socket errors are disclosed rather than treated as gameplay failure.
+- Human review: pending. No external content or fabricated playthrough/rendering evidence; ordinary-input integrated acceptance remains the integrator's gate.
+
+
+### 2026-10-25 01:21:27 +0530 — Overhead room authoring and route checks
+
+- Tool: OpenAI Codex authored the seven remaining room JSON sources and a focused world-route scenario within the exclusive world lane. No outside maps/assets were used.
+- Checks: overhead_world PASS 2/2; corrected the test fixture to instantiate only one collision room at a time, matching the production invariant. Three safe dash launch offsets pass on both axes.
+- Human review: pending. This does not claim encounter balance, original-art visual quality or an integrated campaign playthrough.
+
+
+### 2026-10-25 01:14:36 +0530 — Overhead world foundation
+
+- Tool: OpenAI Codex; authored the owned parser/collision/room/theme lane, overhead r00/world gate and focused physical regression fixtures in feat/overhead-world.
+- Checks: overhead_world_foundation PASS 1/1 on Godot 4.7.2; diff whitespace check. Corrected the initial exact three-tile teaching assumption after integrator chose forgiving two-tile mandatory gaps; three-tile case remains a boundary probe only.
+- Human review: not yet performed. No rendered overhead quality, physical controller or listening claim; other rooms and integrated catalogs remain pending.
+
+
 
 
 ## Overhead input and persistence lane
 
 <!-- overhead-input -->
+
+### 2026-10-25T01:24:34+05:30 — Codex: pure quest and route guidance
+
+Codex authored QuestDirector and fixture regressions in the exclusive input worktree. The module reads team/world/room state and returns objectives/targets without scene or campaign mutations. Human review is pending. Focused Godot guidance checks and import passed; rendered HUD/map integration remains with the integrator.
+
+
+### 2026-10-25T01:18:32+05:30 — Codex: protect foreign backups
+
+Codex identified and fixed silent replacement of incompatible backup data during ordinary rotation, with actual-file newer/corrupt backup regressions. Human review is pending. Both overhead save scenarios pass; storage hardware fault acceptance remains unverified.
+
+
+### 2026-10-25T01:16:49+05:30 — Codex: explicit gamepad admission
+
+Codex guarded negative device indices and verified owned Roll latching across synthetic reconnect/reassignment. Human review is pending. Three overhead input scenarios and editor import passed; physical hardware acceptance remains unverified.
+
+
+### 2026-10-25T01:15:46+05:30 — Codex: atomic overhead progression and recovery
+
+Codex hardened the live progress mutator against partial traversal rewards and wrote actual-file save/backup/fault/settings regressions. Human review is pending. Two focused save scenarios and editor import passed; physical storage power-loss testing was not performed.
+
+
+### 2026-10-25T01:13:15+05:30 — Codex: bounded planar input
+
+Codex implemented full-vector normalization at the snapshot boundary and added owned keyboard/synthetic gamepad regressions, including release and loss behavior. Human review is pending. All three focused input scenarios and editor import passed; hardware behavior remains unverified.
+
+
+### 2026-10-25T01:11:22+05:30 — Codex: overhead campaign version boundary
+
+Codex versioned team progress and campaign format handling, added met_oru, and verified actual file protection/replacement in the exclusive lane. Human review is pending. The focused schema scenario and editor import passed; separate application data-directory integration and gameplay remain with the integrator.
+
+
+### 2026-10-25T01:10:20+05:30 — Codex: overhead Roll migration
+
+Codex implemented the Roll action and legacy settings migration in the exclusive input lane, including canonical-name precedence and actual file/snapshot regression checks. Human review is pending. Godot4.7.2 import and the focused scenario passed; no physical-device or overhead-movement acceptance is claimed.

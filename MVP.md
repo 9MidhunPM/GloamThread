@@ -1,5 +1,7 @@
 # Gloamthread: Two Ends — MVP
 
+> Historical campaign/overhead document. The active product is now the [approved wave fighter](docs/WAVE_FIGHTER_SPEC.md); its requirements supersede conflicts here.
+
 **Superseded for active development:** the user requested overhead perspective on25October2026. Follow [the overhead plan](docs/OVERHEAD_PLAN.md) and [contract](docs/OVERHEAD_CONTRACT.md). This document preserves the side-view milestone scope; shared co-op/original-content principles continue.
 
 Version 2.0 · 24 October 2026 · Owner: Midhun P M.

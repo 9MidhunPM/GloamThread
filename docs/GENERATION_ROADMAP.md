@@ -1,5 +1,7 @@
 # Gloamthread: Two Ends — character and texture generation roadmap
 
+> Historical campaign/overhead document. The active product is now the [approved wave fighter](WAVE_FIGHTER_SPEC.md); its requirements supersede conflicts here.
+
 Version 2.0 · Future Phase 2 plan. No image service, provider integration or generated-character runtime is implemented in this pack.
 
 See the [drawing preparation brief](DRAWING_PREPARATION.md) for the inspected fixed-runtime boundaries, a first recognition/animation experiment and ordered follow-up work. It is future design work, separate from the packaged Phase 1 source.

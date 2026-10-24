@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "bundles": [
+    "cinderjack",
+    "thistlepaw",
+    "kiln-fox-ai"
+  ],
+  "default_players": [
+    "kiln-fox-ai",
+    "thistlepaw"
+  ]
+}

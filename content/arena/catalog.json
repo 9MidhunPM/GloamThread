@@ -1,0 +1,699 @@
+{
+  "schema_version": 1,
+  "content_version": "arena-v1",
+  "kits": {
+    "ember": {
+      "name": "Ember",
+      "description": "Close the gap, breathe fire and spread burns.",
+      "color": "#ff9858",
+      "basic_name": "Coalcleaver",
+      "special_name": "Furnace Breath",
+      "passive_name": "Kindling"
+    },
+    "frost": {
+      "name": "Frost",
+      "description": "Keep a cold distance; frozen crowds shatter together.",
+      "color": "#8be6ee",
+      "basic_name": "Ice Needle",
+      "special_name": "Winter Ring",
+      "passive_name": "Brittle"
+    },
+    "storm": {
+      "name": "Storm",
+      "description": "Rapid strikes store charge for leaping lightning.",
+      "color": "#e8dc77",
+      "basic_name": "Spark Knuckle",
+      "special_name": "Stormchain",
+      "passive_name": "Static"
+    },
+    "stone": {
+      "name": "Stone",
+      "description": "Heavy impacts turn a packed arena into breathing room.",
+      "color": "#c6ad91",
+      "basic_name": "Basalt Fist",
+      "special_name": "Faultline",
+      "passive_name": "Bedrock"
+    },
+    "nature": {
+      "name": "Nature",
+      "description": "Thorns pierce a crowd while roots hold the front line.",
+      "color": "#9ee29a",
+      "basic_name": "Briar Needle",
+      "special_name": "Rootwake",
+      "passive_name": "Renewal"
+    },
+    "shadow": {
+      "name": "Shadow",
+      "description": "Mark opponents, pass through the line and detonate.",
+      "color": "#c9a5ed",
+      "basic_name": "Nightedge",
+      "special_name": "Umbral Lance",
+      "passive_name": "Aftermark"
+    }
+  },
+  "upgrades": [
+    {
+      "id": "keen_edge",
+      "name": "Keen Edge",
+      "description": "Every attack hits harder.",
+      "kit": "any",
+      "stat": "damage",
+      "amount": 3,
+      "price": 7,
+      "max_rank": 3
+    },
+    {
+      "id": "quick_hands",
+      "name": "Quick Hands",
+      "description": "Shorter recovery between basic attacks.",
+      "kit": "any",
+      "stat": "attack_speed",
+      "amount": 0.12,
+      "price": 7,
+      "max_rank": 3
+    },
+    {
+      "id": "second_wind",
+      "name": "Second Wind",
+      "description": "Use your special more often.",
+      "kit": "any",
+      "stat": "special_cooldown",
+      "amount": -36,
+      "price": 8,
+      "max_rank": 3
+    },
+    {
+      "id": "heartwood",
+      "name": "Heartwood",
+      "description": "Raise maximum health and recover the increase.",
+      "kit": "any",
+      "stat": "max_health",
+      "amount": 20,
+      "price": 7,
+      "max_rank": 3
+    },
+    {
+      "id": "light_feet",
+      "name": "Light Feet",
+      "description": "Move faster without changing jump reach.",
+      "kit": "any",
+      "stat": "move_speed",
+      "amount": 10,
+      "price": 6,
+      "max_rank": 3
+    },
+    {
+      "id": "lucky_thread",
+      "name": "Lucky Thread",
+      "description": "A greater chance to land critical hits.",
+      "kit": "any",
+      "stat": "crit",
+      "amount": 0.06,
+      "price": 8,
+      "max_rank": 3
+    },
+    {
+      "id": "slipstream",
+      "name": "Slipstream",
+      "description": "Dodge comes back sooner.",
+      "kit": "any",
+      "stat": "dodge_cooldown",
+      "amount": -6,
+      "price": 6,
+      "max_rank": 3
+    },
+    {
+      "id": "blood_bloom",
+      "name": "Blood Bloom",
+      "description": "A little attack damage returns as health.",
+      "kit": "any",
+      "stat": "lifesteal",
+      "amount": 0.025,
+      "price": 10,
+      "max_rank": 3
+    },
+    {
+      "id": "barbed_guard",
+      "name": "Barbed Guard",
+      "description": "Return a portion of damage to attackers.",
+      "kit": "any",
+      "stat": "thorns",
+      "amount": 0.12,
+      "price": 7,
+      "max_rank": 3
+    },
+    {
+      "id": "twin_stitch",
+      "name": "Twin Stitch",
+      "description": "An extra bolt in projectile attacks.",
+      "kit": "any",
+      "stat": "projectile_count",
+      "amount": 1,
+      "price": 12,
+      "max_rank": 3
+    },
+    {
+      "id": "wide_arc",
+      "name": "Wide Arc",
+      "description": "Cover more ground with attacks and specials.",
+      "kit": "any",
+      "stat": "area",
+      "amount": 0.15,
+      "price": 8,
+      "max_rank": 3
+    },
+    {
+      "id": "field_stitch",
+      "name": "Field Stitch",
+      "description": "Recover a little health between incoming blows.",
+      "kit": "any",
+      "stat": "regen",
+      "amount": 0.35,
+      "price": 8,
+      "max_rank": 3
+    },
+    {
+      "id": "wildfire",
+      "name": "Wildfire",
+      "description": "Burns grow fiercer.",
+      "kit": "ember",
+      "stat": "burn",
+      "amount": 1,
+      "price": 8,
+      "max_rank": 3
+    },
+    {
+      "id": "bellows",
+      "name": "Bellows",
+      "description": "Breathe over a wider arc.",
+      "kit": "ember",
+      "stat": "area",
+      "amount": 0.25,
+      "price": 9,
+      "max_rank": 3
+    },
+    {
+      "id": "hot_coals",
+      "name": "Hot Coals",
+      "description": "A faster second breath.",
+      "kit": "ember",
+      "stat": "special_cooldown",
+      "amount": -48,
+      "price": 10,
+      "max_rank": 3
+    },
+    {
+      "id": "deep_freeze",
+      "name": "Deep Freeze",
+      "description": "Longer frost control on ordinary enemies.",
+      "kit": "frost",
+      "stat": "freeze",
+      "amount": 1,
+      "price": 8,
+      "max_rank": 3
+    },
+    {
+      "id": "ice_fan",
+      "name": "Ice Fan",
+      "description": "Split your needles into more bolts.",
+      "kit": "frost",
+      "stat": "projectile_count",
+      "amount": 1,
+      "price": 10,
+      "max_rank": 3
+    },
+    {
+      "id": "cold_snap",
+      "name": "Cold Snap",
+      "description": "Shattering blows hit harder.",
+      "kit": "frost",
+      "stat": "damage",
+      "amount": 5,
+      "price": 9,
+      "max_rank": 3
+    },
+    {
+      "id": "forked_sky",
+      "name": "Forked Sky",
+      "description": "Lightning leaps to another target.",
+      "kit": "storm",
+      "stat": "chain",
+      "amount": 1,
+      "price": 9,
+      "max_rank": 3
+    },
+    {
+      "id": "overcharge",
+      "name": "Overcharge",
+      "description": "More critical sparks.",
+      "kit": "storm",
+      "stat": "crit",
+      "amount": 0.08,
+      "price": 9,
+      "max_rank": 3
+    },
+    {
+      "id": "live_wire",
+      "name": "Live Wire",
+      "description": "Faster strikes build charge quickly.",
+      "kit": "storm",
+      "stat": "attack_speed",
+      "amount": 0.18,
+      "price": 10,
+      "max_rank": 3
+    },
+    {
+      "id": "earthshaker",
+      "name": "Earthshaker",
+      "description": "More impact and stagger.",
+      "kit": "stone",
+      "stat": "stagger",
+      "amount": 1,
+      "price": 8,
+      "max_rank": 3
+    },
+    {
+      "id": "tectonic",
+      "name": "Tectonic",
+      "description": "The slam reaches farther.",
+      "kit": "stone",
+      "stat": "area",
+      "amount": 0.25,
+      "price": 9,
+      "max_rank": 3
+    },
+    {
+      "id": "mountain_heart",
+      "name": "Mountain Heart",
+      "description": "More health behind the armour.",
+      "kit": "stone",
+      "stat": "max_health",
+      "amount": 30,
+      "price": 10,
+      "max_rank": 3
+    },
+    {
+      "id": "deep_roots",
+      "name": "Deep Roots",
+      "description": "Roots hold the swarm longer.",
+      "kit": "nature",
+      "stat": "freeze",
+      "amount": 1,
+      "price": 8,
+      "max_rank": 3
+    },
+    {
+      "id": "thornline",
+      "name": "Thornline",
+      "description": "Thorns pierce another opponent.",
+      "kit": "nature",
+      "stat": "pierce",
+      "amount": 1,
+      "price": 9,
+      "max_rank": 3
+    },
+    {
+      "id": "green_pulse",
+      "name": "Green Pulse",
+      "description": "Recover a little health each second.",
+      "kit": "nature",
+      "stat": "regen",
+      "amount": 0.6,
+      "price": 10,
+      "max_rank": 3
+    },
+    {
+      "id": "long_night",
+      "name": "Long Night",
+      "description": "A lance passes through more enemies.",
+      "kit": "shadow",
+      "stat": "pierce",
+      "amount": 1,
+      "price": 8,
+      "max_rank": 3
+    },
+    {
+      "id": "hungry_mark",
+      "name": "Hungry Mark",
+      "description": "Marked hits return more health.",
+      "kit": "shadow",
+      "stat": "lifesteal",
+      "amount": 0.035,
+      "price": 10,
+      "max_rank": 3
+    },
+    {
+      "id": "double_omen",
+      "name": "Double Omen",
+      "description": "Another shadow projectile.",
+      "kit": "shadow",
+      "stat": "projectile_count",
+      "amount": 1,
+      "price": 10,
+      "max_rank": 3
+    }
+  ],
+  "waves": [
+    {
+      "number": 1,
+      "count": 8,
+      "interval_ticks": 45,
+      "enemies": [
+        "swarm",
+        "chaser"
+      ],
+      "boss": "",
+      "elite_every": 0
+    },
+    {
+      "number": 2,
+      "count": 10,
+      "interval_ticks": 43,
+      "enemies": [
+        "swarm",
+        "chaser"
+      ],
+      "boss": "",
+      "elite_every": 0
+    },
+    {
+      "number": 3,
+      "count": 12,
+      "interval_ticks": 41,
+      "enemies": [
+        "swarm",
+        "chaser"
+      ],
+      "boss": "",
+      "elite_every": 0
+    },
+    {
+      "number": 4,
+      "count": 14,
+      "interval_ticks": 39,
+      "enemies": [
+        "swarm",
+        "chaser"
+      ],
+      "boss": "",
+      "elite_every": 0
+    },
+    {
+      "number": 5,
+      "count": 4,
+      "interval_ticks": 37,
+      "enemies": [
+        "swarm",
+        "chaser"
+      ],
+      "boss": "warden",
+      "elite_every": 0
+    },
+    {
+      "number": 6,
+      "count": 18,
+      "interval_ticks": 35,
+      "enemies": [
+        "swarm",
+        "chaser",
+        "charger",
+        "shooter"
+      ],
+      "boss": "",
+      "elite_every": 0
+    },
+    {
+      "number": 7,
+      "count": 20,
+      "interval_ticks": 33,
+      "enemies": [
+        "swarm",
+        "chaser",
+        "charger",
+        "shooter"
+      ],
+      "boss": "",
+      "elite_every": 10
+    },
+    {
+      "number": 8,
+      "count": 22,
+      "interval_ticks": 31,
+      "enemies": [
+        "swarm",
+        "chaser",
+        "charger",
+        "shooter"
+      ],
+      "boss": "",
+      "elite_every": 10
+    },
+    {
+      "number": 9,
+      "count": 24,
+      "interval_ticks": 29,
+      "enemies": [
+        "swarm",
+        "chaser",
+        "charger",
+        "shooter"
+      ],
+      "boss": "",
+      "elite_every": 10
+    },
+    {
+      "number": 10,
+      "count": 7,
+      "interval_ticks": 27,
+      "enemies": [
+        "swarm",
+        "chaser",
+        "charger",
+        "shooter"
+      ],
+      "boss": "artillery",
+      "elite_every": 10
+    },
+    {
+      "number": 11,
+      "count": 28,
+      "interval_ticks": 25,
+      "enemies": [
+        "chaser",
+        "charger",
+        "shooter",
+        "flyer"
+      ],
+      "boss": "",
+      "elite_every": 8
+    },
+    {
+      "number": 12,
+      "count": 30,
+      "interval_ticks": 23,
+      "enemies": [
+        "chaser",
+        "charger",
+        "shooter",
+        "flyer"
+      ],
+      "boss": "",
+      "elite_every": 8
+    },
+    {
+      "number": 13,
+      "count": 32,
+      "interval_ticks": 21,
+      "enemies": [
+        "chaser",
+        "charger",
+        "shooter",
+        "flyer"
+      ],
+      "boss": "",
+      "elite_every": 8
+    },
+    {
+      "number": 14,
+      "count": 34,
+      "interval_ticks": 19,
+      "enemies": [
+        "chaser",
+        "charger",
+        "shooter",
+        "flyer"
+      ],
+      "boss": "",
+      "elite_every": 8
+    },
+    {
+      "number": 15,
+      "count": 10,
+      "interval_ticks": 17,
+      "enemies": [
+        "chaser",
+        "charger",
+        "shooter",
+        "flyer"
+      ],
+      "boss": "tempest",
+      "elite_every": 8
+    },
+    {
+      "number": 16,
+      "count": 38,
+      "interval_ticks": 16,
+      "enemies": [
+        "swarm",
+        "charger",
+        "shooter",
+        "flyer",
+        "heavy"
+      ],
+      "boss": "",
+      "elite_every": 6
+    },
+    {
+      "number": 17,
+      "count": 40,
+      "interval_ticks": 16,
+      "enemies": [
+        "swarm",
+        "charger",
+        "shooter",
+        "flyer",
+        "heavy"
+      ],
+      "boss": "",
+      "elite_every": 6
+    },
+    {
+      "number": 18,
+      "count": 42,
+      "interval_ticks": 16,
+      "enemies": [
+        "swarm",
+        "charger",
+        "shooter",
+        "flyer",
+        "heavy"
+      ],
+      "boss": "",
+      "elite_every": 6
+    },
+    {
+      "number": 19,
+      "count": 44,
+      "interval_ticks": 16,
+      "enemies": [
+        "swarm",
+        "charger",
+        "shooter",
+        "flyer",
+        "heavy"
+      ],
+      "boss": "",
+      "elite_every": 6
+    },
+    {
+      "number": 20,
+      "count": 13,
+      "interval_ticks": 16,
+      "enemies": [
+        "swarm",
+        "charger",
+        "shooter",
+        "flyer",
+        "heavy"
+      ],
+      "boss": "loom",
+      "elite_every": 6
+    }
+  ],
+  "arenas": [
+    {
+      "id": "lantern_pit",
+      "name": "Lantern Pit",
+      "platforms": [
+        [
+          144,
+          288,
+          80
+        ],
+        [
+          416,
+          288,
+          80
+        ]
+      ]
+    },
+    {
+      "id": "bell_foundry",
+      "name": "Bell Foundry",
+      "platforms": [
+        [
+          80,
+          288,
+          96
+        ],
+        [
+          464,
+          288,
+          96
+        ],
+        [
+          272,
+          256,
+          96
+        ]
+      ]
+    },
+    {
+      "id": "root_terrace",
+      "name": "Root Terrace",
+      "platforms": [
+        [
+          176,
+          288,
+          96
+        ],
+        [
+          368,
+          288,
+          96
+        ],
+        [
+          272,
+          256,
+          96
+        ]
+      ]
+    },
+    {
+      "id": "crown_of_threads",
+      "name": "Crown of Threads",
+      "platforms": [
+        [
+          64,
+          288,
+          112
+        ],
+        [
+          464,
+          288,
+          112
+        ],
+        [
+          208,
+          256,
+          96
+        ],
+        [
+          336,
+          256,
+          96
+        ]
+      ]
+    }
+  ]
+}

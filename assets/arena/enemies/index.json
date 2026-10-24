@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "layout": "walk0-3, windup4-7, active8-11, recovery12-13, defeat14-15",
+  "assets": {
+    "swarm": {
+      "file": "swarm.png",
+      "cell_size": [
+        32,
+        32
+      ],
+      "origin": [
+        16,
+        28
+      ],
+      "frames": 16,
+      "columns": 4,
+      "sha256": "102987770f7e756fe013ad9a3abe7abb77476ff2f855cf5ada8dafba40e4ce89"
+    },
+    "chaser": {
+      "file": "chaser.png",
+      "cell_size": [
+        32,
+        32
+      ],
+      "origin": [
+        16,
+        28
+      ],
+      "frames": 16,
+      "columns": 4,
+      "sha256": "c6692c45969cce31f19a973eac2df924079e460ffa54ec121db289414ed66510"
+    },
+    "charger": {
+      "file": "charger.png",
+      "cell_size": [
+        32,
+        32
+      ],
+      "origin": [
+        16,
+        28
+      ],
+      "frames": 16,
+      "columns": 4,
+      "sha256": "b5c2a74aa0a6b77fabd27e8530830bfeb54b79b84ada77e950834f9eebe5c359"
+    },
+    "shooter": {
+      "file": "shooter.png",
+      "cell_size": [
+        32,
+        32
+      ],
+      "origin": [
+        16,
+        28
+      ],
+      "frames": 16,
+      "columns": 4,
+      "sha256": "1dfe670927323d1b678cb85b89db125c768fe9c22de015262404ddec92ceae98"
+    },
+    "flyer": {
+      "file": "flyer.png",
+      "cell_size": [
+        32,
+        32
+      ],
+      "origin": [
+        16,
+        28
+      ],
+      "frames": 16,
+      "columns": 4,
+      "sha256": "3ce8ac7fa6b4874967c2179e44a9bd8fecfc3dd362c16b2270a04750ae6f1715"
+    },
+    "heavy": {
+      "file": "heavy.png",
+      "cell_size": [
+        32,
+        32
+      ],
+      "origin": [
+        16,
+        28
+      ],
+      "frames": 16,
+      "columns": 4,
+      "sha256": "019fc5f1d1907474a8b3f22084daac377e4ba42cae51a9cb64ac2b2d20d35305"
+    },
+    "warden": {
+      "file": "warden.png",
+      "cell_size": [
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        60
+      ],
+      "frames": 16,
+      "columns": 4,
+      "sha256": "0de83c3982500af9e9f46f0592cab58a3edb070f06d6767d3a89b611733f90ce"
+    },
+    "artillery": {
+      "file": "artillery.png",
+      "cell_size": [
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        60
+      ],
+      "frames": 16,
+      "columns": 4,
+      "sha256": "65f3c58074b7a75f71e561df6d6fbc7af4b9be9e45d9acc73c67493f1f7d7ba9"
+    },
+    "tempest": {
+      "file": "tempest.png",
+      "cell_size": [
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        60
+      ],
+      "frames": 16,
+      "columns": 4,
+      "sha256": "558fc8d8a43da3b29f297efa69c640a7de2b6dbec5c09ecf5e9e4ae81b8901c0"
+    },
+    "loom": {
+      "file": "loom.png",
+      "cell_size": [
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        60
+      ],
+      "frames": 16,
+      "columns": 4,
+      "sha256": "c5cec97b740df61dfed75ff0ac9ddaf3e990a00d486a16f9c8a38b7cbc32bb3a"
+    }
+  },
+  "provenance": {
+    "method": "original authored pixel silhouettes and poses",
+    "source": "tools/forge/enemies.py",
+    "source_sha256": "56ac89c28f530d81376d327e5152f9ebe88e486cfe5a74838b71ba0d39859cd2",
+    "provider_calls": 0
+  }
+}

@@ -1,0 +1,12 @@
+{
+	"candidate": "kiln-fox-ea0a1f683425",
+	"display": "Wayland",
+	"ledger_unchanged": true,
+	"message": "Inspect the silhouette and every animation. Accept when this looks like your character.",
+	"network": "isolated user/network namespace",
+	"new_requests": 0,
+	"passed": true,
+	"source_job_preserved": true,
+	"source_pixels_sha256": "1281653ee18ee107f604e92512af38a8fa9096bd1834852aa1027b3433b43f72",
+	"state": "complete"
+}

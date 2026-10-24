@@ -1,102 +1,58 @@
-# GLOAMTHREAD: TWO ENDS
+# Gloamthread — wave arena
 
-**Two couriers. One unraveling kingdom. Two ways of seeing it.**
+A side-view pixel fighter for **one or two local players** on a shared screen. Survive 20 waves, buy your own upgrades between rounds, fight four bosses, then choose endless. Draw/import a fighter to propose themed abilities and generate original artwork through an optional local OpenAI authoring worker.
 
-**Active direction:** the user has requested an overhead adventure with further UI, music and combat polish. The current verified download below preserves the side-view milestone; overhead work is next.
+The new game uses fullscreen 1920×1080 presentation with a 640×360 pixel arena scaled 3×. Godot 4.7.2 standard/Compatibility and Python 3 are the project tools. The approved [specification](docs/WAVE_FIGHTER_SPEC.md), [Agent 2 brief](docs/AGENT_2_WAVE_CONTENT.md) and [current evidence](docs/STATUS.md) distinguish working code from acceptance still in progress.
 
-[Download the preserved Linux demo candidate](https://github.com/9MidhunPM/GloamThread/releases/tag/v0.1.0-demo) · [Build/evidence](evidence/release/README.md) · [Play guide](docs/DEMO.md)
+## Play
 
-An original split-screen local co-op pixel action adventure built in Godot 4.7.2 for **Devin Hack Kochi**. Its documentation follows the [corrected event template](https://github.com/anima-regem/devin-hack-kochi-thanushreesuresh-SEOpilot/tree/codex/correct-devin-hack-kochi-thanushreesuresh): [event guidance](RULES.md), [agent guide](AGENTS.md), [change log](CHANGELOG.md), [AI usage record](AI_USAGE.md) and [submission sheet](SUBMISSION.md).
+```sh
+godot --headless --path . --editor --import --quit
+godot --path .
+```
 
-## Event guidance
+Choose Solo Run or Local Co-op, change fighters/inputs, then Start Run. F11 toggles fullscreen. For a window: `godot --path . --windowed --resolution 1920x1080`.
 
-Devin Hack Kochi allows Devin and other AI tools, models and providers without major AI usage constraints. We maintain an accurate AI assistance record as a project convention. Use current organizer announcements for logistics, participation, eligibility, deadlines and credits; the older shared template's details do not apply. Our offline runtime and original-content requirements are game design choices.
+| Action | Player 1 | Player 2 | Gamepad |
+| --- | --- | --- | --- |
+| Move | WASD | Arrows | Left stick |
+| Jump | Space | Period | A |
+| Basic attack (hold) | F | Comma | X |
+| Special | G | Slash | B |
+| Dodge | Left Shift | Apostrophe | RB |
+| Revive (hold near partner) | E | M | Y |
+| Pause | Escape | Enter | Start |
 
-## Project overview
+Down+Jump drops through a platform. Shops use each player's Up/Down and Attack/Jump to select/confirm independently; every active player must Ready. Mouse controls also work. Keyboard sharing depends on hardware rollover; physical controller and fresh human balance/listening checks are recorded only when performed.
 
-- **Project name:** Gloamthread: Two Ends
-- **Short description:** Two players share one computer and one physical world, but each sees it through a different visual theme (Ember and Moss). They fight, revive each other, restore broken bridges from paired anchors and reopen the Lantern Loom so a stranded district can cross home. It is for pairs who enjoy responsive action, exploration and solving a small problem together.
-- **Team:** Midhun P M ([9MidhunPM](https://github.com/9MidhunPM)) — solo, with coding-agent assistance recorded in [AI_USAGE.md](AI_USAGE.md).
-- **Working demo:** the eight-room adventure, menus and save/Continue flow are implemented on `feat/phase1-runtime`; the preserved side-view candidate is packaged; the next iteration changes to overhead. See "Current status" below.
-- **Technology stack:** Godot 4.7.2 standard (typed GDScript, Compatibility renderer), Python 3 + Pillow + numpy for original asset/audio generation and validation, Git.
+Run power and coins reset on defeat/restart. Saved fighters/settings/scores are local under Godot's `Gloamthread-Arena` user directory, separate from the old campaign.
 
-### Run the project
+## Draw and forge
 
-The production game includes title/join, all eight rooms, combat, cooperation, save/Continue, settings and an ending. Twenty engine scenarios include a complete ordinary-input route; native/export acceptance is recorded separately.
+Character Forge supports a drawing canvas, PNG/JPEG import, editable body/ability/theme proposals, animation preview, raw-board crop correction, part masks/pivots and offline local rebaking. Three built-in fighters (including the reviewed AI-generated Kiln Fox) and accepted creations work without a network or API key. Supported bodies are upright, four-legged and floating; abilities use six tested families.
 
-1. **Prerequisites and versions:** Arch Linux (first target), Godot **4.7.2 standard** (`godot --version` → `4.7.2.stable…`, not mono), Python ≥ 3.10 with Pillow and numpy, Git. Install with `sudo pacman -Syu --needed godot git python python-pillow python-numpy`. Details in [docs/SETUP.md](docs/SETUP.md).
-2. **Dependency installation:** none beyond the system packages above. No npm, .NET, C++, database or service.
-3. **Environment setup:** no environment variables, API keys or accounts. Phase 1 runs offline.
-4. **Import and launch:** run `godot --headless --path . --editor --import --quit`, then `godot --path .`. The current runtime uses the original production rooms, enemies and art. Choose New journey and confirm the two input assignments. P1 uses WASD, Space jump, F slash, G special, E interact/revive and Shift dash. P2 uses arrows, Period jump, Comma slash, Slash special, M interact/revive and Apostrophe dash. Esc/Enter pause; Tab/Semicolon open the map. Menu selection uses the owner's Up/Down, Jump/Interact confirm and Pause cancel. On Wayland, `godot --display-driver wayland --path .` selects the native display driver. A full normal-input automated route reaches the actual ending; physical controller and fresh-pair playtests are still pending.
-5. **Run checks or tests:**
-   - `python3 tools/preflight.py` — read-only toolchain check (works now).
-   - `python3 tools/check_pack.py` — event guidance, document/link and example checks.
-   - `python3 tools/generate_assets.py --seed 18427` — rebuild the full original asset bundle.
-   - `python3 tools/validate_assets.py` and `python3 tools/validate_content.py` — full bundle checks.
-   - `python3 -m unittest discover -s tools/tests -p 'test_*.py'` — Python boundary and rebuild tests.
-   - `python3 tools/gen/rebuild_check.py --seed 18427` — compare two complete output/manifest rebuilds.
-   - Runtime checkout: `godot --headless --path . --editor --import --quit`, then `godot --headless --fixed-fps 60 --path . --script tests/run_tests.gd`.
+```sh
+python3 -m venv --system-site-packages .venv
+.venv/bin/python -m pip install -r requirements-authoring.txt
+.venv/bin/python tools/fighter_forge.py status
+```
 
-### Current status
+Keep `OPENAI_API_KEY` in the ignored root `.env` (settings in `.env.example`); never paste it into chat or commit it. Godot launches Python without reading the key. Analysis uses `gpt-6-luna`; image edits use `gpt-image-1-mini`, low quality. Generating requires explicit creator actions, retains source/prompts/provenance and validates the complete result before acceptance. No provider calls occur during combat.
 
-- **Content branch:** eight authored rooms, fixed profiles, dialogue, 47 original manifested art/audio/font assets and the complete Python pipeline. Both full validators and 79 Python tests pass after content QA; two seed-18427 rebuilds matched. See [content evidence](evidence/content/README.md).
-- **Runtime branch:** production catalogs/animation/audio, combat, enemies/boss, team progression, anchors/exits/recovery and validated save/settings stores are integrated. Twenty integrated engine scenarios pass, including the complete actual-App route and UI layout checks; the earlier core staged-copy check passed twelve. See [runtime evidence](evidence/runtime/commands.md) and [movement limits](evidence/runtime/traversal.md).
-- **Known limitations:** native/offline export checks pass for the preserved side-view candidate; gamepad hardware, physical keyboard rollover, audio listening and fresh two-person playtests remain unverified. Human first-clear time, balance and enjoyment are not established by the automated route. Keyboard + keyboard is the primary input mode. [STATUS.md](docs/STATUS.md) records the current boundaries.
-- **Libraries, APIs, and public datasets used:** [Godot Engine](https://godotengine.org/) 4.7.2 (MIT), [Pillow](https://python-pillow.org/) (MIT-CMU), [NumPy](https://numpy.org/) (BSD-3). No game-content packs, stock art, fonts, music or sound libraries: every shipped sprite, tile, glyph, sound and line of dialogue is authored in this repository.
+The initial experiment has a durable shared $0.50 reservation cap, no automatic retries or model fallback. Reservations are conservative allowances, not billing receipts. The mini image model retires 1 December 2026; changing models requires a fresh cost review. See [worker details](evidence/arena-content/forge/README.md). The live drawing-analysis and image requests succeeded; the resulting fox and forest ship with retained source/provenance. Nonconforming image layouts can be corrected locally from cached output. See [status](docs/STATUS.md).
 
-## Start in this order (design pack)
+## Verify
 
-1. Read [the MVP](MVP.md) to see exactly what the first game contains.
-2. Follow [SETUP.md](docs/SETUP.md). On Arch, the essentials are Godot standard, Git, Python, Pillow and numpy; keyboard + keyboard or two controllers are the input setups.
-3. Run `python3 tools/preflight.py` and `python3 tools/check_pack.py` from this folder.
-4. Build in the order given by [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) and [docs/TASKS.md](docs/TASKS.md). The first build gate is one room with two independent inputs, two cameras and one world.
-5. Inspect the resulting playable milestone, then continue through the complete eight-room adventure before beginning generation.
+```sh
+python3 -m unittest discover -s tools/tests -p 'test_*.py'
+python3 -m tools.forge.content --validate
+godot --headless --fixed-fps 60 --path . --script tests/arena/run_tests.gd
+godot --headless --fixed-fps 60 --path . --script tests/forge/run_tests.gd
+python3 tools/check_pack.py
+```
 
-## The first game
+Rebuild original arena media with `python3 -m tools.forge.content --build --validate`. Source drawings, editable rigs, music and provenance are retained. Test fixtures and headless imports do not establish rendered quality, hardware support or enjoyable combat.
 
-Tavi, an Ember courier, and Neri, a Moss courier, carry the two ends of a living thread through the Weftlands. They must reopen the Lantern Loom before their village's paths unravel. Each sees a different visual interpretation of the same ruins. Their platforms, enemies, hazards, doors and progress remain shared.
+Package a clean checkout with `python3 tools/package_arena.py`; the [Linux play guide](docs/ARENA_DEMO.md) covers the optional authoring helper.
 
-- Godot 4.7.2 standard, typed GDScript, Linux desktop first.
-- Fixed vertical split screen: two 480×360 views, 960×360 logical composite, nearest filtering and integer scaling.
-- Two fixed original characters, two theme presets, eight authored rooms, two enemy types, one miniboss, partner revival, cooperative bridge restoration, shared dash unlock, checkpoints, save/continue, a secret and an ending.
-- First-clear target 15–20 minutes, to be measured with real players.
-- All game art, animation, music, sound, glyphs, dialogue and maps authored within the project. Engine/tool downloads are permitted; game-content packs are not.
-- Phase 1 runs offline and needs no API key, server, account or AI model at runtime.
-
-## Pack map
-
-| File | Use it for |
-| --- | --- |
-| [Agent 1 brief](docs/AGENT_1_RUNTIME.md) | Godot runtime, integration, verification and release on `feat/phase1-runtime` |
-| [Agent 2 brief](docs/AGENT_2_CONTENT.md) | Hand this to the second agent: original content/assets/audio and Python tooling on `feat/phase1-content` in a separate checkout |
-| [HANDOFF.md](HANDOFF.md) | **Start here if you are the next agent:** current state, decisions, exact next steps |
-| [PLAN_PHASE1.md](docs/PLAN_PHASE1.md) | Full Phase 1 milestone plan with gates and verification |
-| [MVP.md](MVP.md) | Exact first-release scope, route, controls, acceptance and cuts |
-| [PRD.md](PRD.md) | Product requirements, player paths and larger-world direction |
-| [AGENTS.md](AGENTS.md) | Persistent rules for coding agents, including the repository workflow |
-| [RULES.md](RULES.md) | Devin Hack Kochi guidance and the corrected template reference |
-| [FIRST_AGENT_PROMPT.md](FIRST_AGENT_PROMPT.md) | The build request that started the implementation |
-| [SETUP.md](docs/SETUP.md) | What to install first, hardware checks and run/export commands |
-| [DECISIONS.md](docs/DECISIONS.md) | Canonical names, scope, rules, dimensions and implementation addenda |
-| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | Shared simulation, cameras, inputs, theme layers, saves and contracts |
-| [IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) | Ordered milestones and completion gates |
-| [TASKS.md](docs/TASKS.md) | Dependency-ordered jobs for agents |
-| [STORY_BIBLE.md](docs/STORY_BIBLE.md) | World, characters, playable story beats and larger arc |
-| [ART_AUDIO_PIPELINE.md](docs/ART_AUDIO_PIPELINE.md) | Original art/audio generation and quality requirements |
-| [TEST_PLAN.md](docs/TEST_PLAN.md) | Automated scenarios, real hardware tests and fun/playtest gates |
-| [TRACK_ALIGNMENT.md](docs/TRACK_ALIGNMENT.md) | Track wording, fit and a concrete demonstration script |
-| [GENERATION_ROADMAP.md](docs/GENERATION_ROADMAP.md) | Later drawings/uploads, character generation and per-player textures |
-| [STATUS.md](docs/STATUS.md) | Honest current state and ongoing progress log |
-| [VALIDATION.md](docs/VALIDATION.md) | Checks performed on the starter pack |
-| [CHANGELOG.md](CHANGELOG.md) | Timestamped development record |
-| [AI_USAGE.md](AI_USAGE.md) | What coding agents did, and how it was reviewed |
-| [SUBMISSION.md](SUBMISSION.md) | Submission sheet and checklist |
-| [Examples](examples/README.md) | Fixed profiles, theme settings, world graph and team save illustrations |
-
-## Later phases
-
-**Phase 2:** drawing/upload → interpreted traits → bounded profile → original character appearance and a validated visual-theme bundle. Start with supported body templates, then add constrained generated character art and finite texture slots. Keep fixed characters as the offline fallback and regression baseline.
-
-**Phase 3:** expand the finished game region by region toward the planned 96-room world: Lantern Rest hub and six regions. Room count is a production budget, not evidence of playability. Do not generate a huge empty map to satisfy it.
-
-The strongest track fit is **Make Room for Play**. The defining demonstration is two people cooperating in one world while seeing it differently. Fun must be earned through playtesting; a specification cannot guarantee it.
+The previous eight-room game and its v0.1 release remain preserved in Git/history and [release evidence](evidence/release/README.md); its tests/performance do not prove the new wave game. Event guidance: **Devin Hack Kochi** in [RULES.md](RULES.md).

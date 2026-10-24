@@ -1,0 +1,22 @@
+{
+  "timestamp": "2026-10-25T03:39:54+05:30",
+  "engine": "Godot 4.7.2 Arch standard",
+  "renderer": "OpenGL Compatibility / Mesa Intel Graphics (ARL)",
+  "root_pixels": [
+    1920,
+    1080
+  ],
+  "world_pixels": [
+    640,
+    360
+  ],
+  "input": "synthetic owned keyboard snapshots",
+  "fixture": "explicit32enemydebugcrowd, offscreen native rendering on agent workspace; no physical-device or human playtest claim",
+  "source_sha256": {
+    "scripts/arena/arena_app.gd": "f58f768ca166a53721965edf48be34a629c72137335f865f61c2229ecc588989",
+    "scripts/arena/run_session.gd": "314496afa371714be8cb131247d02d53f9cdd068c8cc4f0c40b893230e8cd28a",
+    "scripts/arena/actors/arena_enemy.gd": "0cb0e73f937eca386cea1e983c9fd38fcfc7fc995375865fe0e2b171e198a10b",
+    "scripts/arena/actors/arena_projectile.gd": "3f6aace37eda9b1fdb87dfa331f427861eb595fc0517e836590a90878538584e",
+    "tools/arena_native_qa.gd": "1975974617f9f4300e2bc1c391d672d0b7e165c04e52db5e5db32c107432247b"
+  }
+}

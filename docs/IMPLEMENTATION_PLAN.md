@@ -1,5 +1,7 @@
 # Implementation plan — Gloamthread: Two Ends
 
+> Historical campaign/overhead document. The active product is now the [approved wave fighter](WAVE_FIGHTER_SPEC.md); its requirements supersede conflicts here.
+
 Version 2.0 · 24 October 2026 · Planning document, not implementation evidence.
 
 Build the fixed-character co-op game first. The first completion target is the eight-room Phase 1 slice in `../MVP.md`, with Tavi and Neri, fixed split screen, two visual themes, and a complete ending. The 96-room production budget and pregame generation system are later work.
