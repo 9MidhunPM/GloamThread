@@ -17,8 +17,10 @@ config/use_custom_user_dir=true
 config/custom_user_dir_name="Gloamthread-Arena"
 run/main_scene="res://scenes/arena/boot.tscn"
 run/main_scene.qa_route="res://tools/qa_boot.tscn"
+run/main_scene.arena_qa="res://tools/qa_boot.tscn"
 run/main_loop_type="SceneTree"
 run/main_loop_type.qa_route="QaRoute"
+run/main_loop_type.arena_qa="ArenaPlaythrough"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 run/low_processor_mode=false
 

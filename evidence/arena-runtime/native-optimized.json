@@ -1,0 +1,26 @@
+{
+	"display": "Wayland",
+	"duration_seconds": 10.001249,
+	"engine": "4.7.2-stable (arch_linux)",
+	"final_phase": "combat",
+	"fixture": "Production App with 32 manually spawned ordinary enemies, replacement spawns and ordinary owned attacks. Explicit offscreen native draw on an agent workspace; not a normal route, scanout FPS or physical display playtest.",
+	"human_playtest": false,
+	"maximum_frame_ms": 17.567,
+	"median_frame_ms": 6.616,
+	"observed_max_enemies": 32,
+	"observed_max_projectiles": 67,
+	"p95_frame_ms": 13.253,
+	"p95_physics_ms": 10.412,
+	"p95_process_ms": 9.774,
+	"p99_frame_ms": 15.588,
+	"render_frames": 1247,
+	"renderer": "Mesa Intel(R) Graphics (ARL)",
+	"root_size": [
+		1920,
+		1080
+	],
+	"world_size": [
+		640,
+		360
+	]
+}
