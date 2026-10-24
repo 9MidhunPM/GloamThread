@@ -332,6 +332,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-world -->
 
+### 2026-10-25 01:50:17 +0530 — Pending ordinary-input overhead campaign gate
+
+- Added a bounded fresh-App campaign driver through all eight rooms, secret, paired repairs, both two-tile Threadstep crossings, ordinary combat, ending and real save boundary. It emits owned inputs in _physics_process before input polling; test-only floor-path searches choose commands without changing actors, rooms, damage or progression.
+- Validation: scenario loads/compiles through the real runner with no script errors. Its current run FAILS at App startup because this branch still has the previous catalog/art versions; traversal/combat/ending assertions therefore remain unexecuted. The driver is an explicit work-in-progress acceptance gate, not a successful playthrough record.
+- Next dependency: merge the integrator's overhead consumer metadata and original directional media, then run/debug `--filter overhead_campaign_route`. No final art, campaign or demo-completion claim.
+
+
 ### 2026-10-25 01:42:11 +0530 — Guide each courier to their remaining paired end
 
 - Filtered transient anchor/Loom targets per living slot while retaining the pure QuestDirector/map result. A courier who has claimed an end receives no second assignment; their partner is guided only to the unclaimed end. Nearby ownership hints distinguish your held end from your partner's.

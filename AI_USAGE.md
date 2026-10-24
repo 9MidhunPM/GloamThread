@@ -112,6 +112,12 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-world -->
 
+### 2026-10-25 01:50:17 +0530 — Draft tick-indexed campaign acceptance driver
+
+- Tool: OpenAI Codex authored the newly assigned ordinary-input overhead campaign gate using actual App intents, canonical room queries and physics-indexed commands. No forced flags, actor repositioning, private room loads or direct damage calls.
+- Checks: real runner parsed the scenario; expected production catalog startup failure prevents route verification. This remains WIP until the independent consumer/art bundle lands. Generated UID retained; no fabricated route evidence.
+
+
 ### 2026-10-25 01:42:11 +0530 — Correct transient cooperative guidance
 
 - Tool: OpenAI Codex implemented the peer-reviewed per-slot target filter and ownership wording in Session/HUD, leaving QuestDirector pure. Added controlled anchor/Loom/downed guidance coverage and retained its generated UID.
