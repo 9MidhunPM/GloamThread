@@ -6,6 +6,7 @@ Use `IMPLEMENTATION_PLAN.md` for milestone gates. This backlog defines implement
 
 ## Collaboration rules
 
+- Current assignment: [Agent 1](AGENT_1_RUNTIME.md) owns runtime/integration and [Agent 2](AGENT_2_CONTENT.md) owns authored content/assets/Python tools, in separate checkouts. Their ownership and shared contract supersede the older suggested task boundaries below; the dependencies and acceptance gates still apply.
 - One integrator owns `project.godot`, the launch scene, shared session wiring, export presets, and final integration. Other agents propose changes to those files through that owner.
 - Before parallel work, agree on named input actions, player-slot IDs, resource/manifest versions, room IDs, actor event names, and animation states. Record a changed contract once and notify dependent owners.
 - Assign exclusive concrete paths at the start of each task. Suggested boundaries below can be adapted to the actual repository; do not create empty modules merely to match a plan.

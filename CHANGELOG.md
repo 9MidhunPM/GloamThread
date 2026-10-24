@@ -4,6 +4,21 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Build log
 
+## Agent 1 — runtime and integration
+
+### 2026-10-24T22:10:33+05:30 — Prepare two-agent parallel execution
+
+- Changed: Added runtime and content agent briefs with exclusive files, shared JSON/asset/audio/room contracts, staged deliverables, separate checkouts/branches and integration gates. Linked the briefs from the agent guide, handoff, README, decisions, task list and original plan. Allocated independent changelog/AI-usage sections; made the pack checker require both briefs.
+- Why: Let the second agent start the original content pipeline immediately while Agent 1 completes the playable Godot foundation without competing writes or incompatible formats.
+- Validation: Documentation/link/example checks and diff whitespace are run before committing this setup. Checkout/branch creation and remote publication are verified after that commit.
+- Limitations: This checkpoint sets up the work; it does not implement or verify the game. Agent 2 must deliver its diagnostic packet before integrated M0 acceptance can pass.
+
+## Agent 2 — content and assets
+
+<!-- Agent 2 inserts its newest timestamped entries here. -->
+
+## Earlier development
+
 ## 2026-10-24T21:51:38+05:30 — Prepare the template-first GitHub publication
 
 - Changed: Kept the original organizer template commit and corrected the two unpublished project commits to `Midhun P M <midhun.titan@gmail.com>`, preserving their file trees, messages, AI attribution and author dates; retained the original local history under `refs/backup/pre-publication-20261024`. Configured the authorized `https://github.com/9MidhunPM/GloamThread.git` origin. Corrected current-state text in the README, agent guide, first build prompt, setup/decision/implementation docs, status, handoff and submission sheet; marked the original environment table as historical context.

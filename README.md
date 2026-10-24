@@ -55,6 +55,8 @@ Tavi, an Ember courier, and Neri, a Moss courier, carry the two ends of a living
 
 | File | Use it for |
 | --- | --- |
+| [Agent 1 brief](docs/AGENT_1_RUNTIME.md) | Godot runtime, integration, verification and release on `feat/phase1-runtime` |
+| [Agent 2 brief](docs/AGENT_2_CONTENT.md) | Hand this to the second agent: original content/assets/audio and Python tooling on `feat/phase1-content` in a separate checkout |
 | [HANDOFF.md](HANDOFF.md) | **Start here if you are the next agent:** current state, decisions, exact next steps |
 | [PLAN_PHASE1.md](docs/PLAN_PHASE1.md) | Full Phase 1 milestone plan with gates and verification |
 | [MVP.md](MVP.md) | Exact first-release scope, route, controls, acceptance and cuts |

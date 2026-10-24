@@ -1,6 +1,12 @@
 # Implementation status
 
-Updated 2026-10-24T21:51:38+05:30. Keep planned work distinct from verified behaviour.
+Updated 2026-10-24T22:10:33+05:30. Keep planned work distinct from verified behaviour.
+
+## Parallel execution setup
+
+- Two agent briefs define exclusive ownership, shared data formats, diagnostic-first packets and separate branches/checkouts: [runtime/integration](AGENT_1_RUNTIME.md) and [content/assets](AGENT_2_CONTENT.md).
+- Agent 2's assigned checkout is `/home/midhun/Coading/GloamThread-content`, branch `feat/phase1-content`; Agent 1 uses `feat/phase1-runtime` here. The preparation commit is the shared starting point. Checkout/branch creation is verified separately after the preparation commit; this documentation does not assert either agent has completed implementation.
+- Agent 1 merges tested content packets and owns runtime/import/release evidence. Agent 2 records its packet SHAs and exact checks in `evidence/content/` and its named changelog/AI-usage sections. M0 remains incomplete at this setup checkpoint.
 
 ## Implemented and verified
 

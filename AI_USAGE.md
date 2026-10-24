@@ -4,6 +4,20 @@ Briefly document each meaningful coding-agent contribution here. Add a row after
 
 ## Build log
 
+## Agent 1 — runtime and integration
+
+| Date and time with timezone | Tool / model, if known | Task | Assistance and affected files | Human review / corrections | Validation and result |
+| --- | --- | --- | --- | --- | --- |
+| 2026-10-24T22:10:33+05:30 | Codex | Prepare two-agent execution | Wrote runtime brief, coordinated the content brief, fixed shared interfaces/ownership and integration stages, linked current instructions and allocated independent logs; prepares separate feature branches/checkouts | Pending — user chose separate checkouts and requested immediate setup | Pack/link checks and whitespace validation before commit; branch/checkout/remote results verified after setup. No game completion or gameplay evidence claimed |
+
+## Agent 2 — content and assets
+
+| Date and time with timezone | Tool / model, if known | Task | Assistance and affected files | Human review / corrections | Validation and result |
+| --- | --- | --- | --- | --- | --- |
+<!-- Agent 2 inserts its newest contribution row above this marker. -->
+
+## Earlier contributions
+
 | Date and time with timezone | Tool / model, if known | Task | Assistance and affected files | Human review / corrections | Validation and result |
 | --- | --- | --- | --- | --- | --- |
 | 2026-10-24T21:51:38+05:30 | Codex | Review and prepare GitHub publication | Read the handoff, docs and code with read-only subagent reviews; corrected only the two unpublished project commit identities; retained the organizer template and local backup; configured the authorized origin; corrected stale implementation/demo status and recorded the repository URL | Pending — user authorized publication and normal author identity; no human gameplay review claimed | Preflight and planning-pack checks PASS; Git integrity/whitespace checks PASS; replacement trees/messages/author dates verified; targeted scan of 52 original tracked blobs found no credential-pattern or private-filename matches. Engine/gameplay checks remain unverified; remote verification follows push |

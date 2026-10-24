@@ -8,6 +8,8 @@ M0 is in progress: `project.godot` and input, audio and room scaffolding exist a
 
 ## Context map
 
+For the current two-agent build, read [Agent 1](docs/AGENT_1_RUNTIME.md) or [Agent 2](docs/AGENT_2_CONTENT.md) according to the assigned role. Their separate-checkout ownership replaces the older three-worker split in the handoff. Both agents follow the shared data contract in Agent 2's brief; only Agent 1 integrates to `main`.
+
 1. Read README.md, MVP.md and docs/DECISIONS.md before implementing.
 2. Follow docs/IMPLEMENTATION_PLAN.md and docs/TASKS.md for dependency order.
 3. Read docs/ARCHITECTURE.md before changing simulation, inputs, views or saves.

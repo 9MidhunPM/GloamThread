@@ -1,5 +1,7 @@
 # Gloamthread: Two Ends — Phase 1 implementation plan
 
+Current two-agent execution: use [Agent 1](AGENT_1_RUNTIME.md) and [Agent 2](AGENT_2_CONTENT.md). These briefs replace this original plan's three-worker ownership, generator ownership and pre-M1 parallelism restrictions. Milestone gates and Phase 1 scope remain unchanged. Canonical keyboard defaults and room dimensions are recorded in [DECISIONS.md](DECISIONS.md).
+
 Build the eight-room fixed-character split-screen co-op slice in Godot 4.7.2 on top of the DevDay Kochi hackathon template's repository workflow, implementing a one-room two-input tracer first, then combat/recovery, cooperation, original art/audio, the full route, persistence and release verification, with honest evidence at every gate.
 
 ## 0. Pre-implementation baseline (verified 2026-10-24)

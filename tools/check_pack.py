@@ -35,7 +35,7 @@ def reachable(graph, flags):
 def main():
     required = ["README.md", "MVP.md", "PRD.md", "AGENTS.md", "FIRST_AGENT_PROMPT.md"]
     required += ["RULES.md", "CHANGELOG.md", "AI_USAGE.md", "SUBMISSION.md", ".github/pull_request_template.md"]
-    required += ["docs/" + name + ".md" for name in ["DECISIONS", "ARCHITECTURE", "IMPLEMENTATION_PLAN", "TASKS", "SETUP", "STORY_BIBLE", "ART_AUDIO_PIPELINE", "TEST_PLAN", "TRACK_ALIGNMENT", "GENERATION_ROADMAP", "STATUS", "VALIDATION"]]
+    required += ["docs/" + name + ".md" for name in ["DECISIONS", "ARCHITECTURE", "IMPLEMENTATION_PLAN", "TASKS", "SETUP", "STORY_BIBLE", "ART_AUDIO_PIPELINE", "TEST_PLAN", "TRACK_ALIGNMENT", "GENERATION_ROADMAP", "STATUS", "VALIDATION", "AGENT_1_RUNTIME", "AGENT_2_CONTENT"]]
     for name in required:
         require((ROOT / name).is_file(), f"Missing document: {name}")
     link_count = 0

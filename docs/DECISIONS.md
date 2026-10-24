@@ -19,7 +19,14 @@ This repository includes the planning and handoff pack plus unverified M0 projec
 - World tile: 16×16 px. Character cell: 32×48 px. Logical composite: **960×360**, with two **480×360** views side by side. Divider is an overlay, not a third region changing either view's width. Initial window 1920×720; integer scaling and letterboxing, nearest filtering. At smaller displays use a 960×360 1× view or letterbox; never silently stretch pixels non-uniformly. Pixel-stable presentation; fixed 60 Hz physics.
 - One World2D and one authoritative simulation. Two SubViewports share it; each has its own Camera2D and HUD. One collision layout and one set of enemies, bosses, triggers, loot and permanent flags. Theme-specific visual layers contain no collision, AI or gameplay triggers.
 - Fixed split screen even when players are close. Both stay in one active room for Phase 1; room transition requires both living players in an exit rally zone, and activation by one. Downed partners must be revived or the team can choose checkpoint recovery. No solo transition, dynamic camera merge, online or LAN networking.
-- Inputs: two gamepads preferred; keyboard plus one gamepad supported; keyboard/keyboard optional with rollover caveat. Explicit device-to-player ownership, simultaneous inputs, remapping and hotplug pause. One global pause/map/dialogue state. One stereo mix; avoid double-playing sound events through two listeners.
+- Inputs: keyboard/keyboard (WASD / arrows) is the user-selected primary mode to implement and verify, with the hardware-rollover caveat. Two gamepads and keyboard plus gamepad remain supported paths, hardware-unverified until controllers are available. Keep the defaults in `scripts/input/bindings.gd`. Explicit device-to-player ownership, simultaneous inputs, remapping and hotplug pause. One global pause/map/dialogue state. One stereo mix; avoid double-playing sound events through two listeners.
+
+## Current implementation collaboration
+
+- Two independent checkouts/branches: [Agent 1](AGENT_1_RUNTIME.md) owns Godot runtime, scenario tests, integration and release; [Agent 2](AGENT_2_CONTENT.md) owns all authored content, asset/audio generators, manifest and Python validation, including r00 and the generator entrypoint. This replaces the old three-worker plan. Parallel work may start immediately from the shared diagnostic/data contracts.
+- The shared producer/consumer data contract lives in Agent 2's brief. Preserve its schema/ID/coordinate conventions in both Python and GDScript. Any compatibility change must update that contract and both consumers before integration.
+- Room dimensions are 30–90 by 23–30 tiles; initial r00 is 60×23. This resolves the older 40-tile minimum proposal against the existing loader and handoff.
+- Each agent records its actual contribution in its named changelog/AI-usage section. Agent 2 records tool/setup instructions and evidence in `evidence/content/`; Agent 1 incorporates these into central docs and runs authoritative Godot imports. Only Agent 1 publishes `main` and release artifacts.
 
 ## Characters and common mechanics
 

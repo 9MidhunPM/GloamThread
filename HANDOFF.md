@@ -1,5 +1,9 @@
 # Handoff — Gloamthread: Two Ends (Phase 1 build)
 
+## Current execution: two agents in separate checkouts
+
+The user approved parallel execution on 2026-10-24. Start from [Agent 1's runtime/integration brief](docs/AGENT_1_RUNTIME.md) or [Agent 2's complete content/pipeline brief](docs/AGENT_2_CONTENT.md). They supersede the original ownership split in sections 1/6 and the integrator-owned generator/r00 instructions below. Agent 1 uses `feat/phase1-runtime` in this checkout; Agent 2 uses `feat/phase1-content` in `/home/midhun/Coading/GloamThread-content`. Both start at the preparation commit containing the briefs. Merge cumulative content packets into the runtime branch; preserve development history. The remainder of this file is the original M0 implementation handoff and remains useful for its technical steps.
+
 Written 2026-10-24 by Devin CLI (Claude) for the next coding agent (Codex). Read this first, then `AGENTS.md`, `MVP.md`, `docs/DECISIONS.md`, `docs/ARCHITECTURE.md`. The latest user instruction outranks every document.
 
 Publication preparation, 2026-10-24T21:51:38+05:30 (Codex): the user authorized `https://github.com/9MidhunPM/GloamThread`. The template root remains `4163290`; the two unpublished project commits were recreated with the account's normal `Midhun P M <midhun.titan@gmail.com>` author/committer identity: `14509f4` → `91bb494` and `fb5cac5` → `a972492`. Their file trees, messages, AI attribution and original author dates are preserved. Original history is retained locally at `refs/backup/pre-publication-20261024`. This changes publication metadata only; the M0 work below is still unverified and incomplete.
