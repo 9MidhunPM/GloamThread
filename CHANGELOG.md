@@ -1,5 +1,10 @@
 # Change log
 
+### 2026-10-25T02:47:21+05:30 — Approve shared-screen wave-fighter implementation
+
+- Replaced active product authority with the approved solo/co-op20wave, personal-shop, generated-character specification; assigned runtime/actor/creator/content ownership and exact bundle/job boundaries. Preserved older game requirements as historical references.
+- Validation: repository clean before work, Godot4.7.2 confirmed; documentation link/whitespace checks follow. Runtime, real generation and new-game acceptance are not yet implemented.
+
 Record each meaningful project change, newest first. Update this file in the same commit as the change. Use a real timestamp with timezone, for example `YYYY-MM-DDTHH:MM:SS+05:30`. Never backdate an entry.
 
 ## Build log

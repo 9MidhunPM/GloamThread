@@ -1,5 +1,7 @@
 # Gloamthread: Two Ends — verification and playtest plan
 
+> Historical campaign/overhead document. The active product is now the [approved wave fighter](WAVE_FIGHTER_SPEC.md); its requirements supersede conflicts here.
+
 Version 2.0 · Phase 1 acceptance contract · 24 October 2026.
 
 **Current status:** 20 engine scenarios pass, including the actual-App eight-room route to ending, combat, timing, menus, actual-file persistence and malformed content. Native rendering and exported performance/offline verification are being completed. Physical controllers, audio listening and fresh two-person playtests remain unverified. See [campaign evidence](../evidence/runtime/campaign.md) and [status](STATUS.md).

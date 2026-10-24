@@ -1,3 +1,9 @@
+# Gloamthread — wave fighter
+
+The active rebuild is a solo or two-player local side-view wave fighter: one shared arena, personal coins, between-wave shops, drawn/generated characters and fullscreen1080p presentation. The [approved specification](docs/WAVE_FIGHTER_SPEC.md) and [Agent2brief](docs/AGENT_2_WAVE_CONTENT.md) define implementation and ownership. [Status](docs/STATUS.md) separates verified work from targets.
+
+Implementation has started; the new arena entry point and launch commands will be added as its first playable slice lands. The existing campaign launch and release instructions below describe the preserved previous game.
+
 # GLOAMTHREAD: TWO ENDS
 
 > **Current direction:** the original side-view co-op game is restored. Optional OpenAI image authoring is being added; the game itself remains playable offline. The overhead experiment is preserved on `feat/overhead-core`.

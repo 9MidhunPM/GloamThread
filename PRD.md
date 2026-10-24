@@ -1,5 +1,7 @@
 # Gloamthread: Two Ends — product requirements
 
+> Historical campaign/overhead document. The active product is now the [approved wave fighter](docs/WAVE_FIGHTER_SPEC.md); its requirements supersede conflicts here.
+
 Version 2.0 · 24 October 2026 · Owner: Midhun P M.
 
 ## 1. Product definition

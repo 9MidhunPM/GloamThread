@@ -1,5 +1,7 @@
 # Handoff — Gloamthread: Two Ends (Phase 1 build)
 
+> Historical campaign/overhead document. The active product is now the [approved wave fighter](docs/WAVE_FIGHTER_SPEC.md); its requirements supersede conflicts here.
+
 Current evidence is in [STATUS.md](docs/STATUS.md) and the [content delivery record](evidence/content/README.md). The original M0 notes below are historical. Current event guidance is **Devin Hack Kochi** in [RULES.md](RULES.md); inherited logistics and tool restrictions in the older template do not apply.
 
 ## Current execution: two agents in separate checkouts

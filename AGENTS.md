@@ -1,8 +1,8 @@
 # Gloamthread: Two Ends — agent guide
 
-## Latest user direction — 25 October 2026
+## Latest user direction — wave fighter, 25 October 2026
 
-Restore the original side-view local co-op adventure. The overhead experiment remains on feat/overhead-core and is no longer the active product direction. The user now authorizes optional OpenAI API image authoring for original sprites/textures, with their own key in ignored .env. Keep calls outside gameplay and exports; generated images cross strict visual/provenance validation and never change physics or executable behavior. Previous Phase 1 no-generation restrictions yield only for this explicit authoring task. Read docs/AI_ASSET_WORKFLOW.md when present. Preserve honest development history; the previous autonomous goal was cleared.
+Implement the approved solo/two-player shared-screen arena fighter in [docs/WAVE_FIGHTER_SPEC.md](docs/WAVE_FIGHTER_SPEC.md). It supersedes conflicting campaign/split-screen/fixed-character/no-generation requirements below and in older documents. Read that contract before runtime, art, creation or content work. Agent 2 follows [docs/AGENT_2_WAVE_CONTENT.md](docs/AGENT_2_WAVE_CONTENT.md); separate checkout ownership is explicit there. One authoritative world, owned inputs, original content, accurate evidence, private credentials and honest Git history remain mandatory. Only root integrates main. The earlier campaign and overhead evidence remain historical, not acceptance of the wave fighter.
 
 ## Mission and current state
 

@@ -1,5 +1,7 @@
 # Gloamthread: Two Ends — settled decisions
 
+> Historical campaign/overhead document. The active product is now the [approved wave fighter](WAVE_FIGHTER_SPEC.md); its requirements supersede conflicts here.
+
 Version 2.0 · 24 October 2026 · Owner: Midhun P M.
 
 These decisions govern the Godot co-op implementation. A diagnostic runtime tracer and the full authored content bundle are now being integrated from separate branches; [STATUS.md](STATUS.md) records their evidence and remaining integration. This supersedes the earlier C++/Raylib production plan. The earlier HTML proof remains a separate single-player experiment.

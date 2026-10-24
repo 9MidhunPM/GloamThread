@@ -1,5 +1,7 @@
 # Agent task backlog — Gloamthread: Two Ends
 
+> Historical campaign/overhead document. The active product is now the [approved wave fighter](WAVE_FIGHTER_SPEC.md); its requirements supersede conflicts here.
+
 Version 2.0 · 24 October 2026 · All tasks below are planned, not completed.
 
 Use `IMPLEMENTATION_PLAN.md` for milestone gates. This backlog defines implementation responsibilities and acceptance criteria; it does not grant permission to publish or message third parties.

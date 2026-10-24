@@ -1,5 +1,7 @@
 # Gloamthread: Two Ends — architecture plan
 
+> Historical campaign/overhead document. The active product is now the [approved wave fighter](WAVE_FIGHTER_SPEC.md); its requirements supersede conflicts here.
+
 Version 2.0 · Planning contract, not an implemented Godot project.
 
 Read [DECISIONS.md](DECISIONS.md) first. This document describes the smallest architecture that supports the fixed-character co-op slice and a later generated-content pipeline without making the slice depend on that pipeline.
