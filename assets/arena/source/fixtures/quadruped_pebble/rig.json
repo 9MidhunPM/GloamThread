@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "rig_id": "quadruped",
+  "parts": [
+    {
+      "id": "torso",
+      "file": "parts/torso.png",
+      "pivot": [
+        30,
+        36
+      ],
+      "anchor": [
+        30,
+        36
+      ]
+    },
+    {
+      "id": "head",
+      "file": "parts/head.png",
+      "pivot": [
+        45,
+        33
+      ],
+      "anchor": [
+        45,
+        33
+      ]
+    },
+    {
+      "id": "leg_back_left",
+      "file": "parts/leg_back_left.png",
+      "pivot": [
+        19,
+        39
+      ],
+      "anchor": [
+        19,
+        39
+      ]
+    },
+    {
+      "id": "leg_back_right",
+      "file": "parts/leg_back_right.png",
+      "pivot": [
+        24,
+        39
+      ],
+      "anchor": [
+        24,
+        39
+      ]
+    },
+    {
+      "id": "leg_front_left",
+      "file": "parts/leg_front_left.png",
+      "pivot": [
+        37,
+        39
+      ],
+      "anchor": [
+        37,
+        39
+      ]
+    },
+    {
+      "id": "leg_front_right",
+      "file": "parts/leg_front_right.png",
+      "pivot": [
+        42,
+        39
+      ],
+      "anchor": [
+        42,
+        39
+      ]
+    },
+    {
+      "id": "tail",
+      "file": "parts/tail.png",
+      "pivot": [
+        16,
+        33
+      ],
+      "anchor": [
+        16,
+        33
+      ]
+    }
+  ]
+}

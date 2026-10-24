@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "authorship": "Original Gloamthread arcade score/cue recipes; synthesized using the project's original instruments, no samples or soundfonts.",
+  "tracks": {
+    "arena": {"title":"Copper Rush","bpm":132,"bars":16,"bass":[38,38,34,34,41,41,36,36],"motif":[74,77,81,79,77,74,72,69],"lead_gain":0.36,"drum_gain":0.4,"peak":0.2},
+    "arena_boss": {"title":"The Loom Bites Back","bpm":150,"bars":16,"bass":[38,38,39,39,34,36,37,38],"motif":[74,75,81,77,75,74,70,73],"lead_gain":0.32,"drum_gain":0.48,"peak":0.21},
+    "shop": {"title":"Pocketful of Sparks","bpm":102,"bars":8,"bass":[50,46,53,48],"motif":[77,74,69,72,79,77,74,81],"lead_gain":0.3,"drum_gain":0.14,"peak":0.16}
+  },
+  "cues": {
+    "coin":{"duration_seconds":0.16,"peak":0.2,"events":[{"at_seconds":0,"duration_seconds":0.12,"instrument":"soft_chime","note":88,"gain":0.7},{"at_seconds":0.04,"duration_seconds":0.1,"instrument":"soft_chime","note":95,"gain":0.45}]},
+    "purchase":{"duration_seconds":0.4,"peak":0.24,"events":[{"at_seconds":0,"duration_seconds":0.2,"instrument":"thread_pluck","note":74,"gain":0.7},{"at_seconds":0.08,"duration_seconds":0.22,"instrument":"soft_chime","note":81,"gain":0.6},{"at_seconds":0.16,"duration_seconds":0.24,"instrument":"soft_chime","note":86,"gain":0.5}]},
+    "wave_clear":{"duration_seconds":0.8,"peak":0.25,"events":[{"at_seconds":0,"duration_seconds":0.3,"instrument":"thread_pluck","note":74,"gain":0.7},{"at_seconds":0.12,"duration_seconds":0.3,"instrument":"soft_bell","note":77,"gain":0.6},{"at_seconds":0.24,"duration_seconds":0.3,"instrument":"soft_bell","note":81,"gain":0.6},{"at_seconds":0.4,"duration_seconds":0.4,"instrument":"soft_chime","note":86,"gain":0.65}]},
+    "ready":{"duration_seconds":0.25,"peak":0.2,"events":[{"at_seconds":0,"duration_seconds":0.16,"instrument":"wood_knock","note":69,"gain":0.5},{"at_seconds":0.08,"duration_seconds":0.17,"instrument":"soft_chime","note":81,"gain":0.5}]},
+    "combo":{"duration_seconds":0.28,"peak":0.22,"events":[{"at_seconds":0,"duration_seconds":0.1,"instrument":"thread_pluck","note":81,"gain":0.7},{"at_seconds":0.05,"duration_seconds":0.12,"instrument":"thread_pluck","note":86,"gain":0.6},{"at_seconds":0.11,"duration_seconds":0.17,"instrument":"soft_chime","note":93,"gain":0.5}]}
+  }
+}
