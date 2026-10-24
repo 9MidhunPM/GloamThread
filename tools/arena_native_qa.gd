@@ -16,6 +16,7 @@ func _run() -> void:
 		folder = args[1]
 	DirAccess.make_dir_recursive_absolute(folder)
 	root.size = Vector2i(1920, 1080)
+	RenderingServer.viewport_set_update_mode(root.get_viewport_rid(), RenderingServer.VIEWPORT_UPDATE_ALWAYS)
 	var app_script := load("res://scripts/arena/arena_app.gd") as GDScript
 	app = app_script.new()
 	app.settings_store.path = "user://native-qa-settings.json"
@@ -63,6 +64,9 @@ func _run() -> void:
 		if step % 6 == 0:
 			world.spawn_projectile(Vector2(30, 220 + step % 90), Vector2.RIGHT, 1.0, -1, {"hostile": true, "speed": 170, "life": 180})
 		maximum_projectiles = maxi(maximum_projectiles, get_nodes_in_group("arena_projectiles").size())
+		# Hidden Wayland windows may stop presentation callbacks. This explicitly
+		# measures offscreen native rendering, separately from physical scanout.
+		RenderingServer.force_draw(false)
 		await process_frame
 		var now := Time.get_ticks_usec()
 		if now - started > 1_000_000:
@@ -74,7 +78,7 @@ func _run() -> void:
 	samples.sort()
 	process_samples.sort()
 	physics_samples.sort()
-	var report := {"fixture": "Production App with 32 manually spawned ordinary enemies, replacement spawns and ordinary owned attacks. Debug crowd fixture, not a normal route or physical display playtest.", "engine": Engine.get_version_info().string, "renderer": RenderingServer.get_video_adapter_name(), "display": DisplayServer.get_name(), "root_size": [root.size.x, root.size.y], "world_size": [app.world_view.size.x, app.world_view.size.y], "observed_max_enemies": maximum_enemies, "observed_max_projectiles": maximum_projectiles, "render_frames": samples.size(), "duration_seconds": (Time.get_ticks_usec() - started) / 1000000.0, "median_frame_ms": _percentile(samples, 0.5), "p95_frame_ms": _percentile(samples, 0.95), "p99_frame_ms": _percentile(samples, 0.99), "maximum_frame_ms": _percentile(samples, 1.0), "p95_process_ms": _percentile(process_samples, 0.95), "p95_physics_ms": _percentile(physics_samples, 0.95), "final_phase": world.phase, "human_playtest": false}
+	var report := {"fixture": "Production App with 32 manually spawned ordinary enemies, replacement spawns and ordinary owned attacks. Explicit offscreen native draw on an agent workspace; not a normal route, scanout FPS or physical display playtest.", "engine": Engine.get_version_info().string, "renderer": RenderingServer.get_video_adapter_name(), "display": DisplayServer.get_name(), "root_size": [root.size.x, root.size.y], "world_size": [app.world_view.size.x, app.world_view.size.y], "observed_max_enemies": maximum_enemies, "observed_max_projectiles": maximum_projectiles, "render_frames": samples.size(), "duration_seconds": (Time.get_ticks_usec() - started) / 1000000.0, "median_frame_ms": _percentile(samples, 0.5), "p95_frame_ms": _percentile(samples, 0.95), "p99_frame_ms": _percentile(samples, 0.99), "maximum_frame_ms": _percentile(samples, 1.0), "p95_process_ms": _percentile(process_samples, 0.95), "p95_physics_ms": _percentile(physics_samples, 0.95), "final_phase": world.phase, "human_playtest": false}
 	await _capture(folder, "crowd_fixture")
 	world._open_shop()
 	await _capture(folder, "shop")
@@ -97,7 +101,7 @@ func _spawn(world: Node, index: int) -> void:
 func _capture(folder: String, name: String) -> void:
 	await process_frame
 	await process_frame
-	await RenderingServer.frame_post_draw
+	RenderingServer.force_draw(false)
 	var image := root.get_texture().get_image()
 	if image != null and not image.is_empty():
 		image.save_png(folder.path_join(name + ".png"))

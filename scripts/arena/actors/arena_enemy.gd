@@ -48,6 +48,7 @@ var _texture: Texture2D
 var _last_source := -1
 var _boss_meter := 0
 var _target_point := Vector2.ZERO
+var _visual_key := -1
 
 func setup(enemy_role: String, world: Node, identity: int, wave: int, elite: bool = false, boss: String = "") -> void:
 	role = enemy_role if ROLE_DATA.has(enemy_role) else "chaser"
@@ -170,7 +171,7 @@ func _physics_process(delta: float) -> void:
 	_age += 1
 	if dead:
 		_state_ticks -= 1
-		queue_redraw()
+		_update_visual()
 		if _state_ticks <= 0: queue_free()
 		return
 	_tick_status()
@@ -185,7 +186,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, 1500 * delta)
 		velocity.y = 0 if flying else minf(500, velocity.y + 1600 * delta)
 		move_and_slide()
-		queue_redraw()
+		_update_visual()
 		return
 	if flying:
 		_fly_tick(target)
@@ -201,7 +202,7 @@ func _physics_process(delta: float) -> void:
 	if global_position.y > 360:
 		global_position.y = 320
 		velocity.y = 0
-	queue_redraw()
+	_update_visual()
 
 func _tick_status() -> void:
 	_freeze = maxi(0, _freeze - 1)
@@ -224,12 +225,14 @@ func _tick_status() -> void:
 		if int(burn.ticks) <= 0: _burns.erase(slot)
 
 func _target() -> Node2D:
-	var living: Array[Node2D] = []
-	for fighter: Node2D in ArenaCombat.actors(_world, "fighters"):
+	# The fixed solo/co-op roster needs no temporary living-player array.
+	var first: ArenaFighter
+	var second: ArenaFighter
+	for fighter: ArenaFighter in ArenaCombat.actors(_world, "fighters"):
 		if is_instance_valid(fighter) and not fighter.downed:
-			living.append(fighter)
-	if living.is_empty(): return null
-	return living[_target_slot % living.size()]
+			if first == null: first = fighter
+			else: second = fighter
+	return second if second != null and _target_slot % 2 == 1 else first
 
 func _ground_tick(target: Node2D, delta: float) -> void:
 	var gap := target.global_position.x - global_position.x
@@ -387,10 +390,12 @@ func _platform_approach(target: Node2D, movement: float) -> float:
 
 func _separation() -> float:
 	var push := 0.0
-	for enemy: Node2D in ArenaCombat.actors(_world,"enemies"):
+	var at := global_position
+	for enemy: ArenaEnemy in ArenaCombat.actors(_world,"enemies"):
 		if not is_instance_valid(enemy) or enemy==self or enemy.dead: continue
-		var gap := global_position.x-enemy.global_position.x
-		if absf(gap)<26 and absf(global_position.y-enemy.global_position.y)<24:
+		var other := enemy.global_position
+		var gap := at.x-other.x
+		if absf(gap)<26 and absf(at.y-other.y)<24:
 			push += (1.0 if gap>0 or (is_zero_approx(gap) and spawn_id>enemy.spawn_id) else -1.0)*(26-absf(gap))*1.5
 	return clampf(push,-45,45)
 
@@ -446,17 +451,34 @@ func _exit_tree() -> void:
 	_release()
 	_end_drop()
 
+func _animation_frame() -> int:
+	if _state == "windup": return 4 + (_age / 6) % 4
+	if _state == "active": return 8 + (_age / 4) % 4
+	if _state in ["recover", "stagger"]: return 12 + (_age / 8) % 2
+	if dead: return 14 + mini(1, (24 - _state_ticks) / 12)
+	return (_age / 8) % 4
+
+func _update_visual() -> void:
+	# Position changes use the retained CanvasItem transform; redraw only when
+	# the frame or a visible cue changes. Damage separately redraws its HP bar.
+	var key := _animation_frame()
+	if _freeze > 0: key |= 32
+	if not _burns.is_empty(): key |= 64
+	if not _marks.is_empty(): key |= 128
+	if _facing > 0: key |= 256
+	if _state == "windup": key |= 512
+	if dead: key |= 1024
+	if key != _visual_key:
+		_visual_key = key
+		queue_redraw()
+
 func _draw() -> void:
 	var color: Color = ROLE_COLORS[role]
 	if not boss_id.is_empty(): color={"warden":Color("#d6ac75"),"artillery":Color("#d390b8"),"tempest":Color("#84d9df"),"loom":Color("#c9a0e5")}[boss_id]
 	if _elite: color=color.lightened(0.18)
 	if _freeze>0: color=Color("#b4e7ff")
 	if _texture!=null:
-		var frame:=(_age/8)%4
-		if _state=="windup": frame=4+(_age/6)%4
-		elif _state=="active": frame=8+(_age/4)%4
-		elif _state in ["recover","stagger"]: frame=12+(_age/8)%2
-		elif dead: frame=14+mini(1,(24-_state_ticks)/12)
+		var frame := _animation_frame()
 		var cell:=64 if not boss_id.is_empty() else 32
 		var size:=Vector2(64,64) if not boss_id.is_empty() or role == "heavy" else Vector2(32,32)
 		draw_texture_rect_region(_texture,Rect2(Vector2(-size.x*0.5,-size.y),size),Rect2((frame%4)*cell,(frame/4)*cell,cell,cell),Color("#b4e7ff") if _freeze > 0 else Color.WHITE)

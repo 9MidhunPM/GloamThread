@@ -291,7 +291,6 @@ func _phase_changed(value: String) -> void:
 func _run_changed() -> void:
 	if screen == "shop" and is_instance_valid(session) and session.phase == "shop":
 		_show_shop(false)
-	_update_hud()
 
 
 func _show_shop(reset: bool = true) -> void:
@@ -319,7 +318,7 @@ func _show_shop(reset: bool = true) -> void:
 			button.disabled = state.coins < int(offer.price) or session.shop_ready[slot]
 			buttons.append(button)
 			row += 1
-		var heal := _button("HEAL 35%  |  5 COINS", Rect2(x + 28, 782, 366, 62), _shop_purchase.bind(slot, "heal"), false, false)
+		var heal := _button("HEAL +35% / 5C", Rect2(x + 28, 782, 366, 62), _shop_purchase.bind(slot, "heal"), false, false)
 		heal.disabled = session.shop_ready[slot] or state.coins < 5 or session.fighters[slot].health >= session.fighters[slot].max_health
 		buttons.append(heal)
 		var roll := _button("REROLL  |  FREE" if not session.rerolled[slot] else "REROLL USED", Rect2(x + 412, 782, 370, 62), _shop_reroll.bind(slot), false, false)
@@ -498,7 +497,7 @@ func _physics_process(_delta: float) -> void:
 				return
 		if screen == "shop":
 			_poll_shop()
-		if _ticks % 3 == 0:
+		if _ticks % 6 == 0:
 			_update_hud()
 		if is_instance_valid(world_container):
 			world_container.position = Vector2((1 if _ticks % 2 == 0 else -1) * 3, 0) if session.shake_ticks > 0 and not settings.reduced_shake else Vector2.ZERO
@@ -561,7 +560,7 @@ func _update_hud() -> void:
 		var state := session.player_states[slot]
 		_hud_labels[slot].text = "P%d  %s   %d COINS\n%s" % [slot + 1, selected[slot].name, state.coins, "DOWNED - HOLD REVIVE NEARBY" if fighter.downed else "%d / %d HP" % [ceili(fighter.health), ceili(fighter.max_health)]]
 		_health_bars[slot].value = 100.0 * fighter.health / maxf(1, fighter.max_health)
-		_special_bars[slot].value = 100.0 * (1.0 - float(fighter.special_ticks) / maxf(1, float(state.stats().special_cooldown)))
+		_special_bars[slot].value = 100.0 * (1.0 - float(fighter.special_ticks) / maxf(1, float(fighter.stats.special_cooldown)))
 	_wave_label.text = "WAVE %02d%s\n%s" % [session.wave, "  /  ENDLESS" if session.endless else " / 20", str(catalog.arenas[session.stage].name).to_upper()]
 	_combo_label.text = "%d CHAIN!" % session.combo if session.combo >= 3 else ""
 	var boss: ArenaEnemy

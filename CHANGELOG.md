@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-25T03:39:54+05:30 — Reduce crowd overhead and verify the exported wave route
+
+- Retained projectile/enemy draw commands between visual changes, removed avoidable sweep/target allocations, and throttled HUD text updates while using cached fighter stats. Preserved terrain-first swept hit order and combat rules. Added the dedicated arena QA export entry point; fixed shop clipping/contrast and added a shared boss bar.
+- Validation:7actor scenarios,30,000sweep-equivalence cases and post-change normal-input solo20/co-op25 routes pass.11arena scenarios,107forge assertions,147Python tests pass. Official Linux QA export also reaches25waves in a network namespace; ordinary package boots outside source. Native offscreen1080p32enemy/67projectile profile:p9513.253ms versus17.442ms before this combined pass; not a physical-display/human performance claim.
+- Both real image requests now succeed after project access changed; strict conversion correctly rejected the returned layout. Local cached crop correction is in progress; no additional request or accepted generated-art claim.
+
 ### 2026-10-25T03:10:36+05:30 — Build the shared-screen wave game and character forge
 
 - Added the active1080pfullscreen solo/co-op App, shared arena simulation, wave/boss/endless director, run-only personal rewards/upgrades, concurrent shops, recovery and results. Kept the campaign tree intact. Integrated Agent2original fighters/three rigs,20waves,30upgrades,six enemy/four boss atlases and arcade audio.

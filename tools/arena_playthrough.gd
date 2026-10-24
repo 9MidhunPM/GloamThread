@@ -1,3 +1,4 @@
+class_name ArenaPlaythrough
 extends SceneTree
 ## Source-only QA harness. Gameplay uses the ordinary-input route driver.
 class Capture extends Logger:

@@ -18,3 +18,11 @@ Run `godot --headless --fixed-fps 60 --path . --script tools/arena_playthrough.g
 Actual title/lobby/creator/crowd/shop render targets were inspected. Shop text overflow/Ready contrast and unsupported font punctuation were found and corrected; refreshed captures follow. No fabricated captures or timings.
 
 Physical controllers, keyboard rollover, music listening, fresh two-human balance/enjoyment and exported offline/native acceptance remain separate gates.
+
+## Final source and export checks
+
+After the targeted redraw/sweep/HUD optimizations, ordinary-input Ember solo20 completed in25,059ticks and co-op25 in34,123ticks, both without downs or engine errors. Final reports retain matching runtime source hashes.
+
+The official Linux QA export also completed25waves in a user/network namespace with no network interfaces, no game-state overrides and no engine errors (34,880ticks). This uses the same gameplay/content with the `arena_qa` observation entry point. The ordinary Linux package separately boots outside the source checkout in that network namespace; helper inventory/status/local-bake checks are separate from executable gameplay.
+
+Refreshed native rendering uses explicit offscreen OpenGL draws on an agent workspace, not physical scanout FPS. A10second32enemy/67projectile fixture measured median6.616ms,p9513.253ms,p9915.588ms,max17.567ms; physics/processp95were10.412/9.774ms. The earlier same forced-draw fixture was17.442msp95. CPU redraw/allocation changes plus lower HUD update frequency contributed; this is a short combined-change observation, not a controlled hardware or human performance guarantee. Raw profiles and actual native captures are retained.
