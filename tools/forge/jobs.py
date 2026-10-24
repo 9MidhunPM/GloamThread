@@ -411,9 +411,84 @@ def validate_candidate(path: Path) -> dict:
     read_json(path / "provenance.json")
     try:
         validate_bundle(path)
-    except (BundleError, OSError, TypeError, ValueError):
+    except BundleError as error:
+        raise ForgeError("Converted candidate rejected: " + str(error)) from None
+    except (OSError, TypeError, ValueError):
         raise ForgeError("Converted candidate failed the shared bundle validator; no art was installed.") from None
     return manifest
+
+
+def copy_source_layout(folder: Path, stage: Path) -> str | None:
+    """Copy only the bounded local correction document, without interpreting paths."""
+    path = folder / "source_layout.json"
+    if not path.exists() and not path.is_symlink():
+        return None
+    layout = read_json(path, 64 * 1024)
+    if type(layout.get("schema_version")) is not int or layout["schema_version"] != 1:
+        raise ForgeError("Source layout must use schema_version 1.")
+    data = read_bytes(path, 64 * 1024)
+    atomic_bytes(stage / "source_layout.json", data)
+    return digest(data)
+
+
+def verified_raw_boards(folder: Path, job: dict) -> tuple[dict, dict, Path, Path]:
+    """Admit received cached pixels without loading settings or dispatching requests."""
+    if not (folder / "provenance.json").is_file():
+        raise ForgeError("Raw recovery requires retained generation provenance and both received image boards.")
+    proposal = validate_proposal(job.get("proposal"))
+    source = snapshot_source(job, folder)
+    provenance = initial_provenance(folder, source)
+    approved = validate_proposal(provenance.get("approved_proposal"))
+    if approved != proposal:
+        raise ForgeError("Raw recovery must use the approved design that produced these boards. Start a new generation job for a different design.")
+    paths = []
+    for kind in ("parts", "theme"):
+        record = provenance["requests"].get(kind)
+        file = f"raw/{kind}.png"
+        prompt = image_prompt(kind, proposal)
+        if (not isinstance(record, dict) or record.get("file") != file or record.get("prompt") != prompt
+                or not isinstance(record.get("model"), str) or not 1 <= len(record["model"]) <= 128
+                or not isinstance(record.get("quality"), str) or record["quality"] not in {"low", "medium", "high"}):
+            raise ForgeError("Raw recovery requires the matching received parts and theme records; image files alone are insufficient.")
+        expected = digest(encode({"source": provenance["source"]["sha256"], "kind": kind, "prompt": prompt,
+                                  "version": VERSION, "model": record["model"], "quality": record["quality"]}))
+        if record.get("cache_key") != expected:
+            raise ForgeError("Retained image request identity differs from its source or approved design.")
+        path = folder / file
+        data = read_bytes(path, MAX_RAW_BYTES)
+        if digest(data) != record.get("sha256"):
+            raise ForgeError("Retained raw board differs from its provenance; no replacement request was made.")
+        raw_image(data, kind == "parts")
+        paths.append(path)
+    return proposal, provenance, paths[0], paths[1]
+
+
+def check_baked_layout(folder: Path) -> None:
+    """A new source crop cannot silently keep already-converted part pixels."""
+    path = folder / "source_layout.json"
+    current = None
+    if path.exists() or path.is_symlink():
+        layout = read_json(path, 64 * 1024)
+        if type(layout.get("schema_version")) is not int or layout["schema_version"] != 1:
+            raise ForgeError("Source layout must use schema_version 1.")
+        current = digest(read_bytes(path, 64 * 1024))
+    provenance_path = folder / "source_provenance.json"
+    previous = read_json(provenance_path, 512 * 1024).get("source_layout_sha256") if provenance_path.exists() else None
+    if current != previous:
+        raise ForgeError("Source layout changed after parts were converted. Create a new local correction job from the verified raw boards, then bake it; the previous preview and edits are preserved.")
+
+
+def stage_raw_boards(parts: Path, theme: Path, provenance: dict, stage: Path) -> tuple[Path, Path]:
+    """The converter reads immutable staging copies, not changing job files."""
+    paths = []
+    for kind, source in (("parts", parts), ("theme", theme)):
+        data = read_bytes(source, MAX_RAW_BYTES)
+        if digest(data) != provenance["requests"][kind]["sha256"]:
+            raise ForgeError("Raw board changed before conversion; the previous preview was preserved.")
+        target = stage / "raw" / f"{kind}.png"
+        atomic_bytes(target, data)
+        paths.append(target)
+    return paths[0], paths[1]
 
 
 def publish_candidate(candidate: Path, folder: Path, root: Path, provenance: dict | None,
@@ -473,7 +548,7 @@ def run_job(command: str, job_path: Path, *, root: Path = ROOT, provider=None, c
             job, cap = read_job(job_path)
             check_cancel(folder)
             if command == "bake":
-                return bake_local(job_path, root, baker)
+                return bake_local(job_path, root, baker, converter)
             config = settings(root) if config is None else dict(config)
             validate_config(config)
             source = snapshot_source(job, folder)
@@ -503,7 +578,9 @@ def run_job(command: str, job_path: Path, *, root: Path = ROOT, provider=None, c
             with tempfile.TemporaryDirectory(dir=folder, prefix=".conversion-") as temp:
                 stage = Path(temp)
                 write_json(stage / "job.json", {**job, "proposal": proposal})
-                candidate = Path(converter(parts, theme, proposal, stage, provenance))
+                copy_source_layout(folder, stage)
+                staged_parts, staged_theme = stage_raw_boards(parts, theme, provenance, stage)
+                candidate = Path(converter(staged_parts, staged_theme, proposal, stage, provenance))
                 if candidate.resolve() != stage / "candidate":
                     raise ForgeError("Converter returned an unexpected candidate path.")
                 validate_candidate(candidate)
@@ -514,19 +591,31 @@ def run_job(command: str, job_path: Path, *, root: Path = ROOT, provider=None, c
         except Cancelled:
             return write_status(folder, root, "cancelled", "Cancelled. Any in-flight request may still be billed; retained reservations and raw outputs are preserved.")
         except Exception as error:
-            message = str(error) if isinstance(error, ForgeError) else "Local authoring failed. Existing fighters were preserved; inspect the retained job or start a new attempt."
+            from .validation import BundleError
+            if isinstance(error, ForgeError):
+                message = str(error)
+            elif isinstance(error, BundleError):
+                message = "Conversion rejected: " + str(error)
+            else:
+                message = "Local authoring failed. Existing fighters were preserved; inspect the retained job or start a new attempt."
             write_status(folder, root, "failed", message)
             raise ForgeError(message) from None
 
 
-def bake_local(job_path: Path, root: Path, baker) -> dict:
+def bake_local(job_path: Path, root: Path, baker, converter=None) -> dict:
     folder = job_path.parent
+    rig = folder / "rig.json"
+    has_rig = rig.exists() or rig.is_symlink()
+    if not has_rig and ((folder / "raw").exists() or (folder / "provenance.json").exists()):
+        return recover_raw(job_path, root, converter)
+    check_baked_layout(folder)
     if baker is None:
         from .rigs import bake_job
         baker = bake_job
     write_status(folder, root, "converting", "Baking local edited parts without a provider request.")
     with tempfile.TemporaryDirectory(dir=folder, prefix=".bake-") as temp:
         stage = Path(temp)
+        copy_source_layout(folder, stage)
         for name in ("job.json", "rig_edits.json", "raw", "provenance.json", *EDITABLE_FILES):
             source = folder / name
             if not source.exists():
@@ -537,6 +626,7 @@ def bake_local(job_path: Path, root: Path, baker) -> dict:
                 shutil.copytree(source, stage / name)
             else:
                 shutil.copy2(source, stage / name)
+        check_baked_layout(stage)
         candidate = Path(baker(stage / "job.json"))
         if candidate.resolve() != stage / "candidate":
             raise ForgeError("Baker returned an unexpected candidate path.")
@@ -544,3 +634,28 @@ def bake_local(job_path: Path, root: Path, baker) -> dict:
         check_cancel(folder)
         provenance = read_json(folder / "provenance.json") if (folder / "provenance.json").exists() else None
         return publish_candidate(candidate, folder, root, provenance)
+
+
+def recover_raw(job_path: Path, root: Path, converter) -> dict:
+    folder = job_path.parent
+    if any((folder / name).exists() or (folder / name).is_symlink() for name in EDITABLE_FILES):
+        raise ForgeError("Partial editable art already exists. Create a new local correction job from the verified raw boards; previous files were preserved.")
+    job, _cap = read_job(job_path)
+    proposal, provenance, parts, theme = verified_raw_boards(folder, job)
+    check_cancel(folder)
+    if converter is None:
+        from .rigs import convert_generated
+        converter = convert_generated
+    write_status(folder, root, "converting", "Converting retained raw boards locally. No provider request or new reservation is made.")
+    with tempfile.TemporaryDirectory(dir=folder, prefix=".raw-recovery-") as temp:
+        stage = Path(temp)
+        write_json(stage / "job.json", {**job, "proposal": proposal})
+        copy_source_layout(folder, stage)
+        staged_parts, staged_theme = stage_raw_boards(parts, theme, provenance, stage)
+        check_cancel(folder)
+        candidate = Path(converter(staged_parts, staged_theme, proposal, stage, provenance))
+        if candidate.resolve() != stage / "candidate":
+            raise ForgeError("Converter returned an unexpected candidate path.")
+        validate_candidate(candidate)
+        check_cancel(folder)
+        return publish_candidate(candidate, folder, root, provenance, EDITABLE_FILES)
