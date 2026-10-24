@@ -18,7 +18,7 @@ signal joypad_list_changed()
 const SLOT_COUNT := 2
 const Action := CommandSnapshot.Action
 ## Actions suppressed by a flush until the player physically releases them.
-const LATCHABLE_MASK: int = Action.LEFT | Action.RIGHT | Action.UP | Action.DOWN | Action.JUMP | Action.ATTACK | Action.SPECIAL | Action.INTERACT | Action.DASH | Action.PAUSE | Action.MAP
+const LATCHABLE_MASK: int = Action.LEFT | Action.RIGHT | Action.UP | Action.DOWN | Action.ROLL | Action.ATTACK | Action.SPECIAL | Action.INTERACT | Action.DASH | Action.PAUSE | Action.MAP
 
 
 class PlayerSlot:

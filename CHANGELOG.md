@@ -209,3 +209,10 @@ Record each meaningful project change, newest first. Update this file in the sam
 ## Overhead input and persistence lane
 
 <!-- overhead-input -->
+
+### 2026-10-25T01:10:20+05:30 — Migrate the overhead Roll action
+
+- Changed: Introduced canonical Roll at bit16, retained the transitional Jump alias, migrated legacy saved jump controls, and made canonical roll mappings win independent of JSON key order. Default keyboard/gamepad controls are preserved and the action appears once in polling/settings.
+- Why: The overhead contract replaces jumping with a roll without losing remapped controls or duplicating menu actions.
+- Validation: Clean Godot4.7.2 editor import in the isolated lane; focused `overhead_input_roll` scenario PASS1/1 in the relocated worktree; actual legacy settings serialization, owned action edges and release latching checked.
+- Limitations: This checks input/settings semantics, not overhead actor motion, physical controllers or rendered menus.

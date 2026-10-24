@@ -10,6 +10,8 @@ enum Action {
 	RIGHT = 2,
 	UP = 4,
 	DOWN = 8,
+	ROLL = 16,
+	## Transitional menu/side-view call sites share the bit; saves name it roll.
 	JUMP = 16,
 	ATTACK = 32,
 	SPECIAL = 64,
@@ -20,7 +22,7 @@ enum Action {
 }
 
 const ALL_ACTIONS: Array[Action] = [
-	Action.LEFT, Action.RIGHT, Action.UP, Action.DOWN, Action.JUMP, Action.ATTACK,
+	Action.LEFT, Action.RIGHT, Action.UP, Action.DOWN, Action.ROLL, Action.ATTACK,
 	Action.SPECIAL, Action.INTERACT, Action.DASH, Action.PAUSE, Action.MAP,
 ]
 
@@ -72,7 +74,7 @@ static func action_name(action: Action) -> String:
 		Action.RIGHT: return "right"
 		Action.UP: return "up"
 		Action.DOWN: return "down"
-		Action.JUMP: return "jump"
+		Action.ROLL: return "roll"
 		Action.ATTACK: return "attack"
 		Action.SPECIAL: return "special"
 		Action.INTERACT: return "interact"
@@ -83,6 +85,8 @@ static func action_name(action: Action) -> String:
 
 
 static func action_from_name(name: String) -> int:
+	if name == "jump":
+		return Action.ROLL
 	for action: Action in ALL_ACTIONS:
 		if action_name(action) == name:
 			return action

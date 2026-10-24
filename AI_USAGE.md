@@ -69,3 +69,7 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 ## Overhead input and persistence lane
 
 <!-- overhead-input -->
+
+### 2026-10-25T01:10:20+05:30 — Codex: overhead Roll migration
+
+Codex implemented the Roll action and legacy settings migration in the exclusive input lane, including canonical-name precedence and actual file/snapshot regression checks. Human review is pending. Godot4.7.2 import and the focused scenario passed; no physical-device or overhead-movement acceptance is claimed.
