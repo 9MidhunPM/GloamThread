@@ -46,6 +46,9 @@ var _visual: Node2D
 var _sprite: Sprite2D
 var _animator: Node
 var _feedback: Label
+var _warning: Node2D
+var _warning_sprite: Sprite2D
+var _warning_animator: SpriteAnimator
 
 
 func configure(enemy_kind: String, players: Array[PlayerController], catalog: AssetCatalog, bounds: Rect2) -> void:
@@ -89,6 +92,42 @@ func _ready() -> void:
 		_feedback.add_theme_font_size_override("font_size", 16)
 		_feedback.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		add_child(_feedback)
+	_setup_warning()
+
+
+## This small authored arrow is a direction hint, not an attack-area outline.
+func _setup_warning() -> void:
+	if _catalog == null or not _catalog.entries.has("effect_enemy_warning_v1"):
+		return
+	_warning = Node2D.new()
+	_warning.name = "AttackDirectionHint"
+	_warning.visible = false
+	add_child(_warning)
+	_warning_sprite = Sprite2D.new()
+	_warning.add_child(_warning_sprite)
+	_warning_animator = SpriteAnimator.new()
+	_warning.add_child(_warning_animator)
+	_warning_animator.set_physics_process(false)
+
+
+func _begin_warning() -> void:
+	if _warning == null:
+		return
+	var quarter_turn := roundf(_attack_direction.angle() / (PI * 0.5)) * PI * 0.5
+	_warning.rotation = quarter_turn
+	_warning.position = Vector2(0, -_footprint_size().y * 0.5) + Vector2.from_angle(quarter_turn) * 20.0
+	_warning.visible = true
+	# Configure only on a new windup serial. Repeated same-state physics ticks
+	# never restart this non-loop clip once its final frame has been reached.
+	_warning_animator.configure(_warning_sprite, _catalog, "effect_enemy_warning_v1")
+	_warning_animator.play("play")
+	_warning_animator.set_physics_process(true)
+
+
+func _hide_warning() -> void:
+	if _warning != null:
+		_warning.visible = false
+		_warning_animator.set_physics_process(false)
 
 
 ## Same room seam as couriers. World queries own terrain interpretation.
@@ -180,6 +219,7 @@ func receive_hit(damage: int, slot: int, attack_id: int, stagger: int = 1, appli
 	CombatQuery.effect(self, _catalog, "effect_hit_v1", global_position)
 	if health == 0:
 		dead = true
+		_hide_warning()
 		if _feedback != null:
 			_feedback.text = ""
 		velocity = Vector2.ZERO
@@ -370,6 +410,10 @@ func _boss_hit_players() -> void:
 func _enter(state: String, ticks: int) -> void:
 	_state = state
 	_state_ticks = ticks
+	if state == "anticipation":
+		_begin_warning()
+	else:
+		_hide_warning()
 
 
 func _begin_active(state: String, ticks: int) -> void:

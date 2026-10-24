@@ -198,6 +198,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T01:37:07+05:30 — Authored enemy direction warning consumer
+
+- Changed: Enemy windups show effect_enemy_warning_v1 through its non-loop play clip, rotated in quarter turns around its declared pivot. The final frame holds through the warning; active/recovery/stagger/death clears it. A new windup starts a new clip serial.
+- Why: Supply a readable authored direction hint while keeping damage geometry and simulation independent from the marker.
+- Validation: Focused Godot 4.7.2 scenario passes against an explicit atlas fixture: cardinal rotation, pivot, frame progression/hold, pause, new-windup restart and immediate state/death cleanup.
+- Limitations: The production authored warning packet is still pending integration/native review; this marker is not an exact damage-area outline.
+
+
 ### 2026-10-25T01:35:23+05:30 — Buffered directional animation regression
 
 - Changed: Added a diagnostic atlas fixture and real player/SpriteAnimator scenario proving that a queued same-facing slash returns through idle and restarts its first windup frame; finished same-state non-loop clips remain held.

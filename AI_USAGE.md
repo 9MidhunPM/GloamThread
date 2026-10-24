@@ -58,6 +58,9 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-actors -->
 
+- 2026-10-25T01:37:07+05:30 | Codex | Added the approved enemy-warning asset consumer and actual-physics animator checks. Human review pending. Fixture-based scenario passes; production art quality and native readability remain integration gates.
+
+
 - 2026-10-25T01:35:23+05:30 | Codex | Investigated buffered same-facing animation restart with actual physics and a diagnostic texture atlas. Human review pending. Regression passes without a source fix; retained existing same-state guards and avoided speculative API changes.
 
 
