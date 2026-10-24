@@ -58,6 +58,9 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-actors -->
 
+- 2026-10-25T01:25:13+05:30 | Codex | Migrated enemy movement, ground hurtboxes and explicit room-water flight; added real FSM/physics assertions with controlled placements. Human review pending. Ordinary enemy scenario and six courier scenarios pass; boss-specific acceptance and rendered art remain pending.
+
+
 - 2026-10-25T01:22:30+05:30 | Codex | Corrected post-roll coasting found while reviewing dash braking. Human review pending. Added and passed a neutral-input completion assertion in the real-physics roll scenario.
 
 

@@ -198,6 +198,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T01:25:13+05:30 — Planar enemy movement and room ownership
+
+- Changed: Enemy bodies now use floating ground-plane footprints, XY target/attack vectors and two-axis bounds. Spoolmites telegraph locked charges; Wickwing hover is visual-only and its explicit water flight returns toward dry courier approaches. Added matching set_room_context seam. Boss movement/attack geometry is translated onto the same plane.
+- Why: Remove platform gravity/ground checks and keep flying traversal separate from solid-wall collision.
+- Validation: Focused real-physics enemy scenario passes: vertical charge, locked warning, recovery, pause, slow, Wickwing water/wall collision, dry close-range recovery and exactly-once defeat. Existing six actor scenarios remain green.
+- Limitations: Boss-specific timing, geometry and Cross-stitch checks are the next slice; original enemy art/telegraph rendering is pending the content packet.
+
+
 ### 2026-10-25T01:22:30+05:30 — End roll at its declared travel distance
 
 - Changed: Clear roll velocity on its last movement tick instead of letting ordinary motor deceleration add unrequested drift.

@@ -22,7 +22,9 @@ var _origin := Vector2.ZERO
 var _state: String = "idle"
 var _state_ticks: int = 45
 var _age_ticks: int = 0
-var _facing: int = -1
+var _facing := Vector2.LEFT
+var _attack_direction := Vector2.LEFT
+var _patrol_direction := Vector2.LEFT
 var _target_slot: int = 0
 var _move_index: int = -1
 var _move_name: String = "sweep"
@@ -32,6 +34,11 @@ var _received_attacks: Dictionary = {}
 var _stagger_slot: int = -1
 var _cross_stitch_used: bool = false
 var _dive_direction := Vector2.ZERO
+var _recovery_point := Vector2.ZERO
+var _can_stand: Callable
+var _can_threadstep: Callable
+var _water_body: PhysicsBody2D
+var _ignoring_water := false
 var _visual: Node2D
 var _sprite: Sprite2D
 var _animator: Node
@@ -49,16 +56,18 @@ func configure(enemy_kind: String, players: Array[PlayerController], catalog: As
 
 
 func _ready() -> void:
+	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	add_to_group("combat_enemies")
 	collision_layer = 4
 	collision_mask = 1
 	_origin = global_position
 	var collision := CollisionShape2D.new()
 	var shape := RectangleShape2D.new()
-	shape.size = Vector2(40, 50) if kind == "spoolwarden" else Vector2(20, 18)
+	shape.size = _footprint_size()
 	collision.shape = shape
 	collision.position.y = -shape.size.y * 0.5
 	add_child(collision)
+	_update_water_exception()
 	_visual = Node2D.new()
 	add_child(_visual)
 	_sprite = Sprite2D.new()
@@ -79,6 +88,24 @@ func _ready() -> void:
 		add_child(_feedback)
 
 
+## Same room seam as couriers. World queries own terrain interpretation.
+func set_room_context(bounds: Rect2, can_stand: Callable, can_threadstep: Callable, water_body: PhysicsBody2D = null) -> void:
+	if _ignoring_water and is_instance_valid(_water_body):
+		remove_collision_exception_with(_water_body)
+	_ignoring_water = false
+	_bounds = bounds
+	_can_stand = can_stand
+	_can_threadstep = can_threadstep
+	_water_body = water_body
+	_update_water_exception()
+
+
+func _update_water_exception() -> void:
+	if kind == "wickwing" and is_inside_tree() and is_instance_valid(_water_body):
+		add_collision_exception_with(_water_body)
+		_ignoring_water = true
+
+
 func _physics_process(delta: float) -> void:
 	_age_ticks += 1
 	if dead:
@@ -89,26 +116,28 @@ func _physics_process(delta: float) -> void:
 	slow_ticks = maxi(0, slow_ticks - 1)
 	slow_immune_ticks = maxi(0, slow_immune_ticks - 1)
 	if _feedback != null:
-		_feedback.text = "Resists slow" if slow_immune_ticks > 0 else ("Partner strike!" if _state == "stagger" and not _cross_stitch_used else "")
+		_feedback.text = "Partner strike!" if _state == "stagger" and not _cross_stitch_used else ("Resists slow" if slow_immune_ticks > 0 else "")
 	var target := _target()
 	if target == null:
-		velocity.x = 0.0
-		if kind != "wickwing":
-			velocity.y = minf(velocity.y + 1400.0 * delta, 400.0)
-			move_and_slide()
+		velocity = Vector2.ZERO
 		return
 	match kind:
 		"spoolwarden": _boss_tick(target, delta)
 		"wickwing": _wing_tick(target, delta)
 		_: _mite_tick(target, delta)
 	_keep_in_room()
-	_visual.scale.x = _facing
+	# Hover belongs to presentation; it cannot drag the hurtbox off the plane.
+	_visual.position.y = -3.0 + sin(_age_ticks / 12.0) * 2.0 if kind == "wickwing" else 0.0
 	if _animator != null:
 		_animator.call("play", animation_state)
 
 
+func _footprint_size() -> Vector2:
+	return Vector2(32, 20) if kind == "spoolwarden" else (Vector2(14, 10) if kind == "wickwing" else Vector2(16, 12))
+
+
 func hurt_rect() -> Rect2:
-	var size := Vector2(40, 50) if kind == "spoolwarden" else Vector2(20, 18)
+	var size := _footprint_size()
 	return Rect2(global_position + Vector2(-size.x * 0.5, -size.y), size)
 
 
@@ -178,41 +207,49 @@ func _target() -> PlayerController:
 
 func _mite_tick(target: PlayerController, delta: float) -> void:
 	var speed_scale := 0.5 if slow_ticks > 0 else 1.0
-	velocity.y = minf(velocity.y + 1400.0 * delta, 400.0)
 	if _state == "idle":
 		animation_state = "walk"
-		velocity.x = _facing * 32.0 * speed_scale
-		if absf(global_position.x - _origin.x) > 64.0 or is_on_wall() or not _ground_ahead():
-			_facing *= -1
-		if global_position.distance_to(target.global_position) < 180.0 and absf(global_position.y - target.global_position.y) < 40.0:
-			_facing = 1 if target.global_position.x >= global_position.x else -1
+		if global_position.distance_to(_origin) > 56.0:
+			_patrol_direction = (_origin - global_position).normalized()
+		elif get_slide_collision_count() > 0:
+			_patrol_direction = _patrol_direction.rotated(PI * 0.5)
+		velocity = _patrol_direction * 32.0 * speed_scale
+		_facing = _patrol_direction
+		if global_position.distance_to(target.global_position) < 180.0 and CombatQuery.clear_line(self, hurt_rect().get_center(), target.hurt_rect().get_center()):
+			_attack_direction = _toward(target.hurt_rect().get_center())
+			_facing = _attack_direction
+			velocity = Vector2.ZERO
 			_enter("anticipation", 30)
 			AudioDirector.play_cue(&"enemy_warning")
 	elif _state == "anticipation":
 		animation_state = "anticipation"
-		velocity.x = 0.0
+		velocity = Vector2.ZERO
 		if _countdown(): _begin_active("charge", 24)
 	elif _state == "charge":
 		animation_state = "charge"
-		velocity.x = _facing * 165.0 * speed_scale if _ground_ahead() else 0.0
-		_hit_players(hurt_rect().grow(3.0))
-		if _countdown() or is_on_wall(): _enter("recovery", 36)
+		velocity = _attack_direction * 165.0 * speed_scale
 	else:
 		animation_state = "recovery"
-		velocity.x = move_toward(velocity.x, 0.0, 1000.0 * delta)
+		velocity = velocity.move_toward(Vector2.ZERO, 1000.0 * delta)
 		if _countdown(): _finish_attack()
 	move_and_slide()
+	if _state == "charge" and animation_state == "charge":
+		_hit_players(hurt_rect().grow(3.0))
+		if _countdown() or get_slide_collision_count() > 0:
+			velocity = Vector2.ZERO
+			_enter("recovery", 36)
 
 
-func _wing_tick(target: PlayerController, delta: float) -> void:
+func _wing_tick(target: PlayerController, _delta: float) -> void:
 	var speed_scale := 0.5 if slow_ticks > 0 else 1.0
 	if _state == "idle":
 		animation_state = "flap"
-		var hover := _origin + Vector2(sin(_age_ticks / 70.0) * 20.0, sin(_age_ticks / 18.0) * 8.0)
-		velocity = (hover - global_position) * 3.0 * speed_scale
+		velocity = Vector2.ZERO
 		if global_position.distance_to(target.global_position) < 260.0:
-			_facing = 1 if target.global_position.x >= global_position.x else -1
-			_dive_direction = (target.global_position + Vector2(0, -12) - global_position).normalized()
+			_dive_direction = _toward(target.hurt_rect().get_center())
+			_attack_direction = _dive_direction
+			_facing = _dive_direction
+			_recovery_point = _dry_approach(target)
 			_enter("anticipation", 36)
 			AudioDirector.play_cue(&"enemy_warning")
 	elif _state == "anticipation":
@@ -222,55 +259,89 @@ func _wing_tick(target: PlayerController, delta: float) -> void:
 	elif _state == "dive":
 		animation_state = "dive"
 		velocity = _dive_direction * 180.0 * speed_scale
-		_hit_players(hurt_rect().grow(4.0))
-		if _countdown() or is_on_floor() or is_on_wall(): _enter("recovery", 60)
 	else:
 		animation_state = "recovery"
-		velocity = (_origin - global_position).limit_length(80.0) * speed_scale
-		if _countdown(): _finish_attack()
+		_recovery_point = _dry_approach(target)
+		velocity = (_recovery_point - global_position).limit_length(80.0) * speed_scale
+		# Recovery lasts at least sixty ticks and keeps returning while over
+		# water, giving the close-range courier a dry approach to the enemy.
+		if _countdown() and _standable(global_position):
+			_origin = global_position
+			_finish_attack()
 	move_and_slide()
+	if _state == "dive" and animation_state == "dive":
+		_hit_players(hurt_rect().grow(4.0))
+		if _countdown() or get_slide_collision_count() > 0:
+			velocity = Vector2.ZERO
+			_enter("recovery", 60)
+
+
+func _dry_approach(target: PlayerController) -> Vector2:
+	var approach := target.global_position - _attack_direction * 24.0
+	return approach if _standable(approach) else target.global_position
+
+
+func _standable(feet: Vector2) -> bool:
+	return not _can_stand.is_valid() or bool(_can_stand.call(feet))
+
+
+func _toward(at: Vector2) -> Vector2:
+	var direction := at - hurt_rect().get_center()
+	return _facing if direction.is_zero_approx() else direction.normalized()
 
 
 func _boss_tick(target: PlayerController, delta: float) -> void:
-	velocity.y = minf(velocity.y + 1400.0 * delta, 400.0)
 	if _state == "idle":
 		animation_state = "idle"
-		var gap := target.global_position.x - global_position.x
-		_facing = 1 if gap >= 0.0 else -1
-		velocity.x = _facing * 52.0 if absf(gap) > 96.0 and absf(gap) < 420.0 else 0.0
-		if absf(gap) < 220.0 and _countdown():
+		var offset := target.hurt_rect().get_center() - hurt_rect().get_center()
+		_facing = _toward(target.hurt_rect().get_center())
+		velocity = _facing * 52.0 if offset.length() > 96.0 and offset.length() < 420.0 else Vector2.ZERO
+		if offset.length() < 220.0 and _countdown():
 			_move_index = (_move_index + 1) % 3
 			_move_name = ["sweep", "strike", "charge"][_move_index]
+			_attack_direction = _facing
+			velocity = Vector2.ZERO
 			_enter("anticipation", 60 if _move_name == "strike" else 45)
 			AudioDirector.play_cue(&"enemy_warning")
 	elif _state == "anticipation":
 		animation_state = _move_name + "_anticipation"
-		velocity.x = 0.0
+		velocity = Vector2.ZERO
 		if _countdown():
 			_begin_active("active", 36 if _move_name == "charge" else 14)
 	elif _state == "active":
 		animation_state = _move_name + "_active"
-		velocity.x = _facing * 250.0 if _move_name == "charge" else 0.0
-		var rectangle: Rect2
-		if _move_name == "charge":
-			rectangle = hurt_rect().grow(4.0)
-		elif _move_name == "strike":
-			rectangle = Rect2(global_position + Vector2(-90, -18), Vector2(180, 18))
-		else:
-			rectangle = Rect2(global_position + Vector2(0 if _facing > 0 else -110, -48), Vector2(110, 48))
-		_hit_players(rectangle)
-		if _countdown() or (_move_name == "charge" and is_on_wall()):
-			_enter("recovery", 60 if _move_name == "strike" else 48)
+		velocity = _attack_direction * 250.0 if _move_name == "charge" else Vector2.ZERO
 	elif _state == "stagger":
 		animation_state = "stagger"
-		velocity.x = 0.0
-		if _countdown():
-			_enter("recovery", 42)
+		velocity = Vector2.ZERO
+		if _countdown(): _enter("recovery", 42)
 	else:
 		animation_state = _move_name + "_recovery"
-		velocity.x = move_toward(velocity.x, 0.0, 1400.0 * delta)
+		velocity = velocity.move_toward(Vector2.ZERO, 1400.0 * delta)
 		if _countdown(): _finish_attack()
 	move_and_slide()
+	if _state == "active" and animation_state.ends_with("_active"):
+		_boss_hit_players()
+		if _countdown() or (_move_name == "charge" and get_slide_collision_count() > 0):
+			velocity = Vector2.ZERO
+			_enter("recovery", 60 if _move_name == "strike" else 48)
+
+
+func _boss_hit_players() -> void:
+	if _move_name == "charge":
+		_hit_players(hurt_rect().grow(4.0))
+		return
+	var origin := hurt_rect().get_center()
+	for player in _players:
+		if not is_instance_valid(player) or player.downed or _hit_slots.has(player.slot_index):
+			continue
+		var box := player.hurt_rect()
+		var point := Vector2(clampf(origin.x, box.position.x, box.end.x), clampf(origin.y, box.position.y, box.end.y))
+		var offset := point - origin
+		var in_range := offset.length() <= (66.0 if _move_name == "strike" else 74.0)
+		var in_arc := _move_name == "strike" or offset.is_zero_approx() or offset.normalized().dot(_attack_direction) >= 0.35
+		if in_range and in_arc and CombatQuery.clear_line(self, origin, box.get_center()):
+			_damage_player(player)
 
 
 func _enter(state: String, ticks: int) -> void:
@@ -299,27 +370,21 @@ func _hit_players(rectangle: Rect2) -> void:
 		if not is_instance_valid(player) or player.downed or _hit_slots.has(player.slot_index):
 			continue
 		if rectangle.intersects(player.hurt_rect()) and CombatQuery.clear_line(self, hurt_rect().get_center(), player.hurt_rect().get_center()):
-			_hit_slots[player.slot_index] = true
-			player.take_hit(1, Vector2(_facing * 140.0, -130.0))
+			_damage_player(player)
 
 
-func _ground_ahead() -> bool:
-	if not is_on_floor():
-		return true
-	var from := global_position + Vector2(_facing * 14.0, -4.0)
-	var query := PhysicsRayQueryParameters2D.create(from, from + Vector2(0, 28), 1)
-	query.exclude = [get_rid()]
-	return not get_world_2d().direct_space_state.intersect_ray(query).is_empty()
+func _damage_player(player: PlayerController) -> void:
+	_hit_slots[player.slot_index] = true
+	var direction := (player.hurt_rect().get_center() - hurt_rect().get_center()).normalized()
+	player.take_hit(1, direction * 140.0)
 
 
 func _keep_in_room() -> void:
-	if _bounds.size.x <= 0.0:
+	if _bounds.size.x <= 0.0 or _bounds.size.y <= 0.0:
 		return
-	var margin := 22.0 if kind == "spoolwarden" else 12.0
-	var before := global_position.x
-	global_position.x = clampf(before, _bounds.position.x + margin, _bounds.end.x - margin)
-	if global_position.x != before:
-		_facing *= -1
-	if global_position.y > _bounds.end.y + 64.0:
-		global_position = _origin
+	var size := _footprint_size()
+	var before := global_position
+	global_position = Vector2(clampf(before.x, _bounds.position.x + size.x * 0.5, _bounds.end.x - size.x * 0.5), clampf(before.y, _bounds.position.y + size.y, _bounds.end.y))
+	if global_position != before:
+		_patrol_direction = (_origin - global_position).normalized()
 		velocity = Vector2.ZERO
