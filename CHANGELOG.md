@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-25T05:13:53+05:30 — Configure lifetime generation allowance and recover blocked drafts
+
+- Added explicit FORGE_TOTAL_BUDGET_USD policy, separate shared/job/required accounting in status and creator UI, exact budget errors and same-draft resume. Existing/uncertain records remain intact; paid cache/provenance admission stays strict. Isolated mock Godot jobs under/tmp so tests stop polluting the real creation library.
+- Validation:72focusedPython tests and162creator assertions pass, including reviewed decimal/resume edge cases. The existing blocked draft produced both real image outputs after the local2USDsetting, retaining the earlier0.35 and adding0.20 conservative reservations. Its explicit cached crop correction→preview→acceptance passed under network isolation with unchanged ledger and no extra requests. User drawing/raw assets remain private.
+- Limits: conservative reservations are not billing receipts; raw output needed manual layout correction. Scrolling-world runtime/art remains in progress and separate from this budget checkpoint; physical/human gates remain unverified.
+
 ### 2026-10-25T04:57:53+05:30 — Begin approved scrolling-world extension
 
 - Recorded the selected2USDtotal/0.50USDjob budget, immutable4-to16chunk world, free intermissions, dynamic split and original scenery/loot target with explicit parallel contracts. Updated active agent/status guidance; preserved the released arena.

@@ -60,7 +60,8 @@ def settings(root: Path = ROOT) -> dict:
     key = value("OPENAI_API_KEY")
     if key.lower() in {"your-key", "your_key", "your-api-key", "replace-me"}:
         key = ""
-    return {"key": key, "model": model, "quality": quality}
+    return {"key": key, "model": model, "quality": quality,
+            "forge_total_budget_usd": value("FORGE_TOTAL_BUDGET_USD", "0.50")}
 
 
 def public_settings(config: dict) -> dict:

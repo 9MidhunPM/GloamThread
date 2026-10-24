@@ -7,20 +7,25 @@ import json
 from pathlib import Path
 import sys
 
-from forge.jobs import ROOT, ForgeError, run_job
-from forge.provider import public_settings, settings
+from forge.jobs import ROOT, ForgeError, budget_status, run_job
+from forge.provider import public_settings, settings, total_budget_microusd
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
-    sub.add_parser("status", help="Print key presence and configured model names only")
+    sub.add_parser("status", help="Print safe key presence, model names and local budget accounting")
     for name in ("analyse", "generate", "bake"):
         command = sub.add_parser(name)
         command.add_argument("--job", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
-        result = public_settings(settings(ROOT)) if args.command == "status" else run_job(args.command, args.job)
+        if args.command == "status":
+            config = settings(ROOT)
+            result = {**public_settings(config), "configuration_file": str(ROOT / ".env"),
+                      "budget": budget_status(ROOT, total_cap=total_budget_microusd(config), required=200000)}
+        else:
+            result = run_job(args.command, args.job)
         print(json.dumps(result, ensure_ascii=True))
         return 0 if result.get("state") != "cancelled" else 2
     except ForgeError as error:
