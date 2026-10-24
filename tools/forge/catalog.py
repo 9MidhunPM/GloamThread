@@ -25,7 +25,7 @@ def catalog() -> dict:
         ('barbed_guard','Barbed Guard','Return a portion of damage to attackers.','thorns',.12,7),
         ('twin_stitch','Twin Stitch','An extra bolt in projectile attacks.','projectile_count',1,12),
         ('wide_arc','Wide Arc','Cover more ground with attacks and specials.','area',.15,8),
-        ('coin_song','Coin Song','Stretch cosmetic coin trails toward you.','magnet',.5,6),
+        ('field_stitch','Field Stitch','Recover a little health between incoming blows.','regen',.35,8),
     ]
     family = {
       'ember':[('wildfire','Wildfire','Burns grow fiercer.','burn',1,8),('bellows','Bellows','Breathe over a wider arc.','area',.25,9),('hot_coals','Hot Coals','A faster second breath.','special_cooldown',-48,10)],

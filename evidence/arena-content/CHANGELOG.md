@@ -18,3 +18,9 @@
 
 - Provider-worker review found that valid4/5colour proposals could reach six-swatch artwork helpers and fail after a paid request. Added local derived highlights without mutating the retained4–8colour proposal. Rebuilt source-hash provenance.
 - Validation:14content/conversion tests PASS including real4/5colour board conversion, all three rig families and master rejection. Local content validator PASS; no API calls made.
+
+## 2026-10-25T03:02:56+05:30 — Original arcade score and useful general healing branch
+
+- Added editable original Copper Rush, The Loom Bites Back and Pocketful of Sparks arrangements, synthesized with the project's own instruments. Added coin,purchase,wave-clear,ready andcombo cues with deliberate headroom and zero endpoints. Audio index records PCM dimensions, loops, source/output hashes.
+- Replaced cosmetic-only coin magnet shop offer with Field Stitch regeneration (.35HP/sec/rank,price8), agreed with runtime integration; retained12general/18kit branches.
+- Validation:15content/art/conversion/audio tests PASS; local rebuild/validator PASS for6kits,30upgrades,20waves,4arenas,2bundles,10enemy atlases,5cues and3scores; git diff --check PASS. Waveform RMS/peaks/format/endpoints checked. Listening, native mix and human rhythm acceptance remain unverified. No paid calls.

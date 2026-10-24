@@ -11,6 +11,7 @@ from PIL import Image
 from tools.forge.art import RIG_PARTS,authored_parts,make_rig,bake_atlas
 from tools.forge.catalog import catalog
 from tools.forge.enemies import validate as validate_enemies
+from tools.forge.audio import validate as validate_audio,arrange
 from tools.forge.rigs import emit_bundle,write_json,load_rig,bake_job,convert_generated
 from tools.forge.validation import BundleError,validate_catalog,validate_bundle,sha256
 
@@ -39,6 +40,13 @@ class FighterContentTests(unittest.TestCase):
         for mutate in mutations:
             c=catalog();mutate(c)
             with self.subTest(mutation=mutate),self.assertRaises(BundleError):validate_catalog(c)
+    def test_arcade_audio_headroom_and_editable_score(self):
+        audio=validate_audio(ROOT);self.assertEqual(len(audio['sfx']),5);self.assertEqual(len(audio['music']),3)
+        source=json.loads((ROOT/'assets/arena/source/audio.json').read_text())
+        for recipe in source['tracks'].values():
+            score=arrange(recipe)
+            self.assertEqual(score['beats'],recipe['bars']*4)
+            self.assertTrue(all(note[0]+note[2]<=score['beats'] for part in score['parts'] for note in part['notes']))
     def test_six_enemy_and_four_boss_atlases(self):
         self.assertEqual(len(validate_enemies(ROOT)['assets']),10)
     def test_shipped_bundles_and_hashes(self):

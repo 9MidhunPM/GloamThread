@@ -163,13 +163,13 @@
       "max_rank": 3
     },
     {
-      "id": "coin_song",
-      "name": "Coin Song",
-      "description": "Stretch cosmetic coin trails toward you.",
+      "id": "field_stitch",
+      "name": "Field Stitch",
+      "description": "Recover a little health between incoming blows.",
       "kit": "any",
-      "stat": "magnet",
-      "amount": 0.5,
-      "price": 6,
+      "stat": "regen",
+      "amount": 0.35,
+      "price": 8,
       "max_rank": 3
     },
     {
