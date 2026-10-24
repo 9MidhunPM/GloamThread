@@ -210,6 +210,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-input -->
 
+### 2026-10-25T01:15:46+05:30 — Protect live overhead reward transactions
+
+- Changed: TeamProgress validates dependency consistency before changing live flags, sharing the same rule with save admission. Incomplete boss/traversal outcomes leave progress untouched. Added actual-file overhead recovery, fault-boundary and settings-separation regressions.
+- Why: A boss-only live reward could otherwise remove its encounter before granting required team traversal, even though a later save would reject that state.
+- Validation: Godot4.7.2 overhead save scenarios PASS2/2: all four save/recovery failure stages preserve active/backup bytes, orphan backup recovery works, side-view backups are refused, rejected originals are retained, and settings/legacy Roll/device identity remain separate. Negative transaction warnings are expected; import and whitespace checks pass.
+- Limitations: Fault injection verifies local file boundaries, not hardware power-loss behavior.
+
+
 ### 2026-10-25T01:13:15+05:30 — Normalize owned ground-plane commands
 
 - Changed: CommandSnapshot now sanitizes and caps the full two-axis vector while retaining gentle analogue magnitude. Added synthetic keyboard/gamepad checks for diagonal limits, independent devices, simultaneous actions, two-axis release latching and disconnect neutrality.
