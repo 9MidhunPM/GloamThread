@@ -364,6 +364,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-world -->
 
+### 2026-10-25 02:07:36 +0530 — Full overhead campaign passes through ordinary owned input
+
+- Integrated overhead core 5162c34 and completed the campaign acceptance driver against the actual App/catalog/media. Corrected the test's unit-vector dash mask and waited for captured audio playbacks to retire before exit; no production movement/combat tuning was needed.
+- Validation: `XDG_DATA_HOME=/tmp/gloamthread-world-route-data godot --headless --fixed-fps 60 --path . --script tests/run_tests.gd -- --filter overhead_campaign_route` PASS. Fresh New/Join, completed Oru dialogue, eight rooms, four Gallery enemies, Spoolwarden, secret, both paired repairs, both twelve-tick water dashes, Loom, actual ending card and real save all pass in 5,941 physics ticks (99.02 simulated seconds). Final hearts [5,3], zero checkpoint recovery; no actor warps, forced flags, private room loads or direct damage.
+- Combined overhead gate PASS 25/25 with isolated writable XDG_DATA_HOME; public content validation PASS. An initial combined run without writable user-data isolation failed four file-writing fixtures due sandbox permissions. Focused route exit is clean after explicit asynchronous audio retirement; earlier accelerated standalone runs had intermittent shutdown resource warnings.
+- Limits: headless scripted owned input at fixed 60 FPS, not native rendering, physical controllers, listening or human play. Root retains native/export validation and separate user-data identity changes.
+
+
 ### 2026-10-25 01:50:17 +0530 — Pending ordinary-input overhead campaign gate
 
 - Added a bounded fresh-App campaign driver through all eight rooms, secret, paired repairs, both two-tile Threadstep crossings, ordinary combat, ending and real save boundary. It emits owned inputs in _physics_process before input polling; test-only floor-path searches choose commands without changing actors, rooms, damage or progression.

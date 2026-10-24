@@ -51,8 +51,27 @@ func run() -> void:
 		InputRouter.clear(slot)
 	if is_instance_valid(app):
 		app.free()
+	await _retire_audio()
+
+
+func _retire_audio() -> void:
+	# Capture active playbacks before stop() removes the public handle. The
+	# audio mixer retires them asynchronously, even under accelerated physics.
+	var pending: Array[WeakRef] = []
+	for node: Node in AudioDirector.get_children():
+		if node is AudioStreamPlayer and node.has_stream_playback():
+			pending.append(weakref(node.get_stream_playback()))
 	AudioDirector.stop_music()
 	AudioDirector.stop_cues()
+	var deadline := Time.get_ticks_msec() + 1000
+	while Time.get_ticks_msec() < deadline:
+		var alive := false
+		for playback: WeakRef in pending:
+			alive = alive or playback.get_ref() != null
+		if not alive:
+			return
+		await get_tree().process_frame
+	assert_true(false, "campaign audio playbacks retire within one second after stopping")
 
 
 func _build_steps() -> void:
@@ -194,7 +213,7 @@ func _dash_step(direction: Vector2) -> void:
 				return
 	if _step_ticks < 12:
 		for slot in 2:
-			_masks[slot] = _direction_mask(direction) | (Action.DASH if _step_ticks == 0 else 0)
+			_masks[slot] = _direction_mask(direction * 16.0) | (Action.DASH if _step_ticks == 0 else 0)
 	else:
 		for slot in 2:
 			if session.players[slot].position.distance_to(_dash_from[slot]+direction*60) > 0.5 or not session.room.can_stand_at(session.players[slot].position):

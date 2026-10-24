@@ -117,6 +117,13 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-world -->
 
+### 2026-10-25 02:07:36 +0530 — Verify the production overhead route
+
+- Tool: OpenAI Codex merged the published consumer/media branch and ran the authored ordinary-input campaign gate. Fixed only the driver's normalized-direction mask and asynchronous test audio retirement.
+- Checks: campaign PASS at 5,941 physics ticks with all eight rooms/ending/save and no recovery; combined overhead PASS 25/25 with writable isolated user data; content validator PASS. Actual App menu/dialogue intents and gameplay inputs are exercised, with no fixture repositioning or progression overrides.
+- Human review: pending. Native captures, export behavior, physical devices and listening remain independent integrator gates; side-view evidence is not reused as overhead proof.
+
+
 ### 2026-10-25 01:50:17 +0530 — Draft tick-indexed campaign acceptance driver
 
 - Tool: OpenAI Codex authored the newly assigned ordinary-input overhead campaign gate using actual App intents, canonical room queries and physics-indexed commands. No forced flags, actor repositioning, private room loads or direct damage calls.
