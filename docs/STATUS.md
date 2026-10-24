@@ -1,26 +1,25 @@
 # Implementation status
 
-Updated 2026-10-25T00:09:58+05:30. The implemented Phase 1 game is in final release-candidate verification. Fresh human/controller acceptance is separate.
+Updated 2026-10-25T00:53:13+05:30.
 
-## Implemented and verified
+## Active user direction
 
-- Eight authored rooms, Tavi/Neri, two render-only themes over one shared world, Oru/dialogue, two ordinary enemy types, Spoolwarden, both specials, optional Cross-stitch, revive/recovery, checkpoints, distinct-player anchors, exit rally, Threadstep/shortcut, cosmetic secret, Loom and actual return-home ending/replay.
-- Title/New/Continue, explicit input/character assignment, per-owner pause/map/dialogue/settings, remapping/deadzone, volume/reduced effects and reconnect. Save failures remain visible and keep the campaign open before title/quit; explicit retry/discard choices are tested. Missing saved pads choose distinct available inputs. Disconnect cancels remapping and transfers menu control safely.
-- Strict catalogs eagerly resolve original resources before play. All47 manifested original art/audio/font outputs and all8rooms validate;79 Python tests pass. Editable generators/provenance remain in the repository.
-- **20 engine scenarios PASS**, including actual files and the actual-App ordinary-input campaign to ending (both alive, no recovery). Isolated fixtures test recovery/transactions/secret without being counted as the full route. Fresh staged-copy core import/test also passed.
-- Movement boundaries PASS at30/60/144 caps: six-tick coyote/buffer, seventh-tick expiry, short/full jumps, one-way/corner handling. The same600physics-tick input trace matches exactly on this machine. See [campaign evidence](../evidence/runtime/campaign.md).
-- Native source/Wayland and official Linux release/X11 automated routes reach the actual ending card with real frame-post-draw captures. The X11 release QA measured120FPS median through r05 on Intel Core Ultra7 255H / Mesa Intel ARL; exact raw samples, window dimensions and preliminary-build limits are being retained for final evidence. Source/Wayland was slower and is not the recommended baseline.
-- Full content true merge is `822aac2`; the separate UI core `c5b061f` is integrated with AppController. History and actual identities/timestamps remain intact on the authorized `9MidhunPM/GloamThread` remote.
+The next game is an **overhead action adventure**, using broad Minish Cap-like perspective/exploration/readability qualities with original content. Keep local two-player identity, improve music/screens/UI/combat and clear progression. The user requests frequent main integration and more than200focused commits by the end of the effort. Commits must represent coherent changes; no empty or fabricated history. New overhead work must earn its own tests and visible-route evidence. It is not implemented in the preserved side-view build.
 
-## Release work in progress
+## Verified side-view milestone
 
-- Matching official4.7.2 standard Linux templates are installed; official archive SHA256 verified. Linux/QA export presets work. Final shipping export, outside-checkout network-isolated route, package checksum, exact implementation SHA and release/main publication are next.
-- Agent2's extended rendered menu-layout QA is integrated cumulatively. User-facing original-font states are reviewed at native resolution; no source preview is treated as gameplay evidence.
+Implementation `34ccb9614cacb4d423c2ef29f85e4a8391841ca1` is packaged as `v0.1.0-demo`. All8rooms, original47asset bundle, combat/revival/anchors/boss/dash/Loom/ending, menus/settings/reconnect and validated save/Continue work through the actual App.20engine scenarios and79Python tests pass, plus full validators and fresh import.
 
-## Unverified acceptance
+The official release QA export of that source completes the normal-input campaign outside checkout with an isolated network namespace, both alive at4/3hearts, zero recovery, valid save,11real captures. All2,650boss samples use1920x720 on Intel Core Ultra7 255H/Mesa Intel ARL: median120FPS, p95process-frame8.333ms, max33.331ms. [Exact evidence](../evidence/release/README.md), [matrix](../evidence/release/ACCEPTANCE.md), [build identity](../evidence/release/BUILD.json). Shipping ZIP SHA256 `654871d29a60c71d823bd9c23bf1c1cc0591709043f664d4b425b9054bd2481c`.
 
-- Physical gamepads/hotplug, keyboard hardware rollover, audio listening and fresh two-person playtests are unavailable. Software input/reconnect and single-event audio tests do not establish those gates.
-- Human first-clear time, balance, clarity for new pairs and enjoyment remain unverified. The15–20minute target is not a measured result. Ship as a candidate for playtesting, not a fully accepted MVP.
-- Final shipping binary's offline/manual/performance acceptance is distinct from preliminary QA exports. No Phase2/3 work is included; the older single-player HTML proof passes no co-op gate.
+Original template/development history, real identities/timestamps and separate content/UI merges are preserved. Only the authorized `9MidhunPM/GloamThread` remote is used. The original handoff and side-view plans are historical for the redesign.
 
-Current event guidance is **Devin Hack Kochi** in [RULES.md](../RULES.md). The [runtime](AGENT_1_RUNTIME.md) and [content](AGENT_2_CONTENT.md) briefs record separate-checkout ownership. Older M0 notes in HANDOFF are historical.
+## Unverified
+
+Physical gamepads/hotplug, keyboard rollover, audio listening, fresh-pair usability, balance, clear time and enjoyment; other Linux hardware/distributions. No human/fun/full-MVP-acceptance claim. The earlier single-player HTML proof and side-view test outcomes are not overhead-game acceptance.
+
+## Parallel next work
+
+Root owns overhead simulation, room/world semantics, player/enemy combat, persistence/app integration and main. Agent2 owns original overhead art/music generators/manifest/art validation and home/GameMenus presentation in a separate checkout. Agreed32x48 hero frames retain origin16,43 with four direction banks; gameplay uses a12x10feet collider, normalizedXY movement, roll and bounded Threadstep traversal. Full revised contracts/plan follow before integration. Future drawing-preparation documents stay separate from runtime/backend scope.
+
+Event guidance remains **Devin Hack Kochi** in [RULES.md](../RULES.md).

@@ -2,6 +2,10 @@
 
 **Two couriers. One unraveling kingdom. Two ways of seeing it.**
 
+**Active direction:** the user has requested an overhead adventure with further UI, music and combat polish. The current verified download below preserves the side-view milestone; overhead work is next.
+
+[Download the preserved Linux demo candidate](https://github.com/9MidhunPM/GloamThread/releases/tag/v0.1.0-demo) · [Build/evidence](evidence/release/README.md) · [Play guide](docs/DEMO.md)
+
 An original split-screen local co-op pixel action adventure built in Godot 4.7.2 for **Devin Hack Kochi**. Its documentation follows the [corrected event template](https://github.com/anima-regem/devin-hack-kochi-thanushreesuresh-SEOpilot/tree/codex/correct-devin-hack-kochi-thanushreesuresh): [event guidance](RULES.md), [agent guide](AGENTS.md), [change log](CHANGELOG.md), [AI usage record](AI_USAGE.md) and [submission sheet](SUBMISSION.md).
 
 ## Event guidance
@@ -13,7 +17,7 @@ Devin Hack Kochi allows Devin and other AI tools, models and providers without m
 - **Project name:** Gloamthread: Two Ends
 - **Short description:** Two players share one computer and one physical world, but each sees it through a different visual theme (Ember and Moss). They fight, revive each other, restore broken bridges from paired anchors and reopen the Lantern Loom so a stranded district can cross home. It is for pairs who enjoy responsive action, exploration and solving a small problem together.
 - **Team:** Midhun P M ([9MidhunPM](https://github.com/9MidhunPM)) — solo, with coding-agent assistance recorded in [AI_USAGE.md](AI_USAGE.md).
-- **Working demo:** the eight-room adventure, menus and save/Continue flow are implemented on `feat/phase1-runtime`; native/export checks are in progress before candidate publication. See "Current status" below.
+- **Working demo:** the eight-room adventure, menus and save/Continue flow are implemented on `feat/phase1-runtime`; the preserved side-view candidate is packaged; the next iteration changes to overhead. See "Current status" below.
 - **Technology stack:** Godot 4.7.2 standard (typed GDScript, Compatibility renderer), Python 3 + Pillow + numpy for original asset/audio generation and validation, Git.
 
 ### Run the project
@@ -37,7 +41,7 @@ The production game includes title/join, all eight rooms, combat, cooperation, s
 
 - **Content branch:** eight authored rooms, fixed profiles, dialogue, 47 original manifested art/audio/font assets and the complete Python pipeline. Both full validators and 79 Python tests pass after content QA; two seed-18427 rebuilds matched. See [content evidence](evidence/content/README.md).
 - **Runtime branch:** production catalogs/animation/audio, combat, enemies/boss, team progression, anchors/exits/recovery and validated save/settings stores are integrated. Twenty integrated engine scenarios pass, including the complete actual-App route and UI layout checks; the earlier core staged-copy check passed twelve. See [runtime evidence](evidence/runtime/commands.md) and [movement limits](evidence/runtime/traversal.md).
-- **Known limitations:** native/export checks are in progress; gamepad hardware, physical keyboard rollover, audio listening and fresh two-person playtests remain unverified. Human first-clear time, balance and enjoyment are not established by the automated route. Keyboard + keyboard is the primary input mode. [STATUS.md](docs/STATUS.md) records the current boundaries.
+- **Known limitations:** native/offline export checks pass for the preserved side-view candidate; gamepad hardware, physical keyboard rollover, audio listening and fresh two-person playtests remain unverified. Human first-clear time, balance and enjoyment are not established by the automated route. Keyboard + keyboard is the primary input mode. [STATUS.md](docs/STATUS.md) records the current boundaries.
 - **Libraries, APIs, and public datasets used:** [Godot Engine](https://godotengine.org/) 4.7.2 (MIT), [Pillow](https://python-pillow.org/) (MIT-CMU), [NumPy](https://numpy.org/) (BSD-3). No game-content packs, stock art, fonts, music or sound libraries: every shipped sprite, tile, glyph, sound and line of dialogue is authored in this repository.
 
 ## Start in this order (design pack)

@@ -1,0 +1,16 @@
+{
+  "version": "0.1.0-demo",
+  "status": "candidate for playtesting",
+  "implementation_commit": "34ccb9614cacb4d423c2ef29f85e4a8391841ca1",
+  "source": "https://github.com/9MidhunPM/GloamThread/tree/34ccb9614cacb4d423c2ef29f85e4a8391841ca1",
+  "platform": "Linux x86_64",
+  "engine": "Godot 4.7.2 standard official release template",
+  "executable_sha256": "3a558a6c9d075bcfa3eafb71798cfe4fba17a9b9c25f0a1f044f445b13e7aacc",
+  "known_unverified": [
+    "physical gamepads/hotplug",
+    "keyboard hardware rollover",
+    "audio listening",
+    "fresh two-human playtests",
+    "human balance, clear time and enjoyment"
+  ]
+}

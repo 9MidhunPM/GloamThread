@@ -6,6 +6,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 1 — runtime and integration
 
+### 2026-10-25T00:53:13+05:30 — Preserve the verified side-view candidate and record overhead direction
+
+- Changed: Retained exact34ccb96build/checksums, full acceptance matrix, network isolation/real native route/captures/performance and submission/launch evidence. The20scenario/79Python release is preserved; the user's new overhead direction is explicit in current docs.
+- Why: Keep a playable verified milestone while the requested perspective/music/UI/combat redesign proceeds through separate atomic commits and periodic tested main merges.
+- Validation: Exact-source official release completes all8rooms/actual ending outside checkout with no network routes/addresses;11real captures,2,650r05samples at1920x720,120medianFPS/p95frame8.333ms. Archive integrity and GitHub uploaded digest match. Full validators/import/scenarios/Python/links pass; no script/resource errors in final native run.
+- Limitations: Physical controllers, hardware rollover, listening, fresh pairs and human balance/fun remain unverified. Overhead gameplay is a new implementation effort; none of this evidence is relabeled for it.
+
 ### 2026-10-25T00:31:03+05:30 — Keep corrupted startup readable when the original font is missing
 
 - Changed: Check the validated catalog before creating font-dependent menus/toasts. A required-resource failure now displays a bounded emergency diagnostic and Quit control, without creating a playable session or starting music. Only that failure screen uses the engine-default font.
