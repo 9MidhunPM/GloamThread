@@ -2,9 +2,9 @@
 
 ## Mission and current state
 
-Build the Phase 1 game in MVP.md: an original two-player local co-op action adventure with fixed split screen, two fixed characters and a complete eight-room story. All game content must be authored within this project. Prioritize responsive controls, readable combat and enjoyable cooperation before world size.
+Build the user-requested original **overhead** local two-player adventure. Read [the overhead plan](docs/OVERHEAD_PLAN.md) and [frozen contract](docs/OVERHEAD_CONTRACT.md) before the older MVP/architecture documents. The new overhead movement, terrain, animation and save contracts replace their side-view assumptions. Preserve Tavi/Neri, fixed split/shared world, original content, eight-room story, responsive combat and cooperation. Continue clear UI/music/screens/experience polish, meaningful atomic commits and regular tested main integration; the user's target exceeds200commits by the end of the effort.
 
-The eight-room campaign and production content are integrated on the runtime branch. The integrated engine scenarios pass, including an actual-App ordinary-input route to the ending, movement/recovery boundaries and file persistence. Release packaging and native performance checks are underway; physical gamepads, listening and fresh pairs remain unverified. Read `docs/STATUS.md` for current evidence. `HANDOFF.md` retains the original historical M0 context. The earlier single-player HTML proof supplies no co-op acceptance evidence.
+The verified side-view milestone is taggedv0.1.0-demo, with release evidence in docs/STATUS.md. Its tests/captures do not prove overhead gameplay. Root is integrator; lane workers and Agent2 use separate checkouts and exclusive ownership. No empty/padded/backdated commits or rewritten shared history.
 
 ## Context map
 

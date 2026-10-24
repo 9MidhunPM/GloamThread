@@ -10,6 +10,7 @@ This project maintains the record for **Devin Hack Kochi** as a repository conve
 
 | Date and time with timezone | Tool / model, if known | Task | Assistance and affected files | Human review / corrections | Validation and result |
 | --- | --- | --- | --- | --- | --- |
+| 2026-10-25T01:03:41+05:30 | Codex | Plan overhead migration and lane contracts | Converted latest user direction into explicit motor/art/terrain/save interfaces and playable milestones; coordinated Agent2 and actor review | User requested overhead perspective and200meaningful commits; implementation review pending | Docs links/whitespace pass; old side-view evidence kept separate |
 | 2026-10-25T00:53:13+05:30 | Codex | Preserve tested milestone and start overhead direction | Packaged34ccb96with source/executable/archive identity; ran native no-network same-source release route and retained captures/raw timings/matrix; updated truthful release/submission/current scope | Pending fresh human/device/listening review; latest user requests overhead rewrite and200meaningful commits | 20engine/79Python tests and full validators pass; offline native route reaches ending; measured120medianFPS at1920x720. Evidence remains side-view-specific |
 | 2026-10-25T00:31:03+05:30 | Codex | Repair missing-font startup reporting | Agent2 sandbox review found the font-dependent invisible failure UI; integrator moved validation before UI and added a diagnostic-only emergency screen plus regression | Pending human review; prior b96ad0e artifact superseded | Startup scenario PASS; all20 integrated scenarios PASS; no gameplay fallback or new content/backend scope |
 | 2026-10-25T00:17:08+05:30 | Codex | Polish menus and prepare Linux candidate | Integrated Agent2 native layout evidence; added clean-commit exporter/packager, license/provenance inventory, launch guide and QA build metadata; improved notice contrast | Pending human review; no physical-controller/listening/fresh-pair claim | 19 integrated scenarios PASS; focused App checks PASS; packaging syntax/pack links/whitespace checked. Final package/offline proof follows the source checkpoint |
@@ -51,3 +52,20 @@ This project maintains the record for **Devin Hack Kochi** as a repository conve
 This historical note describes the inherited template, not current event logistics or AI requirements. Current guidance is in [RULES.md](RULES.md).
 
 On 10 October 2026, Codex prepared the documentation template this repository started from, covering `README.md`, `RULES.md`, `AGENTS.md`, `CHANGELOG.md`, `AI_USAGE.md`, `SUBMISSION.md`, `.gitignore` and the pull request checklist. That preparation is separate from this project's implementation and the AI usage recorded above.
+
+
+## Overhead actor lane
+
+<!-- overhead-actors -->
+
+
+
+## Overhead world lane
+
+<!-- overhead-world -->
+
+
+
+## Overhead input and persistence lane
+
+<!-- overhead-input -->

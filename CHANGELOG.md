@@ -6,6 +6,12 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 1 — runtime and integration
 
+### 2026-10-25T01:03:41+05:30 — Freeze overhead gameplay/art contracts and parallel lanes
+
+- Changed: Wrote overhead movement/combat/terrain/sprite/save contracts and playable checkpoint plan for the latest user direction. Defined exclusive worker lanes, clear player guidance and meaningful commit cadence; marked prior side-view MVP as historical.
+- Why: Let runtime/world/input and original art/music/UI proceed in parallel without incompatible assumptions or manufactured commit history.
+- Validation: Documentation links/consistency and whitespace checked. No overhead gameplay claim; implementation starts from the preserved verified main baseline.
+
 ### 2026-10-25T00:53:13+05:30 — Preserve the verified side-view candidate and record overhead direction
 
 - Changed: Retained exact34ccb96build/checksums, full acceptance matrix, network isolation/real native route/captures/performance and submission/launch evidence. The20scenario/79Python release is preserved; the user's new overhead direction is explicit in current docs.
@@ -186,3 +192,20 @@ Record each meaningful project change, newest first. Update this file in the sam
 - Why: Give participants a consistent starting point for event rules, basic coding patterns, documented changes, and regular commits.
 - Validation: Checked local Markdown links, event detail consistency, required documents, and diff whitespace before publishing.
 - Limitations: Documentation scaffolding only; no participant project, application, or working demo is included. GitHub publication and template status are verified separately after creation.
+
+
+## Overhead actor lane
+
+<!-- overhead-actors -->
+
+
+
+## Overhead world lane
+
+<!-- overhead-world -->
+
+
+
+## Overhead input and persistence lane
+
+<!-- overhead-input -->
