@@ -123,6 +123,9 @@ Results are in [captures/results.json](captures/results.json):
 
 - All eight assigned menu kinds and a controls/remapping subpanel rendered with
   the original font at 960x360; native captures are under `captures/1x/`.
+- The physical 1x window matches Godot's framebuffer pixel for pixel and contains
+  eight colours. The helper asserts framebuffer equality and visible colour
+  variation before input/scaling checks, preventing blank-window false positives.
 - Non-owner P2 Down/period/M/Return left the rendered pixels unchanged and emitted
   no action. P1 D/S/A then mouse adjustment emitted exactly music +1, effects -1,
   effects +1. Native cancel -> title -> quit then exited with code 0.

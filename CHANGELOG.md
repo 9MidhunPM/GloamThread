@@ -43,6 +43,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 2 — content and assets
 
+### 2026-10-25T00:13:18+05:30 — Guard native UI evidence against blank captures
+
+- Changed: Added explicit window/framebuffer pixel equality and rendered-colour assertions to the private UI QA helper; recorded the result in its evidence.
+- Why: Equal before/after or 2x captures alone could also match blank windows. The inspected capture contains eight colours and matches the engine framebuffer exactly.
+- Validation: Re-ran the complete native helper, pack/link and whitespace checks before commit.
+- Limitations: UI fixture evidence remains separate from full application, physical devices and human acceptance. No production game code changed.
+
 ### 2026-10-25T00:06:44+05:30 — Complete UI layout and native-window verification
 
 - Changed: Added the extended UI layout/mouse scenario, explicit preview scene and reproducible private-Xvfb QA helper with real captures. Improved value/binding font size, scrollbar visibility/inset, long-row navigation and two-line footer prompts. Recoverable validation now warns instead of raising engine errors, preserving compatibility with Agent 1's strict error logger.

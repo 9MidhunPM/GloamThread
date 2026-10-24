@@ -129,6 +129,9 @@ def main():
 
                 log, window = start(1, capture_all=True)
                 before = capture(window, output / "1x/settings_window.png")
+                framebuffer = Image.open(output / "1x/settings.png").convert("RGB")
+                require(same_pixels(before, framebuffer), "Native window differs from the engine framebuffer")
+                require(len(before.getcolors(before.width * before.height)) > 3, "Native menu capture lacks rendered content")
                 xdo("key", "--clearmodifiers", "--delay", "120", "Down", "period", "m", "Return")
                 time.sleep(0.1)
                 after = capture(window, output / "1x/nonowner_unchanged.png")
@@ -172,7 +175,8 @@ def main():
                     require("SCRIPT ERROR" not in text and "\nERROR:" not in text, f"Unexpected engine error: {log_path}")
                 result = {"engine": subprocess.check_output(["godot", "--version"], text=True).strip(),
                           "renderer": "X11 / Compatibility / Mesa llvmpipe", "private_display": True,
-                          "fixture_states_rendered": 9, "nonowner_pixels_unchanged": True,
+                          "fixture_states_rendered": 9, "native_matches_engine_framebuffer": True,
+                          "nonowner_pixels_unchanged": True,
                           "native_actions": expected, "cancel_title_quit": True,
                           "pixel_exact_integer_2x": True, "long_prompt_footer_lines": 2,
                           "commands": commands,

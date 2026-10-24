@@ -3,6 +3,7 @@
   "renderer": "X11 / Compatibility / Mesa llvmpipe",
   "private_display": true,
   "fixture_states_rendered": 9,
+  "native_matches_engine_framebuffer": true,
   "nonowner_pixels_unchanged": true,
   "native_actions": [
     {
