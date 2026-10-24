@@ -72,6 +72,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 2 — content and assets
 
+### 2026-10-25T01:49:29+05:30 — Repair the authoring tool for overhead content
+
+- Changed: Replaced side-view preview assumptions with explicit overhead material/pose studies, correct feet/crop/sort rules, strict epoch guards, selected-room/output options and original manifested captions. Versioned the default study directory to preserve old side-view evidence; added nine public-CLI tests and a hashed r00 working-snapshot example.
+- Why: The existing preview command crashed on new terrain names and could overwrite historical authoring proof. A one-room milestone needs a useful study before every room is migrated.
+- Validation: 112 Python tests PASS, including nine CLI cases; Python compilation, independent review, pack/link and whitespace PASS. Evidence-preservation regression first failed then passed. Actual old checkout correctly rejects before output; a read-only Agent 1 r00 snapshot renders a labelled study successfully.
+- Limitations: Pillow studies show basic materials/poses only; no engine/camera/collision/gameplay/audio/performance is exercised. Snapshot hashes identify inputs without claiming a released build or new normal-control route.
+
 ### 2026-10-25T01:29:53+05:30 — Separate enemy warnings from attack artwork
 
 - Changed: Added the original six-frame hollow +X warning arrow, editable source, retained atlas/provenance and focused tests. Required transient effect playback to be nonlooping. Generator 2.1.0 produces 50 assets.

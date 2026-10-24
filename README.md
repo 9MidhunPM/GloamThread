@@ -39,13 +39,15 @@ The production game includes title/join, all eight rooms, combat, cooperation, s
 
 ### Overhead media checkpoint
 
-The new packet has 50 original manifested assets, four-facing 128-frame couriers, a dedicated enemy-warning visual, four music arrangements and 19 SFX including roll. The asset validator, 103 Python tests and Godot media import pass. The old actual-content validator still rejects the new version/terrain; game launch and normal-control overhead acceptance require Agent 1's matching implementation. See [packet evidence](evidence/content/overhead/README.md).
+The new packet has 50 original manifested assets, four-facing 128-frame couriers, a dedicated enemy-warning visual, four music arrangements and 19 SFX including roll. The asset validator, 112 Python tests and Godot media import pass. The old actual-content validator still rejects the new version/terrain; game launch and normal-control overhead acceptance require Agent 1's matching implementation. See [packet evidence](evidence/content/overhead/README.md).
 
 ```sh
 python3 tools/generate_assets.py --seed 18427
 python3 tools/validate_assets.py
 python3 -m unittest discover -s tools/tests -p 'test_*.py'
 ```
+
+With matching overhead room data, `python3 tools/gen/preview.py --room r00` creates labelled material/pose studies in `evidence/content/overhead/authoring`; `--output PATH` selects another study directory. The default preserves earlier side-view evidence. Wrong content versions fail before writing. The separately retained [authoring snapshot](evidence/content/overhead/authoring_snapshot/README.md) is not gameplay evidence.
 
 ### Preserved side-view status
 
