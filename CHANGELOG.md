@@ -15,6 +15,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 2 — content and assets
 
+### 2026-10-24T22:46:23+05:30 — Align the room handoff with measured movement
+
+- Changed: Recorded the exact full-content packet SHA and Agent 1's committed jump/headroom measurements, command and test conditions in content evidence.
+- Why: Replace reliance on source-only ballistic estimates with the available real-physics evidence while keeping diagnostic measurements distinct from full-route acceptance.
+- Validation: Read runtime commit `b1ff5d6` and its traversal evidence; pack/link checks and diff whitespace PASS. No asset or room data changed; previous 69-test and deterministic asset results still apply.
+- Limitations: Dash remains unmeasured at that runtime checkpoint. Both-character room traversal, animation/readability, audio listening and remaining integrated MVP gates are pending Agent 1 verification.
+
 ### 2026-10-24T22:43:33+05:30 — Author the eight-room cooperative story bundle
 
 - Changed: Authored r00-r07 with canonical bidirectional rally exits, two checkpoints, Oru, both anchor pairs, enemy lessons, secret charm, Spoolwarden arena, dash branch, loom and return. Added shared data-only fixtures, 29 content tests, read-only content validation hardening, labelled authoring previews and exact traversal/presentation requests.

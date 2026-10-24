@@ -16,6 +16,14 @@ Provide the current movement constants and measured maximum reliable horizontal 
 
 The live runtime source was inspected: `GRAVITY=1400`, `JUMP_SPEED=-330`, `MAX_SPEED=110`. Continuous ballistic estimates are 38.9 pixels of rise and 51.9 pixels of equal-height travel at full horizontal speed; these are calculations, not engine measurements. All required/secret ascent routes were revised to rises of at most two tiles with adjacent stepping ledges. One-way intermediate ledges were added in r01/r02/r03/r05/r06/r07, and r06's lower recovery bed has an escape shelf. Stable entrance/anchor/checkpoint coordinates were preserved.
 
+Agent 1 subsequently published real-physics measurements in runtime commit `b1ff5d6`, `evidence/runtime/traversal.md`: full jump rise **41.74 px**, running same-height feet travel **55.00 px**, and **30 airborne physics ticks**, using Godot 4.7.2 at 60 Hz and the 12x24 collider. Their exact recorded command was:
+
+```sh
+godot --headless --fixed-fps 60 --path . --script tests/run_tests.gd --log-file /tmp/gloamthread-content-session.log -- --filter content_session
+```
+
+Agent 1 ran that scenario against Drop A's diagnostic r00, with an isolated reset location and owned command snapshots. Agent 2 read the committed result; this is not an Agent 2 engine run or a full-route playthrough. It supports the two-tile-rise draft limit, but does not certify combined gaps. Their guidance is at most one-tile combined rise/gap steps, two-tile flat gaps, and preferably five tiles of headroom for an uncut jump (measured body clearance 66 px). Check these conditions in each real room, especially under upper shelves. Dash remains unimplemented/unmeasured at that checkpoint.
+
 The broad upper r01 span and r06's nine-tile gap are visual drafts awaiting the measured dash envelope. The r01 route has an accessible approach and a `threadstep` exit requirement; this is not evidence of a physically tuned dash lesson. The r06 gap has a lower safe recovery bed, so it currently demonstrates a crossing without imposing a lethal failure. Agent 1 must report whether ordinary jumping bypasses the intended dash lesson and whether the physical route needs revision.
 
 Both bridge anchor pairs are reachable from the lower safe route before restoration. The elevated bridge is a new crossing/shortcut; its paired exit gate is also tied to the permanent bridge flag. Verify each player can reach either anchor, recover from falling below the unbuilt bridge, and leave after restoration. Never require the bridge itself to reach the second anchor.

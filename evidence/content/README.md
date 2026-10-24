@@ -94,6 +94,7 @@ finished-room, physical-traversal, engine-import or motion gate is claimed.
 ## Drop C — full story bundle and integration support
 
 Previous packet: `8495efa74c5e1eaefcdbf8305457a9231ca4c42f` (Drop B).
+Full room/story implementation packet: `48fb0626809dcfa52f0139c03b907c689cc3b9c8`.
 All eight final room files are now authored; r00's diagnostic mover is replaced
 by Lantern Rest while its start/checkpoint/entrance IDs remain stable. The exact
 earlier diagnostic room survives as a data-only contract fixture.
@@ -137,3 +138,13 @@ runtime checkpoint, run authoritative imports/scenarios, update central setup
 and status documentation, and record actual review findings for focused content
 corrections. Agent 2 has not modified runtime scripts, entry points, import
 sidecars, central status documents or `main`.
+
+### Measured motor handoff
+
+Agent 1's runtime commit `b1ff5d6` records a real-physics jump rise of 41.74 px,
+running same-height feet travel of 55.00 px and 30 airborne ticks. The exact
+command and configuration are quoted in `traversal_requests.md`. These are
+Agent 1's diagnostic-room results, read by Agent 2 after room publication.
+They support the conservative two-tile ascent target; they do not validate the
+full authored route. Dash, production-room motion/readability and integrated
+acceptance remain pending. This receipt changes documentation only.
