@@ -12,7 +12,7 @@ Build the fixed-character co-op game first. The first completion target is the e
 4. Keep the current status in the implementation repository: implemented, verified, partially verified, planned, blocked. Include the exact engine version and commands actually run.
 5. Stop after Phase 1 is packaged and playtested. Do not automatically begin image generation, networking, or world expansion.
 
-M0 has started: project configuration and input/audio/room scaffolding exist, but the main scene, playable session, generated assets and scenario runner are missing. The engine code remains unverified; see `STATUS.md` and `../HANDOFF.md`. Commands described as planned in `SETUP.md` become usable only when the relevant implementation tasks create their targets.
+The full authored content and shared campaign runtime are integrated; actual-App normal-input campaign and movement scenarios pass. Menu polish and release verification are underway. [STATUS.md](STATUS.md) records verified checkpoints and remaining integration; the original handoff is historical context. [SETUP.md](SETUP.md) and the README distinguish available content commands from runtime-checkout commands. The milestone gates below still require actual integrated evidence.
 
 ## 2. Dependency path
 

@@ -4,7 +4,7 @@
 
 Build the Phase 1 game in MVP.md: an original two-player local co-op action adventure with fixed split screen, two fixed characters and a complete eight-room story. All game content must be authored within this project. Prioritize responsive controls, readable combat and enjoyable cooperation before world size.
 
-M0 is in progress: `project.godot` and input, audio and room scaffolding exist alongside the specifications, example data and two Python planning utilities. The main scene, playable session, generated art pack and gameplay tests are still missing; the engine files remain unverified. Read `HANDOFF.md` and `docs/STATUS.md` for the next steps. The earlier single-player HTML proof is a separate reference; it is not the co-op implementation. Do not use its tests as evidence for this game.
+The eight-room campaign and production content are integrated on the runtime branch. The integrated engine scenarios pass, including an actual-App ordinary-input route to the ending, movement/recovery boundaries and file persistence. Release packaging and native performance checks are underway; physical gamepads, listening and fresh pairs remain unverified. Read `docs/STATUS.md` for current evidence. `HANDOFF.md` retains the original historical M0 context. The earlier single-player HTML proof supplies no co-op acceptance evidence.
 
 ## Context map
 
@@ -54,20 +54,21 @@ Prototype visuals may be simple during movement tests. Replace them with the ori
 
 ## Commands and evidence
 
-Available in this planning pack:
+Available content/tool checks:
 
 ```sh
 python3 tools/preflight.py
 python3 tools/check_pack.py
-```
-
-Target interfaces to implement during Phase 1; they do not exist yet:
-
-```sh
 python3 tools/generate_assets.py --seed 18427
 python3 tools/validate_assets.py
 python3 tools/validate_content.py
-godot --headless --path . --import
+python3 -m unittest discover -s tools/tests -p 'test_*.py'
+```
+
+Run these engine commands in the runtime/integrated checkout; Agent 1 owns authoritative imports and runtime evidence:
+
+```sh
+godot --headless --path . --editor --import --quit
 godot --headless --path . --script tests/run_tests.gd
 godot --path .
 ```
@@ -84,7 +85,7 @@ Report what changed, what actually ran, what remains unverified and how to launc
 
 ## Repository workflow (from the hackathon template)
 
-This repository began from the DevDay Exchange Community Hackathon: Kochi template. Its workflow rules apply alongside the game-specific rules above; where they overlap, both must be satisfied. Read [RULES.md](RULES.md) for the organizer's event text.
+This project follows the corrected **Devin Hack Kochi** template guidance in [RULES.md](RULES.md). Use current organizer instructions for event requirements. Devin and other AI tools, models and providers are permitted without major AI usage constraints. This repository maintains CHANGELOG and AI_USAGE records for traceability; that convention adds no event eligibility or provider restriction. The fixed engine, original-content boundary and offline gameplay scope are project decisions.
 
 ### Use basic coding patterns
 

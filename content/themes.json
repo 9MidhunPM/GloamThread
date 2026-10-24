@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "geometry_source": "canonical_room_data",
+  "tile_size": [
+    16,
+    16
+  ],
+  "required_tile_slots": [
+    "solid_fill",
+    "solid_top",
+    "one_way_middle",
+    "hazard_middle",
+    "solid_fill_2",
+    "solid_fill_3",
+    "solid_fill_4",
+    "solid_top_2",
+    "solid_top_3",
+    "solid_top_4",
+    "solid_bottom",
+    "solid_bottom_2",
+    "solid_bottom_3",
+    "solid_bottom_4",
+    "solid_left",
+    "solid_left_2",
+    "solid_left_3",
+    "solid_left_4",
+    "solid_right",
+    "solid_right_2",
+    "solid_right_3",
+    "solid_right_4",
+    "corner_outer_tl",
+    "corner_outer_tr",
+    "corner_outer_bl",
+    "corner_outer_br",
+    "corner_inner_tl",
+    "corner_inner_tr",
+    "corner_inner_bl",
+    "corner_inner_br",
+    "one_way_left",
+    "one_way_right",
+    "one_way_single",
+    "hazard_left",
+    "hazard_right",
+    "hazard_single",
+    "bridge_left",
+    "bridge_middle",
+    "bridge_right",
+    "bridge_single",
+    "seam_horizontal",
+    "seam_vertical",
+    "seam_cross",
+    "seam_knot",
+    "background_stone",
+    "background_brass",
+    "background_root",
+    "background_cloth"
+  ],
+  "themes": [
+    {
+      "id": "ember",
+      "visibility_bit": 2,
+      "palette": [
+        "#10141C",
+        "#293247",
+        "#41465A",
+        "#737B83",
+        "#D5D2B8",
+        "#F07865",
+        "#FFE0A1",
+        "#4A292B",
+        "#845044",
+        "#BC7852",
+        "#E3AD6A",
+        "#30283E",
+        "#644258",
+        "#A26671",
+        "#F5CC83"
+      ],
+      "motifs": [
+        "cooled brass",
+        "woven iron",
+        "floating embers"
+      ],
+      "critical_cues": "common_shapes_and_contrast",
+      "terrain_asset_id": "terrain_ember_v1",
+      "background_asset_ids": [
+        "background_ember_far_v1",
+        "background_ember_middle_v1",
+        "background_ember_near_v1"
+      ]
+    },
+    {
+      "id": "moss",
+      "visibility_bit": 4,
+      "palette": [
+        "#10141C",
+        "#293247",
+        "#41465A",
+        "#737B83",
+        "#D5D2B8",
+        "#F07865",
+        "#FFE0A1",
+        "#243F38",
+        "#3E6B51",
+        "#73965D",
+        "#BCD184",
+        "#243C48",
+        "#3C6570",
+        "#6BA49B",
+        "#B5E5B4"
+      ],
+      "motifs": [
+        "stitched roots",
+        "luminous fungi",
+        "seed motes"
+      ],
+      "critical_cues": "common_shapes_and_contrast",
+      "terrain_asset_id": "terrain_moss_v1",
+      "background_asset_ids": [
+        "background_moss_far_v1",
+        "background_moss_middle_v1",
+        "background_moss_near_v1"
+      ]
+    }
+  ],
+  "content_version": "phase1-v1"
+}

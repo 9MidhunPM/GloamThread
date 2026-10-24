@@ -1,46 +1,22 @@
-# Project submission
+# Project submission record
 
-Complete this file as the build progresses and use it to prepare the submission through the method announced by the organizers. Every field below must stay truthful; entries marked TODO are genuinely not yet available.
+## Current direction
 
-## Project
+Not submitted to organizers. The user has requested an overhead action-adventure rewrite with further music, screens, combat and experience polish. The following is the preserved, runnable side-view milestone; it does not claim the new overhead direction is implemented.
 
-- **Project name:** Gloamthread: Two Ends
-- **Short description:** Two players on one computer carry opposite ends of the last living thread through a kingdom each sees differently (Ember and Moss themes over one shared physical world). They fight readable enemies, revive each other, restore bridges from paired anchors, defeat the Spoolwarden to earn a shared dash, and reopen the Lantern Loom so a stranded district can cross home. It is for pairs who enjoy responsive action, exploration and cooperating on a small, complete problem.
-- **Code repository URL:** [9MidhunPM/GloamThread](https://github.com/9MidhunPM/GloamThread).
-- **Final submitted implementation commit SHA:** TODO — recorded when the Phase 1 candidate is packaged.
-- **Working demo URL or local demo steps:** no runnable demo yet; the remaining M0 work is in [HANDOFF.md](HANDOFF.md). Planned launch steps are in [README.md](README.md#run-the-project), with an exported Linux binary targeted for milestone M7.
-- **Demo access requirements:** a Linux machine with Godot 4.7.2 standard (or the exported binary once it exists) and a keyboard; two gamepads are optional. No accounts, keys or network.
+- Project: **Gloamthread: Two Ends** — original local two-player co-op, two views of one physical world, Tavi/Neri and a complete eight-room restoration story.
+- Participant: **Midhun P M**, GitHub `9MidhunPM`; direction and agent supervision. Fresh human playtests remain pending.
+- Repository: [9MidhunPM/GloamThread](https://github.com/9MidhunPM/GloamThread).
+- Packaged implementation: `34ccb9614cacb4d423c2ef29f85e4a8391841ca1`. Later documentation/merge commits record its evidence and the changed direction; they are not silently included in this executable.
+- Preserved candidate download: [v0.1.0-demo](https://github.com/9MidhunPM/GloamThread/releases/tag/v0.1.0-demo), Linuxx86_64 ZIP plus checksums/build identity/notices.
+- Launch: extract, `chmod +x Gloamthread.x86_64`, `./Gloamthread.x86_64 --display-driver wayland`; X11 can use `--display-driver x11`. No account, key, service, editor, Python or network required by the executable. [Full demo guide](docs/DEMO.md).
+- Source setup: Godot4.7.2 standard, Python3 with Pillow/numpy for authoring only; [README](README.md) / [setup](docs/SETUP.md).
+- Walkthrough: join two distinct inputs; meet Oru; restore the Spindle anchors; fight through Gallery; rest at checkpointB; defeat Spoolwarden; follow the shortcut and shared dash route; restore Causeway and both Loom stations; rally for the home ending.
+- Checks:20Godot scenarios,79Python tests, full validators/import, actual-App normal-input complete route, native official-release route outside checkout in an isolated network namespace,1920x720 measured boss performance and real captures. Exact evidence and limits: [release record](evidence/release/README.md) / [matrix](evidence/release/ACCEPTANCE.md).
+- Unverified: physical controllers/hotplug, hardware rollover, audio listening, fresh pairs, human clear time/balance/fun, other distributions/hardware. The first-clear15–20minute target is not a measured result.
+- Technology: Godot4.7.2 (MIT), Pillow (MIT-CMU), NumPy (BSD-3) as tools. Game art/font/audio/maps/writing are original project content; no game-content packs, datasets or runtime APIs. [Notices](THIRD_PARTY_NOTICES.md).
+- Development/assistance: [CHANGELOG](CHANGELOG.md), [AI_USAGE](AI_USAGE.md); actual authorship/history preserved.
 
-## Participants
+## Event status
 
-| Participant name | GitHub handle | Contribution |
-| --- | --- | --- |
-| Midhun P M | 9MidhunPM | Design pack, direction, review and playtesting; coding-agent supervision |
-
-## Run and demonstrate
-
-- **Prerequisites and versions:** Arch Linux, Godot 4.7.2 standard, Python ≥ 3.10 with Pillow and numpy, Git. See [docs/SETUP.md](docs/SETUP.md).
-- **Install command:** `sudo pacman -Syu --needed godot git python python-pillow python-numpy`
-- **Required environment variable names:** none.
-- **Start command:** `godot --path .` *(available from milestone M0)*; exported build `./build/gloamthread.x86_64` *(planned, M7)*.
-- **Demo walkthrough:** TODO — to be written from the three-minute sequence in [docs/TRACK_ALIGNMENT.md](docs/TRACK_ALIGNMENT.md) once the slice is playable: two players join → same landmark in Ember and Moss → paired-anchor bridge → combat and a rescue → restoration payoff and ending card.
-- **Checks performed and results:** `python3 tools/preflight.py` → exit 0; `python3 tools/check_pack.py` → PASS (documents, links, example contracts). No engine, gameplay, rendering, audio or playtest checks exist yet; see [docs/STATUS.md](docs/STATUS.md) and [CHANGELOG.md](CHANGELOG.md) for the running record.
-- **Known limitations or incomplete features:** partial M0 engine scaffolding exists, but the main scene, playable session, content, assets and scenario runner are missing. The engine files remain unverified. Keyboard + keyboard is the primary mode to build and verify; gamepad checks require a controller. Two-human fresh playtests and performance measurements are reported only when they actually happen.
-- **Libraries, APIs, and public datasets used:** [Godot Engine 4.7.2](https://godotengine.org/) (MIT), [Pillow](https://python-pillow.org/) (MIT-CMU), [NumPy](https://numpy.org/) (BSD-3). No datasets, APIs, game-content packs, stock art, fonts, music or sound libraries.
-- **AI usage record:** [AI_USAGE.md](AI_USAGE.md)
-- **Development change log:** [CHANGELOG.md](CHANGELOG.md)
-
-## Submission checklist
-
-- [ ] The project implementation is built from scratch in this repository (the only pre-existing material is the design documentation and example contracts).
-- [x] I participated solo or with no more than 4 team members in total.
-- [x] Coding-agent usage is documented honestly in [AI_USAGE.md](AI_USAGE.md).
-- [ ] The code repository URL, short description, and working demo are provided.
-- [ ] README setup and demo instructions match the submitted code.
-- [ ] Actual checks and known limitations are documented.
-- [x] Meaningful changes are documented and committed throughout development.
-- [ ] The final implementation is committed and pushed, and its SHA is recorded above.
-- [x] No credentials or private data are included in the repository or demo instructions.
-- [ ] The organizers' announced submission method and timing have been followed.
-
-Event reference: [DevDay Exchange Community: Kochi on Luma](https://luma.com/z10nz8gp). The organizer text in [RULES.md](RULES.md) is kept verbatim from the template.
+Current event guidance is **Devin Hack Kochi** in [RULES.md](RULES.md). Organizer eligibility, participation format, submission method and timing have not been certified or completed here. This record is accurate project evidence, not an eligibility or submission-success claim.

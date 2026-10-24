@@ -1,11 +1,11 @@
 class_name CollisionBuilder
 extends RefCounted
-## Builds the one canonical collision body of a room from its logical tile grid.
+## Builds one canonical collision tree from the room's logical tile grid.
 ##
 ## Solid cells are merged into the fewest axis-aligned rectangles (greedy row
 ## runs, then vertical merge of identical runs) so bodies never catch on tile
-## seams. One-way platforms become one shape per horizontal run. Theme skins
-## never add shapes; this is the only place terrain collision is created.
+## seams. One-way runs use a child body so a dropping courier can ignore only
+## those platforms briefly. Theme skins never add collision shapes.
 
 const PHYSICS_LAYER_WORLD := 1
 
@@ -19,9 +19,14 @@ static func build(definition: RoomDefinition) -> StaticBody2D:
 	for rect in solid_rects(definition):
 		body.add_child(_rect_shape("Solid%d" % index, rect, false))
 		index += 1
+	var one_way := StaticBody2D.new()
+	one_way.name = "OneWayCollision"
+	one_way.collision_layer = PHYSICS_LAYER_WORLD
+	one_way.collision_mask = 0
+	body.add_child(one_way)
 	index = 0
 	for rect in one_way_rects(definition):
-		body.add_child(_rect_shape("OneWay%d" % index, rect, true))
+		one_way.add_child(_rect_shape("OneWay%d" % index, rect, true))
 		index += 1
 	return body
 

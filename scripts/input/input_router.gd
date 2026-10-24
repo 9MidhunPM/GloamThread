@@ -18,7 +18,7 @@ signal joypad_list_changed()
 const SLOT_COUNT := 2
 const Action := CommandSnapshot.Action
 ## Actions suppressed by a flush until the player physically releases them.
-const LATCHABLE_MASK: int = Action.JUMP | Action.ATTACK | Action.SPECIAL | Action.INTERACT | Action.DASH | Action.PAUSE | Action.MAP
+const LATCHABLE_MASK: int = Action.LEFT | Action.RIGHT | Action.UP | Action.DOWN | Action.JUMP | Action.ATTACK | Action.SPECIAL | Action.INTERACT | Action.DASH | Action.PAUSE | Action.MAP
 
 
 class PlayerSlot:
@@ -90,6 +90,8 @@ func is_waiting_for_device(slot_index: int) -> bool:
 func assign(slot_index: int, source: DeviceSource, bindings: Bindings = null) -> Error:
 	if slot_index < 0 or slot_index >= SLOT_COUNT or source == null or source.kind == DeviceSource.Kind.NONE:
 		return ERR_INVALID_PARAMETER
+	if bindings != null and bindings.kind != source.kind:
+		return ERR_INVALID_PARAMETER
 	for other in _slots:
 		if other.index != slot_index and other.source != null and other.source.conflicts_with(source):
 			push_warning("InputRouter: %s already belongs to player %d" % [source.display_name(), other.index + 1])
@@ -115,7 +117,11 @@ func clear(slot_index: int) -> void:
 
 
 func set_bindings(slot_index: int, bindings: Bindings) -> void:
+	if bindings == null or _slots[slot_index].source == null or bindings.kind != _slots[slot_index].source.kind:
+		push_warning("InputRouter: bindings must match the assigned device kind")
+		return
 	_slots[slot_index].bindings = bindings
+	flush(slot_index)
 
 
 ## Lists sources that are not currently owned by another slot.
@@ -188,8 +194,9 @@ func clear_test_input(slot_index: int = -1) -> void:
 # --- polling ------------------------------------------------------------------
 
 func _poll_slot(slot: PlayerSlot) -> void:
-	if not slot.is_joined():
+	if not slot.is_joined() or slot.waiting_for_device:
 		slot.snapshot = CommandSnapshot.empty()
+		slot.held_before = 0
 		return
 	var raw := _raw_held(slot)
 	slot.latched &= raw
@@ -200,10 +207,10 @@ func _poll_slot(slot: PlayerSlot) -> void:
 
 
 func _raw_held(slot: PlayerSlot) -> int:
-	if not slot.test_input.is_empty():
-		return int(slot.test_input["held"])
 	if slot.source == null or slot.bindings == null or slot.waiting_for_device:
 		return 0
+	if not slot.test_input.is_empty():
+		return int(slot.test_input["held"])
 	var held := 0
 	if slot.source.is_gamepad():
 		for action: Action in CommandSnapshot.ALL_ACTIONS:
@@ -219,17 +226,22 @@ func _raw_held(slot: PlayerSlot) -> int:
 
 
 func _pad_action_held(slot: PlayerSlot, action: Action) -> bool:
+	return _pad_action_strength(slot, action) > 0.0
+
+
+func _pad_action_strength(slot: PlayerSlot, action: Action) -> float:
 	var id := slot.source.joy_id
+	var strength := 0.0
 	for control: Dictionary in slot.bindings.pad_controls_for(action):
 		if control.has("button"):
 			if Input.is_joy_button_pressed(id, control["button"] as JoyButton):
-				return true
+				return 1.0
 		elif control.has("axis"):
 			var value := Input.get_joy_axis(id, control["axis"] as JoyAxis)
 			var sign := int(control.get("sign", 1))
 			if value * sign > slot.bindings.deadzone:
-				return true
-	return false
+				strength = maxf(strength, value * sign)
+	return strength
 
 
 func _axes(slot: PlayerSlot, held: int) -> Vector2:
@@ -241,13 +253,19 @@ func _axes(slot: PlayerSlot, held: int) -> Vector2:
 		axis.y = y if not is_nan(y) else _digital_axis(held, Action.UP, Action.DOWN)
 		return axis
 	if slot.source.is_gamepad() and not slot.waiting_for_device:
-		var stick := Vector2(Input.get_joy_axis(slot.source.joy_id, JOY_AXIS_LEFT_X), Input.get_joy_axis(slot.source.joy_id, JOY_AXIS_LEFT_Y))
-		if stick.length() > slot.bindings.deadzone:
-			axis = stick.limit_length(1.0)
-	if is_zero_approx(axis.x):
-		axis.x = _digital_axis(held, Action.LEFT, Action.RIGHT)
-	if is_zero_approx(axis.y):
-		axis.y = _digital_axis(held, Action.UP, Action.DOWN)
+		# Held-axis input obeys the same release latch as digital controls.
+		# Polling raw strengths here would bypass flush() on menu/reconnect.
+		if held & Action.RIGHT:
+			axis.x += _pad_action_strength(slot, Action.RIGHT)
+		if held & Action.LEFT:
+			axis.x -= _pad_action_strength(slot, Action.LEFT)
+		if held & Action.DOWN:
+			axis.y += _pad_action_strength(slot, Action.DOWN)
+		if held & Action.UP:
+			axis.y -= _pad_action_strength(slot, Action.UP)
+		return axis.limit_length(1.0)
+	axis.x = _digital_axis(held, Action.LEFT, Action.RIGHT)
+	axis.y = _digital_axis(held, Action.UP, Action.DOWN)
 	return axis
 
 
@@ -264,15 +282,33 @@ static func _digital_axis(held: int, negative: Action, positive: Action) -> floa
 
 func _on_joy_connection_changed(device: int, connected: bool) -> void:
 	joypad_list_changed.emit()
+	if connected:
+		_reconnect_device(device, Input.get_joy_guid(device), Input.get_joy_name(device))
+		return
 	for slot in _slots:
 		if slot.source == null or not slot.source.is_gamepad():
 			continue
-		if not connected and slot.source.joy_id == device and not slot.waiting_for_device:
+		if slot.source.joy_id == device and not slot.waiting_for_device:
 			slot.waiting_for_device = true
+			slot.source.joy_id = -1
 			flush(slot.index)
 			device_lost.emit(slot.index, slot.source)
-		elif connected and slot.waiting_for_device and Input.get_joy_guid(device) == slot.source.guid and Input.get_joy_name(device) == slot.source.device_name:
+
+
+func _reconnect_device(device: int, guid: String, device_name: String) -> void:
+	# A repeated notification or a second identical pad must not steal an
+	# already claimed OS index from the other player's live assignment.
+	for owner in _slots:
+		if owner.source != null and owner.source.is_gamepad() and not owner.waiting_for_device and owner.source.joy_id == device:
+			return
+	for slot in _slots:
+		if slot.source == null or not slot.source.is_gamepad():
+			continue
+		if slot.waiting_for_device and guid == slot.source.guid and device_name == slot.source.device_name:
 			slot.source.joy_id = device
 			slot.waiting_for_device = false
 			flush(slot.index)
 			device_returned.emit(slot.index, slot.source)
+			# GUID/name identify a model, not an individual controller. Claim
+			# only one waiting slot; other identical pads remain disconnected.
+			return

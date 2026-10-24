@@ -1,5 +1,7 @@
 # First Devin / Codex prompt
 
+This is the original build request. Before resuming, read [STATUS.md](docs/STATUS.md) and the current two-agent briefs: runtime and content delivery have advanced beyond this prompt's initial-state description. Follow current [Devin Hack Kochi guidance](RULES.md) for the event.
+
 Copy the block below into an agent working in the extracted project folder. It is the build request, not a claim that the Godot game already exists.
 
 ```text

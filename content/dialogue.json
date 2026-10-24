@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "content_version": "phase1-v1",
+  "sequences": {
+    "oru_intro": [
+      {
+        "speaker": "Oru",
+        "text": "The far district is still there. The way home isn't."
+      },
+      {
+        "speaker": "Oru",
+        "text": "Restore the Lantern Loom. Follow the path through the Atrium."
+      },
+      {
+        "speaker": "Tavi",
+        "text": "Then we give them a way home."
+      },
+      {
+        "speaker": "Neri",
+        "text": "Both ends this time."
+      }
+    ],
+    "oru_return": [
+      {
+        "speaker": "Oru",
+        "text": "Different roads. Same promise. Welcome home."
+      }
+    ],
+    "bridge_spindle_complete": [
+      {
+        "speaker": "Tavi",
+        "text": "I thought you were holding the other end."
+      },
+      {
+        "speaker": "Neri",
+        "text": "I was. You finally stopped pulling."
+      }
+    ],
+    "boss_defeated": [
+      {
+        "speaker": "Tavi",
+        "text": "It was keeping the road safe."
+      },
+      {
+        "speaker": "Neri",
+        "text": "From everyone who needed it."
+      },
+      {
+        "speaker": "",
+        "text": "Threadstep is yours. Return to the Atrium and cross the causeway."
+      }
+    ],
+    "ending": [
+      {
+        "speaker": "",
+        "text": "The Lantern Loom is lit. The stranded district has a road home."
+      },
+      {
+        "speaker": "Neri",
+        "text": "Two threads. Still two colours."
+      },
+      {
+        "speaker": "Tavi",
+        "text": "Strong enough together."
+      }
+    ],
+    "charm_found": [
+      {
+        "speaker": "",
+        "text": "A lantern charm, left for the next traveller. Both lanterns carry its light."
+      }
+    ],
+    "causeway_restored": [
+      {
+        "speaker": "Neri",
+        "text": "Look. The far lanterns are answering."
+      }
+    ],
+    "warden_warning": [
+      {
+        "speaker": "",
+        "text": "Keep a thread for the one behind you."
+      }
+    ]
+  }
+}

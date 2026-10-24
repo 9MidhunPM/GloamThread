@@ -2,34 +2,46 @@
 
 **Two couriers. One unraveling kingdom. Two ways of seeing it.**
 
-An original split-screen local co-op pixel action adventure built in Godot 4.7.2. This repository started from the [DevDay Exchange Community Hackathon: Kochi template](https://github.com/anima-regem/devday-kochi-hackathon-template) and follows its repository workflow: [event rules](RULES.md), [agent guide](AGENTS.md), [change log](CHANGELOG.md), [AI usage record](AI_USAGE.md) and [submission sheet](SUBMISSION.md).
+**Active direction:** the user has requested an overhead adventure with further UI, music and combat polish. The current verified download below preserves the side-view milestone; overhead work is next.
+
+[Download the preserved Linux demo candidate](https://github.com/9MidhunPM/GloamThread/releases/tag/v0.1.0-demo) · [Build/evidence](evidence/release/README.md) · [Play guide](docs/DEMO.md)
+
+An original split-screen local co-op pixel action adventure built in Godot 4.7.2 for **Devin Hack Kochi**. Its documentation follows the [corrected event template](https://github.com/anima-regem/devin-hack-kochi-thanushreesuresh-SEOpilot/tree/codex/correct-devin-hack-kochi-thanushreesuresh): [event guidance](RULES.md), [agent guide](AGENTS.md), [change log](CHANGELOG.md), [AI usage record](AI_USAGE.md) and [submission sheet](SUBMISSION.md).
+
+## Event guidance
+
+Devin Hack Kochi allows Devin and other AI tools, models and providers without major AI usage constraints. We maintain an accurate AI assistance record as a project convention. Use current organizer announcements for logistics, participation, eligibility, deadlines and credits; the older shared template's details do not apply. Our offline runtime and original-content requirements are game design choices.
 
 ## Project overview
 
 - **Project name:** Gloamthread: Two Ends
 - **Short description:** Two players share one computer and one physical world, but each sees it through a different visual theme (Ember and Moss). They fight, revive each other, restore broken bridges from paired anchors and reopen the Lantern Loom so a stranded district can cross home. It is for pairs who enjoy responsive action, exploration and solving a small problem together.
 - **Team:** Midhun P M ([9MidhunPM](https://github.com/9MidhunPM)) — solo, with coding-agent assistance recorded in [AI_USAGE.md](AI_USAGE.md).
-- **Working demo:** not available yet. An offline desktop build is planned; see "Current status" below.
+- **Working demo:** the eight-room adventure, menus and save/Continue flow are implemented on `feat/phase1-runtime`; the preserved side-view candidate is packaged; the next iteration changes to overhead. See "Current status" below.
 - **Technology stack:** Godot 4.7.2 standard (typed GDScript, Compatibility renderer), Python 3 + Pillow + numpy for original asset/audio generation and validation, Git.
 
 ### Run the project
 
-Commands marked *planned* become usable when the milestone that creates them lands; see [Current status](#current-status).
+The production game includes title/join, all eight rooms, combat, cooperation, save/Continue, settings and an ending. Twenty engine scenarios include a complete ordinary-input route; native/export acceptance is recorded separately.
 
 1. **Prerequisites and versions:** Arch Linux (first target), Godot **4.7.2 standard** (`godot --version` → `4.7.2.stable…`, not mono), Python ≥ 3.10 with Pillow and numpy, Git. Install with `sudo pacman -Syu --needed godot git python python-pillow python-numpy`. Details in [docs/SETUP.md](docs/SETUP.md).
 2. **Dependency installation:** none beyond the system packages above. No npm, .NET, C++, database or service.
 3. **Environment setup:** no environment variables, API keys or accounts. Phase 1 runs offline.
-4. **Start the project:** `godot --path .` *(planned — arrives with milestone M0)*.
+4. **Import and launch:** run `godot --headless --path . --editor --import --quit`, then `godot --path .`. The current runtime uses the original production rooms, enemies and art. Choose New journey and confirm the two input assignments. P1 uses WASD, Space jump, F slash, G special, E interact/revive and Shift dash. P2 uses arrows, Period jump, Comma slash, Slash special, M interact/revive and Apostrophe dash. Esc/Enter pause; Tab/Semicolon open the map. Menu selection uses the owner's Up/Down, Jump/Interact confirm and Pause cancel. On Wayland, `godot --display-driver wayland --path .` selects the native display driver. A full normal-input automated route reaches the actual ending; physical controller and fresh-pair playtests are still pending.
 5. **Run checks or tests:**
    - `python3 tools/preflight.py` — read-only toolchain check (works now).
-   - `python3 tools/check_pack.py` — planning-pack document/link/example check (works now).
-   - `python3 tools/validate_content.py`, `python3 tools/generate_assets.py --seed 18427`, `python3 tools/validate_assets.py` *(planned)*.
-   - `godot --headless --path . --import` and `godot --headless --path . --script tests/run_tests.gd` *(planned)*.
+   - `python3 tools/check_pack.py` — event guidance, document/link and example checks.
+   - `python3 tools/generate_assets.py --seed 18427` — rebuild the full original asset bundle.
+   - `python3 tools/validate_assets.py` and `python3 tools/validate_content.py` — full bundle checks.
+   - `python3 -m unittest discover -s tools/tests -p 'test_*.py'` — Python boundary and rebuild tests.
+   - `python3 tools/gen/rebuild_check.py --seed 18427` — compare two complete output/manifest rebuilds.
+   - Runtime checkout: `godot --headless --path . --editor --import --quit`, then `godot --headless --fixed-fps 60 --path . --script tests/run_tests.gd`.
 
 ### Current status
 
-- **Current implementation:** M0 is in progress. `project.godot` and input, audio and room scaffolding exist alongside the design pack, example contracts and two Python utilities. The engine files have not been parsed, imported or run. See [HANDOFF.md](HANDOFF.md) for the remaining M0 work and [docs/STATUS.md](docs/STATUS.md) for verified and unverified work.
-- **Known limitations:** the main scene, player/session controllers, cameras, room content, generated assets, saves, scenario runner and export are missing, so the game is not runnable yet. Keyboard + keyboard (WASD / arrows) is the primary input mode to build and verify. Gamepad support requires hardware verification when a controller is available.
+- **Content branch:** eight authored rooms, fixed profiles, dialogue, 47 original manifested art/audio/font assets and the complete Python pipeline. Both full validators and 79 Python tests pass after content QA; two seed-18427 rebuilds matched. See [content evidence](evidence/content/README.md).
+- **Runtime branch:** production catalogs/animation/audio, combat, enemies/boss, team progression, anchors/exits/recovery and validated save/settings stores are integrated. Twenty integrated engine scenarios pass, including the complete actual-App route and UI layout checks; the earlier core staged-copy check passed twelve. See [runtime evidence](evidence/runtime/commands.md) and [movement limits](evidence/runtime/traversal.md).
+- **Known limitations:** native/offline export checks pass for the preserved side-view candidate; gamepad hardware, physical keyboard rollover, audio listening and fresh two-person playtests remain unverified. Human first-clear time, balance and enjoyment are not established by the automated route. Keyboard + keyboard is the primary input mode. [STATUS.md](docs/STATUS.md) records the current boundaries.
 - **Libraries, APIs, and public datasets used:** [Godot Engine](https://godotengine.org/) 4.7.2 (MIT), [Pillow](https://python-pillow.org/) (MIT-CMU), [NumPy](https://numpy.org/) (BSD-3). No game-content packs, stock art, fonts, music or sound libraries: every shipped sprite, tile, glyph, sound and line of dialogue is authored in this repository.
 
 ## Start in this order (design pack)
@@ -62,7 +74,7 @@ Tavi, an Ember courier, and Neri, a Moss courier, carry the two ends of a living
 | [MVP.md](MVP.md) | Exact first-release scope, route, controls, acceptance and cuts |
 | [PRD.md](PRD.md) | Product requirements, player paths and larger-world direction |
 | [AGENTS.md](AGENTS.md) | Persistent rules for coding agents, including the repository workflow |
-| [RULES.md](RULES.md) | Hackathon event rules from the template (organizer text) |
+| [RULES.md](RULES.md) | Devin Hack Kochi guidance and the corrected template reference |
 | [FIRST_AGENT_PROMPT.md](FIRST_AGENT_PROMPT.md) | The build request that started the implementation |
 | [SETUP.md](docs/SETUP.md) | What to install first, hardware checks and run/export commands |
 | [DECISIONS.md](docs/DECISIONS.md) | Canonical names, scope, rules, dimensions and implementation addenda |

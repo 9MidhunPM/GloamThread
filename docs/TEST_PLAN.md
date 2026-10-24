@@ -2,7 +2,7 @@
 
 Version 2.0 · Phase 1 acceptance contract · 24 October 2026.
 
-**Current status:** this starter pack specifies tests; it does not contain a Godot game, a scenario runner, gameplay captures, performance results, or a completed co-op playtest. The earlier single-player HTML proof supplies no evidence that these co-op gates pass.
+**Current status:** 20 engine scenarios pass, including the actual-App eight-room route to ending, combat, timing, menus, actual-file persistence and malformed content. Native rendering and exported performance/offline verification are being completed. Physical controllers, audio listening and fresh two-person playtests remain unverified. See [campaign evidence](../evidence/runtime/campaign.md) and [status](STATUS.md).
 
 ## 1. Evidence levels
 
@@ -27,7 +27,7 @@ Prefer real Godot physics steps for movement/collision tests. Use temporary save
 
 Use a Python content validator for room graph references, requirements, anchor pairs, profile bounds and asset IDs. Use the asset validator for frame/palette/atlas/audio contracts. A graph check does not prove a jump, timed dash or two-person puzzle is physically possible.
 
-Planned commands, to be implemented by the first agent:
+Current implementation commands:
 
 ```sh
 python3 tools/generate_assets.py --seed 18427
@@ -38,7 +38,7 @@ godot --headless --path . --script tests/run_tests.gd
 godot --path .
 ```
 
-These commands describe the intended implementation interface, not available tools or results in this documentation pack. The implementation agent must confirm its exact Godot CLI behaviour and document any deliberate replacement.
+For fresh checkouts use `godot --headless --path . --editor --import --quit` before the scenario runner. Use `--fixed-fps 60` for accelerated scenario checks; native performance QA explicitly refuses accelerated/headless runs.
 
 ## 3. Acceptance matrix
 

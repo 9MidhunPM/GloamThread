@@ -4,6 +4,8 @@ Version 2.0 · 24 October 2026.
 
 This page records checks of the planning pack only. It is not a gameplay test report.
 
+This is the historical starter snapshot. Current content, runtime and event-correction evidence is recorded in [STATUS.md](STATUS.md), [content evidence](../evidence/content/README.md) and [RULES.md](../RULES.md).
+
 ## Authoring checks
 
 - `python3 tools/check_pack.py`: passed. All required documents and 27 relative file links resolved. Fixed profile/theme examples, abstract pre/post-dash gates, causeway restoration, final return link and the checkpoint-save illustration passed their checks.

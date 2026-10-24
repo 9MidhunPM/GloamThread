@@ -1,0 +1,59 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "render_cap": 30,
+      "physics_ticks": 600,
+      "max_position_delta_px": 0.0,
+      "health": [
+        5,
+        4
+      ],
+      "unlocks": [
+        "threadstep"
+      ],
+      "end_positions": [
+        792.007934570312,
+        319.925109863281,
+        413.996520996094,
+        287.925262451172
+      ]
+    },
+    {
+      "render_cap": 60,
+      "physics_ticks": 600,
+      "max_position_delta_px": 0.0,
+      "health": [
+        5,
+        4
+      ],
+      "unlocks": [
+        "threadstep"
+      ],
+      "end_positions": [
+        792.007934570312,
+        319.925109863281,
+        413.996520996094,
+        287.925262451172
+      ]
+    },
+    {
+      "render_cap": 144,
+      "physics_ticks": 600,
+      "max_position_delta_px": 0.0,
+      "health": [
+        5,
+        4
+      ],
+      "unlocks": [
+        "threadstep"
+      ],
+      "end_positions": [
+        792.007934570312,
+        319.925109863281,
+        413.996520996094,
+        287.925262451172
+      ]
+    }
+  ]
+}

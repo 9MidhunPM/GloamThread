@@ -6,6 +6,70 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 1 — runtime and integration
 
+### 2026-10-25T00:53:13+05:30 — Preserve the verified side-view candidate and record overhead direction
+
+- Changed: Retained exact34ccb96build/checksums, full acceptance matrix, network isolation/real native route/captures/performance and submission/launch evidence. The20scenario/79Python release is preserved; the user's new overhead direction is explicit in current docs.
+- Why: Keep a playable verified milestone while the requested perspective/music/UI/combat redesign proceeds through separate atomic commits and periodic tested main merges.
+- Validation: Exact-source official release completes all8rooms/actual ending outside checkout with no network routes/addresses;11real captures,2,650r05samples at1920x720,120medianFPS/p95frame8.333ms. Archive integrity and GitHub uploaded digest match. Full validators/import/scenarios/Python/links pass; no script/resource errors in final native run.
+- Limitations: Physical controllers, hardware rollover, listening, fresh pairs and human balance/fun remain unverified. Overhead gameplay is a new implementation effort; none of this evidence is relabeled for it.
+
+### 2026-10-25T00:31:03+05:30 — Keep corrupted startup readable when the original font is missing
+
+- Changed: Check the validated catalog before creating font-dependent menus/toasts. A required-resource failure now displays a bounded emergency diagnostic and Quit control, without creating a playable session or starting music. Only that failure screen uses the engine-default font.
+- Why: Final sandbox review reproduced an invisible error screen when the required original font record was removed. The error UI had depended on the unavailable resource it was reporting.
+- Validation: New startup-failure regression PASS; complete integrated suite PASS20/20 with no script errors. Valid startup/menu/campaign scenarios remain green. Final source is rebuilt and rechecked before publishing; earlier b96ad0e offline route passed, but its artifact is superseded by this correction.
+- Limitations: The emergency screen is diagnostic only and never substitutes missing gameplay content. Physical controller/rollover, listening and fresh-pair acceptance remain unverified.
+
+### 2026-10-25T00:17:08+05:30 — Polish original-font menus and prepare reproducible Linux packaging
+
+- Changed: True-merged Agent2's complete native UI layout fixes/evidence. Critical values/bindings, scrollbars and long prompts are readable at1x/2x. Added the Linux package command, explicit license/provenance inventory, candidate launch guide, shipping exclusion of UI fixtures, and source/build identification for rendered QA. Toasts now have a readable backplate.
+- Why: Make the candidate reproducible from a clean commit and retain the complete notices alongside its executable, with diagnostic tools excluded from the shipping package.
+- Validation: Integrated suite PASS19/19 after full resource import; focused app scenarios PASS after toast styling. Packaging tool compiles and uses only the standard library; its clean-commit export/archive execution follows this commit. Private Xvfb UI captures pass24groups, exact2x pixels and owner-specific window actions; native actual-App campaign already reached ending with original art.
+- Limitations: Final network-isolated export/package/checksum and exact build source are recorded in the subsequent release evidence. Physical controllers, hardware rollover, listening and fresh pairs remain unverified. The earlier release/X11 performance sample is preliminary, not asserted as the final binary.
+
+### 2026-10-25T00:02:04+05:30 — Connect campaign menus and verify the complete route
+
+- Changed: True-merged Agent 2's owner-controlled menu component and connected title/New/Continue, explicit join, source/character selection, pause/map/dialogue, controls/remapping/deadzone, volume/reduced effects, recovery, reconnect and ending/replay. Added queued notices plus persistent save errors, per-player prompts and readable HUD backplates. Permanent room visuals refresh immediately.
+- Why: Make the shared campaign reachable through complete player-facing flows and prove authored rooms with real movement/combat rather than debug progression.
+- Validation: 18 engine scenarios PASS; complete actual-App normal-input route reaches ending with both couriers alive and no recovery. Six-hundred-tick movement replay matches at30/60/144; boundary tests found and fixed a one-tick coyote defect. Secret tests caught/fixed simultaneous reward cue duplication. Native 960x360 logical captures show original themes/boss/ending. Engine logger negative probe correctly exits1 on runtime exception. Full source render performance is below target and under investigation against export.
+- Review corrections: Title/quit retain unsaved campaigns for retry or explicit discard; missing pads fall back to a free keyboard zone, disconnected remapping cancels, and available players own reconnect menus. All18 integrated scenarios pass.
+- Limitations: Export/offline/performance verification and newer UI layout QA continue. Gamepad hardware, physical rollover, listening, fresh pairs, human duration/balance/fun remain unverified. NoPhase2 work added.
+
+### 2026-10-24T23:36:24+05:30 — Integrate original production content and campaign core
+
+- Changed: True-merged the complete eight-room content branch. Added strict runtime catalogs, shared terrain/bridge/prop consumers, physics-driven sprite/effect animation and one audio mix. Implemented owned-input combat, both enemy types and boss, cooperative room/recovery/progression transactions, validated campaign backups and independent settings.
+- Why: Replace diagnostic-only consumers with the original authored adventure and real shared gameplay, while retaining one authoritative simulation.
+- Validation: Fresh full editor import had no script/resource errors; full asset/content validators PASS; all 79 Python tests PASS; integrated Godot suite PASS 12/12 from a fresh staged-file copy. Focused combat, catalog and persistence runs pass. Tests caught and fixed simultaneous anchor-edge loss, prop state aliases, orphan-backup handling and invalid save combinations.
+- Limitations: Global menu integration, ordinary-input route, visible motion/listening, packaged offline export, performance and human/controller acceptance are still pending. Accelerated suite audio teardown warnings are recorded separately. Approved official template archive was checksum-verified and Linux templates installed.
+
+### 2026-10-24T22:50:16+05:30 — Refresh diagnostic setup and handoff status
+
+- Changed: Updated setup, decisions, implementation/test plan and submission to reflect the actual integrated diagnostic room instead of stale missing-boot claims. Recorded Agent 2's later cumulative content tip as queued for integration, preserving the distinction between authored content and implemented gameplay.
+- Why: Keep the published agent handoff and launch instructions consistent with the first runtime milestone while both workstreams advance independently.
+- Validation: Documentation/link/example checker and diff whitespace pass; Git remote refs confirm preparation `2fea1ef`, runtime diagnostic merge `b1ff5d6` and queued content `e56d714`. The prior 4 engine scenarios and 15 Python cases remain the current code verification; this change adds no gameplay.
+- Limitations: Full adventure and visible/physical-input acceptance remain incomplete; final assets/rooms require further runtime consumers and integrated checks.
+
+### 2026-10-24T22:40:57+05:30 — Integrate Agent 2's diagnostic packet and measure movement
+
+- Changed: Merged content checkpoint `34e14c9` through a true merge, retaining both agents' log sections. Imported its original diagnostic sprites/terrain/font and added an engine scenario consuming the actual r00/manifest. Published the measured motor envelope, updated launch/validation instructions and retained an actual initial window capture.
+- Why: Close the first runtime/content seam early and give the level author measured limits rather than theoretical jump assumptions.
+- Validation: Diagnostic asset/content validators PASS; 15 Python tests PASS; clean resource import and bounded normal headless boot PASS; all 4 engine scenarios PASS. Actual-content session measured full jump rise 41.74 px, running feet travel 55.00 px, 30 airborne ticks and 66 px full-jump body clearance. Initial X11/Compatibility window capture shows both characters/tints. Hidden XWayland input was refused; native-Wayland background key delivery returned success but capture was black, so visible input/motion acceptance is unverified. Pack/whitespace checks passed; evidence is excluded from engine resource imports.
+- Limitations: M0's visible simultaneous-control gate is still outstanding. No dash measurement, complete gameplay route, human/device/audio/performance acceptance or full-bundle claim. Content packet remains diagnostic; complete schemas and later runtime mechanics are still planned.
+
+### 2026-10-24T22:32:31+05:30 — Add the shared session and motor before content integration
+
+- Changed: Added boot/session scenes, one authoritative world with two viewports/cameras/HUDs, a manifest image boundary, owned player motor and stable sprite pivot, diagnostic mover, shared focus/pause overlay and an explicit test-only room fixture. Production boot reports missing content rather than substituting test geometry.
+- Why: Complete the runtime side of the first parallel handoff and test real physics/session ownership before merging Agent 2's first packet.
+- Validation: Fresh headless editor import exited 0 without resource/script errors. The real-session fixture smoke scenario passed: one world/room/mover, two independent nonblocking players, stable grounding, diverging cameras, masks, jump and shared pause/resume. The isolated motor/camera harness passed 19 checks. Visual, actual device and production-content checks remain pending.
+- Limitations: This pre-merge checkpoint has no production content/assets yet. The explicit fixture disables art only for engine tests; it cannot satisfy rendered or ordinary-input acceptance. Full manifest/entity validation, one-way drop-through, combat and later milestones are outstanding.
+
+### 2026-10-24T22:23:11+05:30 — Start runtime verification and harden input/room data
+
+- Changed: Added the built-in scenario runner/filter/timeout and shell wrapper, input and room boundary scenarios, generated script UID metadata and runtime evidence. Validated saved controls and analog remapping, neutralized disconnected inputs, prevented duplicate identical-pad reconnect claims, and latched held movement/actions across flush. Room parsing rejects malformed geometry/fractional coordinates/oversized layouts and unsafe or duplicated paired spawns without indexing invalid rows or treating outside-room sentinels as real floors. Updated current setup/status/command instructions.
+- Why: Give Agent 1 reproducible engine checks and repair scaffold defects before the parallel content pipeline supplies real rooms/assets.
+- Validation: Final Godot run: 2 scenarios passed / 0 failed; wrapper's room filter passed; nonexistent-filter run correctly exited 1. A new held-stick regression first failed and then passed after directional latching was fixed. Editor scan registered 13 scripts but reported the still-missing boot scene despite exit 0; not a complete import/launch pass. Exact commands/configuration and remaining gaps are in `evidence/runtime/commands.md`; pack and whitespace checks run before commit.
+- Limitations: Synthetic input only; no physical devices, visible split screen, gameplay, audio, performance or human playtest. Boot/session/player/cameras and Agent 2's authored content remain outstanding; full entity schema validation is not yet implemented.
+
 ### 2026-10-24T22:10:33+05:30 — Prepare two-agent parallel execution
 
 - Changed: Added runtime and content agent briefs with exclusive files, shared JSON/asset/audio/room contracts, staged deliverables, separate checkouts/branches and integration gates. Linked the briefs from the agent guide, handoff, README, decisions, task list and original plan. Allocated independent changelog/AI-usage sections; made the pack checker require both briefs.
@@ -14,6 +78,75 @@ Record each meaningful project change, newest first. Update this file in the sam
 - Limitations: This checkpoint sets up the work; it does not implement or verify the game. Agent 2 must deliver its diagnostic packet before integrated M0 acceptance can pass.
 
 ## Agent 2 — content and assets
+
+### 2026-10-25T00:15:26+05:30 — Verify every UI capture and expected process lifetime
+
+- Changed: QA now checks the exact nine fixture kinds, fresh expected paths/dimensions, distinct nonblank pixels, and live preview processes before intentional shutdown.
+- Why: Peer review found that record counts could mask repeated/stale captures and cleanup could mask an unexpected preview exit.
+- Validation: Full native helper and Python compilation PASS; regenerated screenshots are byte-identical. Pack/link and whitespace checks PASS.
+- Limitations: This strengthens UI fixture evidence only; production code and full-game acceptance are unchanged.
+
+### 2026-10-25T00:13:18+05:30 — Guard native UI evidence against blank captures
+
+- Changed: Added explicit window/framebuffer pixel equality and rendered-colour assertions to the private UI QA helper; recorded the result in its evidence.
+- Why: Equal before/after or 2x captures alone could also match blank windows. The inspected capture contains eight colours and matches the engine framebuffer exactly.
+- Validation: Re-ran the complete native helper, pack/link and whitespace checks before commit.
+- Limitations: UI fixture evidence remains separate from full application, physical devices and human acceptance. No production game code changed.
+
+### 2026-10-25T00:06:44+05:30 — Complete UI layout and native-window verification
+
+- Changed: Added the extended UI layout/mouse scenario, explicit preview scene and reproducible private-Xvfb QA helper with real captures. Improved value/binding font size, scrollbar visibility/inset, long-row navigation and two-line footer prompts. Recoverable validation now warns instead of raising engine errors, preserving compatibility with Agent 1's strict error logger.
+- Why: Native review exposed invisible overflow and small critical values; the UI assignment also requires proof that global widget focus cannot bypass player ownership and that pixel scaling remains stable.
+- Validation: Six engine scenarios PASS, including two UI scenarios with 24 behavior groups. Native X11/Godot captures cover eight assigned kinds plus controls; non-owner input left pixels/actions unchanged, owner keyboard/mouse payloads matched, cancel/title/quit exited 0, 2x scaling matched pixels exactly, and the long footer wrapped into two lines. Pack, compilation and diff whitespace PASS. Debug-title matching in the new harness was corrected before its successful run. Temporary GUI processes were stopped.
+- Limitations: Native QA uses software llvmpipe and an isolated UI fixture with Dummy audio. It does not establish full application/campaign semantics, physical gamepads, keyboard rollover, performance or human playtests. Agent 1 owns integration and final release evidence; no application/session/storage files or global import sidecars changed.
+
+### 2026-10-24T23:40:29+05:30 — Add the shared owner-controlled GameMenus component
+
+- Changed: Added the typed CanvasLayer menu renderer and public intent API, original-font layout, scrolling rows/body, owner-specific navigation, disabled/adjustable actions, repeat timing, guarded mouse events and shared-boundary input flushing. Added a real-engine UI scenario and a separate UI integration/evidence record.
+- Why: Agent 1 assigned this exclusive UI vertical to unblock title/join/pause/map/dialogue/settings/reconnect/ending wiring while other workers implement gameplay and persistence. The component emits intents and leaves application decisions with Agent 1.
+- Validation: Baseline import, four existing engine scenarios and 15 Python tests PASS. New UI scenario first failed on missing implementation; final engine suite passes five scenarios including 13 UI behavior groups. Pack/link and diff checks PASS; independent source review found no blocker. Invalid-row fixtures intentionally emit error diagnostics. Direct standalone script checking lacked autoload globals; normal project scenario loading compiles/runs successfully.
+- Limitations: Native rendered layout, extended scrolling/mouse checks and real window input are still pending this core checkpoint. No full application, controller, rollover or human-playtest acceptance is claimed. Global importer sidecars and central application integration remain with Agent 1.
+### 2026-10-24T23:06:44+05:30 — Tighten asset acceptance and improve room approaches
+
+- Changed: Reject invisible images/frames, changed canonical terrain silhouettes, duplicated decoded courier/background pixels and silent or near-silent PCM, with regression fixtures that update hashes correctly. Widened/inset east footholds in r02/r06, raised r03's optional hazard shelf for 80 px combat clearance, and restricted r06's catch shelf to westward recovery. Expanded labelled authoring previews and updated current content evidence.
+- Why: Manifest counts and matching hashes previously accepted visually empty/cloned bundles. Layout review also exposed narrow boundary approaches, a 48 px combat ceiling and a lower-route ordinary-jump bypass.
+- Validation: All 79 Python tests PASS, both full validators PASS, temporary diagnostic generation/validation PASS, pack/event/link checks and diff whitespace PASS. The transparent-background regression first reproduced the failure, then passed after the fix. Native authoring views inspected; generated asset recipes/outputs remain unchanged and earlier deterministic hashes still apply.
+- Limitations: Geometry corrections use measured ordinary movement as a constraint; real both-character traversal, Threadstep reach, combat readability, listening and the remaining runtime/human MVP gates remain unverified. Source-art views exercise no physics.
+
+### 2026-10-24T23:00:02+05:30 — Correct the project documentation for Devin Hack Kochi
+
+- Changed: Aligned README, event guidance, agent instructions, submission checklist, AI record and PR checklist with the user-linked corrected template at `cb4db78169a8d199b43b077fbcc8f2ff4b798a14`. Removed inherited logistics, participation limits and credit promises; clarified provider-neutral event guidance and the project's own documentation conventions. Refreshed stale setup/status/prompt references against the separate content delivery and runtime checkpoint. Added a read-only event-consistency gate to `tools/check_pack.py`.
+- Why: The organizer-shared template carried the wrong event identity and requirements. The user explicitly requested project-wide correction while preserving truthful project facts and actual tool attribution.
+- Validation: Fetched the corrected template through GitHub at the pinned commit and independently reviewed its event text. The new gate first failed on the stale README, then passed after correction; pack checks PASS with 106 relative links, Python compilation and diff whitespace PASS. Runtime checkpoint `b1ff5d6` evidence was read, not rerun by Agent 2.
+- Limitations: Current organizers still determine eligibility, logistics, deadline and credits. Historical log entries and Git history are preserved. These are documentation/consistency changes; no additional runtime, hardware or human acceptance is claimed.
+
+### 2026-10-24T22:46:23+05:30 — Align the room handoff with measured movement
+
+- Changed: Recorded the exact full-content packet SHA and Agent 1's committed jump/headroom measurements, command and test conditions in content evidence.
+- Why: Replace reliance on source-only ballistic estimates with the available real-physics evidence while keeping diagnostic measurements distinct from full-route acceptance.
+- Validation: Read runtime commit `b1ff5d6` and its traversal evidence; pack/link checks and diff whitespace PASS. No asset or room data changed; previous 69-test and deterministic asset results still apply.
+- Limitations: Dash remains unmeasured at that runtime checkpoint. Both-character room traversal, animation/readability, audio listening and remaining integrated MVP gates are pending Agent 1 verification.
+
+### 2026-10-24T22:43:33+05:30 — Author the eight-room cooperative story bundle
+
+- Changed: Authored r00-r07 with canonical bidirectional rally exits, two checkpoints, Oru, both anchor pairs, enemy lessons, secret charm, Spoolwarden arena, dash branch, loom and return. Added shared data-only fixtures, 29 content tests, read-only content validation hardening, labelled authoring previews and exact traversal/presentation requests.
+- Why: Complete Agent 2's Phase 1 content inventory and give Agent 1 explicit integration data without guessing entrance, progression or asset references. Revised ascent stairs against current motor constants, widened rally rectangles to include standing feet, and fixed malformed spawn/path handling plus bridge distribution enforcement.
+- Validation: Both full validators PASS; all 69 Python tests PASS. Pack and diff whitespace PASS. Native r00/r02 authoring compositions and actor sheets inspected. Earlier seed-18427 twice-rebuild hashes remain valid because this drop does not change asset sources.
+- Limitations: Physical traversal, dash tuning, real engine presentation/animation, audio listening, ordinary-input playthrough, gamepads, performance, export and human acceptance remain with integrated runtime verification. Room previews are explicitly labelled authoring-only and exercise no physics. Agent 1 owns true-merge integration and main publication.
+
+### 2026-10-24T22:40:32+05:30 — Author the complete original art and audio inventory
+
+- Changed: Completed the full generator with courier animation, Oru, two ordinary enemies, Spoolwarden, both terrain themes, layered backgrounds, props/states, effects and UI. Added editable original audio instruments/cues/scores and synthesis for 18 cues and three arrangements. Hardened asset validation and added reproducible rebuild evidence.
+- Why: Give the runtime stable production assets and semantic sound mappings while room geometry and gameplay integration continue independently.
+- Validation: Full generation produces 47 manifested assets; full asset validation PASS. Asset/audio/generator suites pass 40 tests. Two rebuilds at seed 18427 produced identical output and manifest hashes. Native authoring/contact-sheet inspection performed; inner-corner orientation corrected. PCM format, peaks, loop joins and a representative simultaneous-event mix checked structurally.
+- Limitations: Final room delivery follows separately. Authoring previews do not establish Godot rendering/animation; audio has not been listened to, and runtime mix, traversal, gamepads, performance, exports and human review remain unverified. Diagnostic files are retained for early-runtime compatibility but excluded from the full manifest.
+
+### 2026-10-24T22:29:31+05:30 — Deliver Drop A diagnostic content tracer
+
+- Changed: Added original diagnostic courier/terrain/mover sources and generator, a retained 96-glyph font source and PNG/BMFont export, provenance manifest, real fixed profiles/themes/world/dialogue and the exact r00 tracer layout. Added read-only staged asset/content validators and Python boundary tests; recorded setup and limitations in `evidence/content/README.md`.
+- Why: Unblock Agent 1's one-room co-op foundation while preserving stable IDs and strict producer/consumer contracts for final art.
+- Validation: Diagnostic generation and both diagnostic validators PASS; 15 Python tests PASS; preflight, pack/link checks and diff whitespace PASS. The full asset validator deliberately fails on the incomplete diagnostic bundle. Native PNG inspection covered both courier silhouettes.
+- Limitations: This is diagnostic content. Full assets/rooms/audio, engine import, animation playback, listening, traversal, controllers, performance and human playtests remain unverified or unfinished. Agent 1 owns integration and main publication.
 
 <!-- Agent 2 inserts its newest timestamped entries here. -->
 

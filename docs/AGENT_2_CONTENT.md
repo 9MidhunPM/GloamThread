@@ -16,7 +16,7 @@ Wait for Agent 1 to publish the preparation commit containing both agent briefs 
 
 If your checkout or branch already exists, inspect its status, origin and ancestry and preserve its work. Never repurpose the runtime checkout. Read `AGENTS.md`, `README.md`, `MVP.md`, `HANDOFF.md`, `docs/DECISIONS.md`, `docs/ARCHITECTURE.md`, `docs/ART_AUDIO_PIPELINE.md`, `docs/STORY_BIBLE.md`, `docs/TEST_PLAN.md`, the implementation/task plans and `examples/README.md` before authoring. Treat the generation roadmap only as a later-phase boundary.
 
-Initial state: partial project/input/audio/room scaffolding exists, but the main scene, playable session, assets, room content and scenario runner are missing. None of the existing GDScript has established engine or gameplay acceptance. The example JSON files illustrate contracts; they are not shipped content or finished schemas.
+Initial state at preparation commit `2fea1ef`: only partial project/input/audio/room scaffolding existed, with no engine/gameplay acceptance. Content and runtime have since advanced; [STATUS.md](STATUS.md) and [content evidence](../evidence/content/README.md) record current delivery. Example JSON illustrates contracts; shipped content lives under `content/` and passes the validators.
 
 ## 2. Exclusive ownership and integration
 

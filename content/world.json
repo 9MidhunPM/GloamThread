@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "start_room": "r00",
+  "checkpoints": {
+    "checkpoint_a": "r00",
+    "checkpoint_b": "r04"
+  },
+  "rooms": [
+    {
+      "id": "r00",
+      "name": "Lantern Rest",
+      "challenge_rewards": []
+    },
+    {
+      "id": "r01",
+      "name": "Mossfoot Atrium",
+      "challenge_rewards": []
+    },
+    {
+      "id": "r02",
+      "name": "Spindle Steps",
+      "challenge_rewards": [
+        "bridge_spindle"
+      ]
+    },
+    {
+      "id": "r03",
+      "name": "Glasswing Gallery",
+      "challenge_rewards": []
+    },
+    {
+      "id": "r04",
+      "name": "Warden's Landing",
+      "challenge_rewards": []
+    },
+    {
+      "id": "r05",
+      "name": "Broken Bell",
+      "challenge_rewards": [
+        "boss_spoolwarden",
+        "threadstep",
+        "shortcut_bell"
+      ]
+    },
+    {
+      "id": "r06",
+      "name": "Severed Causeway",
+      "challenge_rewards": [
+        "bridge_causeway"
+      ]
+    },
+    {
+      "id": "r07",
+      "name": "Lantern Loom",
+      "challenge_rewards": [
+        "loom_restored"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "a": "r00",
+      "b": "r01",
+      "requires_all": []
+    },
+    {
+      "a": "r01",
+      "b": "r02",
+      "requires_all": []
+    },
+    {
+      "a": "r02",
+      "b": "r03",
+      "requires_all": [
+        "bridge_spindle"
+      ]
+    },
+    {
+      "a": "r03",
+      "b": "r04",
+      "requires_all": []
+    },
+    {
+      "a": "r04",
+      "b": "r05",
+      "requires_all": []
+    },
+    {
+      "a": "r05",
+      "b": "r01",
+      "requires_all": [
+        "shortcut_bell"
+      ]
+    },
+    {
+      "a": "r01",
+      "b": "r06",
+      "requires_all": [
+        "threadstep"
+      ]
+    },
+    {
+      "a": "r06",
+      "b": "r07",
+      "requires_all": [
+        "bridge_causeway"
+      ]
+    },
+    {
+      "a": "r07",
+      "b": "r00",
+      "requires_all": [
+        "loom_restored"
+      ]
+    }
+  ],
+  "content_version": "phase1-v1"
+}

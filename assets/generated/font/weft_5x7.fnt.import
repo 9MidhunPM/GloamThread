@@ -1,0 +1,17 @@
+[remap]
+
+importer="font_data_bmfont"
+type="FontFile"
+uid="uid://fhle1oq6dktv"
+path="res://.godot/imported/weft_5x7.fnt-7b2d24f31805857bc85280ca1e1163ba.fontdata"
+
+[deps]
+
+source_file="res://assets/generated/font/weft_5x7.fnt"
+dest_files=["res://.godot/imported/weft_5x7.fnt-7b2d24f31805857bc85280ca1e1163ba.fontdata"]
+
+[params]
+
+fallbacks=[]
+compress=true
+scaling_mode=2
