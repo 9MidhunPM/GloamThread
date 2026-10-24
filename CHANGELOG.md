@@ -308,6 +308,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-world -->
 
+### 2026-10-25 01:39:12 +0530 — Clear water ownership before recovery replacement
+
+- Fixed a stale physics RID when recovery replaced a room during Threadstep: couriers now cancel their water exceptions while the previous water body still exists, before that room is freed. Null-catalog fixtures also avoid requesting unavailable background music.
+- Validation: both overhead_session scenarios PASS. New controlled regression proves ninety-tick revive completion wins at the 720-tick timeout boundary, rescuer damage interrupts the hold, timeout/wipe recover once, boss/unlock/shortcut commit before a same-tick wipe, cleared boss stays absent, and mid-water recovery clears its exception and restores a complete dry footprint.
+- Limits: explicitly controlled coordinator fixtures and synthetic owned movement; no claim of complete normal-input campaign or final rendered assets.
+
+
 ### 2026-10-25 01:36:43 +0530 — Overhead session and per-courier guidance
 
 - Integrated actor/input branch ancestry, wired every courier/enemy to the room's planar collision queries and separate water body, and placed props with actors under shared feet sorting. Hazards use the real planar hurt rectangle and knockback; the camera follows the ground-plane centre.

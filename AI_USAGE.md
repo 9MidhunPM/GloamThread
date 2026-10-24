@@ -103,6 +103,12 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-world -->
 
+### 2026-10-25 01:39:12 +0530 — Mid-Threadstep recovery diagnosis
+
+- Tool: OpenAI Codex added the controlled transaction scenario, reproduced the stale-water-RID engine error, and fixed lifetime ordering in GameSession without modifying actor physics.
+- Checks: overhead_session PASS 2/2 with no runtime errors. The regression failed before the ordering fix and passes afterward; generated scenario UID retained. Human review and integrated production playthrough remain pending.
+
+
 ### 2026-10-25 01:36:43 +0530 — Shared overhead session integration
 
 - Tool: OpenAI Codex connected the exclusive GameSession/SplitPresentation/FollowCamera files to the merged actor/input APIs and authored an isolated session regression. Added completion-based Oru progress and per-slot guidance without changing actor/input sources.

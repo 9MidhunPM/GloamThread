@@ -149,6 +149,10 @@ func _load_room(room_id: String, entrance: String, restore_health: bool) -> bool
 		startup_error = "Missing paired room entrance: %s/%s" % [room_id, entrance]
 		return false
 	var next_room := Room.build(definition, not fixture_mode, catalog.assets if catalog != null else null, progress.flags)
+	# Cancel water exceptions while the old PhysicsBody2D still exists. Freeing
+	# it first leaves a stale RID in a courier interrupted mid-Threadstep.
+	for player in players:
+		player.set_room_context(Rect2(), Callable(), Callable(), null)
 	_clear_encounter()
 	if is_instance_valid(room):
 		if is_instance_valid(room.entity_visuals) and not room.is_ancestor_of(room.entity_visuals):
@@ -361,7 +365,8 @@ func _latch(entity: Dictionary, point: Dictionary, slot: int) -> void:
 			AudioDirector.play_cue("bridge_restored")
 		else:
 			AudioDirector.play_cue("loom_restored")
-			AudioDirector.play_music("ending")
+			if not fixture_mode:
+				AudioDirector.play_music("ending")
 			dialogue_id = "ending"
 			request_mode("dialogue", slot)
 
@@ -435,7 +440,8 @@ func _perform_recovery(reason: String) -> void:
 func _on_enemy_defeated(enemy: CombatEnemy) -> void:
 	if enemy.kind == "spoolwarden":
 		_commit_flags(["boss_spoolwarden", "threadstep", "shortcut_bell"])
-		AudioDirector.play_music("exploration")
+		if not fixture_mode:
+			AudioDirector.play_music("exploration")
 		notice.emit("Threadstep unlocked for both couriers. Dash opens the old path.")
 
 
