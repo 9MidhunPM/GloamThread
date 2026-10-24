@@ -6,7 +6,7 @@
   "sources": {
     "assets/arena/source/builtin_profiles.json": "bd7dc779fa2103abd3d4d0e256d1280854086375a2c163658850683f67e7a224",
     "tools/forge/art.py": "1681cb1e8cac0a49f64e4a5b05b18d3915c9f925142b67d67b5fdf38e7f81a7f",
-    "tools/forge/rigs.py": "4cda4747967f09ccb18ec0a3d445b70b19ca946629d2fd15c6bb4b97c7da3354"
+    "tools/forge/rigs.py": "7361b6af90d2abd44dbfabbb5e606a935e9b46471f871f03018dfe381a9f0220"
   },
   "notice": "Source-authored offline built-in. Not a live generated or human-reviewed character."
 }
