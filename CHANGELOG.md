@@ -204,6 +204,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-world -->
 
+### 2026-10-25 01:28:24 +0530 — Overhead content admission and route guards
+
+- Migrated the public content validator to overhead-v1, the planar collider and exact opaque terrain slots. It now rejects unsafe floor entrances, missing cross-room references, disconnected rallies/interactions, bypassable paired repairs and removed Threadstep lessons. Both bridges require dry banks separated by at least four water tiles in Python and the runtime parser.
+- Kept opaque terrain below feet-sorted props/actors independently of sibling order and retained generated scenario UIDs. Removed obsolete diagnostic-mover parsing.
+- Validation: `python3 -m unittest discover -s tools/tests -p test_content.py` PASS 29 tests using temporary overhead catalog metadata; `godot --headless --fixed-fps 60 --path . --script tests/run_tests.gd -- --filter overhead_world` PASS 2/2; `git diff --check` PASS. Editor import produced no script errors, but sandbox TCP-listen errors remain separate from the clean runtime run.
+- Limits: the branch's full `python3 tools/validate_content.py` correctly fails on eight outstanding manifest/profile/theme/dialogue version or mapping mismatches owned by other lanes. No integrated campaign, native art or controller-quality claim.
+
+
 ### 2026-10-25 01:21:27 +0530 — Authored overhead district route
 
 - Reauthored r01-r07 as planar rooms: the remembered Atrium branch, separate Spindle anchor approaches, Gallery encounter/secret alcove, checkpoint respite, roomy Bell arena, vertical Causeway dash lesson and opposing Loom stations. Added dry bank markers, recognizable original props, two-tile mandatory water crossings and four-tile paired repair barriers.

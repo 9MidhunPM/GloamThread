@@ -64,6 +64,13 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-world -->
 
+### 2026-10-25 01:28:24 +0530 — Overhead validator and admission regressions
+
+- Tool: OpenAI Codex implemented the world lane's overhead schema/route validation and 29 focused Python cases, aligned runtime bridge admission, and corrected opaque-ground draw ordering after source review.
+- Checks: all 29 Python cases and both Godot overhead world scenarios pass. Temporary synthetic metadata isolates this lane from pending original-art/catalog work; production validation remains visibly failing until those bundles are integrated. Import-only sandbox socket errors are disclosed rather than treated as gameplay failure.
+- Human review: pending. No external content or fabricated playthrough/rendering evidence; ordinary-input integrated acceptance remains the integrator's gate.
+
+
 ### 2026-10-25 01:21:27 +0530 — Overhead room authoring and route checks
 
 - Tool: OpenAI Codex authored the seven remaining room JSON sources and a focused world-route scenario within the exclusive world lane. No outside maps/assets were used.
