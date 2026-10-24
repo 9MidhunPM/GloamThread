@@ -1,0 +1,24 @@
+{
+	"display": "Wayland",
+	"duration_seconds": 10.001697,
+	"engine": "4.7.2-stable (arch_linux)",
+	"final_phase": "combat",
+	"fixture": "Production App with 32 manually spawned ordinary enemies, replacement spawns and ordinary owned attacks. Debug crowd fixture, not a normal route.",
+	"human_playtest": false,
+	"median_frame_ms": 8.647,
+	"observed_max_enemies": 32,
+	"observed_max_projectiles": 55,
+	"p95_frame_ms": 14.446,
+	"p95_physics_ms": 15.21,
+	"p95_process_ms": 106.194,
+	"render_frames": 1054,
+	"renderer": "Mesa Intel(R) Graphics (ARL)",
+	"root_size": [
+		1920,
+		1080
+	],
+	"world_size": [
+		640,
+		360
+	]
+}

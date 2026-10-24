@@ -11,9 +11,11 @@ config_version=5
 [application]
 
 config/name="Gloamthread: Two Ends"
-config/description="Two couriers, two views of one kingdom, and one thread that restores the way home. Local two-player split-screen co-op."
-config/version="0.1.0-demo"
-run/main_scene="res://scenes/app/boot.tscn"
+config/description="Draw a fighter. Build a ridiculous run. Solo or local co-op wave combat on one shared arena."
+config/version="0.2.0-arena"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="Gloamthread-Arena"
+run/main_scene="res://scenes/arena/boot.tscn"
 run/main_scene.qa_route="res://tools/qa_boot.tscn"
 run/main_loop_type="SceneTree"
 run/main_loop_type.qa_route="QaRoute"
@@ -33,12 +35,17 @@ gdscript/warnings/unsafe_method_access=1
 gdscript/warnings/unsafe_cast=1
 gdscript/warnings/unsafe_call_argument=1
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/arena_export/plugin.cfg")
+
 [display]
 
-window/size/viewport_width=960
-window/size/viewport_height=360
+window/size/viewport_width=1920
+window/size/viewport_height=1080
 window/size/window_width_override=1920
-window/size/window_height_override=720
+window/size/window_height_override=1080
+window/size/mode=3
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 window/stretch/scale_mode="integer"
