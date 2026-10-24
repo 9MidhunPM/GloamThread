@@ -2,17 +2,17 @@
 
 ## Active mission
 
-Build and maintain the approved solo/two-player shared-screen wave fighter in [docs/WAVE_FIGHTER_SPEC.md](docs/WAVE_FIGHTER_SPEC.md). It supersedes the previous campaign/overhead requirements. Read [docs/STATUS.md](docs/STATUS.md) first for actual implementation/evidence; use [README.md](README.md) and [docs/ARENA_DEMO.md](docs/ARENA_DEMO.md) to launch. The old campaign and overhead branches/evidence remain historical references, not acceptance of the current game.
+Build and maintain the approved solo/two-player shared-screen wave fighter in [docs/WAVE_FIGHTER_SPEC.md](docs/WAVE_FIGHTER_SPEC.md). It supersedes the previous campaign/overhead requirements. The current approved extension is [docs/SCROLLING_WORLD_PLAN.md](docs/SCROLLING_WORLD_PLAN.md). Read [docs/STATUS.md](docs/STATUS.md) first for actual implementation/evidence; use [README.md](README.md) and [docs/ARENA_DEMO.md](docs/ARENA_DEMO.md) to launch. The old campaign and overhead branches/evidence remain historical references, not acceptance of the current game.
 
 Twenty waves, four stages/bosses, optional endless, personal last-hit wallets and between-wave shops; fixed roster per run. Run power resets. Saved creations/settings/scores persist. Three body rigs and six game-owned ability families support drawn/uploaded characters. Current original and retained-generation content must remain reproducible.
 
 ## Runtime boundaries
 
-- Godot4.7.2standard, typed GDScript, Compatibility, Python3authoring. One authoritative shared world, one arena camera, one audio mix. Target1920×1080with640×360nearest/integer pixel world; letterbox other aspect ratios.
+- Godot4.7.2standard, typed GDScript, Compatibility, Python3authoring. One authoritative shared world, merged/split scrolling cameras, one audio mix. Target1920×1080with640×360nearest/integer pixel world; letterbox other aspect ratios.
 - Godot60Hzphysics owns combat/timers. Pause/focus/device loss freezes shared combat without wall-clock catch-up. One owned input source per player; flush held actions at mode transitions, preserve simultaneous shop confirmations.
 - No friendly fire/body blocking. Gameplay-owned colliders, timing, stats and finite ability IDs remain independent of images/body rigs. Generated content never supplies scripts, paths or executable behaviour.
 - Session alone owns wave clear/wipe, rewards, revival, shops and results. Reward each accepted death once to lethal source; DOT/chain/projectiles retain ownership. Resolve final clear before same-tick wipe. Both shop panels must ready before advancing.
-- Network/model calls are optional pregame authoring through a separate local Python worker. Credentials stay in ignored.env, outside Godot/exports/logs. Initial model experiment has a durable0.50USDcap; no automatic retries, fallback or ledger resets. Cached crop/mask/pivot corrections use SDK-free local conversion.
+- Network/model calls are optional pregame authoring through a separate local Python worker. Credentials stay in ignored.env, outside Godot/exports/logs. The configured local model allowance is2USD with0.50USDper job; no automatic retries, fallback or ledger resets. Cached crop/mask/pivot corrections use SDK-free local conversion.
 - A candidate is accepted only after full bundle admission. Preserve previous accepted art/jobs on failure, retain source/provenance and display genuine errors. Save settings/scores/creation libraries separately from run power.
 
 ## Content and ownership

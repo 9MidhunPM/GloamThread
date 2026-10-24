@@ -1,5 +1,10 @@
 # Change log
 
+### 2026-10-25T04:57:53+05:30 — Begin approved scrolling-world extension
+
+- Recorded the selected2USDtotal/0.50USDjob budget, immutable4-to16chunk world, free intermissions, dynamic split and original scenery/loot target with explicit parallel contracts. Updated active agent/status guidance; preserved the released arena.
+- Validation: clean branch from2a6e7b8; baseline12arena scenarios pass. New runtime and generation changes are in progress and not yet accepted.
+
 ### 2026-10-25T04:26:31+05:30 — Publish the tested Linux arena candidate
 
 - Merged the authorized wave implementation to main, exported clean implementation4e6fd56 and published v0.2.0-arena with exact BUILD identity/checksum. Replaced stale campaign submission text and linked the current download.

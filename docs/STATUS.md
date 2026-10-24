@@ -1,5 +1,7 @@
 # Implementation status
 
+Current work: implementing the approved [expanding-world and budget extension](SCROLLING_WORLD_PLAN.md). The records below describe the preceding released arena; they do not establish acceptance of the new scrolling/split map. Baseline12arena scenarios passed before this work.
+
 Active product: **solo/two-player shared-screen wave fighter**, approved 25 October 2026. [Contract](WAVE_FIGHTER_SPEC.md), [Agent 2 brief](AGENT_2_WAVE_CONTENT.md), [play guide](ARENA_DEMO.md). The earlier campaign and overhead implementations remain historical.
 
 ## Implemented
