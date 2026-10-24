@@ -70,6 +70,11 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-input -->
 
+### 2026-10-25T01:24:34+05:30 — Codex: pure quest and route guidance
+
+Codex authored QuestDirector and fixture regressions in the exclusive input worktree. The module reads team/world/room state and returns objectives/targets without scene or campaign mutations. Human review is pending. Focused Godot guidance checks and import passed; rendered HUD/map integration remains with the integrator.
+
+
 ### 2026-10-25T01:18:32+05:30 — Codex: protect foreign backups
 
 Codex identified and fixed silent replacement of incompatible backup data during ordinary rotation, with actual-file newer/corrupt backup regressions. Human review is pending. Both overhead save scenarios pass; storage hardware fault acceptance remains unverified.

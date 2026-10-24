@@ -210,6 +210,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-input -->
 
+### 2026-10-25T01:24:34+05:30 — Derive overhead objectives and local route targets
+
+- Changed: Added pure QuestDirector queries for Oru, Spindle, Spoolwarden, Causeway, Loom and home objectives. Breadth-first routing uses only unlocked declared world connections, including the post-boss shortcut. Local targets expose authored NPC/boss/anchor/station identities and safe exit feet positions; unreachable routes are explicit and yield no invented targets.
+- Why: The integrator needs one reliable guidance boundary for HUD/map/proximity hints without making presentation own progression.
+- Validation: Godot4.7.2 overhead_quest_guidance PASS1/1 using pure fixtures: six stages, backtracking, locked/unlocked shortcuts, unreachable/malformed gates, local targets, canonical feet and no world/progress mutation. Import and whitespace checks pass.
+- Limitations: Root wiring, rendered guidance and ordinary overhead traversal are not acceptance evidence from these fixtures.
+
+
 ### 2026-10-25T01:18:32+05:30 — Preserve foreign backup data before rotation
 
 - Changed: Normal save rotation now retains rejected copies of unsupported/newer or damaged existing backup files before installing a validated previous save. Failed preservation keeps the prior active save intact and returns a visible error. Primary replacement uses the same small preservation helper.
