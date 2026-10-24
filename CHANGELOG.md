@@ -198,6 +198,54 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T01:21:06+05:30 — Safe team Threadstep crossings
+
+- Changed: Threadstep now travels sixty pixels over twelve ticks with a forty-five-tick cooldown; room callbacks validate dry departure, full-footprint landing and swept walls. Only the known water body is excepted for that courier.
+- Why: Allow forgiving bounded water traversal while preserving walls, partner collision and safe interruption/recovery.
+- Validation: Isolated Godot 4.7.2 actor scenarios pass 6/6, including two-tile crossing, unlock/cooldown, partial landing rejection, paused crossing, damage/geometry rollback and room-reset exception cleanup.
+- Limitations: Dedicated callback/physics fixtures; complete authored-room integration remains with the world/session lanes.
+
+
+### 2026-10-25T01:19:15+05:30 — Swept overhead Spore Bolt
+
+- Changed: Spore Bolt follows a normalized two-axis direction, chooses earliest swept hurtbox contact before terrain, starts at the courier ground centre and expires after forty-eight physics ticks.
+- Why: Prevent tree-order hits, vertical-shot errors, duplicate impacts and close-wall spawn bypasses while retaining Neri slow.
+- Validation: Isolated Godot 4.7.2 actor scenarios pass 5/5: nearest ordering, vertical/diagonal hits, wall rejection, bounded lifetime and owned tick-eight/twenty-two-tick special emission.
+- Limitations: Null-catalog fixtures; water-flight policy and original effect presentation await integration.
+
+
+### 2026-10-25T01:17:53+05:30 — Ground-plane Ember Arc
+
+- Changed: Ember Arc emits one 120-degree close fan on tick eight, with bounded reach, whole-hurtbox intersection, wall line-of-sight and a twenty-two-tick special sequence.
+- Why: Give Tavi a distinct directional close-range stagger tool on the overhead plane.
+- Validation: Isolated Godot 4.7.2 actor scenarios pass 4/4, including fan shoulders, excluded rear/flank/distant targets, emission/recovery ticks, damage/stagger values and wall rejection.
+- Limitations: Null-catalog fixture; Spore Bolt remains the next projectile migration.
+
+
+### 2026-10-25T01:17:03+05:30 — Directional slash and input buffer
+
+- Changed: Slash now uses cardinal ground-plane reach, six windup/active/recovery ticks, a six-tick press buffer and unique per-swing hit sets; directed effects rotate instead of mirroring.
+- Why: Preserve responsive combos and readable four-direction combat without diagonal or shared-player hit ambiguity.
+- Validation: Isolated Godot 4.7.2 scenarios pass 3/3: four facing directions, exact timing, one hit per swing, no held-button repetition, buffer expiry, independent simultaneous swings and no friendly fire.
+- Limitations: Stationary enemy fixtures; directional original-art review and planar special/enemy migration remain pending.
+
+
+### 2026-10-25T01:15:39+05:30 — Bounded overhead roll
+
+- Changed: The former jump bit starts a twelve-tick, 36px cardinal roll with six invulnerable ticks and a 36-tick cooldown; damage, restore and pause retain explicit interruption semantics.
+- Why: Replace platform jumping with a readable, short defensive action that respects water and wall collision.
+- Validation: Isolated Godot 4.7.2 actor scenarios pass 2/2, including exact displacement, direction lock, six-tick evasion, paused timers and real water/wall bodies.
+- Limitations: Null-catalog fixture; the new roll cue is pending the parallel authored audio packet.
+
+
+### 2026-10-25T01:12:16+05:30 — Overhead courier motor and room context
+
+- Changed: Replaced gravity/platform movement with floating XY movement, 12x10 feet collision, cardinal facing and directional animation keys; introduced set_room_context(bounds, can_stand, can_threadstep, water_body).
+- Why: Establish the actor-side ground-plane contract before world integration. Existing health/revive APIs and owned snapshots remain intact.
+- Validation: Godot 4.7.2 isolated import and overhead_actor_motor scenario pass; actual bodies prove equal diagonal speed, analogue magnitude, wall/bounds collision, owner isolation, pause and stationary downing.
+- Limitations: Null-catalog physics fixture only; roll, new attack timing, water dash and planar enemies remain subsequent actor slices. No overhead art/rendered/full-route claim.
+
+
 
 
 ## Overhead world lane

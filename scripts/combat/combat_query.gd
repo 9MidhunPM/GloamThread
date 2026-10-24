@@ -37,7 +37,29 @@ static func enemies_in(actor: Node2D, rectangle: Rect2) -> Array[Node2D]:
 	return targets
 
 
-static func effect(actor: Node2D, catalog: AssetCatalog, asset_id: String, at: Vector2, facing: int = 1) -> void:
+## A 120-degree close fan on the ground plane, tested against whole hurtboxes.
+static func enemies_in_fan(actor: Node2D, origin: Vector2, direction: Vector2, reach: float) -> Array[Node2D]:
+	var fan := PackedVector2Array([origin])
+	for step in 13:
+		var angle := direction.angle() - PI / 3.0 + float(step) * PI / 18.0
+		fan.append(origin + Vector2.from_angle(angle) * reach)
+	var targets: Array[Node2D] = []
+	for enemy in enemies_in(actor, Rect2(origin - Vector2.ONE * reach, Vector2.ONE * reach * 2.0)):
+		var box: Rect2 = enemy.call("hurt_rect")
+		var corners := PackedVector2Array([box.position, Vector2(box.end.x, box.position.y), box.end, Vector2(box.position.x, box.end.y)])
+		if not Geometry2D.intersect_polygons(fan, corners).is_empty():
+			targets.append(enemy)
+	return targets
+
+
+## Cardinal attack footprint around the actor's ground-plane centre.
+static func directional_rect(origin: Vector2, direction: Vector2, reach: float, width: float) -> Rect2:
+	if absf(direction.x) > absf(direction.y):
+		return Rect2(origin + Vector2(0.0 if direction.x > 0.0 else -reach, -width * 0.5), Vector2(reach, width))
+	return Rect2(origin + Vector2(-width * 0.5, 0.0 if direction.y > 0.0 else -reach), Vector2(width, reach))
+
+
+static func effect(actor: Node2D, catalog: AssetCatalog, asset_id: String, at: Vector2, direction: Vector2 = Vector2.RIGHT) -> void:
 	if catalog == null or not catalog.entries.has(asset_id):
 		return
 	var effect_node := Node2D.new()
@@ -52,7 +74,7 @@ static func effect(actor: Node2D, catalog: AssetCatalog, asset_id: String, at: V
 	effect_node.add_child(animator)
 	actor.get_parent().add_child(effect_node)
 	effect_node.global_position = at
-	effect_node.scale.x = facing
+	effect_node.rotation = direction.angle()
 	animator.call("configure", sprite, catalog, asset_id)
 	var clips: Dictionary = catalog.entries[asset_id].get("animations", {})
 	if not clips.is_empty():
