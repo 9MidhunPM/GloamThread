@@ -181,10 +181,10 @@ func _navigate(direction: int) -> void:
 	var selected_rect := _row_panels[_selected].get_global_rect()
 	var viewport_rect := _scroll.get_global_rect()
 	# Long bodies remain readable before moving on to the action rows.
-	if direction > 0 and selected_rect.position.y >= viewport_rect.end.y:
+	if direction > 0 and selected_rect.end.y > viewport_rect.end.y:
 		_scroll.scroll_vertical += SCROLL_STEP
 		return
-	if direction < 0 and selected_rect.end.y <= viewport_rect.position.y:
+	if direction < 0 and selected_rect.position.y < viewport_rect.position.y:
 		_scroll.scroll_vertical -= SCROLL_STEP
 		return
 	var next := _selected + direction
@@ -211,7 +211,9 @@ func _reset_repeat() -> void:
 
 func _reject(message: String) -> void:
 	last_error = message
-	push_error(message)
+	# Recoverable caller validation retains the previous safe menu. Runtime
+	# errors must remain distinguishable to the integrated scenario logger.
+	push_warning(message)
 
 
 static func _glyph_text(text: String) -> String:
@@ -264,12 +266,16 @@ func _ensure_ui() -> void:
 	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_scroll.focus_mode = Control.FOCUS_NONE
 	_scroll.follow_focus = false
+	var scroll_inset := StyleBoxEmpty.new()
+	scroll_inset.content_margin_right = 12
+	_scroll.add_theme_stylebox_override("panel", scroll_inset)
 	_screen.add_child(_scroll)
 	var bar := _scroll.get_v_scroll_bar()
 	bar.focus_mode = Control.FOCUS_NONE
+	bar.custom_minimum_size.x = 8
 	bar.add_theme_stylebox_override("scroll", _box(BACKGROUND, BACKGROUND, 0))
 	for state: String in ["grabber", "grabber_highlight", "grabber_pressed"]:
-		bar.add_theme_stylebox_override(state, _box(EDGE if state == "grabber" else FOCUS, EDGE, 0))
+		bar.add_theme_stylebox_override(state, _box(Color("#737b83") if state == "grabber" else FOCUS, EDGE, 0))
 	var content := VBoxContainer.new()
 	content.name = "Content"
 	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -290,7 +296,8 @@ func _ensure_ui() -> void:
 	_footer = _label("Footer", 8)
 	_footer.position = Vector2(44, 312)
 	_footer.size = Vector2(872, 16)
-	_footer.clip_text = true
+	_footer.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_footer.max_lines_visible = 2
 	_screen.add_child(_footer)
 	if _font != null:
 		_apply_font()
@@ -364,13 +371,14 @@ func _rebuild_rows() -> void:
 			arrows.custom_minimum_size.x = 60
 			heading.add_child(arrows)
 		if not str(row["detail"]).is_empty():
-			var detail := _label("Detail", 8)
+			var detail := _label("Detail", 16)
 			detail.text = _glyph_text(row["detail"])
 			detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			detail.modulate = Color(0.78, 0.82, 0.86)
 			lines.add_child(detail)
 		if not row["enabled"]:
-			lines.modulate = Color(0.60, 0.64, 0.68)
+			lines.modulate = Color(0.72, 0.75, 0.78)
 		_rows_box.add_child(panel)
 		_row_panels.append(panel)
 		_row_marks.append(mark)

@@ -43,6 +43,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 2 — content and assets
 
+### 2026-10-25T00:06:44+05:30 — Complete UI layout and native-window verification
+
+- Changed: Added the extended UI layout/mouse scenario, explicit preview scene and reproducible private-Xvfb QA helper with real captures. Improved value/binding font size, scrollbar visibility/inset, long-row navigation and two-line footer prompts. Recoverable validation now warns instead of raising engine errors, preserving compatibility with Agent 1's strict error logger.
+- Why: Native review exposed invisible overflow and small critical values; the UI assignment also requires proof that global widget focus cannot bypass player ownership and that pixel scaling remains stable.
+- Validation: Six engine scenarios PASS, including two UI scenarios with 24 behavior groups. Native X11/Godot captures cover eight assigned kinds plus controls; non-owner input left pixels/actions unchanged, owner keyboard/mouse payloads matched, cancel/title/quit exited 0, 2x scaling matched pixels exactly, and the long footer wrapped into two lines. Pack, compilation and diff whitespace PASS. Debug-title matching in the new harness was corrected before its successful run. Temporary GUI processes were stopped.
+- Limitations: Native QA uses software llvmpipe and an isolated UI fixture with Dummy audio. It does not establish full application/campaign semantics, physical gamepads, keyboard rollover, performance or human playtests. Agent 1 owns integration and final release evidence; no application/session/storage files or global import sidecars changed.
+
 ### 2026-10-24T23:40:29+05:30 — Add the shared owner-controlled GameMenus component
 
 - Changed: Added the typed CanvasLayer menu renderer and public intent API, original-font layout, scrolling rows/body, owner-specific navigation, disabled/adjustable actions, repeat timing, guarded mouse events and shared-boundary input flushing. Added a real-engine UI scenario and a separate UI integration/evidence record.
