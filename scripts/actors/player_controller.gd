@@ -109,7 +109,8 @@ func _physics_process(delta: float) -> void:
 	# A buffered landing can already have queued upward velocity for this tick.
 	var grounded := is_on_floor() and velocity.y >= 0.0
 	if grounded:
-		_coyote_ticks = COYOTE_TICKS
+		# The departure tick is still grounded; retain six subsequent air ticks.
+		_coyote_ticks = COYOTE_TICKS + 1
 		_last_safe_feet = global_position
 		if dash_ticks == 0:
 			_air_dash_available = true

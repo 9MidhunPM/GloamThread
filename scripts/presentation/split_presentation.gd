@@ -42,6 +42,8 @@ func _ready() -> void:
 	camera_b = FollowCamera.new()
 	camera_b.name = "CameraB"
 	viewport_b.add_child(camera_b)
+	_hud_shade(0, 60)
+	_hud_shade(326, 34)
 	hud_a = _make_hud(8)
 	hud_b = _make_hud(488)
 	_objective_a = _make_objective(8)
@@ -81,10 +83,19 @@ func _world_branch(branch_name: String) -> Node2D:
 	return branch
 
 
+func _hud_shade(y: int, height: int) -> void:
+	var shade := ColorRect.new()
+	shade.position = Vector2(0, y)
+	shade.size = Vector2(960, height)
+	shade.color = Color(0.04, 0.06, 0.09, 0.88)
+	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(shade)
+
+
 func _make_hud(x: int) -> Label:
 	var label := Label.new()
 	label.position = Vector2(x, 25)
-	label.size = Vector2(460, 34)
+	label.size = Vector2(460, 40)
 	label.add_theme_font_size_override("font_size", 8)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(label)
@@ -153,10 +164,13 @@ func update_hud(players: Array[PlayerController], objective_text: String = "", h
 		if player.downed:
 			readiness = "Downed %.1fs | Revive %d%%" % [maxf(0, 720 - player.downed_ticks) / 60.0, player.revive_progress_ticks * 100 / 90]
 		label.text = "P%d %s | %s | %s" % [index + 1, name_text, device_name, readiness]
+		var bindings := InputRouter.bindings_of(index)
+		if bindings != null:
+			label.text += "\nJump %s  Slash %s  Special %s  Interact %s  Dash %s" % [bindings.prompt_label(CommandSnapshot.Action.JUMP), bindings.prompt_label(CommandSnapshot.Action.ATTACK), bindings.prompt_label(CommandSnapshot.Action.SPECIAL), bindings.prompt_label(CommandSnapshot.Action.INTERACT), bindings.prompt_label(CommandSnapshot.Action.DASH)]
 		if is_instance_valid(boss_actor):
 			label.text += "\nSpoolwarden %d/%d" % [boss_actor.health, boss_actor.max_health]
 		var objective_label: Label = _objective_a if index == 0 else _objective_b
-		objective_label.text = hint if not hint.is_empty() else objective_text
+		objective_label.text = hint.replace("Interact", bindings.prompt_label(CommandSnapshot.Action.INTERACT)) if not hint.is_empty() and bindings != null else objective_text
 		var hearts: Array[TextureRect] = _hearts_a if index == 0 else _hearts_b
 		for heart_index in hearts.size():
 			hearts[heart_index].visible = heart_index < player.max_hearts

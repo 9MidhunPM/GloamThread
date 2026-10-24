@@ -184,7 +184,7 @@ func set_progress(flags: Dictionary) -> void:
 			for requirement: String in item["requires_all"]:
 				open = open and bool(progress.get(requirement, false))
 			set_entity_state(item["id"], "open" if open else "locked")
-	if definition.id == "r00" and catalog != null and progress.get("loom_restored", false):
+	if catalog != null and progress.get("loom_restored", false):
 		for sprite: Sprite2D in _decor:
 			if sprite.get_meta("asset_id") == "props_v1":
 				var original: int = int(sprite.get_meta("original_frame"))

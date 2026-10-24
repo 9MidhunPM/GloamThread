@@ -6,6 +6,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 1 — runtime and integration
 
+### 2026-10-25T00:02:04+05:30 — Connect campaign menus and verify the complete route
+
+- Changed: True-merged Agent 2's owner-controlled menu component and connected title/New/Continue, explicit join, source/character selection, pause/map/dialogue, controls/remapping/deadzone, volume/reduced effects, recovery, reconnect and ending/replay. Added queued notices plus persistent save errors, per-player prompts and readable HUD backplates. Permanent room visuals refresh immediately.
+- Why: Make the shared campaign reachable through complete player-facing flows and prove authored rooms with real movement/combat rather than debug progression.
+- Validation: 18 engine scenarios PASS; complete actual-App normal-input route reaches ending with both couriers alive and no recovery. Six-hundred-tick movement replay matches at30/60/144; boundary tests found and fixed a one-tick coyote defect. Secret tests caught/fixed simultaneous reward cue duplication. Native 960x360 logical captures show original themes/boss/ending. Engine logger negative probe correctly exits1 on runtime exception. Full source render performance is below target and under investigation against export.
+- Review corrections: Title/quit retain unsaved campaigns for retry or explicit discard; missing pads fall back to a free keyboard zone, disconnected remapping cancels, and available players own reconnect menus. All18 integrated scenarios pass.
+- Limitations: Export/offline/performance verification and newer UI layout QA continue. Gamepad hardware, physical rollover, listening, fresh pairs, human duration/balance/fun remain unverified. NoPhase2 work added.
+
 ### 2026-10-24T23:36:24+05:30 — Integrate original production content and campaign core
 
 - Changed: True-merged the complete eight-room content branch. Added strict runtime catalogs, shared terrain/bridge/prop consumers, physics-driven sprite/effect animation and one audio mix. Implemented owned-input combat, both enemy types and boss, cooperative room/recovery/progression transactions, validated campaign backups and independent settings.
@@ -50,6 +58,12 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 2 — content and assets
 
+### 2026-10-24T23:40:29+05:30 — Add the shared owner-controlled GameMenus component
+
+- Changed: Added the typed CanvasLayer menu renderer and public intent API, original-font layout, scrolling rows/body, owner-specific navigation, disabled/adjustable actions, repeat timing, guarded mouse events and shared-boundary input flushing. Added a real-engine UI scenario and a separate UI integration/evidence record.
+- Why: Agent 1 assigned this exclusive UI vertical to unblock title/join/pause/map/dialogue/settings/reconnect/ending wiring while other workers implement gameplay and persistence. The component emits intents and leaves application decisions with Agent 1.
+- Validation: Baseline import, four existing engine scenarios and 15 Python tests PASS. New UI scenario first failed on missing implementation; final engine suite passes five scenarios including 13 UI behavior groups. Pack/link and diff checks PASS; independent source review found no blocker. Invalid-row fixtures intentionally emit error diagnostics. Direct standalone script checking lacked autoload globals; normal project scenario loading compiles/runs successfully.
+- Limitations: Native rendered layout, extended scrolling/mouse checks and real window input are still pending this core checkpoint. No full application, controller, rollover or human-playtest acceptance is claimed. Global importer sidecars and central application integration remain with Agent 1.
 ### 2026-10-24T23:06:44+05:30 — Tighten asset acceptance and improve room approaches
 
 - Changed: Reject invisible images/frames, changed canonical terrain silhouettes, duplicated decoded courier/background pixels and silent or near-silent PCM, with regression fixtures that update hashes correctly. Widened/inset east footholds in r02/r06, raised r03's optional hazard shelf for 80 px combat clearance, and restricted r06's catch shelf to westward recovery. Expanded labelled authoring previews and updated current content evidence.

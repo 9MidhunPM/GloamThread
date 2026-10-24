@@ -13,17 +13,17 @@ Devin Hack Kochi allows Devin and other AI tools, models and providers without m
 - **Project name:** Gloamthread: Two Ends
 - **Short description:** Two players share one computer and one physical world, but each sees it through a different visual theme (Ember and Moss). They fight, revive each other, restore broken bridges from paired anchors and reopen the Lantern Loom so a stranded district can cross home. It is for pairs who enjoy responsive action, exploration and solving a small problem together.
 - **Team:** Midhun P M ([9MidhunPM](https://github.com/9MidhunPM)) — solo, with coding-agent assistance recorded in [AI_USAGE.md](AI_USAGE.md).
-- **Working demo:** the eight-room production content and campaign/combat core are integrated on `feat/phase1-runtime`; menu, route and export acceptance are in progress. See "Current status" below.
+- **Working demo:** the eight-room adventure, menus and save/Continue flow are implemented on `feat/phase1-runtime`; native/export checks are in progress before candidate publication. See "Current status" below.
 - **Technology stack:** Godot 4.7.2 standard (typed GDScript, Compatibility renderer), Python 3 + Pillow + numpy for original asset/audio generation and validation, Git.
 
 ### Run the project
 
-The production art/audio bundle and shared gameplay core are integrated. The current branch is a development checkpoint: menu, complete route and export checks are still in progress.
+The production game includes title/join, all eight rooms, combat, cooperation, save/Continue, settings and an ending. Eighteen engine scenarios include a complete ordinary-input route; native/export acceptance is recorded separately.
 
 1. **Prerequisites and versions:** Arch Linux (first target), Godot **4.7.2 standard** (`godot --version` → `4.7.2.stable…`, not mono), Python ≥ 3.10 with Pillow and numpy, Git. Install with `sudo pacman -Syu --needed godot git python python-pillow python-numpy`. Details in [docs/SETUP.md](docs/SETUP.md).
 2. **Dependency installation:** none beyond the system packages above. No npm, .NET, C++, database or service.
 3. **Environment setup:** no environment variables, API keys or accounts. Phase 1 runs offline.
-4. **Import and launch:** run `godot --headless --path . --editor --import --quit`, then `godot --path .`. The current runtime uses the original production rooms, enemies and art. P1 uses A/D and Space, P2 arrows and `.`; Esc or Enter pauses both. On Wayland, `godot --display-driver wayland --path .` selects the native display driver. The complete adventure still needs acceptance checks.
+4. **Import and launch:** run `godot --headless --path . --editor --import --quit`, then `godot --path .`. The current runtime uses the original production rooms, enemies and art. Choose New journey and confirm the two input assignments. P1 uses WASD, Space jump, F slash, G special, E interact/revive and Shift dash. P2 uses arrows, Period jump, Comma slash, Slash special, M interact/revive and Apostrophe dash. Esc/Enter pause; Tab/Semicolon open the map. Menu selection uses the owner's Up/Down, Jump/Interact confirm and Pause cancel. On Wayland, `godot --display-driver wayland --path .` selects the native display driver. A full normal-input automated route reaches the actual ending; physical controller and fresh-pair playtests are still pending.
 5. **Run checks or tests:**
    - `python3 tools/preflight.py` — read-only toolchain check (works now).
    - `python3 tools/check_pack.py` — event guidance, document/link and example checks.
@@ -37,7 +37,7 @@ The production art/audio bundle and shared gameplay core are integrated. The cur
 
 - **Content branch:** eight authored rooms, fixed profiles, dialogue, 47 original manifested art/audio/font assets and the complete Python pipeline. Both full validators and 79 Python tests pass after content QA; two seed-18427 rebuilds matched. See [content evidence](evidence/content/README.md).
 - **Runtime branch:** production catalogs/animation/audio, combat, enemies/boss, team progression, anchors/exits/recovery and validated save/settings stores are integrated. Twelve engine scenarios passed from a fresh staged-file copy. See [runtime evidence](evidence/runtime/commands.md) and [movement limits](evidence/runtime/traversal.md).
-- **Known limitations:** the complete combat/recovery/cooperation/boss/dash/loom/save loop is not accepted. Physical room traversal, animation, listening, ordinary-input playthrough, gamepad hardware, export, performance and human playtests remain pending. Keyboard + keyboard is the primary input mode. [STATUS.md](docs/STATUS.md) records the current boundaries.
+- **Known limitations:** native/export checks are in progress; gamepad hardware, physical keyboard rollover, audio listening and fresh two-person playtests remain unverified. Human first-clear time, balance and enjoyment are not established by the automated route. Keyboard + keyboard is the primary input mode. [STATUS.md](docs/STATUS.md) records the current boundaries.
 - **Libraries, APIs, and public datasets used:** [Godot Engine](https://godotengine.org/) 4.7.2 (MIT), [Pillow](https://python-pillow.org/) (MIT-CMU), [NumPy](https://numpy.org/) (BSD-3). No game-content packs, stock art, fonts, music or sound libraries: every shipped sprite, tile, glyph, sound and line of dialogue is authored in this repository.
 
 ## Start in this order (design pack)

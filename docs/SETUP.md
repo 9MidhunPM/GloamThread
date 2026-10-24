@@ -56,7 +56,7 @@ python3 tools/preflight.py --godot /path/to/Godot_v4.7.2-stable_linux.x86_64
 4. Paste FIRST_AGENT_PROMPT.md's prompt block and start the build.
 5. Ask for the first one-room two-input proof early, then let the agent continue through the scoped MVP. Inspect visible output at each integration gate.
 
-The full original bundle and Python tools are being integrated with Agent 1's diagnostic boot/session and engine scenarios. The diagnostic checkpoint passed fresh import and four engine scenarios; this does not establish production gameplay after integration. Use [STATUS.md](STATUS.md) for verified checkpoints and the two agent briefs for ownership; the older handoff is historical context.
+The full original bundle, campaign runtime and menus are integrated. Eighteen engine scenarios include the actual-App eight-room route and real save handling; physical hardware, listening and fresh pairs remain separate. Use [STATUS.md](STATUS.md) for verified checkpoints and the two agent briefs for ownership; the older handoff is historical context.
 
 ## 5. Content and runtime commands
 
@@ -82,7 +82,7 @@ The scenario runner returns nonzero on failure. Agent 1 owns authoritative engin
 
 ## 6. Exporting a playable Linux build
 
-Once the game exists, install **matching 4.7.2 standard export templates** through Editor → Manage Export Templates, selecting Linux x86_64 as available. These are engine templates, not art/resource packs. In Project → Export, add a Linux preset and name it exactly `Linux`. Include the project's JSON/CSV data in export filters if it is loaded as plain files; test that the exported build can find it.
+The approved **matching 4.7.2 standard export templates** are installed on the build machine. On another machine, install them through Editor → Manage Export Templates, selecting Linux x86_64 as available. These are engine templates, not art/resource packs. In Project → Export, add a Linux preset and name it exactly `Linux`. Include the project's JSON/CSV data in export filters if it is loaded as plain files; test that the exported build can find it.
 
 The planned export commands are:
 

@@ -4,7 +4,7 @@
 
 Build the Phase 1 game in MVP.md: an original two-player local co-op action adventure with fixed split screen, two fixed characters and a complete eight-room story. All game content must be authored within this project. Prioritize responsive controls, readable combat and enjoyable cooperation before world size.
 
-M0 integration is in progress. Agent 1 has a verified diagnostic runtime tracer; Agent 2 has delivered the eight-room content bundle, 47 original assets and Python validators. Production runtime integration and full MVP acceptance remain unfinished. Read `docs/STATUS.md` for current evidence and `HANDOFF.md` for historical context. The earlier single-player HTML proof is a separate reference and supplies no co-op acceptance evidence.
+The eight-room campaign and production content are integrated on the runtime branch. Eighteen engine scenarios pass, including an actual-App ordinary-input route to the ending, movement/recovery boundaries and file persistence. Release packaging and native performance checks are underway; physical gamepads, listening and fresh pairs remain unverified. Read `docs/STATUS.md` for current evidence. `HANDOFF.md` retains the original historical M0 context. The earlier single-player HTML proof supplies no co-op acceptance evidence.
 
 ## Context map
 

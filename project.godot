@@ -12,8 +12,11 @@ config_version=5
 
 config/name="Gloamthread: Two Ends"
 config/description="Two couriers, two views of one kingdom, and one thread that restores the way home. Local two-player split-screen co-op."
-config/version="0.1.0-m0"
+config/version="0.1.0-demo"
 run/main_scene="res://scenes/app/boot.tscn"
+run/main_scene.qa_route="res://tools/qa_boot.tscn"
+run/main_loop_type="SceneTree"
+run/main_loop_type.qa_route="QaRoute"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 run/low_processor_mode=false
 

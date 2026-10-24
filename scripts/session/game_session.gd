@@ -182,6 +182,8 @@ func _load_room(room_id: String, entrance: String, restore_health: bool) -> bool
 			enemy.defeated.connect(_on_enemy_defeated)
 			presentation.actors.add_child(enemy)
 			enemies.append(enemy)
+		elif type == "checkpoint" and str(entity.checkpoint_id) == progress.checkpoint_id:
+			room.set_entity_state(str(entity.id), "checkpoint_lit")
 		elif type == "diagnostic_mover":
 			mover = DiagnosticMover.new()
 			mover.name = str(entity.id)
@@ -262,10 +264,11 @@ func _process_interactions() -> void:
 		if entity.type == "secret" and not progress.has_flag(str(entity.flag)):
 			for player in players:
 				if not player.downed and player.position.distance_to(_centre(entity.tile)) < 28.0:
-					_commit_flags([str(entity.flag)])
-					AudioDirector.play_cue("checkpoint")
-					notice.emit("Lantern charm found. Both couriers carry its light.")
-					_apply_charms()
+					if _commit_flags([str(entity.flag)]):
+						AudioDirector.play_cue("checkpoint")
+						notice.emit("Lantern charm found. Both couriers carry its light.")
+						_apply_charms()
+					break
 	for slot in 2:
 		var player := players[slot]
 		if player.downed:
@@ -279,7 +282,11 @@ func _process_interactions() -> void:
 			match str(entity.type):
 				"exit":
 					if _tile_rect(entity.rect).has_point(player.position):
-						interaction_hint = "Both couriers: rally here, then Interact"
+						var open := true
+						for flag: String in entity.requires_all:
+							open = open and progress.has_flag(flag)
+						if open:
+							interaction_hint = "Both couriers: rally here, then Interact"
 						if pressed:
 							request_transition(str(entity.id), slot)
 							return

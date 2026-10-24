@@ -1,29 +1,26 @@
 # Implementation status
 
-Updated 2026-10-24T23:36:24+05:30. The active runtime branch is integrating the full Phase 1 game; this is an implementation checkpoint, not final acceptance.
+Updated 2026-10-25T00:09:58+05:30. The implemented Phase 1 game is in final release-candidate verification. Fresh human/controller acceptance is separate.
 
 ## Implemented and verified
 
-- All eight authored rooms and 47 original manifested art/audio/font outputs are integrated from content checkpoint `af2cb4c`. Full asset/content validators pass. All 79 Python boundary, asset, audio and generator tests pass.
-- The production Godot boundary loads profiles, world, dialogue, rooms, cached sprite frames, animation tables, original font and looped WAV streams. Both theme terrain layers, decorative props and finite per-view backgrounds build from one canonical collision layout. A restored bridge adds one collision surface and updates both skins.
-- Shared-world players now have slash hit deduplication, Ember Arc, terrain-blocked Spore Bolt, immunity, down/revive state, one-way drop through and 72 px/12-tick Threadstep. Spoolmite, Wickwing and Spoolwarden have real attack states; optional Cross-stitch supports either role order.
-- GameSession owns distinct-player anchor latches, living-pair exit rally, deferred room/recovery transactions, checkpoints, secret, boss reward triple, loom restoration and return-ending state. Shared pause/map/dialogue/reconnect freeze the world; semantic audio events use one mix.
-- Campaign and separate settings repositories validate data, preserve backups, protect newer saves and report failures. Actual-file fault scenarios cover write/verify/rotate/replace and explicit recovery.
-- Fresh editor import passes without script/resource errors. The integrated engine suite passed 12/12 from a fresh staged-file copy. Isolated combat/production resource checks pass. Exact commands and limitations are in [runtime evidence](../evidence/runtime/commands.md).
-- Official standard 4.7.2 templates were downloaded with user approval and the Linux x86_64 templates installed. The archive matches the official asset SHA-256 `f298490b8d44d934be425a5a65a51bf15f422428b229a06a6e11d9ffea248011`.
+- Eight authored rooms, Tavi/Neri, two render-only themes over one shared world, Oru/dialogue, two ordinary enemy types, Spoolwarden, both specials, optional Cross-stitch, revive/recovery, checkpoints, distinct-player anchors, exit rally, Threadstep/shortcut, cosmetic secret, Loom and actual return-home ending/replay.
+- Title/New/Continue, explicit input/character assignment, per-owner pause/map/dialogue/settings, remapping/deadzone, volume/reduced effects and reconnect. Save failures remain visible and keep the campaign open before title/quit; explicit retry/discard choices are tested. Missing saved pads choose distinct available inputs. Disconnect cancels remapping and transfers menu control safely.
+- Strict catalogs eagerly resolve original resources before play. All47 manifested original art/audio/font outputs and all8rooms validate;79 Python tests pass. Editable generators/provenance remain in the repository.
+- **18 engine scenarios PASS**, including actual files and the actual-App ordinary-input campaign to ending (both alive, no recovery). Isolated fixtures test recovery/transactions/secret without being counted as the full route. Fresh staged-copy core import/test also passed.
+- Movement boundaries PASS at30/60/144 caps: six-tick coyote/buffer, seventh-tick expiry, short/full jumps, one-way/corner handling. The same600physics-tick input trace matches exactly on this machine. See [campaign evidence](../evidence/runtime/campaign.md).
+- Native source/Wayland and official Linux release/X11 automated routes reach the actual ending card with real frame-post-draw captures. The X11 release QA measured120FPS median through r05 on Intel Core Ultra7 255H / Mesa Intel ARL; exact raw samples, window dimensions and preliminary-build limits are being retained for final evidence. Source/Wayland was slower and is not the recommended baseline.
+- Full content true merge is `822aac2`; the separate UI core `c5b061f` is integrated with AppController. History and actual identities/timestamps remain intact on the authorized `9MidhunPM/GloamThread` remote.
 
-## In progress
+## Release work in progress
 
-- App menus, explicit join/source selection, remapping and all campaign screen flows are being connected. Agent 2 owns the menu presentation in a separate `feat/phase1-ui` checkout; Agent 1 owns app/session integration.
-- An ordinary-input fresh campaign route is being checked against actual physics. Draft dash gaps and recovery routes remain provisional until that run succeeds.
-- Linux export, visible native play, original animation review, listening and performance measurement follow the connected screens and route.
+- Matching official4.7.2 standard Linux templates are installed; official archive SHA256 verified. Linux/QA export presets work. Final shipping export, outside-checkout network-isolated route, package checksum, exact implementation SHA and release/main publication are next.
+- Agent2's extended rendered menu-layout QA is being integrated cumulatively. User-facing original-font states are reviewed at native resolution; no source preview is treated as gameplay evidence.
 
 ## Unverified acceptance
 
-- No physical gamepads or fresh two-person playtests are available. Keyboard + keyboard is primary; physical rollover is a hardware check. No hardware, human-fun or duration claims are inferred from synthetic inputs.
-- Whole-suite audio retirement is now awaited on the real mixing clock; the 12-scenario staged-copy run exits cleanly. The runner captures engine errors so a runtime exception cannot silently count as a passing scenario.
-- Full normal-control route, visible split-screen motion/audio, packaged offline launch and performance have not passed yet. The earlier single-player HTML proof supplies no co-op evidence.
+- Physical gamepads/hotplug, keyboard hardware rollover, audio listening and fresh two-person playtests are unavailable. Software input/reconnect and single-event audio tests do not establish those gates.
+- Human first-clear time, balance, clarity for new pairs and enjoyment remain unverified. The15–20minute target is not a measured result. Ship as a candidate for playtesting, not a fully accepted MVP.
+- Final shipping binary's offline/manual/performance acceptance is distinct from preliminary QA exports. No Phase2/3 work is included; the older single-player HTML proof passes no co-op gate.
 
-## Repository and event
-
-History retains the organizer-shared root and actual development commits. Only the authorized `9MidhunPM/GloamThread` remote is used. Current guidance is **Devin Hack Kochi** in [RULES.md](../RULES.md); historical event references are preserved as history. Agents follow [runtime](AGENT_1_RUNTIME.md) and [content](AGENT_2_CONTENT.md) ownership. No Phase 2/3 scope is included.
+Current event guidance is **Devin Hack Kochi** in [RULES.md](../RULES.md). The [runtime](AGENT_1_RUNTIME.md) and [content](AGENT_2_CONTENT.md) briefs record separate-checkout ownership. Older M0 notes in HANDOFF are historical.
