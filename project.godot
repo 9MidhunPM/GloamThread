@@ -1,0 +1,70 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Gloamthread: Two Ends"
+config/description="Two couriers, two views of one kingdom, and one thread that restores the way home. Local two-player split-screen co-op."
+config/version="0.1.0-m0"
+run/main_scene="res://scenes/app/boot.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+run/low_processor_mode=false
+
+[autoload]
+
+InputRouter="*res://scripts/input/input_router.gd"
+AudioDirector="*res://scripts/audio/audio_director.gd"
+
+[debug]
+
+gdscript/warnings/untyped_declaration=1
+gdscript/warnings/unsafe_property_access=1
+gdscript/warnings/unsafe_method_access=1
+gdscript/warnings/unsafe_cast=1
+gdscript/warnings/unsafe_call_argument=1
+
+[display]
+
+window/size/viewport_width=960
+window/size/viewport_height=360
+window/size/window_width_override=1920
+window/size/window_height_override=720
+window/stretch/mode="viewport"
+window/stretch/aspect="keep"
+window/stretch/scale_mode="integer"
+window/vsync/vsync_mode=1
+
+[layer_names]
+
+2d_render/layer_1="common"
+2d_render/layer_2="ember"
+2d_render/layer_3="moss"
+2d_physics/layer_1="world"
+2d_physics/layer_2="players"
+2d_physics/layer_3="enemies"
+2d_physics/layer_4="player_hurtbox"
+2d_physics/layer_5="enemy_hurtbox"
+2d_physics/layer_6="interactables"
+2d_physics/layer_7="hazards"
+2d_physics/layer_8="projectiles"
+
+[physics]
+
+common/physics_ticks_per_second=60
+common/max_physics_steps_per_frame=8
+2d/default_gravity=0.0
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/canvas_textures/default_texture_filter=0
+2d/snap/snap_2d_transforms_to_pixel=true
+environment/defaults/default_clear_color=Color(0.0627451, 0.0784314, 0.109804, 1)

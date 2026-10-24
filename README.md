@@ -55,6 +55,8 @@ Tavi, an Ember courier, and Neri, a Moss courier, carry the two ends of a living
 
 | File | Use it for |
 | --- | --- |
+| [HANDOFF.md](HANDOFF.md) | **Start here if you are the next agent:** current state, decisions, exact next steps |
+| [PLAN_PHASE1.md](docs/PLAN_PHASE1.md) | Full Phase 1 milestone plan with gates and verification |
 | [MVP.md](MVP.md) | Exact first-release scope, route, controls, acceptance and cuts |
 | [PRD.md](PRD.md) | Product requirements, player paths and larger-world direction |
 | [AGENTS.md](AGENTS.md) | Persistent rules for coding agents, including the repository workflow |
