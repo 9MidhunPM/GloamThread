@@ -112,6 +112,12 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-world -->
 
+### 2026-10-25 01:42:11 +0530 — Correct transient cooperative guidance
+
+- Tool: OpenAI Codex implemented the peer-reviewed per-slot target filter and ownership wording in Session/HUD, leaving QuestDirector pure. Added controlled anchor/Loom/downed guidance coverage and retained its generated UID.
+- Checks: overhead_session PASS 3/3. Peer read-only review identified the stale claimed-end compass target; root owns the separate App dialogue-completion wiring. Human/native visual review remains pending.
+
+
 ### 2026-10-25 01:39:12 +0530 — Mid-Threadstep recovery diagnosis
 
 - Tool: OpenAI Codex added the controlled transaction scenario, reproduced the stale-water-RID engine error, and fixed lifetime ordering in GameSession without modifying actor physics.

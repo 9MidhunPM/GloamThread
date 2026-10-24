@@ -154,7 +154,7 @@ func follow_players(players: Array[PlayerController], bounds: Rect2) -> void:
 	camera_b.configure(players[1], bounds)
 
 
-func update_hud(players: Array[PlayerController], objective_text: String = "", hints: Array[String] = [], boss_actor: CombatEnemy = null, team: TeamProgress = null, targets: Array[Dictionary] = []) -> void:
+func update_hud(players: Array[PlayerController], objective_text: String = "", hints: Array[String] = [], boss_actor: CombatEnemy = null, team: TeamProgress = null, targets_by_slot: Array = []) -> void:
 	if players.size() != 2:
 		return
 	for index in 2:
@@ -186,6 +186,9 @@ func update_hud(players: Array[PlayerController], objective_text: String = "", h
 			hint = hint.replace("Interact", bindings.prompt_label(CommandSnapshot.Action.INTERACT)) if not player.downed else hint
 		objective_label.text = hint if not hint.is_empty() else objective_text
 		if hint.is_empty() and not player.downed:
+			var targets: Array[Dictionary] = []
+			if index < targets_by_slot.size() and targets_by_slot[index] is Array:
+				targets.assign(targets_by_slot[index])
 			var direction := _target_hint(player, targets)
 			if not direction.is_empty():
 				objective_label.text += "\n" + direction

@@ -96,7 +96,7 @@ func _physics_process(_delta: float) -> void:
 		return
 	_process_interactions()
 	_damaged_slots.clear()
-	presentation.update_hud(players, objective(), interaction_hints, boss(), progress, local_targets())
+	_refresh_hud()
 
 
 func _notification(what: int) -> void:
@@ -328,7 +328,12 @@ func _process_interactions() -> void:
 					for point: Dictionary in points:
 						if player.position.distance_to(_feet(point.tile)) <= 36.0:
 							var held: Dictionary = _latches.get(flag, {})
-							interaction_hints[slot] = "Your end is held. Your partner takes the other." if held.has(point.id) else "Interact: hold this end; partner takes the other"
+							if held.has(point.id):
+								interaction_hints[slot] = "Your end is held; partner takes the other" if int(held[point.id]) == slot else "Partner holds this end; take the other"
+							elif slot in held.values():
+								interaction_hints[slot] = "Your end is held; partner takes the other"
+							else:
+								interaction_hints[slot] = "Interact: hold this end; partner takes the other"
 							if pressed:
 								_latch(entity, point, slot)
 								# Both owned edges may latch in one tick; do not discard P2.
@@ -492,10 +497,29 @@ func guidance() -> Dictionary:
 	return Quest.describe(progress, current_room_id, catalog.world)
 
 
-func local_targets() -> Array[Dictionary]:
+func local_targets(slot: int = -1) -> Array[Dictionary]:
 	if not is_instance_valid(room):
 		return []
-	return Quest.local_targets(room.definition, guidance())
+	var targets := Quest.local_targets(room.definition, guidance())
+	if slot not in [0, 1]:
+		return targets
+	if players[slot].downed:
+		return []
+	var available: Array[Dictionary] = []
+	for target: Dictionary in targets:
+		if target.kind not in ["anchor", "station"]:
+			available.append(target)
+			continue
+		var held: Dictionary = {}
+		for entity: Dictionary in room.definition.entities:
+			if entity.id == target.parent_id:
+				held = _latches.get(str(entity.get("flag", "")), {})
+				break
+		# A courier who already took an end has no second assignment. The
+		# unassigned partner is guided only to the remaining unclaimed point.
+		if not held.has(target.entity_id) and slot not in held.values():
+			available.append(target)
+	return available
 
 
 func objective() -> String:
@@ -504,7 +528,7 @@ func objective() -> String:
 
 func _refresh_hud() -> void:
 	if is_instance_valid(presentation):
-		presentation.update_hud(players, objective(), interaction_hints, boss(), progress, local_targets())
+		presentation.update_hud(players, objective(), interaction_hints, boss(), progress, [local_targets(0), local_targets(1)])
 
 
 func _locked_hint(required: Array) -> String:

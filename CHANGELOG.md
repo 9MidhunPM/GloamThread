@@ -332,6 +332,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-world -->
 
+### 2026-10-25 01:42:11 +0530 — Guide each courier to their remaining paired end
+
+- Filtered transient anchor/Loom targets per living slot while retaining the pure QuestDirector/map result. A courier who has claimed an end receives no second assignment; their partner is guided only to the unclaimed end. Nearby ownership hints distinguish your held end from your partner's.
+- Validation: overhead_session PASS 3/3. New guidance scenario uses real authored coordinates and world metadata to verify both anchor/station assignments, compass direction, immediate onward guidance after repair and passive downed rescue status. The preceding combined actor/input/world/session suite passed 21/21 after the actor fixture correction.
+- Limits: metadata-only controlled placements; final catalog/art and ordinary-input campaign are still independent gates.
+
+
 ### 2026-10-25 01:39:12 +0530 — Clear water ownership before recovery replacement
 
 - Fixed a stale physics RID when recovery replaced a room during Threadstep: couriers now cancel their water exceptions while the previous water body still exists, before that room is freed. Null-catalog fixtures also avoid requesting unavailable background music.
