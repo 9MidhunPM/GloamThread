@@ -64,6 +64,13 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-world -->
 
+### 2026-10-25 01:21:27 +0530 — Overhead room authoring and route checks
+
+- Tool: OpenAI Codex authored the seven remaining room JSON sources and a focused world-route scenario within the exclusive world lane. No outside maps/assets were used.
+- Checks: overhead_world PASS 2/2; corrected the test fixture to instantiate only one collision room at a time, matching the production invariant. Three safe dash launch offsets pass on both axes.
+- Human review: pending. This does not claim encounter balance, original-art visual quality or an integrated campaign playthrough.
+
+
 ### 2026-10-25 01:14:36 +0530 — Overhead world foundation
 
 - Tool: OpenAI Codex; authored the owned parser/collision/room/theme lane, overhead r00/world gate and focused physical regression fixtures in feat/overhead-world.

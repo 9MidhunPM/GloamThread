@@ -204,6 +204,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-world -->
 
+### 2026-10-25 01:21:27 +0530 — Authored overhead district route
+
+- Reauthored r01-r07 as planar rooms: the remembered Atrium branch, separate Spindle anchor approaches, Gallery encounter/secret alcove, checkpoint respite, roomy Bell arena, vertical Causeway dash lesson and opposing Loom stations. Added dry bank markers, recognizable original props, two-tile mandatory water crossings and four-tile paired repair barriers.
+- Validation: overhead_world scenarios PASS 2/2. All eight strict room definitions/paired entrances and eighteen directed exits resolve; safe route searches reach both anchors/secret/Loom stations and cannot bypass unrepaired spans. Six actual CharacterBody2D probes cross the required water gaps at three launch offsets per axis using exactly 60px motion.
+- Limits: structural reachability plus isolated collision probes; integrated ordinary-input overhead campaign, final directional art and native quality review remain pending.
+
+
 ### 2026-10-25 01:14:36 +0530 — Overhead world foundation
 
 - Added strict overhead-v1 room parsing, planar feet/footprint queries, separate immutable wall and water bodies, named bridge blocker removal, shared sortable prop/NPC branch and opaque terrain slot selection. Reauthored Lantern Rest as a safe overhead plaza and gated the Atrium introduction with met_oru.
