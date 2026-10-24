@@ -1,0 +1,5 @@
+# Optional authoring only; Godot/the packaged game needs none of these.
+openai>=2.0,<3
+python-dotenv>=1.0,<2
+Pillow>=10,<13
+numpy>=1.26,<3

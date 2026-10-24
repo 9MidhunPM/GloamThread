@@ -10,7 +10,7 @@ Default experiment: `gpt-image-1-mini`, low quality,1024x1024, one PNG per reque
 
 The official [model page](https://developers.openai.com/api/docs/models/gpt-image-1-mini) lists low square output at$0.005/image plus input. It is deprecated and scheduled for [1December2026 retirement](https://developers.openai.com/api/docs/deprecations). Model/quality are configurable, never silently upgraded; account access is checked by the actual request. Price is an estimate, not a billing guarantee. New models/settings require a fresh cost review.
 
-Implementation and exact CLI commands are being added. Dry-run and mocked-provider checks establish local behavior only. Live generation cannot be claimed until a key is present and a real request succeeds; generated quality must be inspected before promotion.
+Install with `python3 -m venv --system-site-packages .venv` and `.venv/bin/python -m pip install -r requirements-authoring.txt`. Run `tools/ai_assets.py status`, `plan --kind smoke`, then `generate --kind smoke` using that Python. Generation makes two billable requests; `--kind materials` or `--kind tavi` makes one. No automatic retries or replacement. `prepare build/ai-assets/RUN_ID` converts a completed retained run locally. Dry-run and mocked-provider checks establish local behavior only. Live generation cannot be claimed until a key is present and a real request succeeds; generated quality must be inspected before promotion.
 
 ## Candidate/runtime contract
 

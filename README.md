@@ -6,6 +6,24 @@
 
 An original split-screen local co-op pixel action adventure built in Godot 4.7.2 for **Devin Hack Kochi**. Its documentation follows the [corrected event template](https://github.com/anima-regem/devin-hack-kochi-thanushreesuresh-SEOpilot/tree/codex/correct-devin-hack-kochi-thanushreesuresh): [event guidance](RULES.md), [agent guide](AGENTS.md), [change log](CHANGELOG.md), [AI usage record](AI_USAGE.md) and [submission sheet](SUBMISSION.md).
 
+## Optional AI sprites and textures
+
+The restored side-view game runs offline. OpenAI is used only by this local authoring tool, with your own key in the ignored `.env`. A sanitized [.env.example](.env.example) and [workflow/preview contract](docs/AI_ASSET_WORKFLOW.md) are included.
+
+```sh
+python3 -m venv --system-site-packages .venv
+.venv/bin/python -m pip install -r requirements-authoring.txt
+.venv/bin/python tools/ai_assets.py status
+.venv/bin/python tools/ai_assets.py plan --kind smoke
+# Two billable image requests, no retries or automatic installation:
+.venv/bin/python tools/ai_assets.py generate --kind smoke
+# Substitute the run directory printed above:
+.venv/bin/python tools/ai_assets.py prepare build/ai-assets/RUN_ID
+godot --path . -- --ai-assets /absolute/path/to/RUN_ID/candidate/manifest.json
+```
+
+Default: `gpt-image-1-mini`, low quality,1024square. Approximate image-output cost is$0.01 for the two-image smoke, plus input. This deprecated model retires1December2026; configure a documented alternative in`.env` after reviewing its cost. No automatic model upgrade/fallback. Retained raw images and candidates stay under ignored`build/ai-assets/`; failed candidates leave original game art intact. Generated art is a visual-review candidate until inspected, not an accepted replacement just because decoding succeeds.
+
 ## Event guidance
 
 Devin Hack Kochi allows Devin and other AI tools, models and providers without major AI usage constraints. We maintain an accurate AI assistance record as a project convention. Use current organizer announcements for logistics, participation, eligibility, deadlines and credits; the older shared template's details do not apply. Our offline runtime and original-content requirements are game design choices.
@@ -24,7 +42,7 @@ The production game includes title/join, all eight rooms, combat, cooperation, s
 
 1. **Prerequisites and versions:** Arch Linux (first target), Godot **4.7.2 standard** (`godot --version` → `4.7.2.stable…`, not mono), Python ≥ 3.10 with Pillow and numpy, Git. Install with `sudo pacman -Syu --needed godot git python python-pillow python-numpy`. Details in [docs/SETUP.md](docs/SETUP.md).
 2. **Dependency installation:** none beyond the system packages above. No npm, .NET, C++, database or service.
-3. **Environment setup:** no environment variables, API keys or accounts. Phase 1 runs offline.
+3. **Environment setup:** the game runs offline without keys/accounts. The optional separate AI authoring tool uses the ignored `.env` described above.
 4. **Import and launch:** run `godot --headless --path . --editor --import --quit`, then `godot --path .`. The current runtime uses the original production rooms, enemies and art. Choose New journey and confirm the two input assignments. P1 uses WASD, Space jump, F slash, G special, E interact/revive and Shift dash. P2 uses arrows, Period jump, Comma slash, Slash special, M interact/revive and Apostrophe dash. Esc/Enter pause; Tab/Semicolon open the map. Menu selection uses the owner's Up/Down, Jump/Interact confirm and Pause cancel. On Wayland, `godot --display-driver wayland --path .` selects the native display driver. A full normal-input automated route reaches the actual ending; physical controller and fresh-pair playtests are still pending.
 5. **Run checks or tests:**
    - `python3 tools/preflight.py` — read-only toolchain check (works now).

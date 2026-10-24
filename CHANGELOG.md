@@ -6,6 +6,12 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 1 — runtime and integration
 
+### 2026-10-25T02:24:23+05:30 — Add bounded OpenAI image-authoring commands
+
+- Changed: Added optional official OpenAI SDK dependency setup, private.env loading/status, explicit model/quality plans, one/two-request generation, retained raw PNG/prompt/usage/hash provenance and local candidate preparation commands. Excluded local build and env data from both exports.
+- Why: Test the user-authorized low-cost image workflow without embedding credentials/network calls in the game or silently retrying billed generation.
+- Validation: Eight mocked-provider/credential/decode/provenance tests pass; SDK2.54.0 installed in ignored.venv; key presence verified without its value. Real requests and converted quality are recorded separately after the shared prompt library lands.
+
 ### 2026-10-25T02:20:42+05:30 — Restore the original side-view adventure
 
 - Changed: Restored verified34ccb96side-view simulation, rooms, art/audio, tests and authoring tools as a forward change. Preserved the complete overhead experiment on its branch. Created an ignored private blank.env and documented the newly authorized optional API authoring boundary.
