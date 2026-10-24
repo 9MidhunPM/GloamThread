@@ -58,6 +58,9 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-actors -->
 
+- 2026-10-25T01:28:41+05:30 | Codex | Added shared boss phase state and non-overwriting combat feedback. Human review pending. Focused boss scenario passes; pending integrated route and native feedback review remain disclosed.
+
+
 - 2026-10-25T01:27:48+05:30 | Codex | Added boss phase-pattern acceptance and generated owned script UIDs. Human review pending. Actor clone passes 8/8 scenarios; import environment warnings and controlled boss damage fixtures are disclosed. No normal-route or rendered-quality claim.
 
 

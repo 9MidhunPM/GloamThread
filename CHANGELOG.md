@@ -198,6 +198,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T01:28:41+05:30 — Shared boss phase and concurrent feedback
+
+- Changed: Half health advances Spoolwarden to phase two, with faster subsequent pursuit/charge and a shorter next idle gap; existing warning/recovery durations stay explicit. Partner-strike feedback takes the first line while slow resistance remains visible below it. Defeat clears stale notices.
+- Why: Add encounter escalation and readable simultaneous feedback without cancelling a co-op stagger opening or changing an already-active charge speed.
+- Validation: Focused boss scenario passes, including half-health transition during stagger, preserved opening timer, concurrent slow-resist notice and cleared defeat text.
+- Limitations: Escalation values need the integrated normal-input route and human balance review; no rendered readability claim yet.
+
+
 ### 2026-10-25T01:27:48+05:30 — Overhead boss acceptance and stable script IDs
 
 - Changed: Added a boss-specific scenario covering real sweep/strike/charge clocks, ground-plane reach, immutable walls, shared stagger/Cross-stitch state and exactly-once defeat; retained generated UID sidecars for new actor fixtures/scenarios.

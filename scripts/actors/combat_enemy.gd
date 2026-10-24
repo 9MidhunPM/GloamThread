@@ -14,6 +14,9 @@ var slow_ticks: int = 0
 var slow_immune_ticks: int = 0
 var stagger_meter: int = 0
 var cross_stitch_count: int = 0
+var phase: int = 1
+var _phase_notice_ticks: int = 0
+var _charge_speed := 250.0
 
 var _players: Array[PlayerController] = []
 var _catalog: AssetCatalog
@@ -115,8 +118,9 @@ func _physics_process(delta: float) -> void:
 		return
 	slow_ticks = maxi(0, slow_ticks - 1)
 	slow_immune_ticks = maxi(0, slow_immune_ticks - 1)
+	_phase_notice_ticks = maxi(0, _phase_notice_ticks - 1)
 	if _feedback != null:
-		_feedback.text = "Partner strike!" if _state == "stagger" and not _cross_stitch_used else ("Resists slow" if slow_immune_ticks > 0 else "")
+		_feedback.text = feedback_text()
 	var target := _target()
 	if target == null:
 		velocity = Vector2.ZERO
@@ -169,10 +173,15 @@ func receive_hit(damage: int, slot: int, attack_id: int, stagger: int = 1, appli
 	else:
 		slow_ticks = maxi(slow_ticks, mini(applied_slow_ticks, 180))
 	health = maxi(0, health - total_damage)
+	if kind == "spoolwarden" and health > 0 and phase == 1 and health * 2 <= max_health:
+		phase = 2
+		_phase_notice_ticks = 120
 	AudioDirector.play_cue(&"hit")
 	CombatQuery.effect(self, _catalog, "effect_hit_v1", global_position)
 	if health == 0:
 		dead = true
+		if _feedback != null:
+			_feedback.text = ""
 		velocity = Vector2.ZERO
 		_state_ticks = 90 if kind == "spoolwarden" else 30
 		animation_state = "defeat"
@@ -182,6 +191,20 @@ func receive_hit(damage: int, slot: int, attack_id: int, stagger: int = 1, appli
 		AudioDirector.play_cue(&"enemy_defeat")
 		defeated.emit(self)
 	return true
+
+
+## Shared feedback prioritizes the co-op opening without hiding slow immunity.
+func feedback_text() -> String:
+	if dead:
+		return ""
+	var notice := ""
+	if _state == "stagger" and not _cross_stitch_used:
+		notice = "Partner strike!"
+	elif _phase_notice_ticks > 0:
+		notice = "Seam ablaze!"
+	if slow_immune_ticks > 0:
+		notice += ("\n" if not notice.is_empty() else "") + "Resists slow"
+	return notice
 
 
 func _target() -> PlayerController:
@@ -295,7 +318,7 @@ func _boss_tick(target: PlayerController, delta: float) -> void:
 		animation_state = "idle"
 		var offset := target.hurt_rect().get_center() - hurt_rect().get_center()
 		_facing = _toward(target.hurt_rect().get_center())
-		velocity = _facing * 52.0 if offset.length() > 96.0 and offset.length() < 420.0 else Vector2.ZERO
+		velocity = _facing * (62.0 if phase == 2 else 52.0) if offset.length() > 96.0 and offset.length() < 420.0 else Vector2.ZERO
 		if offset.length() < 220.0 and _countdown():
 			_move_index = (_move_index + 1) % 3
 			_move_name = ["sweep", "strike", "charge"][_move_index]
@@ -310,7 +333,7 @@ func _boss_tick(target: PlayerController, delta: float) -> void:
 			_begin_active("active", 36 if _move_name == "charge" else 14)
 	elif _state == "active":
 		animation_state = _move_name + "_active"
-		velocity = _attack_direction * 250.0 if _move_name == "charge" else Vector2.ZERO
+		velocity = _attack_direction * _charge_speed if _move_name == "charge" else Vector2.ZERO
 	elif _state == "stagger":
 		animation_state = "stagger"
 		velocity = Vector2.ZERO
@@ -350,6 +373,8 @@ func _enter(state: String, ticks: int) -> void:
 
 
 func _begin_active(state: String, ticks: int) -> void:
+	if kind == "spoolwarden" and _move_name == "charge":
+		_charge_speed = 275.0 if phase == 2 else 250.0
 	_enter(state, ticks)
 	_attack_id = CombatQuery.next_attack_id()
 	_hit_slots.clear()
@@ -362,7 +387,7 @@ func _countdown() -> bool:
 
 func _finish_attack() -> void:
 	_target_slot = 1 - _target_slot
-	_enter("idle", 40)
+	_enter("idle", 28 if kind == "spoolwarden" and phase == 2 else 40)
 
 
 func _hit_players(rectangle: Rect2) -> void:
