@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "content_version": "phase1-v1",
-  "generator_version": "1.0.0",
+  "content_version": "overhead-v1",
+  "generator_version": "2.0.0",
   "seed": 18427,
   "stage": "full",
   "assets": [
@@ -14,11 +14,11 @@
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
@@ -36,11 +36,11 @@
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
@@ -58,11 +58,11 @@
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
@@ -80,11 +80,11 @@
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
@@ -102,11 +102,11 @@
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
@@ -124,11 +124,11 @@
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
@@ -141,16 +141,16 @@
       "id": "effect_dash_v1",
       "kind": "sprite_atlas",
       "path": "assets/generated/sprites/effect_dash_v1.png",
-      "sha256": "98d0f82501c4655ea48591a72cb96d3b4af461791567695a181bb06db2904a07",
+      "sha256": "c6dd4413fa5d34676ad97b65e0c27244bea0cd7c09cb92fd2766b6b434abd5f8",
       "diagnostic": false,
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
@@ -229,16 +229,16 @@
       "id": "effect_ember_arc_v1",
       "kind": "sprite_atlas",
       "path": "assets/generated/sprites/effect_ember_arc_v1.png",
-      "sha256": "72b6507c88d9f111fcbb33458a3703d7f0fc70fe08958530ac9b14e81da2f97f",
+      "sha256": "de50eb965de758fc9df260853bd214a28df2aad143e0c1626498e7bd863dec25",
       "diagnostic": false,
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
@@ -317,16 +317,16 @@
       "id": "effect_hit_v1",
       "kind": "sprite_atlas",
       "path": "assets/generated/sprites/effect_hit_v1.png",
-      "sha256": "2b02574bfa1d8e45a416b62541027bb9f3905870a2c139e6077a12ce3fa1909f",
+      "sha256": "013b7c60fd6f9e1739703ad3883fd09c3c483130d61464ab79395f5f6681d419",
       "diagnostic": false,
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
@@ -405,16 +405,16 @@
       "id": "effect_restoration_v1",
       "kind": "sprite_atlas",
       "path": "assets/generated/sprites/effect_restoration_v1.png",
-      "sha256": "fa823e49c9b0b2e0804a4e86a0e3fd45aab12218108414bf110b5d42d10abfe4",
+      "sha256": "00fd19560a84e7d4c04bf67530bfd9083e78213392cc033d57d2ff20dd5fd8d3",
       "diagnostic": false,
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
@@ -493,16 +493,16 @@
       "id": "effect_revive_v1",
       "kind": "sprite_atlas",
       "path": "assets/generated/sprites/effect_revive_v1.png",
-      "sha256": "007aa220f13da6878ad4c05c8f06e0c07e17d9f98da3c0a4b21e4ae4ef9ca4fb",
+      "sha256": "1a1226ddc5ee04844f09dc0fb740e9681548f9aa04093ec4eecbbc6374730d54",
       "diagnostic": false,
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
@@ -581,16 +581,16 @@
       "id": "effect_slash_v1",
       "kind": "sprite_atlas",
       "path": "assets/generated/sprites/effect_slash_v1.png",
-      "sha256": "eb5f1a529b2711ac52a127d1bf3b13667d142c76c227a3ebb63ec6f03d8670b3",
+      "sha256": "761558e6cb109d351fc77cc7d7e565ba7121003bb1b356de457099f1cf70d872",
       "diagnostic": false,
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
@@ -669,16 +669,16 @@
       "id": "effect_spore_impact_v1",
       "kind": "sprite_atlas",
       "path": "assets/generated/sprites/effect_spore_impact_v1.png",
-      "sha256": "3705d8e010b37c5e0e2a4d2c9f8ff7531c706640a3588225d8e8b8435e7a2d82",
+      "sha256": "912459105471a6956dd15c4c9031e51f33e4c56fa1f983e93e129b18f69f6544",
       "diagnostic": false,
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
@@ -757,16 +757,16 @@
       "id": "effect_weave_v1",
       "kind": "sprite_atlas",
       "path": "assets/generated/sprites/effect_weave_v1.png",
-      "sha256": "acbd1ec87a0b15473ef76cf274dc54fe875c4cd68df197b3cb5e185d38d881ec",
+      "sha256": "0ffdc1c56827c26ea982b0aa8a69a6f15b7faad38f9bc9a7641ded2e89d574f6",
       "diagnostic": false,
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
@@ -845,21 +845,21 @@
       "id": "fixed_neri_v1",
       "kind": "sprite_atlas",
       "path": "assets/generated/sprites/fixed_neri_v1.png",
-      "sha256": "92a24f4251267d67afa0b350b597bdc0067bd2ff93f8ee0c5720a3dccf3ee4a3",
+      "sha256": "42226c4fb0c23c77683e481615fb025061dbfb39e62d76f4775dd34eefa14aed",
       "diagnostic": false,
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
         288,
-        208
+        832
       ],
       "cell_size": [
         32,
@@ -1061,10 +1061,586 @@
           158,
           32,
           48
+        ],
+        [
+          2,
+          210,
+          32,
+          48
+        ],
+        [
+          38,
+          210,
+          32,
+          48
+        ],
+        [
+          74,
+          210,
+          32,
+          48
+        ],
+        [
+          110,
+          210,
+          32,
+          48
+        ],
+        [
+          146,
+          210,
+          32,
+          48
+        ],
+        [
+          182,
+          210,
+          32,
+          48
+        ],
+        [
+          218,
+          210,
+          32,
+          48
+        ],
+        [
+          254,
+          210,
+          32,
+          48
+        ],
+        [
+          2,
+          262,
+          32,
+          48
+        ],
+        [
+          38,
+          262,
+          32,
+          48
+        ],
+        [
+          74,
+          262,
+          32,
+          48
+        ],
+        [
+          110,
+          262,
+          32,
+          48
+        ],
+        [
+          146,
+          262,
+          32,
+          48
+        ],
+        [
+          182,
+          262,
+          32,
+          48
+        ],
+        [
+          218,
+          262,
+          32,
+          48
+        ],
+        [
+          254,
+          262,
+          32,
+          48
+        ],
+        [
+          2,
+          314,
+          32,
+          48
+        ],
+        [
+          38,
+          314,
+          32,
+          48
+        ],
+        [
+          74,
+          314,
+          32,
+          48
+        ],
+        [
+          110,
+          314,
+          32,
+          48
+        ],
+        [
+          146,
+          314,
+          32,
+          48
+        ],
+        [
+          182,
+          314,
+          32,
+          48
+        ],
+        [
+          218,
+          314,
+          32,
+          48
+        ],
+        [
+          254,
+          314,
+          32,
+          48
+        ],
+        [
+          2,
+          366,
+          32,
+          48
+        ],
+        [
+          38,
+          366,
+          32,
+          48
+        ],
+        [
+          74,
+          366,
+          32,
+          48
+        ],
+        [
+          110,
+          366,
+          32,
+          48
+        ],
+        [
+          146,
+          366,
+          32,
+          48
+        ],
+        [
+          182,
+          366,
+          32,
+          48
+        ],
+        [
+          218,
+          366,
+          32,
+          48
+        ],
+        [
+          254,
+          366,
+          32,
+          48
+        ],
+        [
+          2,
+          418,
+          32,
+          48
+        ],
+        [
+          38,
+          418,
+          32,
+          48
+        ],
+        [
+          74,
+          418,
+          32,
+          48
+        ],
+        [
+          110,
+          418,
+          32,
+          48
+        ],
+        [
+          146,
+          418,
+          32,
+          48
+        ],
+        [
+          182,
+          418,
+          32,
+          48
+        ],
+        [
+          218,
+          418,
+          32,
+          48
+        ],
+        [
+          254,
+          418,
+          32,
+          48
+        ],
+        [
+          2,
+          470,
+          32,
+          48
+        ],
+        [
+          38,
+          470,
+          32,
+          48
+        ],
+        [
+          74,
+          470,
+          32,
+          48
+        ],
+        [
+          110,
+          470,
+          32,
+          48
+        ],
+        [
+          146,
+          470,
+          32,
+          48
+        ],
+        [
+          182,
+          470,
+          32,
+          48
+        ],
+        [
+          218,
+          470,
+          32,
+          48
+        ],
+        [
+          254,
+          470,
+          32,
+          48
+        ],
+        [
+          2,
+          522,
+          32,
+          48
+        ],
+        [
+          38,
+          522,
+          32,
+          48
+        ],
+        [
+          74,
+          522,
+          32,
+          48
+        ],
+        [
+          110,
+          522,
+          32,
+          48
+        ],
+        [
+          146,
+          522,
+          32,
+          48
+        ],
+        [
+          182,
+          522,
+          32,
+          48
+        ],
+        [
+          218,
+          522,
+          32,
+          48
+        ],
+        [
+          254,
+          522,
+          32,
+          48
+        ],
+        [
+          2,
+          574,
+          32,
+          48
+        ],
+        [
+          38,
+          574,
+          32,
+          48
+        ],
+        [
+          74,
+          574,
+          32,
+          48
+        ],
+        [
+          110,
+          574,
+          32,
+          48
+        ],
+        [
+          146,
+          574,
+          32,
+          48
+        ],
+        [
+          182,
+          574,
+          32,
+          48
+        ],
+        [
+          218,
+          574,
+          32,
+          48
+        ],
+        [
+          254,
+          574,
+          32,
+          48
+        ],
+        [
+          2,
+          626,
+          32,
+          48
+        ],
+        [
+          38,
+          626,
+          32,
+          48
+        ],
+        [
+          74,
+          626,
+          32,
+          48
+        ],
+        [
+          110,
+          626,
+          32,
+          48
+        ],
+        [
+          146,
+          626,
+          32,
+          48
+        ],
+        [
+          182,
+          626,
+          32,
+          48
+        ],
+        [
+          218,
+          626,
+          32,
+          48
+        ],
+        [
+          254,
+          626,
+          32,
+          48
+        ],
+        [
+          2,
+          678,
+          32,
+          48
+        ],
+        [
+          38,
+          678,
+          32,
+          48
+        ],
+        [
+          74,
+          678,
+          32,
+          48
+        ],
+        [
+          110,
+          678,
+          32,
+          48
+        ],
+        [
+          146,
+          678,
+          32,
+          48
+        ],
+        [
+          182,
+          678,
+          32,
+          48
+        ],
+        [
+          218,
+          678,
+          32,
+          48
+        ],
+        [
+          254,
+          678,
+          32,
+          48
+        ],
+        [
+          2,
+          730,
+          32,
+          48
+        ],
+        [
+          38,
+          730,
+          32,
+          48
+        ],
+        [
+          74,
+          730,
+          32,
+          48
+        ],
+        [
+          110,
+          730,
+          32,
+          48
+        ],
+        [
+          146,
+          730,
+          32,
+          48
+        ],
+        [
+          182,
+          730,
+          32,
+          48
+        ],
+        [
+          218,
+          730,
+          32,
+          48
+        ],
+        [
+          254,
+          730,
+          32,
+          48
+        ],
+        [
+          2,
+          782,
+          32,
+          48
+        ],
+        [
+          38,
+          782,
+          32,
+          48
+        ],
+        [
+          74,
+          782,
+          32,
+          48
+        ],
+        [
+          110,
+          782,
+          32,
+          48
+        ],
+        [
+          146,
+          782,
+          32,
+          48
+        ],
+        [
+          182,
+          782,
+          32,
+          48
+        ],
+        [
+          218,
+          782,
+          32,
+          48
+        ],
+        [
+          254,
+          782,
+          32,
+          48
         ]
       ],
       "animations": {
-        "idle": {
+        "idle_down": {
           "frames": [
             0,
             1,
@@ -1072,14 +1648,14 @@
             3
           ],
           "ticks": [
-            8,
-            8,
-            8,
-            8
+            10,
+            10,
+            10,
+            10
           ],
           "loop": true
         },
-        "run": {
+        "run_down": {
           "frames": [
             4,
             5,
@@ -1098,55 +1674,41 @@
           ],
           "loop": true
         },
-        "jump_rise": {
+        "slash_down": {
           "frames": [
             10,
-            11
-          ],
-          "ticks": [
-            5,
-            5
-          ],
-          "loop": false
-        },
-        "fall": {
-          "frames": [
+            11,
             12,
-            13
+            13,
+            14
           ],
           "ticks": [
-            5,
-            5
+            3,
+            3,
+            3,
+            3,
+            6
           ],
           "loop": false
         },
-        "land": {
+        "special_down": {
           "frames": [
-            14,
-            15
-          ],
-          "ticks": [
-            5,
-            5
-          ],
-          "loop": false
-        },
-        "slash": {
-          "frames": [
+            15,
             16,
             17,
             18,
             19
           ],
           "ticks": [
-            5,
-            5,
-            5,
-            5
+            4,
+            4,
+            3,
+            4,
+            7
           ],
           "loop": false
         },
-        "special": {
+        "roll_down": {
           "frames": [
             20,
             21,
@@ -1154,54 +1716,435 @@
             23
           ],
           "ticks": [
-            5,
-            5,
-            5,
-            5
+            3,
+            3,
+            3,
+            3
           ],
           "loop": false
         },
-        "hurt": {
+        "dash_down": {
           "frames": [
             24,
             25
           ],
           "ticks": [
-            5,
-            5
+            6,
+            6
           ],
           "loop": false
         },
-        "dash": {
+        "hurt_down": {
           "frames": [
             26,
             27
           ],
           "ticks": [
             5,
-            5
+            7
           ],
           "loop": false
         },
-        "downed": {
+        "downed_down": {
           "frames": [
             28,
             29
           ],
           "ticks": [
-            5,
-            5
+            18,
+            18
           ],
           "loop": true
         },
-        "revive": {
+        "revive_down": {
           "frames": [
             30,
             31
           ],
           "ticks": [
+            6,
+            10
+          ],
+          "loop": false
+        },
+        "idle_left": {
+          "frames": [
+            32,
+            33,
+            34,
+            35
+          ],
+          "ticks": [
+            10,
+            10,
+            10,
+            10
+          ],
+          "loop": true
+        },
+        "run_left": {
+          "frames": [
+            36,
+            37,
+            38,
+            39,
+            40,
+            41
+          ],
+          "ticks": [
+            5,
+            5,
+            5,
+            5,
             5,
             5
+          ],
+          "loop": true
+        },
+        "slash_left": {
+          "frames": [
+            42,
+            43,
+            44,
+            45,
+            46
+          ],
+          "ticks": [
+            3,
+            3,
+            3,
+            3,
+            6
+          ],
+          "loop": false
+        },
+        "special_left": {
+          "frames": [
+            47,
+            48,
+            49,
+            50,
+            51
+          ],
+          "ticks": [
+            4,
+            4,
+            3,
+            4,
+            7
+          ],
+          "loop": false
+        },
+        "roll_left": {
+          "frames": [
+            52,
+            53,
+            54,
+            55
+          ],
+          "ticks": [
+            3,
+            3,
+            3,
+            3
+          ],
+          "loop": false
+        },
+        "dash_left": {
+          "frames": [
+            56,
+            57
+          ],
+          "ticks": [
+            6,
+            6
+          ],
+          "loop": false
+        },
+        "hurt_left": {
+          "frames": [
+            58,
+            59
+          ],
+          "ticks": [
+            5,
+            7
+          ],
+          "loop": false
+        },
+        "downed_left": {
+          "frames": [
+            60,
+            61
+          ],
+          "ticks": [
+            18,
+            18
+          ],
+          "loop": true
+        },
+        "revive_left": {
+          "frames": [
+            62,
+            63
+          ],
+          "ticks": [
+            6,
+            10
+          ],
+          "loop": false
+        },
+        "idle_right": {
+          "frames": [
+            64,
+            65,
+            66,
+            67
+          ],
+          "ticks": [
+            10,
+            10,
+            10,
+            10
+          ],
+          "loop": true
+        },
+        "run_right": {
+          "frames": [
+            68,
+            69,
+            70,
+            71,
+            72,
+            73
+          ],
+          "ticks": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "loop": true
+        },
+        "slash_right": {
+          "frames": [
+            74,
+            75,
+            76,
+            77,
+            78
+          ],
+          "ticks": [
+            3,
+            3,
+            3,
+            3,
+            6
+          ],
+          "loop": false
+        },
+        "special_right": {
+          "frames": [
+            79,
+            80,
+            81,
+            82,
+            83
+          ],
+          "ticks": [
+            4,
+            4,
+            3,
+            4,
+            7
+          ],
+          "loop": false
+        },
+        "roll_right": {
+          "frames": [
+            84,
+            85,
+            86,
+            87
+          ],
+          "ticks": [
+            3,
+            3,
+            3,
+            3
+          ],
+          "loop": false
+        },
+        "dash_right": {
+          "frames": [
+            88,
+            89
+          ],
+          "ticks": [
+            6,
+            6
+          ],
+          "loop": false
+        },
+        "hurt_right": {
+          "frames": [
+            90,
+            91
+          ],
+          "ticks": [
+            5,
+            7
+          ],
+          "loop": false
+        },
+        "downed_right": {
+          "frames": [
+            92,
+            93
+          ],
+          "ticks": [
+            18,
+            18
+          ],
+          "loop": true
+        },
+        "revive_right": {
+          "frames": [
+            94,
+            95
+          ],
+          "ticks": [
+            6,
+            10
+          ],
+          "loop": false
+        },
+        "idle_up": {
+          "frames": [
+            96,
+            97,
+            98,
+            99
+          ],
+          "ticks": [
+            10,
+            10,
+            10,
+            10
+          ],
+          "loop": true
+        },
+        "run_up": {
+          "frames": [
+            100,
+            101,
+            102,
+            103,
+            104,
+            105
+          ],
+          "ticks": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "loop": true
+        },
+        "slash_up": {
+          "frames": [
+            106,
+            107,
+            108,
+            109,
+            110
+          ],
+          "ticks": [
+            3,
+            3,
+            3,
+            3,
+            6
+          ],
+          "loop": false
+        },
+        "special_up": {
+          "frames": [
+            111,
+            112,
+            113,
+            114,
+            115
+          ],
+          "ticks": [
+            4,
+            4,
+            3,
+            4,
+            7
+          ],
+          "loop": false
+        },
+        "roll_up": {
+          "frames": [
+            116,
+            117,
+            118,
+            119
+          ],
+          "ticks": [
+            3,
+            3,
+            3,
+            3
+          ],
+          "loop": false
+        },
+        "dash_up": {
+          "frames": [
+            120,
+            121
+          ],
+          "ticks": [
+            6,
+            6
+          ],
+          "loop": false
+        },
+        "hurt_up": {
+          "frames": [
+            122,
+            123
+          ],
+          "ticks": [
+            5,
+            7
+          ],
+          "loop": false
+        },
+        "downed_up": {
+          "frames": [
+            124,
+            125
+          ],
+          "ticks": [
+            18,
+            18
+          ],
+          "loop": true
+        },
+        "revive_up": {
+          "frames": [
+            126,
+            127
+          ],
+          "ticks": [
+            6,
+            10
           ],
           "loop": false
         }
@@ -1211,21 +2154,21 @@
       "id": "fixed_tavi_v1",
       "kind": "sprite_atlas",
       "path": "assets/generated/sprites/fixed_tavi_v1.png",
-      "sha256": "146cfd51e8d97b01171d314996398578e2b5b385b1585640c27c0e5dcdab337d",
+      "sha256": "034912f68cefa94b89168b8d13a6026bb1888211f96aebb0a276e696d0ecad1f",
       "diagnostic": false,
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
         288,
-        208
+        832
       ],
       "cell_size": [
         32,
@@ -1427,10 +2370,586 @@
           158,
           32,
           48
+        ],
+        [
+          2,
+          210,
+          32,
+          48
+        ],
+        [
+          38,
+          210,
+          32,
+          48
+        ],
+        [
+          74,
+          210,
+          32,
+          48
+        ],
+        [
+          110,
+          210,
+          32,
+          48
+        ],
+        [
+          146,
+          210,
+          32,
+          48
+        ],
+        [
+          182,
+          210,
+          32,
+          48
+        ],
+        [
+          218,
+          210,
+          32,
+          48
+        ],
+        [
+          254,
+          210,
+          32,
+          48
+        ],
+        [
+          2,
+          262,
+          32,
+          48
+        ],
+        [
+          38,
+          262,
+          32,
+          48
+        ],
+        [
+          74,
+          262,
+          32,
+          48
+        ],
+        [
+          110,
+          262,
+          32,
+          48
+        ],
+        [
+          146,
+          262,
+          32,
+          48
+        ],
+        [
+          182,
+          262,
+          32,
+          48
+        ],
+        [
+          218,
+          262,
+          32,
+          48
+        ],
+        [
+          254,
+          262,
+          32,
+          48
+        ],
+        [
+          2,
+          314,
+          32,
+          48
+        ],
+        [
+          38,
+          314,
+          32,
+          48
+        ],
+        [
+          74,
+          314,
+          32,
+          48
+        ],
+        [
+          110,
+          314,
+          32,
+          48
+        ],
+        [
+          146,
+          314,
+          32,
+          48
+        ],
+        [
+          182,
+          314,
+          32,
+          48
+        ],
+        [
+          218,
+          314,
+          32,
+          48
+        ],
+        [
+          254,
+          314,
+          32,
+          48
+        ],
+        [
+          2,
+          366,
+          32,
+          48
+        ],
+        [
+          38,
+          366,
+          32,
+          48
+        ],
+        [
+          74,
+          366,
+          32,
+          48
+        ],
+        [
+          110,
+          366,
+          32,
+          48
+        ],
+        [
+          146,
+          366,
+          32,
+          48
+        ],
+        [
+          182,
+          366,
+          32,
+          48
+        ],
+        [
+          218,
+          366,
+          32,
+          48
+        ],
+        [
+          254,
+          366,
+          32,
+          48
+        ],
+        [
+          2,
+          418,
+          32,
+          48
+        ],
+        [
+          38,
+          418,
+          32,
+          48
+        ],
+        [
+          74,
+          418,
+          32,
+          48
+        ],
+        [
+          110,
+          418,
+          32,
+          48
+        ],
+        [
+          146,
+          418,
+          32,
+          48
+        ],
+        [
+          182,
+          418,
+          32,
+          48
+        ],
+        [
+          218,
+          418,
+          32,
+          48
+        ],
+        [
+          254,
+          418,
+          32,
+          48
+        ],
+        [
+          2,
+          470,
+          32,
+          48
+        ],
+        [
+          38,
+          470,
+          32,
+          48
+        ],
+        [
+          74,
+          470,
+          32,
+          48
+        ],
+        [
+          110,
+          470,
+          32,
+          48
+        ],
+        [
+          146,
+          470,
+          32,
+          48
+        ],
+        [
+          182,
+          470,
+          32,
+          48
+        ],
+        [
+          218,
+          470,
+          32,
+          48
+        ],
+        [
+          254,
+          470,
+          32,
+          48
+        ],
+        [
+          2,
+          522,
+          32,
+          48
+        ],
+        [
+          38,
+          522,
+          32,
+          48
+        ],
+        [
+          74,
+          522,
+          32,
+          48
+        ],
+        [
+          110,
+          522,
+          32,
+          48
+        ],
+        [
+          146,
+          522,
+          32,
+          48
+        ],
+        [
+          182,
+          522,
+          32,
+          48
+        ],
+        [
+          218,
+          522,
+          32,
+          48
+        ],
+        [
+          254,
+          522,
+          32,
+          48
+        ],
+        [
+          2,
+          574,
+          32,
+          48
+        ],
+        [
+          38,
+          574,
+          32,
+          48
+        ],
+        [
+          74,
+          574,
+          32,
+          48
+        ],
+        [
+          110,
+          574,
+          32,
+          48
+        ],
+        [
+          146,
+          574,
+          32,
+          48
+        ],
+        [
+          182,
+          574,
+          32,
+          48
+        ],
+        [
+          218,
+          574,
+          32,
+          48
+        ],
+        [
+          254,
+          574,
+          32,
+          48
+        ],
+        [
+          2,
+          626,
+          32,
+          48
+        ],
+        [
+          38,
+          626,
+          32,
+          48
+        ],
+        [
+          74,
+          626,
+          32,
+          48
+        ],
+        [
+          110,
+          626,
+          32,
+          48
+        ],
+        [
+          146,
+          626,
+          32,
+          48
+        ],
+        [
+          182,
+          626,
+          32,
+          48
+        ],
+        [
+          218,
+          626,
+          32,
+          48
+        ],
+        [
+          254,
+          626,
+          32,
+          48
+        ],
+        [
+          2,
+          678,
+          32,
+          48
+        ],
+        [
+          38,
+          678,
+          32,
+          48
+        ],
+        [
+          74,
+          678,
+          32,
+          48
+        ],
+        [
+          110,
+          678,
+          32,
+          48
+        ],
+        [
+          146,
+          678,
+          32,
+          48
+        ],
+        [
+          182,
+          678,
+          32,
+          48
+        ],
+        [
+          218,
+          678,
+          32,
+          48
+        ],
+        [
+          254,
+          678,
+          32,
+          48
+        ],
+        [
+          2,
+          730,
+          32,
+          48
+        ],
+        [
+          38,
+          730,
+          32,
+          48
+        ],
+        [
+          74,
+          730,
+          32,
+          48
+        ],
+        [
+          110,
+          730,
+          32,
+          48
+        ],
+        [
+          146,
+          730,
+          32,
+          48
+        ],
+        [
+          182,
+          730,
+          32,
+          48
+        ],
+        [
+          218,
+          730,
+          32,
+          48
+        ],
+        [
+          254,
+          730,
+          32,
+          48
+        ],
+        [
+          2,
+          782,
+          32,
+          48
+        ],
+        [
+          38,
+          782,
+          32,
+          48
+        ],
+        [
+          74,
+          782,
+          32,
+          48
+        ],
+        [
+          110,
+          782,
+          32,
+          48
+        ],
+        [
+          146,
+          782,
+          32,
+          48
+        ],
+        [
+          182,
+          782,
+          32,
+          48
+        ],
+        [
+          218,
+          782,
+          32,
+          48
+        ],
+        [
+          254,
+          782,
+          32,
+          48
         ]
       ],
       "animations": {
-        "idle": {
+        "idle_down": {
           "frames": [
             0,
             1,
@@ -1438,14 +2957,14 @@
             3
           ],
           "ticks": [
-            8,
-            8,
-            8,
-            8
+            10,
+            10,
+            10,
+            10
           ],
           "loop": true
         },
-        "run": {
+        "run_down": {
           "frames": [
             4,
             5,
@@ -1464,55 +2983,41 @@
           ],
           "loop": true
         },
-        "jump_rise": {
+        "slash_down": {
           "frames": [
             10,
-            11
-          ],
-          "ticks": [
-            5,
-            5
-          ],
-          "loop": false
-        },
-        "fall": {
-          "frames": [
+            11,
             12,
-            13
+            13,
+            14
           ],
           "ticks": [
-            5,
-            5
+            3,
+            3,
+            3,
+            3,
+            6
           ],
           "loop": false
         },
-        "land": {
+        "special_down": {
           "frames": [
-            14,
-            15
-          ],
-          "ticks": [
-            5,
-            5
-          ],
-          "loop": false
-        },
-        "slash": {
-          "frames": [
+            15,
             16,
             17,
             18,
             19
           ],
           "ticks": [
-            5,
-            5,
-            5,
-            5
+            4,
+            4,
+            3,
+            4,
+            7
           ],
           "loop": false
         },
-        "special": {
+        "roll_down": {
           "frames": [
             20,
             21,
@@ -1520,54 +3025,435 @@
             23
           ],
           "ticks": [
-            5,
-            5,
-            5,
-            5
+            3,
+            3,
+            3,
+            3
           ],
           "loop": false
         },
-        "hurt": {
+        "dash_down": {
           "frames": [
             24,
             25
           ],
           "ticks": [
-            5,
-            5
+            6,
+            6
           ],
           "loop": false
         },
-        "dash": {
+        "hurt_down": {
           "frames": [
             26,
             27
           ],
           "ticks": [
             5,
-            5
+            7
           ],
           "loop": false
         },
-        "downed": {
+        "downed_down": {
           "frames": [
             28,
             29
           ],
           "ticks": [
-            5,
-            5
+            18,
+            18
           ],
           "loop": true
         },
-        "revive": {
+        "revive_down": {
           "frames": [
             30,
             31
           ],
           "ticks": [
+            6,
+            10
+          ],
+          "loop": false
+        },
+        "idle_left": {
+          "frames": [
+            32,
+            33,
+            34,
+            35
+          ],
+          "ticks": [
+            10,
+            10,
+            10,
+            10
+          ],
+          "loop": true
+        },
+        "run_left": {
+          "frames": [
+            36,
+            37,
+            38,
+            39,
+            40,
+            41
+          ],
+          "ticks": [
+            5,
+            5,
+            5,
+            5,
             5,
             5
+          ],
+          "loop": true
+        },
+        "slash_left": {
+          "frames": [
+            42,
+            43,
+            44,
+            45,
+            46
+          ],
+          "ticks": [
+            3,
+            3,
+            3,
+            3,
+            6
+          ],
+          "loop": false
+        },
+        "special_left": {
+          "frames": [
+            47,
+            48,
+            49,
+            50,
+            51
+          ],
+          "ticks": [
+            4,
+            4,
+            3,
+            4,
+            7
+          ],
+          "loop": false
+        },
+        "roll_left": {
+          "frames": [
+            52,
+            53,
+            54,
+            55
+          ],
+          "ticks": [
+            3,
+            3,
+            3,
+            3
+          ],
+          "loop": false
+        },
+        "dash_left": {
+          "frames": [
+            56,
+            57
+          ],
+          "ticks": [
+            6,
+            6
+          ],
+          "loop": false
+        },
+        "hurt_left": {
+          "frames": [
+            58,
+            59
+          ],
+          "ticks": [
+            5,
+            7
+          ],
+          "loop": false
+        },
+        "downed_left": {
+          "frames": [
+            60,
+            61
+          ],
+          "ticks": [
+            18,
+            18
+          ],
+          "loop": true
+        },
+        "revive_left": {
+          "frames": [
+            62,
+            63
+          ],
+          "ticks": [
+            6,
+            10
+          ],
+          "loop": false
+        },
+        "idle_right": {
+          "frames": [
+            64,
+            65,
+            66,
+            67
+          ],
+          "ticks": [
+            10,
+            10,
+            10,
+            10
+          ],
+          "loop": true
+        },
+        "run_right": {
+          "frames": [
+            68,
+            69,
+            70,
+            71,
+            72,
+            73
+          ],
+          "ticks": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "loop": true
+        },
+        "slash_right": {
+          "frames": [
+            74,
+            75,
+            76,
+            77,
+            78
+          ],
+          "ticks": [
+            3,
+            3,
+            3,
+            3,
+            6
+          ],
+          "loop": false
+        },
+        "special_right": {
+          "frames": [
+            79,
+            80,
+            81,
+            82,
+            83
+          ],
+          "ticks": [
+            4,
+            4,
+            3,
+            4,
+            7
+          ],
+          "loop": false
+        },
+        "roll_right": {
+          "frames": [
+            84,
+            85,
+            86,
+            87
+          ],
+          "ticks": [
+            3,
+            3,
+            3,
+            3
+          ],
+          "loop": false
+        },
+        "dash_right": {
+          "frames": [
+            88,
+            89
+          ],
+          "ticks": [
+            6,
+            6
+          ],
+          "loop": false
+        },
+        "hurt_right": {
+          "frames": [
+            90,
+            91
+          ],
+          "ticks": [
+            5,
+            7
+          ],
+          "loop": false
+        },
+        "downed_right": {
+          "frames": [
+            92,
+            93
+          ],
+          "ticks": [
+            18,
+            18
+          ],
+          "loop": true
+        },
+        "revive_right": {
+          "frames": [
+            94,
+            95
+          ],
+          "ticks": [
+            6,
+            10
+          ],
+          "loop": false
+        },
+        "idle_up": {
+          "frames": [
+            96,
+            97,
+            98,
+            99
+          ],
+          "ticks": [
+            10,
+            10,
+            10,
+            10
+          ],
+          "loop": true
+        },
+        "run_up": {
+          "frames": [
+            100,
+            101,
+            102,
+            103,
+            104,
+            105
+          ],
+          "ticks": [
+            5,
+            5,
+            5,
+            5,
+            5,
+            5
+          ],
+          "loop": true
+        },
+        "slash_up": {
+          "frames": [
+            106,
+            107,
+            108,
+            109,
+            110
+          ],
+          "ticks": [
+            3,
+            3,
+            3,
+            3,
+            6
+          ],
+          "loop": false
+        },
+        "special_up": {
+          "frames": [
+            111,
+            112,
+            113,
+            114,
+            115
+          ],
+          "ticks": [
+            4,
+            4,
+            3,
+            4,
+            7
+          ],
+          "loop": false
+        },
+        "roll_up": {
+          "frames": [
+            116,
+            117,
+            118,
+            119
+          ],
+          "ticks": [
+            3,
+            3,
+            3,
+            3
+          ],
+          "loop": false
+        },
+        "dash_up": {
+          "frames": [
+            120,
+            121
+          ],
+          "ticks": [
+            6,
+            6
+          ],
+          "loop": false
+        },
+        "hurt_up": {
+          "frames": [
+            122,
+            123
+          ],
+          "ticks": [
+            5,
+            7
+          ],
+          "loop": false
+        },
+        "downed_up": {
+          "frames": [
+            124,
+            125
+          ],
+          "ticks": [
+            18,
+            18
+          ],
+          "loop": true
+        },
+        "revive_up": {
+          "frames": [
+            126,
+            127
+          ],
+          "ticks": [
+            6,
+            10
           ],
           "loop": false
         }
@@ -1711,64 +3597,95 @@
       ]
     },
     {
-      "id": "music_boss_v1",
+      "id": "music_boss_final_v1",
       "kind": "music",
-      "path": "assets/generated/audio/music_boss.wav",
-      "sha256": "df5129fb7e400e5db3a468c20beefd6400c45818d3bd5452870505ef74ba693c",
+      "path": "assets/generated/audio/music_boss_final.wav",
+      "sha256": "3ad7dc4d3c969bec98e2101cc5494c6a856b09c2e90ebe22814ca5caa08992df",
       "diagnostic": false,
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
       "channels": 2,
       "sample_width_bytes": 2,
-      "sample_frames": 1587600,
+      "sample_frames": 2257920,
       "loop_start": 0,
-      "loop_end": 1587600
+      "loop_end": 2257920
+    },
+    {
+      "id": "music_boss_v1",
+      "kind": "music",
+      "path": "assets/generated/audio/music_boss.wav",
+      "sha256": "4e5baf9364e7e8954209a2927229568259445fcf5b91f0c222455c2ecf75c891",
+      "diagnostic": false,
+      "sources": [
+        {
+          "path": "assets/source/audio/instruments.json",
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
+        },
+        {
+          "path": "assets/source/audio/cues.json",
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
+        },
+        {
+          "path": "assets/source/audio/score.json",
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
+        },
+        {
+          "path": "tools/gen/audio.py",
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
+        }
+      ],
+      "sample_rate": 44100,
+      "channels": 2,
+      "sample_width_bytes": 2,
+      "sample_frames": 2257920,
+      "loop_start": 0,
+      "loop_end": 2257920
     },
     {
       "id": "music_ending_v1",
       "kind": "music",
       "path": "assets/generated/audio/music_ending.wav",
-      "sha256": "c6dddcf1d82472baa0d3940f645b65f78c4532d1ff61df918b1a37060fb574aa",
+      "sha256": "fc421805260a242d3b8353867a6cf9205f5519a283014f0be0e9e7dcf1165a2b",
       "diagnostic": false,
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
       "channels": 2,
       "sample_width_bytes": 2,
-      "sample_frames": 793800,
+      "sample_frames": 882000,
       "loop_start": null,
       "loop_end": null
     },
@@ -1776,24 +3693,24 @@
       "id": "music_exploration_v1",
       "kind": "music",
       "path": "assets/generated/audio/music_exploration.wav",
-      "sha256": "b5d557e9d6a1232a74e2558bcd5dd57618aa14d923d0d0f4650b6c49e338d0ec",
+      "sha256": "f3cd7b62b52a880c97ab08fa59ae6785d96132a2ecf33b8be5218d6486fdb195",
       "diagnostic": false,
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
@@ -1807,24 +3724,24 @@
       "id": "oru_v1",
       "kind": "sprite_atlas",
       "path": "assets/generated/sprites/oru_v1.png",
-      "sha256": "9f4420031b60ee3a6c28ad105b9c25b19964b8dcc22bbf226b66380933043baa",
+      "sha256": "7fdb481c354ef45911b5de053692c316607169c40d11030e5136ab62aff05572",
       "diagnostic": false,
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         },
         {
           "path": "tools/gen/actors.py",
-          "sha256": "7b5aa961a23191a860f244be5558caca6e699c6d7ae69f1d2c0702c6af41c430"
+          "sha256": "e14c24bc513f32cecc18629536d716834dd860dd511c030067ef95ef5a9d12c6"
         },
         {
           "path": "assets/source/art/actors.json",
-          "sha256": "d9e22750840488c69905d0b99d1329d6be39f23aa27db81638d863c64314df8f"
+          "sha256": "4ad486485002169d3d107d5357ea4278eabd09dbad93fcb951cc3e29a3545ff5"
         }
       ],
       "size": [
@@ -1938,11 +3855,11 @@
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
@@ -2137,19 +4054,19 @@
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
@@ -2168,19 +4085,19 @@
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
@@ -2199,19 +4116,19 @@
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
@@ -2230,19 +4147,19 @@
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
@@ -2261,19 +4178,19 @@
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
@@ -2292,19 +4209,19 @@
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
@@ -2323,19 +4240,19 @@
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
@@ -2354,19 +4271,19 @@
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
@@ -2385,19 +4302,19 @@
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
@@ -2416,19 +4333,19 @@
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
@@ -2447,19 +4364,19 @@
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
@@ -2478,19 +4395,19 @@
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
@@ -2509,19 +4426,19 @@
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
@@ -2540,19 +4457,19 @@
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
@@ -2571,19 +4488,19 @@
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
@@ -2602,25 +4519,56 @@
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
       "channels": 1,
       "sample_width_bytes": 2,
       "sample_frames": 48510,
+      "loop_start": null,
+      "loop_end": null
+    },
+    {
+      "id": "sfx_roll_v1",
+      "kind": "sfx",
+      "path": "assets/generated/audio/sfx_roll.wav",
+      "sha256": "8c8baebeedb402a564f7ca56240de1b7125d2459a2c89f9f3809038dea3350aa",
+      "diagnostic": false,
+      "sources": [
+        {
+          "path": "assets/source/audio/instruments.json",
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
+        },
+        {
+          "path": "assets/source/audio/cues.json",
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
+        },
+        {
+          "path": "assets/source/audio/score.json",
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
+        },
+        {
+          "path": "tools/gen/audio.py",
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
+        }
+      ],
+      "sample_rate": 44100,
+      "channels": 1,
+      "sample_width_bytes": 2,
+      "sample_frames": 7938,
       "loop_start": null,
       "loop_end": null
     },
@@ -2633,19 +4581,19 @@
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
@@ -2664,19 +4612,19 @@
       "sources": [
         {
           "path": "assets/source/audio/instruments.json",
-          "sha256": "8487ebf06555c4b3d07e08889057a769ec5ee35352f3062fccaf02eddc1578d1"
+          "sha256": "23e35e95ac724760dd12d89097e7b15a2cc6b86c97145df2d2e123eb06f39049"
         },
         {
           "path": "assets/source/audio/cues.json",
-          "sha256": "709208f8cbb150c511fa89e9c911f4e7ef83b22fd244f746d4d2f098c5d45c4c"
+          "sha256": "1a996e750af1718b9bd197de49154171bd39795a8668e05b5b5f9c75bd650ab0"
         },
         {
           "path": "assets/source/audio/score.json",
-          "sha256": "fef82fa7e465b26ff591ce0eb04164afd9f403b5c31be016c6e73e81941df925"
+          "sha256": "89d33af3b1826ac12dc3c8e7abe869cb42bad538e3b7572b17c8a0a0390ff9ff"
         },
         {
           "path": "tools/gen/audio.py",
-          "sha256": "8cb04e32fb502a2e23b1df0eae167283c2be21ccc2aafe3f01e4dfcacebd3b25"
+          "sha256": "9f589fc55f9ed51d6fb63f1948c8d16e7e030952c7a56a037b02649310b904db"
         }
       ],
       "sample_rate": 44100,
@@ -2690,24 +4638,24 @@
       "id": "spoolmite_v1",
       "kind": "sprite_atlas",
       "path": "assets/generated/sprites/spoolmite_v1.png",
-      "sha256": "63c30ed7327099d23b9209a21307a9455632638b717c6704da059106ed07d7e6",
+      "sha256": "3bf2c56aca3336f2d1e06222de6b712ab267d10d75d2304e8ea2e2a5517b8bc0",
       "diagnostic": false,
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         },
         {
           "path": "tools/gen/actors.py",
-          "sha256": "7b5aa961a23191a860f244be5558caca6e699c6d7ae69f1d2c0702c6af41c430"
+          "sha256": "e14c24bc513f32cecc18629536d716834dd860dd511c030067ef95ef5a9d12c6"
         },
         {
           "path": "assets/source/art/actors.json",
-          "sha256": "d9e22750840488c69905d0b99d1329d6be39f23aa27db81638d863c64314df8f"
+          "sha256": "4ad486485002169d3d107d5357ea4278eabd09dbad93fcb951cc3e29a3545ff5"
         }
       ],
       "size": [
@@ -2901,24 +4849,24 @@
       "id": "spoolwarden_v1",
       "kind": "sprite_atlas",
       "path": "assets/generated/sprites/spoolwarden_v1.png",
-      "sha256": "9e14dfe88575e970520ec23d29820660ded4f52df002392a76bc05e5d7f653a2",
+      "sha256": "536f7236bc7d701dfd04d1b3fc6fe7919666198355609b7b5b4e9ba8f548c4f2",
       "diagnostic": false,
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         },
         {
           "path": "tools/gen/actors.py",
-          "sha256": "7b5aa961a23191a860f244be5558caca6e699c6d7ae69f1d2c0702c6af41c430"
+          "sha256": "e14c24bc513f32cecc18629536d716834dd860dd511c030067ef95ef5a9d12c6"
         },
         {
           "path": "assets/source/art/actors.json",
-          "sha256": "d9e22750840488c69905d0b99d1329d6be39f23aa27db81638d863c64314df8f"
+          "sha256": "4ad486485002169d3d107d5357ea4278eabd09dbad93fcb951cc3e29a3545ff5"
         }
       ],
       "size": [
@@ -3282,16 +5230,16 @@
       "id": "terrain_ember_v1",
       "kind": "tile_atlas",
       "path": "assets/generated/sprites/terrain_ember_v1.png",
-      "sha256": "a3a8c9c982e3c7143006523f09592c64983c9a062ed546991ff75b0fbe57ebb4",
+      "sha256": "36704fad0bfd05589e5deb84e0a6debad280a19977cc5bfa79f55352b6971146",
       "diagnostic": false,
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
@@ -3598,70 +5546,70 @@
       ],
       "animations": {},
       "tile_ids": [
-        "solid_fill",
-        "solid_top",
-        "one_way_middle",
-        "hazard_middle",
-        "solid_fill_2",
-        "solid_fill_3",
-        "solid_fill_4",
-        "solid_top_2",
-        "solid_top_3",
-        "solid_top_4",
-        "solid_bottom",
-        "solid_bottom_2",
-        "solid_bottom_3",
-        "solid_bottom_4",
-        "solid_left",
-        "solid_left_2",
-        "solid_left_3",
-        "solid_left_4",
-        "solid_right",
-        "solid_right_2",
-        "solid_right_3",
-        "solid_right_4",
-        "corner_outer_tl",
-        "corner_outer_tr",
-        "corner_outer_bl",
-        "corner_outer_br",
-        "corner_inner_tl",
-        "corner_inner_tr",
-        "corner_inner_bl",
-        "corner_inner_br",
-        "one_way_left",
-        "one_way_right",
-        "one_way_single",
-        "hazard_left",
-        "hazard_right",
-        "hazard_single",
-        "bridge_left",
-        "bridge_middle",
-        "bridge_right",
-        "bridge_single",
-        "seam_horizontal",
-        "seam_vertical",
-        "seam_cross",
-        "seam_knot",
-        "background_stone",
-        "background_brass",
-        "background_root",
-        "background_cloth"
+        "floor_path_1",
+        "floor_path_2",
+        "floor_grass_1",
+        "floor_grass_2",
+        "wall_fill_1",
+        "wall_fill_2",
+        "wall_fill_3",
+        "wall_fill_4",
+        "wall_edge_north",
+        "wall_edge_east",
+        "wall_edge_south",
+        "wall_edge_west",
+        "wall_corner_outer_ne",
+        "wall_corner_outer_se",
+        "wall_corner_outer_sw",
+        "wall_corner_outer_nw",
+        "wall_corner_inner_ne",
+        "wall_corner_inner_se",
+        "wall_corner_inner_sw",
+        "wall_corner_inner_nw",
+        "water_fill_1",
+        "water_fill_2",
+        "water_fill_3",
+        "water_fill_4",
+        "water_edge_north",
+        "water_edge_east",
+        "water_edge_south",
+        "water_edge_west",
+        "water_corner_ne",
+        "water_corner_se",
+        "water_corner_sw",
+        "water_corner_nw",
+        "bridge_plank_1",
+        "bridge_plank_2",
+        "bridge_rail_north",
+        "bridge_rail_south",
+        "seam_rune_1",
+        "seam_rune_2",
+        "seam_rune_3",
+        "seam_rune_4",
+        "background_earth_1",
+        "background_earth_2",
+        "background_roots_1",
+        "background_roots_2",
+        "hazard_glass_1",
+        "hazard_glass_2",
+        "hazard_thread_1",
+        "hazard_thread_2"
       ]
     },
     {
       "id": "terrain_moss_v1",
       "kind": "tile_atlas",
       "path": "assets/generated/sprites/terrain_moss_v1.png",
-      "sha256": "91b4f2387191a67036d080f6ad09363b78f5e148fe38ad1ddb1804daac59a6bb",
+      "sha256": "caa92b8b63b8874b8ac309a17ad6c1cf86d7ee43b5211a523fdf92c7bfb9e9f4",
       "diagnostic": false,
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
@@ -3968,54 +5916,54 @@
       ],
       "animations": {},
       "tile_ids": [
-        "solid_fill",
-        "solid_top",
-        "one_way_middle",
-        "hazard_middle",
-        "solid_fill_2",
-        "solid_fill_3",
-        "solid_fill_4",
-        "solid_top_2",
-        "solid_top_3",
-        "solid_top_4",
-        "solid_bottom",
-        "solid_bottom_2",
-        "solid_bottom_3",
-        "solid_bottom_4",
-        "solid_left",
-        "solid_left_2",
-        "solid_left_3",
-        "solid_left_4",
-        "solid_right",
-        "solid_right_2",
-        "solid_right_3",
-        "solid_right_4",
-        "corner_outer_tl",
-        "corner_outer_tr",
-        "corner_outer_bl",
-        "corner_outer_br",
-        "corner_inner_tl",
-        "corner_inner_tr",
-        "corner_inner_bl",
-        "corner_inner_br",
-        "one_way_left",
-        "one_way_right",
-        "one_way_single",
-        "hazard_left",
-        "hazard_right",
-        "hazard_single",
-        "bridge_left",
-        "bridge_middle",
-        "bridge_right",
-        "bridge_single",
-        "seam_horizontal",
-        "seam_vertical",
-        "seam_cross",
-        "seam_knot",
-        "background_stone",
-        "background_brass",
-        "background_root",
-        "background_cloth"
+        "floor_path_1",
+        "floor_path_2",
+        "floor_grass_1",
+        "floor_grass_2",
+        "wall_fill_1",
+        "wall_fill_2",
+        "wall_fill_3",
+        "wall_fill_4",
+        "wall_edge_north",
+        "wall_edge_east",
+        "wall_edge_south",
+        "wall_edge_west",
+        "wall_corner_outer_ne",
+        "wall_corner_outer_se",
+        "wall_corner_outer_sw",
+        "wall_corner_outer_nw",
+        "wall_corner_inner_ne",
+        "wall_corner_inner_se",
+        "wall_corner_inner_sw",
+        "wall_corner_inner_nw",
+        "water_fill_1",
+        "water_fill_2",
+        "water_fill_3",
+        "water_fill_4",
+        "water_edge_north",
+        "water_edge_east",
+        "water_edge_south",
+        "water_edge_west",
+        "water_corner_ne",
+        "water_corner_se",
+        "water_corner_sw",
+        "water_corner_nw",
+        "bridge_plank_1",
+        "bridge_plank_2",
+        "bridge_rail_north",
+        "bridge_rail_south",
+        "seam_rune_1",
+        "seam_rune_2",
+        "seam_rune_3",
+        "seam_rune_4",
+        "background_earth_1",
+        "background_earth_2",
+        "background_roots_1",
+        "background_roots_2",
+        "hazard_glass_1",
+        "hazard_glass_2",
+        "hazard_thread_1",
+        "hazard_thread_2"
       ]
     },
     {
@@ -4027,11 +5975,11 @@
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         }
       ],
       "size": [
@@ -4196,24 +6144,24 @@
       "id": "wickwing_v1",
       "kind": "sprite_atlas",
       "path": "assets/generated/sprites/wickwing_v1.png",
-      "sha256": "0363069e60024afe32d2f43b3b953c7842b6373b347cb383292d7a1e4d8b6341",
+      "sha256": "473eeb1a15fdd6a503b369de12b6fd31a4677191b3f353af8347713d14e95f8b",
       "diagnostic": false,
       "sources": [
         {
           "path": "assets/source/art/direction.json",
-          "sha256": "25bc32f338cf356bfa4f6d23e98f3cd8fdb91f066c1ff930a1ff0072ad6fc8ad"
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
         },
         {
           "path": "tools/gen/art.py",
-          "sha256": "35db5c6363d4c76c09a98c223decd11257bd9709d5d3b30bd21140048036e291"
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
         },
         {
           "path": "tools/gen/actors.py",
-          "sha256": "7b5aa961a23191a860f244be5558caca6e699c6d7ae69f1d2c0702c6af41c430"
+          "sha256": "e14c24bc513f32cecc18629536d716834dd860dd511c030067ef95ef5a9d12c6"
         },
         {
           "path": "assets/source/art/actors.json",
-          "sha256": "d9e22750840488c69905d0b99d1329d6be39f23aa27db81638d863c64314df8f"
+          "sha256": "4ad486485002169d3d107d5357ea4278eabd09dbad93fcb951cc3e29a3545ff5"
         }
       ],
       "size": [
@@ -4384,6 +6332,7 @@
   "sfx": {
     "jump": "sfx_jump_v1",
     "land": "sfx_land_v1",
+    "roll": "sfx_roll_v1",
     "slash": "sfx_slash_v1",
     "hit": "sfx_hit_v1",
     "hurt": "sfx_hurt_v1",
@@ -4404,6 +6353,7 @@
   "music": {
     "exploration": "music_exploration_v1",
     "boss": "music_boss_v1",
+    "boss_final": "music_boss_final_v1",
     "ending": "music_ending_v1"
   }
 }

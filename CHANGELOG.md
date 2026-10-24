@@ -72,6 +72,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 2 — content and assets
 
+### 2026-10-25T01:18:03+05:30 — Author the overhead art and active original soundtrack
+
+- Changed: Rebuilt both couriers as four-direction 128-frame sets, radial actors/boss, all eight effects and 48 opaque overhead terrain slots. Added four original keyboard/bass/percussion arrangements including boss_final, plus a grounded roll cue while retaining 18 legacy SFX. Versioned the 49-asset packet as overhead-v1/generator 2.0.0 with source/output provenance. Updated asset admission, focused regressions, pipeline docs and branch integration notice.
+- Why: Implement the user-authorized overhead direction and stronger animation/music while preserving clear movement, attack phases and original content. Broad reference qualities inform energy and perspective; no copied art, melodies, samples or maps are used.
+- Validation: 100 Python tests PASS, including two deterministic full rebuilds, art/source/PCM/headroom tests and negative admission cases; full asset validator PASS; Godot 4.7.2 headless media import PASS; pack/link and whitespace PASS. Static 1× attack/terrain/effect/boss contact sheets inspected; independent source/admission review completed. Two clip-alias regressions first failed then passed after exact Oru/effect names were enforced. Original 18 SFX bytes independently match 34ccb96.
+- Limitations: This is a content packet, not an overhead gameplay completion claim. The old checkout content gate rejects the new epoch/terrain until Agent 1 integrates matching rooms/runtime. New in-engine motion, complete ordinary-control route, exported playback/performance, listening, hardware and human acceptance remain separate. Evidence and actual audio metrics are retained under evidence/content/overhead.
+
 ### 2026-10-25T00:55:01+05:30 — Give the home screen an original illustrated composition
 
 - Changed: Added a render-only animated loom/courier vignette, compact home choices, live bound-key guides, operational-menu owner badge and a regression scenario for layout/remapping. Kept the shared menu intent API and owner input rules.

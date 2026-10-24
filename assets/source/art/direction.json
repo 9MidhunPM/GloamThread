@@ -9,5 +9,5 @@
   "ember": ["#10141C", "#293247", "#41465A", "#737B83", "#D5D2B8", "#F07865", "#FFE0A1", "#4A292B", "#845044", "#BC7852", "#E3AD6A", "#30283E", "#644258", "#A26671", "#F5CC83"],
   "moss": ["#10141C", "#293247", "#41465A", "#737B83", "#D5D2B8", "#F07865", "#FFE0A1", "#243F38", "#3E6B51", "#73965D", "#BCD184", "#243C48", "#3C6570", "#6BA49B", "#B5E5B4"],
   "background_extent": "finite",
-  "notes": "Right-facing source poses keep feet fixed; two themes use identical terrain alpha masks. Pixel contours are drawn deliberately; seed affects only deterministic accent placement."
+  "notes": "Four authored overhead directions keep feet anchored at (16,43); terrain slots are fully opaque in both themes, with walkability authored only in room JSON. Directional effects face +X before cardinal rotation. Pixel contours are deliberate; seed affects only deterministic accent placement."
 }
