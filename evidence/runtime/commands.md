@@ -36,3 +36,15 @@ Boot/session/player/cameras, real room/content/assets from Agent 2, rendered spl
 ## Shared-session checkpoint — 2026-10-24T22:32:31+05:30
 
 The missing boot/session/player/cameras above have now been implemented. `godot --headless --path . --editor --import --quit --log-file /tmp/gloamthread-session-import.log` exited 0 without resource/script errors. `godot --headless --fixed-fps 60 --path . --script tests/run_tests.gd --log-file /tmp/gloamthread-session-smoke.log -- --filter smoke_session` exited 0: the real session and Godot physics passed one shared room/world/mover, two players, grounded feet, independent movement/jump, body overlap, diverging bounded cameras and shared pause/resume. This scenario explicitly uses `tests/fixtures/m0_room.json` and disables art; normal boot never uses that fixture. No rendered or ordinary-input proof is claimed before Agent 2's packet is merged.
+
+## First content integration — 2026-10-24T22:40:57+05:30
+
+Packet `34e14c96d9c2e78d94007b55ac7af5794b5157ec` was merged cumulatively. Both `python3 tools/validate_assets.py --stage diagnostic` and `python3 tools/validate_content.py --stage diagnostic` passed; `python3 -m unittest discover -s tools/tests -p 'test_*.py'` passed 15 tests. Full-stage completeness is deliberately not asserted.
+
+The integrated suite `godot --headless --fixed-fps 60 --path . --script tests/run_tests.gd --log-file /tmp/gloamthread-integrated-scenarios.log` passed all four scenarios with no script errors; malformed-binding/duplicate-source warnings are expected negative cases. An `evidence/.gdignore` marker excludes retained captures/docs from game-resource import and export.
+
+`godot --headless --path . --editor --import --quit --log-file /tmp/gloamthread-content-import.log` imported six PNG/font resources without errors. `godot --headless --path . --quit-after 120 --log-file /tmp/gloamthread-boot.log` exited 0 with normal startup and no errors. The actual-content scenario command in [traversal.md](traversal.md) passed and produced the retained movement measurements.
+
+An actual app was launched on a hidden Hypruse agent workspace using `godot --path /home/midhun/Coading/Gloamthread --log-file /tmp/gloamthread-visible.log`; renderer was Compatibility/OpenGL 4.6, Mesa 26.2.5, Intel Arc (ARL). [Initial window capture](captures/m0-initial-window.png) is the unmodified window PNG at 2840×1713 pixels; monitor scale 1.25, compositor logical window 2272×1370. It shows equal letterboxed views, both diagnostic couriers, divider and Ember/Moss terrain tints. Because the window was hidden, this proves a rendered initial state, not continuous playback or actual input. The compositor may return stale hidden-window frames.
+
+Hypruse refused background keys to the XWayland window to protect the human's focus. A second launch with `--display-driver wayland` accepted one addressed `d` sendshortcut while leaving human focus untouched, but its subsequent hidden-window screenshot was black. Therefore visible ordinary-key movement, simultaneous physical keyboard actions and motion/pause capture remain unverified. No foreground takeover or human playtest was performed.

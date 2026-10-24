@@ -1,0 +1,13 @@
+{
+  "title": "Weftlands: cloth planes, brass seams and returning roots",
+  "authorship": "Original project-authored shapes and palettes; no external art inputs.",
+  "transparent_padding": 2,
+  "couriers": {
+    "tavi": {"hood": "#737B83", "mantle": "#3C6570", "scarf": "#E3AD6A", "spool": "#BC7852", "glow": "#F5CC83", "origin": [16, 43]},
+    "neri": {"hood": "#73965D", "mantle": "#3E6B51", "scarf": "#A26671", "spool": "#BCD184", "glow": "#B5E5B4", "origin": [16, 43]}
+  },
+  "ember": ["#10141C", "#293247", "#41465A", "#737B83", "#D5D2B8", "#F07865", "#FFE0A1", "#4A292B", "#845044", "#BC7852", "#E3AD6A", "#30283E", "#644258", "#A26671", "#F5CC83"],
+  "moss": ["#10141C", "#293247", "#41465A", "#737B83", "#D5D2B8", "#F07865", "#FFE0A1", "#243F38", "#3E6B51", "#73965D", "#BCD184", "#243C48", "#3C6570", "#6BA49B", "#B5E5B4"],
+  "background_extent": "finite",
+  "notes": "Right-facing source poses keep feet fixed; two themes use identical terrain alpha masks. Pixel contours are drawn deliberately; seed affects only deterministic accent placement."
+}

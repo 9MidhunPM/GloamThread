@@ -1,35 +1,35 @@
 # Implementation status
 
-Updated 2026-10-24T22:23:11+05:30. Keep planned work distinct from verified behaviour.
+Updated 2026-10-24T22:40:57+05:30. Keep planned work distinct from verified behaviour.
 
-Latest runtime checkpoint (2026-10-24T22:32:31+05:30): boot/session/player/cameras now exist. A fresh editor import is clean, and the shared-session physics fixture passes grounding, owned movement/jump, body overlap, world/masks and pause checks. Production art/content has not yet been merged into this checkpoint, so visible/ordinary-input M0 acceptance is still pending. Older missing-boot observations below describe the preceding checkpoint; the original handoff remains historical.
+## Parallel execution
 
-## Parallel execution setup
-
-- Two agent briefs define exclusive ownership, shared data formats, diagnostic-first packets and separate branches/checkouts: [runtime/integration](AGENT_1_RUNTIME.md) and [content/assets](AGENT_2_CONTENT.md).
-- Preparation commit `2fea1ef` is published to `main`; both feature branches were published from it. Agent 2's separate clone at `/home/midhun/Coading/GloamThread-content` was created and verified on `feat/phase1-content`; Agent 1 uses `feat/phase1-runtime` here. No Agent 2 implementation is claimed by setup alone.
-- Agent 1 merges tested content packets and owns runtime/import/release evidence. Agent 2 records its packet SHAs and exact checks in `evidence/content/` and its named changelog/AI-usage sections. M0 remains incomplete at this setup checkpoint.
+- Preparation commit `2fea1ef` is published on `main`. Agent 1 uses `feat/phase1-runtime` in `/home/midhun/Coading/Gloamthread`; Agent 2 is active on `feat/phase1-content` in its separate `/home/midhun/Coading/GloamThread-content` clone.
+- The [runtime brief](AGENT_1_RUNTIME.md) and [content brief](AGENT_2_CONTENT.md) define exclusive ownership and the shared data boundary. Cumulative content packet `34e14c9` is the first diagnostic integration; each agent's log sections are preserved.
 
 ## Implemented and verified
 
-- Built-in scenario runner, focused filter, zero-match failure and wrapper; two real-engine component scenarios pass for input bindings/routing and canonical room data. Synthetic input covers identical-pad reconnect ownership, analog remapping, release latches and disconnected neutrality; room cases cover unsafe/fractional/ragged data and full-body spawn clearance. See [commands and limitations](../evidence/runtime/commands.md).
-- Repository bootstrapped on the DevDay Kochi hackathon template; documentation merged. The current review reran `python3 tools/preflight.py` (exit 0) and `python3 tools/check_pack.py` (PASS) with Godot 4.7.2.stable.arch_linux.ed1daf0bf, Python 3.14.8, Pillow 13.0.0 and numpy 2.5.4.
-- Publication preparation: original template root retained; the two unpublished project commits use `Midhun P M <midhun.titan@gmail.com>` with identical trees/messages and preserved author dates. `origin` points to the user-authorized `9MidhunPM/GloamThread` repository. Git integrity and whitespace checks passed; a targeted credential-pattern/filename scan of all 52 original tracked blobs found no matches (not an entropy-based audit).
+- Boot/session, one authoritative room/world, two 480×360 viewports/cameras/HUDs, two owned-input player bodies, canonical collision, diagnostic mover and shared focus/pause handling exist. Fresh headless import succeeds, and normal boot with the diagnostic packet exits cleanly in a bounded headless smoke run.
+- Engine scenarios cover input/binding/reconnect safety, room/spawn validation, a shared-session physics fixture and the actual authored diagnostic r00/assets. They verify stable grounded feet, separate movement/jump, nonblocking partners, one world/room/mover, masks and shared pause/resume. Synthetic inputs do not certify physical devices.
+- Agent 2's diagnostic asset/content validators and 15 Python tests pass. The packet supplies original source, diagnostic sprites/terrain, a printable-ASCII bitmap font, manifests and r00. Full validators intentionally require later content.
+- An actual X11/Compatibility window capture shows both original diagnostic couriers, the two terrain tints and the equal divider/letterboxing. The window was on a hidden agent workspace: this is an initial rendered snapshot, not continuous animation or ordinary-input acceptance. Background XWayland input was refused safely; native-Wayland key delivery was accepted but its hidden-window capture was black, so no successful visible input check is claimed.
+- [Movement measurements](../evidence/runtime/traversal.md): 41.74 px full feet rise, 55.00 px running same-height feet travel, 30 airborne physics ticks, 12×24 collider and 66 px measured full-jump body clearance. Dash is not yet implemented or measured.
 
-## Implemented, not yet verified (M0 in progress)
+## Implemented, not fully verified
 
-- The editor scan registers scripts/classes and generates UID sidecars, but reports missing `scenes/app/boot.tscn` despite exit 0. This is not a clean integrated import/launch pass. Audio/world rendering/collision behaviour remains unverified; room validation is still a partial boundary rather than the complete entity schema.
-- Boot/session/player/cameras and a test-fixture session smoke now exist; production diagnostic assets and `content/rooms/r00.json` await Agent 2's packet. Continue from the two briefs; completed portions of the original handoff are documented above.
+- M0's runtime and first diagnostic packet are integrated for engine/structural checks. Visible simultaneous controls, moving-object playback in both views, native-resolution motion/pixel stability and physical keyboard rollover remain outstanding before the full M0 gate is claimed.
+- The manifest loader currently validates image IDs/kinds/paths/dimensions/frames needed by the tracer. Complete production manifest/profile/entity/decor/audio consumption and equivalent Python/GDScript contract coverage remain M1/integration work.
+- Coyote time, jump buffer, variable height and camera following exist. Isolated motor/camera checks passed, but integrated boundary scenarios and manual feel still need expansion. One-way landing exists; explicit drop-through is not implemented.
 
 ## Planned; not implemented
 
-- M0 remainder, then M1–M7: join screen, motor polish, combat, revive/recovery, Threadweave, exits, themes and original art/audio, the eight rooms, boss, Threadstep, persistence, settings, export. Full plan in `docs/PLAN_PHASE1.md`.
-- All performance, controller, visual, audio, two-human fun and complete-route acceptance results.
+- Join/reassignment/remapping UI; combat, enemies, down/revive/recovery; paired anchors, rally exits and checkpoint progression; finished theme/animation/audio integration; eight-room boss/dash/loom route, secret and ending; persistence/settings; export and final evidence.
+- All human fun/full-route playtests, actual gamepad hotplug, audio listening and named-machine performance acceptance.
 
-## Blocked or unavailable
+## Blocked or unavailable checks
 
-- Gamepads: none connected; gamepad ownership and hotplug gates stay unverified until hardware is attached. Primary mode is keyboard + keyboard.
-- Export templates for Godot 4.7.2 are not installed; needed at M7 (ask the user before downloading).
-- Human playtests and named-device performance measurements require the user.
+- No physical gamepads are connected. Keyboard/keyboard remains the primary mode to verify; gamepad paths remain hardware-unverified.
+- Matching export templates are not installed; the existing approval boundary for their large download applies at M7.
+- Two-human fresh playtests require actual participants. Hidden-window capture/input limitations do not count as a visible interaction pass; source and headless checks are reported separately.
 
-The older single-player HTML proof is separate evidence for a previous experiment. It does not establish any co-op acceptance criterion.
+Exact commands and historical checkpoint results are in [runtime evidence](../evidence/runtime/commands.md). The earlier single-player HTML proof is separate evidence and passes no co-op gate.

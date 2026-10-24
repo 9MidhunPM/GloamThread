@@ -6,6 +6,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 1 — runtime and integration
 
+### 2026-10-24T22:40:57+05:30 — Integrate Agent 2's diagnostic packet and measure movement
+
+- Changed: Merged content checkpoint `34e14c9` through a true merge, retaining both agents' log sections. Imported its original diagnostic sprites/terrain/font and added an engine scenario consuming the actual r00/manifest. Published the measured motor envelope, updated launch/validation instructions and retained an actual initial window capture.
+- Why: Close the first runtime/content seam early and give the level author measured limits rather than theoretical jump assumptions.
+- Validation: Diagnostic asset/content validators PASS; 15 Python tests PASS; clean resource import and bounded normal headless boot PASS; all 4 engine scenarios PASS. Actual-content session measured full jump rise 41.74 px, running feet travel 55.00 px, 30 airborne ticks and 66 px full-jump body clearance. Initial X11/Compatibility window capture shows both characters/tints. Hidden XWayland input was refused; native-Wayland background key delivery returned success but capture was black, so visible input/motion acceptance is unverified. Pack/whitespace checks passed; evidence is excluded from engine resource imports.
+- Limitations: M0's visible simultaneous-control gate is still outstanding. No dash measurement, complete gameplay route, human/device/audio/performance acceptance or full-bundle claim. Content packet remains diagnostic; complete schemas and later runtime mechanics are still planned.
+
 ### 2026-10-24T22:32:31+05:30 — Add the shared session and motor before content integration
 
 - Changed: Added boot/session scenes, one authoritative world with two viewports/cameras/HUDs, a manifest image boundary, owned player motor and stable sprite pivot, diagnostic mover, shared focus/pause overlay and an explicit test-only room fixture. Production boot reports missing content rather than substituting test geometry.
@@ -28,6 +35,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 - Limitations: This checkpoint sets up the work; it does not implement or verify the game. Agent 2 must deliver its diagnostic packet before integrated M0 acceptance can pass.
 
 ## Agent 2 — content and assets
+
+### 2026-10-24T22:29:31+05:30 — Deliver Drop A diagnostic content tracer
+
+- Changed: Added original diagnostic courier/terrain/mover sources and generator, a retained 96-glyph font source and PNG/BMFont export, provenance manifest, real fixed profiles/themes/world/dialogue and the exact r00 tracer layout. Added read-only staged asset/content validators and Python boundary tests; recorded setup and limitations in `evidence/content/README.md`.
+- Why: Unblock Agent 1's one-room co-op foundation while preserving stable IDs and strict producer/consumer contracts for final art.
+- Validation: Diagnostic generation and both diagnostic validators PASS; 15 Python tests PASS; preflight, pack/link checks and diff whitespace PASS. The full asset validator deliberately fails on the incomplete diagnostic bundle. Native PNG inspection covered both courier silhouettes.
+- Limitations: This is diagnostic content. Full assets/rooms/audio, engine import, animation playback, listening, traversal, controllers, performance and human playtests remain unverified or unfinished. Agent 1 owns integration and main publication.
 
 <!-- Agent 2 inserts its newest timestamped entries here. -->
 

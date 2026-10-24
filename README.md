@@ -19,18 +19,19 @@ Commands marked *planned* become usable when the milestone that creates them lan
 1. **Prerequisites and versions:** Arch Linux (first target), Godot **4.7.2 standard** (`godot --version` → `4.7.2.stable…`, not mono), Python ≥ 3.10 with Pillow and numpy, Git. Install with `sudo pacman -Syu --needed godot git python python-pillow python-numpy`. Details in [docs/SETUP.md](docs/SETUP.md).
 2. **Dependency installation:** none beyond the system packages above. No npm, .NET, C++, database or service.
 3. **Environment setup:** no environment variables, API keys or accounts. Phase 1 runs offline.
-4. **Start the project:** `godot --path .` *(planned — arrives with milestone M0)*.
+4. **Start the diagnostic co-op room:** run `godot --headless --path . --editor --import --quit` once, then `godot --path .`. This is the M0 movement/camera tracer; the full adventure is still being built. P1: A/D and Space; P2: arrows and `.`; Esc or Enter pauses both. On Wayland, `godot --display-driver wayland --path .` selects the native display driver.
 5. **Run checks or tests:**
    - `python3 tools/preflight.py` — read-only toolchain check (works now).
    - `python3 tools/check_pack.py` — planning-pack document/link/example check (works now).
-   - `python3 tools/validate_content.py`, `python3 tools/generate_assets.py --seed 18427`, `python3 tools/validate_assets.py` *(planned)*.
+   - `python3 tools/generate_assets.py --seed 18427 --stage diagnostic`, `python3 tools/validate_assets.py --stage diagnostic`, `python3 tools/validate_content.py --stage diagnostic` — the current diagnostic packet. Omit `--stage diagnostic` only for the later full bundle; full checks currently report incomplete content.
+   - `python3 -m unittest discover -s tools/tests -p 'test_*.py'` — asset/content validator regressions.
    - `godot --headless --path . --editor --import --quit` — register scripts/resources on a fresh checkout; this does not establish rendered gameplay.
    - `godot --headless --path . --script tests/run_tests.gd` — input/room component scenarios; also available as `bash tools/run_tests.sh`, with optional `-- --filter room_loading`.
 
 ### Current status
 
-- **Current implementation:** M0 is in progress. Boot/session/player/cameras now exist with a shared world, owned movement/jump and shared pause. Component scenarios and an actual-physics session fixture pass; the latest editor import is clean. See [runtime evidence](evidence/runtime/commands.md), [HANDOFF.md](HANDOFF.md) and [docs/STATUS.md](docs/STATUS.md).
-- **Known limitations:** production room content and generated assets await Agent 2's packet; normal startup explains missing data rather than running the test fixture. The complete game, saves and export remain unfinished. Keyboard + keyboard is the primary input mode to verify. Physical input, rendered gameplay and audio remain unverified.
+- **Current implementation:** M0's diagnostic content packet and runtime are integrated: one room, two couriers/views, shared collision/motion and pause. Engine and Python checks pass, with an initial real window capture and measured jump envelope. See [runtime evidence](evidence/runtime/commands.md), [movement limits](evidence/runtime/traversal.md) and [docs/STATUS.md](docs/STATUS.md).
+- **Known limitations:** continuous visible/physical-input M0 acceptance remains unverified; current art is diagnostic. Join/remapping UI, combat, cooperation/progression, the eight-room adventure, saves, finished art/audio and export remain unfinished. No human co-op playtest, actual gamepad or performance pass is claimed.
 - **Libraries, APIs, and public datasets used:** [Godot Engine](https://godotengine.org/) 4.7.2 (MIT), [Pillow](https://python-pillow.org/) (MIT-CMU), [NumPy](https://numpy.org/) (BSD-3). No game-content packs, stock art, fonts, music or sound libraries: every shipped sprite, tile, glyph, sound and line of dialogue is authored in this repository.
 
 ## Start in this order (design pack)
