@@ -38,6 +38,17 @@ def main():
     required += ["docs/" + name + ".md" for name in ["DECISIONS", "ARCHITECTURE", "IMPLEMENTATION_PLAN", "TASKS", "SETUP", "STORY_BIBLE", "ART_AUDIO_PIPELINE", "TEST_PLAN", "TRACK_ALIGNMENT", "GENERATION_ROADMAP", "STATUS", "VALIDATION", "AGENT_1_RUNTIME", "AGENT_2_CONTENT"]]
     for name in required:
         require((ROOT / name).is_file(), f"Missing document: {name}")
+    for name in ("README.md", "RULES.md", "AGENTS.md", "SUBMISSION.md", "HANDOFF.md",
+                 "docs/STATUS.md", "docs/SETUP.md", "docs/PLAN_PHASE1.md", "docs/DECISIONS.md",
+                 "docs/TRACK_ALIGNMENT.md"):
+        event_text = (ROOT / name).read_text(encoding="utf-8")
+        require("Devin Hack Kochi" in event_text, f"{name}: current Devin Hack Kochi event name missing")
+        require(not re.search(r"DevDay|devday-kochi|z10nz8gp", event_text, re.IGNORECASE),
+                f"{name}: inherited event branding or registration reference must be corrected")
+    rules = (ROOT / "RULES.md").read_text(encoding="utf-8")
+    require(not re.search(r"Use Codex as you build|will receive Codex credits|team of up to 4", rules),
+            "RULES.md: older event eligibility/credit rules are not current guidance")
+    print("PASS Devin Hack Kochi event identity and current template guidance")
     link_count = 0
     for path in ROOT.rglob("*.md"):
         text = path.read_text(encoding="utf-8")

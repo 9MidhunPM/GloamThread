@@ -1,31 +1,34 @@
 # Implementation status
 
-Updated 2026-10-24T22:10:33+05:30. Keep planned work distinct from verified behaviour.
+Updated 2026-10-24T22:57:30+05:30. Keep branch-specific implementation and actual evidence distinct.
 
-## Parallel execution setup
+## Parallel execution
 
-- Two agent briefs define exclusive ownership, shared data formats, diagnostic-first packets and separate branches/checkouts: [runtime/integration](AGENT_1_RUNTIME.md) and [content/assets](AGENT_2_CONTENT.md).
-- Agent 2's assigned checkout is `/home/midhun/Coading/GloamThread-content`, branch `feat/phase1-content`; Agent 1 uses `feat/phase1-runtime` here. The preparation commit is the shared starting point. Checkout/branch creation is verified separately after the preparation commit; this documentation does not assert either agent has completed implementation.
-- Agent 1 merges tested content packets and owns runtime/import/release evidence. Agent 2 records its packet SHAs and exact checks in `evidence/content/` and its named changelog/AI-usage sections. M0 remains incomplete at this setup checkpoint.
+- The [runtime brief](AGENT_1_RUNTIME.md) and [content brief](AGENT_2_CONTENT.md) define separate checkouts and cumulative integration. Agent 1 owns runtime, true merges and release; Agent 2 owns content and Python tooling.
+- Full content implementation is published at `48fb062`, with measured-movement handoff documentation at `e56d714`, on `feat/phase1-content`. Agent 1's recorded runtime checkpoint is `b1ff5d6` on `feat/phase1-runtime`; it integrates the earlier diagnostic packet `34e14c9`.
+- The current event is **Devin Hack Kochi**. [RULES.md](../RULES.md) follows the corrected template; current organizer instructions govern logistics and eligibility. AI usage records are this project's convention and impose no event tool/provider restriction.
 
 ## Implemented and verified
 
-- Repository bootstrapped on the DevDay Kochi hackathon template; documentation merged. The current review reran `python3 tools/preflight.py` (exit 0) and `python3 tools/check_pack.py` (PASS) with Godot 4.7.2.stable.arch_linux.ed1daf0bf, Python 3.14.8, Pillow 13.0.0 and numpy 2.5.4.
-- Publication preparation: original template root retained; the two unpublished project commits use `Midhun P M <midhun.titan@gmail.com>` with identical trees/messages and preserved author dates. `origin` points to the user-authorized `9MidhunPM/GloamThread` repository. Git integrity and whitespace checks passed; a targeted credential-pattern/filename scan of all 52 original tracked blobs found no matches (not an entropy-based audit).
+- Content: all eight authored rooms, fixed profiles/themes, dialogue, the full world graph and 47 original manifested art/audio/font outputs. Both full validators and 69 Python tests passed at full-content delivery; two seed-18427 rebuilds produced identical output/manifest hashes. Exact commands and limits are in [content evidence](../evidence/content/README.md).
+- Runtime checkpoint `b1ff5d6`: shared session/world, two independently driven player bodies and views, canonical collision, diagnostic mover, pause/focus handling and engine scenarios. Agent 1 recorded a real diagnostic window snapshot and actual-physics movement measurements: 41.74 px rise, 55 px running same-height feet travel and 30 airborne ticks. These are separate from Agent 2's authoring previews.
+- Publication: the organizer-shared root and focused development history are preserved under the authorized `9MidhunPM/GloamThread` remote and normal `Midhun P M` commit identity.
 
-## Implemented, not yet verified (M0 in progress)
+## Authored or implemented, pending integrated acceptance
 
-- `project.godot` and the first engine scripts: input contract (`CommandSnapshot`, `DeviceSource`, `Bindings`, `InputRouter` autoload), `AudioDirector` autoload, `RoomDefinition`, `CollisionBuilder`, `GrayboxSkin`, `Room`. **None of these has been parsed, imported or run by Godot yet.** The main scene, player, cameras, split presentation, session, scenario runner, diagnostic assets and `content/rooms/r00.json` are still missing; see `HANDOFF.md` §4 for the exact remaining M0 steps.
+- Production sprites, animation tables, terrain/backgrounds/decor, semantic cues and room/progression data exist. Agent 1 must wire and verify their runtime consumers; manifest counts and source-art previews pass no motion, listening or gameplay gate.
+- Authored two-tile ascent targets are consistent with the measured ordinary-movement envelope. Every mandatory route, anchor approach, recovery path and rally still needs actual both-character traversal. Dash gaps remain provisional until Threadstep has measured reach.
+- M0's visible simultaneous controls, motion stability and physical keyboard rollover are not established by synthetic engine input or a still window capture.
 
 ## Planned; not implemented
 
-- M0 remainder, then M1–M7: join screen, motor polish, combat, revive/recovery, Threadweave, exits, themes and original art/audio, the eight rooms, boss, Threadstep, persistence, settings, export. Full plan in `docs/PLAN_PHASE1.md`.
-- All performance, controller, visual, audio, two-human fun and complete-route acceptance results.
+- At the recorded runtime checkpoint: complete join/remapping UI, combat/recovery, cooperative anchors and exits, production presentation/audio, boss/dash/loom/ending progression, saves/settings and export. The data for these systems is authored; executable runtime behaviour is a separate milestone.
+- Complete ordinary-input route, controller hardware, listening, performance and fresh-pair playtests.
 
 ## Blocked or unavailable
 
-- Gamepads: none connected; gamepad ownership and hotplug gates stay unverified until hardware is attached. Primary mode is keyboard + keyboard.
-- Export templates for Godot 4.7.2 are not installed; needed at M7 (ask the user before downloading).
-- Human playtests and named-device performance measurements require the user.
+- No physical gamepads were available for recorded checks. Keyboard/keyboard is primary; gamepad acceptance remains pending hardware.
+- Matching export templates and a packaged Linux release have not been verified.
+- Fresh two-person playtests remain pending actual participants. No performance or fun claims are inferred from source/headless checks.
 
 The older single-player HTML proof is separate evidence for a previous experiment. It does not establish any co-op acceptance criterion.

@@ -15,6 +15,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 2 — content and assets
 
+### 2026-10-24T23:00:02+05:30 — Correct the project documentation for Devin Hack Kochi
+
+- Changed: Aligned README, event guidance, agent instructions, submission checklist, AI record and PR checklist with the user-linked corrected template at `cb4db78169a8d199b43b077fbcc8f2ff4b798a14`. Removed inherited logistics, participation limits and credit promises; clarified provider-neutral event guidance and the project's own documentation conventions. Refreshed stale setup/status/prompt references against the separate content delivery and runtime checkpoint. Added a read-only event-consistency gate to `tools/check_pack.py`.
+- Why: The organizer-shared template carried the wrong event identity and requirements. The user explicitly requested project-wide correction while preserving truthful project facts and actual tool attribution.
+- Validation: Fetched the corrected template through GitHub at the pinned commit and independently reviewed its event text. The new gate first failed on the stale README, then passed after correction; pack checks PASS with 106 relative links, Python compilation and diff whitespace PASS. Runtime checkpoint `b1ff5d6` evidence was read, not rerun by Agent 2.
+- Limitations: Current organizers still determine eligibility, logistics, deadline and credits. Historical log entries and Git history are preserved. These are documentation/consistency changes; no additional runtime, hardware or human acceptance is claimed.
+
 ### 2026-10-24T22:46:23+05:30 — Align the room handoff with measured movement
 
 - Changed: Recorded the exact full-content packet SHA and Agent 1's committed jump/headroom measurements, command and test conditions in content evidence.

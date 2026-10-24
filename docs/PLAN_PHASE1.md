@@ -2,7 +2,7 @@
 
 Current two-agent execution: use [Agent 1](AGENT_1_RUNTIME.md) and [Agent 2](AGENT_2_CONTENT.md). These briefs replace this original plan's three-worker ownership, generator ownership and pre-M1 parallelism restrictions. Milestone gates and Phase 1 scope remain unchanged. Canonical keyboard defaults and room dimensions are recorded in [DECISIONS.md](DECISIONS.md).
 
-Build the eight-room fixed-character split-screen co-op slice in Godot 4.7.2 on top of the DevDay Kochi hackathon template's repository workflow, implementing a one-room two-input tracer first, then combat/recovery, cooperation, original art/audio, the full route, persistence and release verification, with honest evidence at every gate.
+Build the eight-room fixed-character split-screen co-op slice in Godot 4.7.2 using the corrected Devin Hack Kochi template's repository workflow, implementing a one-room two-input tracer first, then combat/recovery, cooperation, original art/audio, the full route, persistence and release verification, with honest evidence at every gate. Current event guidance is in [RULES.md](../RULES.md).
 
 ## 0. Pre-implementation baseline (verified 2026-10-24)
 
@@ -16,7 +16,7 @@ This table records the environment before repository bootstrap and M0 work. It i
 | Gamepads | none connected; user will play **keyboard + keyboard (WASD / arrows)** |
 | Display / audio | Wayland + Hyprland; PipeWire. GPU: Intel Arc 140T, 30 GB RAM |
 | Git | no repository yet; identity configured (`9MidhunPM`) |
-| Hackathon template | `anima-regem/devday-kochi-hackathon-template` = docs scaffolding only: README (project overview + run/status sections), RULES.md, AGENTS.md (simple code, CHANGELOG/AI_USAGE/README upkeep, commit per milestone / ~30 min, conventional messages, no backdating/force-push), CHANGELOG.md, AI_USAGE.md, SUBMISSION.md, PR template, .gitignore |
+| Hackathon template | Documentation scaffold only. Current correction baseline: `anima-regem/devin-hack-kochi-thanushreesuresh-SEOpilot` at `cb4db78169a8d199b43b077fbcc8f2ff4b798a14`; [RULES.md](../RULES.md) supersedes inherited event details. Original root history is preserved. |
 | Project | no `project.godot`, code or assets — documents, 4 example JSONs, 2 Python utilities only |
 | numpy 2.5.4 | installed (not listed in SETUP.md; used for audio synthesis) |
 
@@ -153,5 +153,5 @@ Install 4.7.2 Linux export templates (ask first), preset `Linux`, `--export-rele
 - Gamepad ownership/hotplug (A02/A03 gamepad legs) unverified until a pad exists; K/K is verified instead.
 - Export templates missing → M7 export blocked until installed.
 - A27 audio listening, A29 performance, A30 two-human playtests need the user/hardware; recorded only when performed.
-- Template text says "Codex"; AI_USAGE records the actual tool. Event dates in RULES.md are organizer text and are kept verbatim; no claims are made about event timing.
+- The corrected template permits different AI tools and providers. AI_USAGE records actual assistance as a project convention. Current organizer announcements govern event details; older template dates and credit promises are not reused.
 - `docs/.~lock.STORY_BIBLE.md#` is a LibreOffice lock (user state) — left alone, git-ignored.

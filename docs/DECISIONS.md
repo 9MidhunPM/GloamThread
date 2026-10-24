@@ -2,10 +2,11 @@
 
 Version 2.0 · 24 October 2026 · Owner: Midhun P M.
 
-This repository includes the planning and handoff pack plus unverified M0 project/input/audio/room scaffolding. A playable Godot session is still missing; see `STATUS.md`. It supersedes the earlier C++/Raylib single-player production plan. The earlier HTML proof remains a separate, single-player experiment.
+These decisions govern the Godot co-op implementation. A diagnostic runtime tracer and the full authored content bundle now exist on separate branches; [STATUS.md](STATUS.md) records their evidence and remaining integration. This supersedes the earlier C++/Raylib production plan. The earlier HTML proof remains a separate single-player experiment.
 
 ## Product and phases
 
+- Event: **Devin Hack Kochi**, using the corrected template guidance in [RULES.md](../RULES.md). The template permits different AI tools/providers without major constraints; original-content, fixed-engine and offline-game boundaries are project choices. Current organizer instructions determine eligibility and logistics.
 - Working title: **GLOAMTHREAD: TWO ENDS**. Pitch: two couriers carrying opposite ends of the last living thread restore a kingdom that each sees differently.
 - Genre: original side-view pixel action exploration RPG, local two-player co-op, fixed vertical split screen, Linux desktop first.
 - Phase 1: two fixed characters; eight purposeful rooms; a complete 15–20 minute first-clear target; one shared physical world; two authored visual themes. No runtime image analysis or image generation.
@@ -66,5 +67,5 @@ Main links: r00↔r01↔r02↔r03↔r04↔r05; boss opens r05↔r01 shortcut. r0
 - Fixed content and later generated bundles use the same validated manifest interfaces. Phase 1 only needs to consume fixed manifests; do not implement the Phase 2 backend early.
 - Keep ability IDs allowlisted, stats bounded, colliders fixed, geometry canonical, and presentation separate. An image model never emits executable gameplay code.
 - Save team progress once: version, fixed character profile IDs, checkpoint ID, explored rooms, team unlocks, restored anchors, boss/secret flags. Settings/device bindings separate. Load at safe checkpoint, never an arbitrary combat-frame snapshot.
-- Planned commands use `tools/generate_assets.py`, `tools/validate_content.py`, `tools/validate_assets.py`, and a built-in GDScript scenario runner `tests/run_tests.gd`; no external test addon mandatory. These interfaces do not exist yet in this planning pack.
-- No claims of shipped co-op, Godot import, gameplay, rendering, audio or performance tests until actually run. This pack's validation only covers its documents and any example data/tooling explicitly included.
+- Content tooling implements `tools/generate_assets.py`, `tools/validate_content.py` and `tools/validate_assets.py`. The runtime branch provides the built-in GDScript scenario runner `tests/run_tests.gd`; no external test addon is mandatory. See the README for checkout-specific commands.
+- Record the branch/version and actual conditions for every import, gameplay, rendering, audio or performance result. Structural asset/content checks do not establish a complete co-op playthrough.

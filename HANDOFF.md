@@ -1,5 +1,7 @@
 # Handoff — Gloamthread: Two Ends (Phase 1 build)
 
+Current evidence is in [STATUS.md](docs/STATUS.md) and the [content delivery record](evidence/content/README.md). The original M0 notes below are historical. Current event guidance is **Devin Hack Kochi** in [RULES.md](RULES.md); inherited logistics and tool restrictions in the older template do not apply.
+
 ## Current execution: two agents in separate checkouts
 
 The user approved parallel execution on 2026-10-24. Start from [Agent 1's runtime/integration brief](docs/AGENT_1_RUNTIME.md) or [Agent 2's complete content/pipeline brief](docs/AGENT_2_CONTENT.md). They supersede the original ownership split in sections 1/6 and the integrator-owned generator/r00 instructions below. Agent 1 uses `feat/phase1-runtime` in this checkout; Agent 2 uses `feat/phase1-content` in `/home/midhun/Coading/GloamThread-content`. Both start at the preparation commit containing the briefs. Merge cumulative content packets into the runtime branch; preserve development history. The remainder of this file is the original M0 implementation handoff and remains useful for its technical steps.
@@ -12,7 +14,7 @@ Publication preparation, 2026-10-24T21:51:38+05:30 (Codex): the user authorized 
 
 1. **Scope:** full Phase 1 (milestones M0–M7 in `docs/IMPLEMENTATION_PLAN.md`). Stop there — no Phase 2 generation, no 96-room world.
 2. **Input:** **keyboard + keyboard (WASD / arrows)** is the primary mode to build and verify on the user's laptop. Gamepad and keyboard+gamepad paths must be implemented (data-driven) but recorded as *unverified on hardware* until a pad is plugged in. No gamepads are connected on this machine.
-3. **Repository workflow:** the repo history starts from the DevDay Kochi hackathon template. Follow its rules (now merged into `AGENTS.md` → "Repository workflow"): `CHANGELOG.md` entry with a real `date -Iseconds` timestamp in the same commit as each meaningful change; `AI_USAGE.md` row per meaningful agent contribution (name the actual tool, e.g. "Codex"); keep `README.md` and `SUBMISSION.md` truthful; commit per milestone and roughly every 30 minutes of meaningful work with `feat:/fix:/docs:/wip:` messages; never backdate, squash, or force-push. The template `origin` remote was **removed on purpose** — never push to the template repo; only push to a remote the user explicitly authorizes.
+3. **Repository workflow:** history retains the organizer-shared template root. Current guidance follows the corrected Devin Hack Kochi template in `RULES.md`. Keep actual timestamped changelog/AI assistance records, README and submission facts, and coherent milestone commits; preserve shared history. Publish only to the user-authorized project remote.
 4. **Parallelism:** the user approved parallel subagents for independent subsystems with exclusive file ownership (see §6). The integrator (you) owns `project.godot`, scenes, session/input/world engine code, `tools/generate_assets.py`, `assets/manifest.json`, docs and commits.
 
 ## 2. Environment (verified 2026-10-24)

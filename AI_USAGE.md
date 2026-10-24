@@ -2,6 +2,8 @@
 
 Briefly document each meaningful coding-agent contribution here. Add a row after each meaningful task or milestone. Keep summaries concise; omit secrets, private data and full chat transcripts. Name the tool actually used; mark human review as pending until the user has reviewed the contribution.
 
+This project maintains the record for **Devin Hack Kochi** as a repository convention. The event permits different AI tools and providers without major AI usage constraints. Historical tool names below describe actual assistance and remain unchanged.
+
 ## Build log
 
 ## Agent 1 — runtime and integration
@@ -14,6 +16,7 @@ Briefly document each meaningful coding-agent contribution here. Add a row after
 
 | Date and time with timezone | Tool / model, if known | Task | Assistance and affected files | Human review / corrections | Validation and result |
 | --- | --- | --- | --- | --- | --- |
+| 2026-10-24T23:00:02+05:30 | Codex | Correct Devin Hack Kochi documentation | Read the user-linked corrected template at its exact commit; corrected event/provider/logistics guidance across active docs, refreshed branch-specific status and added the event identity check | Pending; user explicitly requested the correction; historical Codex/Devin attribution preserved | New gate reproduced stale README failure then passed; pack/106 links, compilation and whitespace PASS. Runtime evidence read only; no new gameplay claims |
 | 2026-10-24T22:46:23+05:30 | Codex | Reconcile measured motor evidence | Added full content SHA and Agent 1's exact measured jump/clearance command, configuration and limitations to the content handoff | Pending; no content/runtime implementation changed | Read committed runtime evidence; pack/whitespace PASS. Diagnostic movement measurements do not pass full-route or dash gates |
 | 2026-10-24T22:43:33+05:30 | Codex | Author eight-room story data and integration evidence | Authored full room layouts/decor, canonical exits/progression/entities, data-only fixtures, content boundary tests and labelled source-art previews; documented concrete runtime traversal/presentation requests | Pending; review fixed rally feet inclusion, unsafe data crashes, missing causeway validation and overlarge draft stairs | Full content/assets PASS; 69 tests PASS; pack/whitespace PASS; native authoring inspection. No runtime traversal, animation, listening, controller, export or human gate claimed |
 | 2026-10-24T22:40:32+05:30 | Codex | Complete original asset inventory | Authored production pixel/pose recipes, actor atlases, material/background/prop/effect/UI output and original synthesized cues/music with retained editable sources; strengthened negative validators and rebuild checks | Pending; review corrected inner-corner orientation; no human animation/listening review claimed | 47 full assets validate; 40 asset/audio/generator tests PASS; twice-generated hashes identical; native authoring sheets inspected. Engine playback, physical traversal, listening, gamepads and human acceptance remain pending |
@@ -29,5 +32,7 @@ Briefly document each meaningful coding-agent contribution here. Add a row after
 | 2026-10-24T21:25:00+05:30 | Devin CLI (Claude) | Read the full design pack, verify the environment and write the Phase 1 implementation plan; bootstrap the repository on the hackathon template | Wrote the milestone plan (M0–M7, decisions D1–D12, parallel work split). Merged `README.md`, extended `AGENTS.md`, filled `CHANGELOG.md`, `AI_USAGE.md`, `SUBMISSION.md`, `.gitignore`; removed the template remote. | Pending — user chose scope (full Phase 1), input mode (keyboard + keyboard), template adoption and parallel subagents through the plan questions | `python3 tools/preflight.py` exit 0; `python3 tools/check_pack.py` PASS; Godot 4.7.2 CLI flags and split-screen docs checked against official sources |
 
 ## Template preparation
+
+This historical note describes the inherited template, not current event logistics or AI requirements. Current guidance is in [RULES.md](RULES.md).
 
 On 10 October 2026, Codex prepared the documentation template this repository started from, covering `README.md`, `RULES.md`, `AGENTS.md`, `CHANGELOG.md`, `AI_USAGE.md`, `SUBMISSION.md`, `.gitignore` and the pull request checklist. That preparation is separate from this project's implementation and the AI usage recorded above.

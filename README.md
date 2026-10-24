@@ -2,34 +2,42 @@
 
 **Two couriers. One unraveling kingdom. Two ways of seeing it.**
 
-An original split-screen local co-op pixel action adventure built in Godot 4.7.2. This repository started from the [DevDay Exchange Community Hackathon: Kochi template](https://github.com/anima-regem/devday-kochi-hackathon-template) and follows its repository workflow: [event rules](RULES.md), [agent guide](AGENTS.md), [change log](CHANGELOG.md), [AI usage record](AI_USAGE.md) and [submission sheet](SUBMISSION.md).
+An original split-screen local co-op pixel action adventure built in Godot 4.7.2 for **Devin Hack Kochi**. Its documentation follows the [corrected event template](https://github.com/anima-regem/devin-hack-kochi-thanushreesuresh-SEOpilot/tree/codex/correct-devin-hack-kochi-thanushreesuresh): [event guidance](RULES.md), [agent guide](AGENTS.md), [change log](CHANGELOG.md), [AI usage record](AI_USAGE.md) and [submission sheet](SUBMISSION.md).
+
+## Event guidance
+
+Devin Hack Kochi allows Devin and other AI tools, models and providers without major AI usage constraints. We maintain an accurate AI assistance record as a project convention. Use current organizer announcements for logistics, participation, eligibility, deadlines and credits; the older shared template's details do not apply. Our offline runtime and original-content requirements are game design choices.
 
 ## Project overview
 
 - **Project name:** Gloamthread: Two Ends
 - **Short description:** Two players share one computer and one physical world, but each sees it through a different visual theme (Ember and Moss). They fight, revive each other, restore broken bridges from paired anchors and reopen the Lantern Loom so a stranded district can cross home. It is for pairs who enjoy responsive action, exploration and solving a small problem together.
 - **Team:** Midhun P M ([9MidhunPM](https://github.com/9MidhunPM)) — solo, with coding-agent assistance recorded in [AI_USAGE.md](AI_USAGE.md).
-- **Working demo:** not available yet. An offline desktop build is planned; see "Current status" below.
+- **Working demo:** a diagnostic runtime tracer is verified on `feat/phase1-runtime`; the full eight-room game and exported demo are not complete. See "Current status" below.
 - **Technology stack:** Godot 4.7.2 standard (typed GDScript, Compatibility renderer), Python 3 + Pillow + numpy for original asset/audio generation and validation, Git.
 
 ### Run the project
 
-Commands marked *planned* become usable when the milestone that creates them lands; see [Current status](#current-status).
+The content branch supports the Python commands below. Launch and engine scenarios require Agent 1's runtime checkout or the integrated branch; this content branch does not contain its boot/session implementation yet.
 
 1. **Prerequisites and versions:** Arch Linux (first target), Godot **4.7.2 standard** (`godot --version` → `4.7.2.stable…`, not mono), Python ≥ 3.10 with Pillow and numpy, Git. Install with `sudo pacman -Syu --needed godot git python python-pillow python-numpy`. Details in [docs/SETUP.md](docs/SETUP.md).
 2. **Dependency installation:** none beyond the system packages above. No npm, .NET, C++, database or service.
 3. **Environment setup:** no environment variables, API keys or accounts. Phase 1 runs offline.
-4. **Start the project:** `godot --path .` *(planned — arrives with milestone M0)*.
+4. **Start the runtime tracer:** `godot --path .` from the runtime/integrated checkout. The complete adventure still needs runtime integration and acceptance checks.
 5. **Run checks or tests:**
    - `python3 tools/preflight.py` — read-only toolchain check (works now).
-   - `python3 tools/check_pack.py` — planning-pack document/link/example check (works now).
-   - `python3 tools/validate_content.py`, `python3 tools/generate_assets.py --seed 18427`, `python3 tools/validate_assets.py` *(planned)*.
-   - `godot --headless --path . --import` and `godot --headless --path . --script tests/run_tests.gd` *(planned)*.
+   - `python3 tools/check_pack.py` — event guidance, document/link and example checks.
+   - `python3 tools/generate_assets.py --seed 18427` — rebuild the full original asset bundle.
+   - `python3 tools/validate_assets.py` and `python3 tools/validate_content.py` — full bundle checks.
+   - `python3 -m unittest discover -s tools/tests -p 'test_*.py'` — Python boundary and rebuild tests.
+   - `python3 tools/gen/rebuild_check.py --seed 18427` — compare two complete output/manifest rebuilds.
+   - Runtime checkout: `godot --headless --path . --editor --import --quit`, then `godot --headless --fixed-fps 60 --path . --script tests/run_tests.gd`.
 
 ### Current status
 
-- **Current implementation:** M0 is in progress. `project.godot` and input, audio and room scaffolding exist alongside the design pack, example contracts and two Python utilities. The engine files have not been parsed, imported or run. See [HANDOFF.md](HANDOFF.md) for the remaining M0 work and [docs/STATUS.md](docs/STATUS.md) for verified and unverified work.
-- **Known limitations:** the main scene, player/session controllers, cameras, room content, generated assets, saves, scenario runner and export are missing, so the game is not runnable yet. Keyboard + keyboard (WASD / arrows) is the primary input mode to build and verify. Gamepad support requires hardware verification when a controller is available.
+- **Content branch:** eight authored rooms, fixed profiles, dialogue, 47 original manifested art/audio/font assets and the complete Python pipeline. Both full validators and 69 Python tests passed at delivery; two seed-18427 rebuilds matched. See [content evidence](evidence/content/README.md).
+- **Runtime branch:** Agent 1's `b1ff5d6` checkpoint integrates the diagnostic packet with one shared world, two owned-input couriers, split views, engine scenarios and measured movement. Its first window capture is a diagnostic snapshot. Production content integration remains separate from these results.
+- **Known limitations:** the complete combat/recovery/cooperation/boss/dash/loom/save loop is not accepted. Physical room traversal, animation, listening, ordinary-input playthrough, gamepad hardware, export, performance and human playtests remain pending. Keyboard + keyboard is the primary input mode. [STATUS.md](docs/STATUS.md) records the current boundaries.
 - **Libraries, APIs, and public datasets used:** [Godot Engine](https://godotengine.org/) 4.7.2 (MIT), [Pillow](https://python-pillow.org/) (MIT-CMU), [NumPy](https://numpy.org/) (BSD-3). No game-content packs, stock art, fonts, music or sound libraries: every shipped sprite, tile, glyph, sound and line of dialogue is authored in this repository.
 
 ## Start in this order (design pack)
@@ -62,7 +70,7 @@ Tavi, an Ember courier, and Neri, a Moss courier, carry the two ends of a living
 | [MVP.md](MVP.md) | Exact first-release scope, route, controls, acceptance and cuts |
 | [PRD.md](PRD.md) | Product requirements, player paths and larger-world direction |
 | [AGENTS.md](AGENTS.md) | Persistent rules for coding agents, including the repository workflow |
-| [RULES.md](RULES.md) | Hackathon event rules from the template (organizer text) |
+| [RULES.md](RULES.md) | Devin Hack Kochi guidance and the corrected template reference |
 | [FIRST_AGENT_PROMPT.md](FIRST_AGENT_PROMPT.md) | The build request that started the implementation |
 | [SETUP.md](docs/SETUP.md) | What to install first, hardware checks and run/export commands |
 | [DECISIONS.md](docs/DECISIONS.md) | Canonical names, scope, rules, dimensions and implementation addenda |

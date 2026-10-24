@@ -1,43 +1,27 @@
-# Hackathon rules
+# Devin Hack Kochi — event guidance
 
-## Event
+## Current event
 
-**DevDay Exchange Community Hackathon: Kochi**
+Gloamthread is being built for **Devin Hack Kochi**. Guidance follows the
+[corrected organizer-shared template](https://github.com/anima-regem/devin-hack-kochi-thanushreesuresh-SEOpilot/tree/cb4db78169a8d199b43b077fbcc8f2ff4b798a14), checked on 24 October 2026.
 
-**Dates:** 10–11 October 2026
+The template permits Devin and other AI tools, models and providers without
+major AI usage constraints. Our [AI usage record](AI_USAGE.md) documents actual
+assistance as a project convention. It is not an event eligibility condition.
 
-**Venue:** JAIN University, Kochi — rooms 2008 and 2009
+## Organizer instructions
 
-**Map:** [Venue location](https://maps.app.goo.gl/Eme7gR7NDXSNRANu5)
+Use current organizer announcements for participation, tracks, project-start
+requirements, eligibility, logistics, deadlines, submission and credits. The
+older template's schedule, venue, registration link, team limit and credit
+promises do not establish this event's rules. No replacement details are assumed.
 
-**Registration:** [Luma event page](https://luma.com/z10nz8gp)
+## Project preparation
 
-All times below are in **Indian Standard Time (IST, UTC+05:30)**:
+- Prepare a repository, description and working demo using [SUBMISSION.md](SUBMISSION.md).
+- Record dependencies, sources, actual checks and remaining limitations.
+- Protect credentials and private data, and treat participants respectfully.
 
-- Check-in: **10 October, 6:00 PM**.
-- Kick-off: **10 October, 6:30 PM**.
-- Wrap-up: **11 October, by 10:00 AM**.
-
-## Participation and building
-
-1. **Participate solo or in a team of up to 4.** You may form a team with fellow participants at the venue.
-2. **The theme is open.** Build anything you like.
-3. **Start from scratch at the event.** Libraries, APIs, and public datasets are welcome. Pre-built projects are not allowed. This repository supplies documentation scaffolding only.
-4. **Use Codex as you build, and briefly document your AI usage.** Keep a short, accurate record in [AI_USAGE.md](AI_USAGE.md).
-5. **Submit your code repository, a short project description, and a working demo.** Use [SUBMISSION.md](SUBMISSION.md) to prepare these items. Follow the organizers' submission instructions at the venue.
-
-## Entry and conduct
-
-- Keep your **approved Luma QR code** ready for entry.
-- Bring your **laptop and charger**.
-- Be **respectful of fellow participants**.
-
-## Credits
-
-**Eligible checked-in participants will receive Codex credits and OpenAI API credits.**
-
-## Source and repository guidance
-
-These rules reflect the organizer-provided event announcement. The [Luma page](https://luma.com/z10nz8gp) is the event and registration reference. Follow any event updates communicated by the organizers.
-
-[AGENTS.md](AGENTS.md) adds project workflow guidance for simple coding patterns, documentation, verification, and regular commits. Its commit cadence is a template convention, not an additional event eligibility rule.
+[AGENTS.md](AGENTS.md) defines our development workflow. The original-content,
+offline-game and engine choices are Gloamthread requirements; they do not restrict
+which AI tool an event participant may use.

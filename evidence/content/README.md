@@ -148,3 +148,19 @@ Agent 1's diagnostic-room results, read by Agent 2 after room publication.
 They support the conservative two-tile ascent target; they do not validate the
 full authored route. Dash, production-room motion/readability and integrated
 acceptance remain pending. This receipt changes documentation only.
+
+## Event documentation correction
+
+The user requested project-wide alignment with the corrected **Devin Hack Kochi**
+template. The reference branch was read through GitHub at commit
+`cb4db78169a8d199b43b077fbcc8f2ff4b798a14`; [RULES.md](../../RULES.md) pins that source.
+Active documentation now follows its provider-neutral guidance and delegates
+unconfirmed logistics/eligibility to current organizers. Historical development
+records and actual tool attribution remain intact.
+
+This later user request extends the earlier content-only documentation boundary:
+central setup/status/event docs were corrected on the content branch, with Agent 1
+notified to preserve newer runtime facts when merging. `tools/check_pack.py` now
+rejects inherited event names/registration references in active guidance; it first
+failed on the old README and passed after correction. This gate and link checks
+do not add engine or gameplay evidence.

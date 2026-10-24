@@ -1,4 +1,4 @@
-# Setup before the first coding run
+# Setup and validation
 
 Version 2.0 · verified sources on 24 October 2026. These instructions prepare the user's machine; no system packages have been installed by this starter pack.
 
@@ -26,12 +26,12 @@ Official packages: [Godot](https://archlinux.org/packages/extra/x86_64/godot/), 
 
 ## 2. Hardware and environment
 
-- Two gamepads are preferred. Keyboard plus one gamepad is the required alternative. Two people on one keyboard is optional because simultaneous key combinations may be dropped by keyboard hardware.
+- Keyboard/keyboard is the user-selected primary input mode, with a hardware-rollover caveat. Two gamepads and keyboard plus gamepad are supported paths to verify when devices are available. Use the runtime's configured bindings and per-player ownership.
 - Connect the devices before the first input test. Confirm distinct device IDs in the Godot debug output once the game exists. Do not allow one controller to steer both players.
 - Target the user's Arch/Hyprland laptop first; test actual window focus, controller hotplug and audio on that machine. This document does not certify hardware compatibility.
 - Use the Compatibility renderer for the first 2D slice. Start windowed at 1920×720 if the desktop has room, otherwise a 960×360 integer-scaled window. Fullscreen letterboxes to preserve the 8:3 composite aspect; a 1920×1080 monitor will have vertical unused space. A two-half 16:9 window would give different camera framing and needs a separate deliberate design pass.
 
-## 3. Check this planning pack now
+## 3. Check the toolchain and documentation
 
 From the extracted folder containing README.md:
 
@@ -52,26 +52,33 @@ python3 tools/preflight.py --godot /path/to/Godot_v4.7.2-stable_linux.x86_64
 
 1. Extract the whole ZIP; keep AGENTS.md at the root where the agent starts.
 2. Open that folder in your coding agent. For a remote agent, place the folder's contents in the repository/workspace it actually uses; your local installed tools are not automatically installed in its cloud environment.
-3. This repository's history starts from the DevDay Kochi hackathon template; its `.gitignore` (extended with Godot's `.godot/` cache and build output) covers transient project files. Do not nest a repository inside an existing checkout.
+3. This repository retains the organizer-shared template history and follows corrected Devin Hack Kochi guidance in [RULES.md](../RULES.md). Its `.gitignore` covers Godot caches and build output. Do not nest a repository inside an existing checkout.
 4. Paste FIRST_AGENT_PROMPT.md's prompt block and start the build.
 5. Ask for the first one-room two-input proof early, then let the agent continue through the scoped MVP. Inspect visible output at each integration gate.
 
-`project.godot` and initial input/audio/room scripts exist, but the main scene and playable session are missing. The game cannot launch yet, and the scripts have not been imported or run. Continue from [the handoff](../HANDOFF.md) and use [STATUS.md](STATUS.md) for current verification evidence.
+The content branch contains the full original bundle and Python tools. Agent 1's runtime branch contains the diagnostic boot/session and engine scenarios. Use [STATUS.md](STATUS.md) for verified checkpoints and the two agent briefs for ownership; the older handoff is historical context.
 
-## 5. Command contract after implementation
+## 5. Content and runtime commands
 
-The agent must create these interfaces. They are **planned**, and will not work from the planning pack alone:
+From the content/integrated checkout:
 
 ```sh
 python3 tools/generate_assets.py --seed 18427
 python3 tools/validate_assets.py
 python3 tools/validate_content.py
-godot --headless --path . --import
+python3 -m unittest discover -s tools/tests -p 'test_*.py'
+python3 tools/gen/rebuild_check.py --seed 18427
+```
+
+From the runtime/integrated checkout:
+
+```sh
+godot --headless --path . --editor --import --quit
 godot --headless --path . --script tests/run_tests.gd
 godot --path .
 ```
 
-The scenario runner must return a nonzero process status on failure and finish, not hang in an empty main loop. Import success alone cannot validate cameras, audio, controllers or playability.
+The scenario runner returns nonzero on failure. Agent 1 owns authoritative engine imports and runtime evidence. Import success alone cannot validate cameras, audio, controllers or playability.
 
 ## 6. Exporting a playable Linux build
 
