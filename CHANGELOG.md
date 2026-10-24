@@ -6,6 +6,12 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 1 — runtime and integration
 
+### 2026-10-25T02:05:12+05:30 — Isolate overhead saves and identify development packages
+
+- Changed: Versioned the new game 0.2.0-dev with a dedicated Gloamthread-overhead user-data directory. Linux packaging derives its archive/build version from the validated project identifier; updated the current launch guide for Roll and actual verification limits.
+- Why: Preserve the published side-view campaign/settings and prevent a new export from masquerading as the old demo.
+- Validation: Python packaging compilation, planning-pack links and whitespace pass. Native overhead play/export remains a separate pending gate.
+
 ### 2026-10-25T02:01:00+05:30 — Connect overhead rooms, per-player guidance and Oru's mission
 
 - Changed: Integrated the authored overhead world/session/HUD with shared feet sorting, safe water-context cleanup, per-slot local hints/targets and permanent mission flow. Actual App Next/Skip/cancel closes introduction through complete_dialogue, committing met_oru before the first gate. Rewrote Oru's short introduction for clear overhead cooperation.
