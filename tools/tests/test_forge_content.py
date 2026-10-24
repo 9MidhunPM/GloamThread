@@ -6,7 +6,7 @@ from pathlib import Path
 import shutil
 import tempfile
 import unittest
-from PIL import Image
+from PIL import Image,ImageDraw
 
 from tools.forge.art import RIG_PARTS,authored_parts,make_rig,bake_atlas
 from tools.forge.catalog import catalog
@@ -181,6 +181,45 @@ class FighterContentTests(unittest.TestCase):
             im.paste((0,0,0,0),(682,682,1024,1024));im.save(job/'raw_parts.png')
         with self.assertRaisesRegex(BundleError,'master design'):convert_generated(job/'raw_parts.png',job/'raw_theme.png',p,job,{})
         self.assertFalse((job/'candidate').exists())
+    def annotated_raw_job(self):
+        job=self.folder/'annotated';job.mkdir();p=self.proposal();write_json(job/'job.json',{'schema_version':1,'proposal':p})
+        board=Image.new('RGBA',(1024,1024),(130,135,130,96));board.putpixel((0,0),(0,0,0,0));crops={}
+        for n,(name,image) in enumerate(authored_parts('upright',p['theme']['palette']).items()):
+            cut=image.crop(image.getbbox());cut=cut.resize((cut.width*4,cut.height*4),Image.Resampling.NEAREST)
+            x,y=(40+(n%4)*230,60+(n//4)*360);board.alpha_composite(cut,(x,y));crops[name]={'crop':[x-8,y-8,cut.width+16,cut.height+16]}
+        master=Image.new('RGBA',(64,64))
+        for image in authored_parts('upright',p['theme']['palette']).values():master.alpha_composite(image)
+        master=master.crop(master.getbbox());master=master.resize((master.width*4,master.height*4),Image.Resampling.NEAREST)
+        board.alpha_composite(master,(700,610));board.save(job/'raw_parts.png')
+        theme=Image.new('RGBA',(1024,1024),(40,60,80,255));ImageDraw.Draw(theme).rectangle((640,0,1023,575),fill=(250,10,10,255));theme.save(job/'raw_theme.png')
+        layout={'schema_version':1,'raw_parts_sha256':sha256(job/'raw_parts.png'),'raw_theme_sha256':sha256(job/'raw_theme.png'),'alpha_cutoff':192,'parts':crops,
+                'master_crop':[692,602,master.width+16,master.height+16],'background_crop':[0,0,576,324],
+                'material_crops':[[n*256,680,256,344] for n in range(4)]}
+        return job,p,layout
+    def test_explicit_layout_corrects_haze_and_nongrid_without_relaxing_default(self):
+        job,p,layout=self.annotated_raw_job()
+        with self.assertRaisesRegex(BundleError,'clipped'):convert_generated(job/'raw_parts.png',job/'raw_theme.png',p,job,{})
+        self.assertFalse((job/'parts').exists());self.assertFalse((job/'candidate').exists())
+        write_json(job/'source_layout.json',layout)
+        result=convert_generated(job/'raw_parts.png',job/'raw_theme.png',p,job,{'provider':'mock'})
+        manifest=validate_bundle(result);provenance=json.loads((result/'provenance.json').read_text())
+        self.assertEqual(provenance['source_layout'],layout);self.assertEqual(provenance['source_layout_sha256'],sha256(job/'source_layout.json'))
+        self.assertEqual(provenance['bake_inputs']['source_layout'],layout)
+        with Image.open(result/'background.png') as image:self.assertEqual(image.convert('RGB').getextrema(),((40,40),(60,60),(80,80)))
+        self.assertEqual(manifest['rig_id'],'upright')
+    def test_source_layout_rejects_bad_hash_bounds_part_ids_and_cutoff(self):
+        job,p,layout=self.annotated_raw_job()
+        mutations=[lambda x:x.update(raw_parts_sha256='0'*64),lambda x:x['parts']['head'].update(crop=[1023,0,10,10]),lambda x:x['parts'].update(unknown={'crop':[0,0,4,4]}),lambda x:x.update(alpha_cutoff=0),lambda x:x.update(alpha_cutoff=True),lambda x:x.update(material_crops=[[0,0,4,4]])]
+        for mutate in mutations:
+            bad=copy.deepcopy(layout);mutate(bad);write_json(job/'source_layout.json',bad)
+            with self.assertRaises(BundleError):convert_generated(job/'raw_parts.png',job/'raw_theme.png',p,job,{})
+            self.assertFalse((job/'candidate').exists());self.assertFalse((job/'parts').exists())
+    def test_changed_source_layout_requires_raw_reconversion(self):
+        job,p,layout=self.annotated_raw_job();write_json(job/'source_layout.json',layout)
+        first=convert_generated(job/'raw_parts.png',job/'raw_theme.png',p,job,{})
+        retained={file.name:file.read_bytes() for file in first.iterdir()};layout['alpha_cutoff']=224;write_json(job/'source_layout.json',layout)
+        with self.assertRaisesRegex(BundleError,'reconvert'):bake_job(job/'job.json')
+        self.assertEqual({file.name:file.read_bytes() for file in first.iterdir()},retained);self.assertFalse((job/'candidate-bake-1').exists())
     def test_symlinked_part_is_rejected(self):
         job=self.make_job();(job/'parts/head.png').unlink();(job/'parts/head.png').symlink_to(ROOT/'assets/arena/builtin/cinderjack/portrait.png')
         with self.assertRaises(BundleError):load_rig(job,'upright')

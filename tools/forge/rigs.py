@@ -85,11 +85,47 @@ def _json_digest(value:dict)->str:
     return hashlib.sha256(encoded).hexdigest()
 
 
+def _source_layout(job_dir:Path,rig_id:str,raw_hashes:dict)->dict|None:
+    """Explicit reviewed coordinates only; never infer or relax an invalid grid."""
+    file=job_dir/'source_layout.json'
+    if not file.exists():return None
+    require(file.is_file() and not file.is_symlink() and file.stat().st_size<=128*1024,'Source layout is unsafe or oversized.')
+    layout=json.loads(file.read_text())
+    required={'schema_version','raw_parts_sha256','raw_theme_sha256','alpha_cutoff','parts','master_crop','background_crop'}
+    require(isinstance(layout,dict) and required<=set(layout)<=required|{'material_crops'},'Source layout fields are invalid.')
+    require(type(layout['schema_version']) is int and layout['schema_version']==1,'Source layout version is invalid.')
+    for field in ('raw_parts_sha256','raw_theme_sha256'):
+        require(isinstance(layout[field],str) and re.fullmatch(r'[0-9a-f]{64}',layout[field]) is not None and layout[field]==raw_hashes.get(field),'Source layout belongs to different raw images.')
+    require(type(layout['alpha_cutoff']) is int and 1<=layout['alpha_cutoff']<=255,'Source alpha cutoff must be an integer from1to255.')
+    def crop(value):
+        require(isinstance(value,list) and len(value)==4 and all(type(n) is int for n in value),'Source crop must be integer x,y,width,height.')
+        x,y,w,h=value
+        require(x>=0 and y>=0 and w>=4 and h>=4 and x+w<=1024 and y+h<=1024,'Source crop is outside its1024square image.')
+    require(isinstance(layout['parts'],dict) and set(layout['parts'])==set(RIG_PARTS[rig_id]),'Source layout part IDs must match the rig.')
+    for part in layout['parts'].values():
+        require(isinstance(part,dict) and set(part)=={'crop'},'Source part annotation only accepts a crop.')
+        crop(part['crop'])
+    crop(layout['master_crop']);crop(layout['background_crop'])
+    if 'material_crops' in layout:
+        require(isinstance(layout['material_crops'],list) and len(layout['material_crops'])==4,'Source material annotations need four crops.')
+        for value in layout['material_crops']:crop(value)
+    return layout
+
+
+def _crop_source(image:Image.Image,crop:list[int],alpha_cutoff:int|None=None)->Image.Image:
+    x,y,w,h=crop;result=image.crop((x,y,x+w,y+h))
+    if alpha_cutoff is not None:result.putalpha(result.getchannel('A').point(lambda value:255 if value>=alpha_cutoff else 0))
+    return result
+
+
 def _bake_provenance(job_dir:Path,proposal:dict,parts:dict,rig:dict,masks:dict,
                      parent:dict,parent_digest:str|None,theme_images:tuple,theme_mode:str)->dict:
     """Bind the actual decoded inputs as well as retained source-file identities."""
     edits_path=job_dir/'rig_edits.json'
     edits_digest=sha256(edits_path) if edits_path.exists() else None
+    layout=_source_layout(job_dir,proposal['rig_id'],parent)
+    layout_digest=sha256(job_dir/'source_layout.json') if layout is not None else None
+    require(layout_digest==parent.get('source_layout_sha256'),'Source-layout annotations changed; reconvert the retained raw images before rebaking.')
     inputs={
         'schema_version':1,
         'proposal_sha256':_json_digest(proposal),
@@ -97,6 +133,8 @@ def _bake_provenance(job_dir:Path,proposal:dict,parts:dict,rig:dict,masks:dict,
         'applied_rig_sha256':_json_digest(rig),
         'applied_pivots':{record['id']:{'pivot':record['pivot'],'anchor':record['anchor']} for record in rig['parts']},
         'rig_edits_sha256':edits_digest,
+        'source_layout_sha256':layout_digest,
+        'source_layout':layout,
         'parts':{name:{'file_sha256':sha256(job_dir/f'parts/{name}.png'),
                        'pixels_sha256':hashlib.sha256(image.tobytes()).hexdigest()} for name,image in sorted(parts.items())},
         'masks':{name:{'file_sha256':sha256(job_dir/f'masks/{name}.png'),
@@ -167,31 +205,40 @@ def convert_generated(raw_parts:Path,raw_theme:Path,proposal:dict,job_dir:Path,p
     with Image.open(raw_theme) as image:
         require(image.format=='PNG' and image.size==(1024,1024) and getattr(image,'n_frames',1)==1,'Theme board must be a1024squarePNG.')
         theme=image.convert('RGBA');require(theme.getchannel('A').getextrema()==(255,255),'Theme board must be opaque.')
+    layout=_source_layout(job_dir,proposal['rig_id'],{'raw_parts_sha256':sha256(raw_parts),'raw_theme_sha256':sha256(raw_theme)})
     # Target envelopes are authored by rig; the supplied artwork keeps its shapes/details.
     templates=authored_parts(proposal['rig_id'],proposal['theme']['palette']);parts={}
     for n,name in enumerate(RIG_PARTS[proposal['rig_id']]):
-        x0,x1=(n%3)*1024//3,((n%3)+1)*1024//3;y0,y1=(n//3)*1024//3,((n//3)+1)*1024//3
-        raw=board.crop((x0,y0,x1,y1));box=raw.getchannel('A').getbbox();require(box is not None,f'Generated part {name} is blank.')
-        require(box[0]>2 and box[1]>2 and box[2]<raw.width-2 and box[3]<raw.height-2,f'Generated part {name} is clipped by its grid slot.')
+        if layout is None:
+            x0,x1=(n%3)*1024//3,((n%3)+1)*1024//3;y0,y1=(n//3)*1024//3,((n//3)+1)*1024//3
+            raw=board.crop((x0,y0,x1,y1))
+        else:raw=_crop_source(board,layout['parts'][name]['crop'],layout['alpha_cutoff'])
+        box=raw.getchannel('A').getbbox();require(box is not None,f'Generated part {name} is blank.')
+        if layout is None:require(box[0]>2 and box[1]>2 and box[2]<raw.width-2 and box[3]<raw.height-2,f'Generated part {name} is clipped by its grid slot. Retain the image and provide reviewed source-layout annotations.')
         silhouette=raw.crop(box);target=templates[name].getchannel('A').getbbox();require(target is not None,'Missing authored rig envelope.')
         width,height=target[2]-target[0],target[3]-target[1]
         silhouette.thumbnail((width,height),Image.Resampling.NEAREST)
         require(silhouette.width>=2 and silhouette.height>=2,f'Generated part {name} is too narrow to rig.')
         part=Image.new('RGBA',(64,64));part.alpha_composite(silhouette,(target[0]+(width-silhouette.width)//2,target[1]+(height-silhouette.height)//2));parts[name]=part
     # The ninth slot is the approved full design, separate from the rig pieces.
-    raw_master=board.crop((2*1024//3,2*1024//3,1024,1024));master_box=raw_master.getchannel('A').getbbox()
+    raw_master=board.crop((2*1024//3,2*1024//3,1024,1024)) if layout is None else _crop_source(board,layout['master_crop'],layout['alpha_cutoff'])
+    master_box=raw_master.getchannel('A').getbbox()
     require(master_box is not None,'Generated master design in slot8 is blank.')
-    require(master_box[0]>2 and master_box[1]>2 and master_box[2]<raw_master.width-2 and master_box[3]<raw_master.height-2,'Generated master design is clipped by its grid slot.')
+    if layout is None:require(master_box[0]>2 and master_box[1]>2 and master_box[2]<raw_master.width-2 and master_box[3]<raw_master.height-2,'Generated master design is clipped by its grid slot.')
     master=raw_master.crop(master_box);master.thumbnail((116,116),Image.Resampling.NEAREST)
     master_preview=Image.new('RGBA',(128,128));master_preview.alpha_composite(master,((128-master.width)//2,(128-master.height)//2));master_preview.save(job_dir/'master.png')
     (job_dir/'parts').mkdir();rig=make_rig(proposal['rig_id']);rig['source_kind']='generated-parts'
     for name,image in parts.items():image.save(job_dir/f'parts/{name}.png')
     write_json(job_dir/'rig.json',rig);write_json(job_dir/'proposal.json',proposal)
-    theme.crop((0,0,1024,576)).resize((640,360),Image.Resampling.NEAREST).save(job_dir/'theme_background.png')
+    background_source=theme.crop((0,0,1024,576)) if layout is None else _crop_source(theme,layout['background_crop'])
+    background_source.resize((640,360),Image.Resampling.NEAREST).save(job_dir/'theme_background.png')
     mat=Image.new('RGBA',(256,256))
     for col in range(4):
-        tile=theme.crop((col*256,576,(col+1)*256,1024)).resize((128,128),Image.Resampling.NEAREST)
+        tile_source=theme.crop((col*256,576,(col+1)*256,1024)) if layout is None or 'material_crops' not in layout else _crop_source(theme,layout['material_crops'][col])
+        tile=tile_source.resize((128,128),Image.Resampling.NEAREST)
         mat.alpha_composite(tile,((col%2)*128,(col//2)*128))
     mat.save(job_dir/'theme_materials.png')
-    write_json(job_dir/'source_provenance.json',{'schema_version':1,**provenance,'raw_parts_sha256':sha256(raw_parts),'raw_theme_sha256':sha256(raw_theme),'conversion':'three-family authored envelopes, nearest sampling and deterministic animation'})
+    write_json(job_dir/'source_provenance.json',{'schema_version':1,**provenance,'raw_parts_sha256':sha256(raw_parts),'raw_theme_sha256':sha256(raw_theme),
+      'source_layout_sha256':sha256(job_dir/'source_layout.json') if layout is not None else None,'source_layout':layout,
+      'conversion':'explicit reviewed source-layout crops' if layout is not None else 'strict three-by-three parts grid','animation':'three-family authored envelopes, nearest sampling and deterministic animation'})
     return bake_job(job_dir/'job.json')
