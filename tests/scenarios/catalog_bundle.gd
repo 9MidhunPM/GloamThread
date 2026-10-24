@@ -34,9 +34,18 @@ func _check_room_boundaries(bundle: Bundle) -> void:
 	var previous_errors := start.errors.duplicate()
 	assert_eq(start.spawn_positions("entrance_that_does_not_exist").size(), 0, "unknown entrance never falls back to start")
 	assert_eq(start.errors, previous_errors, "entrance queries do not mutate validation results")
-	var fractional := RoomData.load_from_path("res://tests/contracts/content_invalid_fractional_spawn.json")
+	var original: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://content/rooms/r00.json"))
+	var fractional_data := original.duplicate(true)
+	fractional_data.spawns.start[0][0] = 3.5
+	var fractional := RoomData.new()
+	fractional.parse(fractional_data)
 	assert_true(not fractional.is_valid(), "fractional fixture coordinates are rejected")
-	var unresolved := RoomData.load_from_path("res://tests/contracts/content_invalid_missing_entrance.json")
+	var unresolved_data := original.duplicate(true)
+	for entity: Dictionary in unresolved_data.entities:
+		if entity.type == "exit" and entity.id == "to_atrium":
+			entity.target_entrance = "missing_destination_pair"
+	var unresolved := RoomData.new()
+	unresolved.parse(unresolved_data)
 	assert_true(unresolved.is_valid(), "missing destination entrance is a cross-room reference failure")
 	if not unresolved.is_valid():
 		return
@@ -66,17 +75,17 @@ func _check_assets(assets: AssetCatalog) -> void:
 		assert_true(frame == assets.frame_texture(id, 0), "%s frame texture is cached" % id)
 		if frame != null:
 			assert_eq(frame.get_size(), Vector2(32, 48), "%s frame excludes atlas padding" % id)
-		assert_eq(assets.entries[id]["frames"].size(), 32, "%s contains all 32 courier frames" % id)
+		assert_eq(assets.entries[id]["frames"].size(), 128, "%s contains all four directional banks" % id)
 		var clip_frames := 0
-		for state: String in Bundle.COURIER_CLIPS:
+		for state: String in Bundle.courier_clip_keys():
 			var clip := assets.animation(id, state)
 			assert_true(not clip.is_empty(), "%s has %s animation" % [id, state])
 			clip_frames += clip.get("frames", []).size()
-		assert_eq(clip_frames, 32, "%s required clips expose all 32 authored frames" % id)
+		assert_eq(clip_frames, 128, "%s required clips expose all 128 authored frames" % id)
 	var original_font := assets.font()
 	assert_true(original_font != null and original_font == assets.font(), "original bitmap font loads and is cached")
-	assert_eq(assets.sfx.size(), 18, "all eighteen semantic sound cues are mapped")
-	assert_eq(assets.music.size(), 3, "all three music tracks are mapped")
+	assert_eq(assets.sfx.size(), 19, "all nineteen semantic sound cues are mapped")
+	assert_eq(assets.music.size(), 4, "all four music tracks are mapped")
 	var audio_count := 0
 	for mapping: Dictionary in [assets.sfx, assets.music]:
 		for name: String in mapping:
@@ -92,24 +101,20 @@ func _check_assets(assets: AssetCatalog) -> void:
 			assert_eq(stream.stereo, int(record["channels"]) == 2, "%s uses its declared channel layout" % name)
 			var duration: float = float(record["sample_frames"]) / float(record["sample_rate"])
 			assert_true(absf(stream.get_length() - duration) < 1.0 / float(record["sample_rate"]), "%s duration matches actual sample frames" % name)
-			if name in ["exploration", "boss"]:
+			if record["loop_start"] != null:
 				assert_eq(stream.loop_mode, AudioStreamWAV.LOOP_FORWARD, "%s loops in the actual loaded stream" % name)
 				assert_eq(stream.loop_begin, int(record["loop_start"]), "%s loop begins at the declared sample" % name)
 				assert_eq(stream.loop_end, int(record["loop_end"]), "%s loop ends at the declared exclusive sample" % name)
 			else:
 				assert_eq(stream.loop_mode, AudioStreamWAV.LOOP_DISABLED, "%s remains a non-looping stream" % name)
-	assert_eq(audio_count, 21, "all twenty-one audio assets are usable")
+	assert_eq(audio_count, 23, "all twenty-three audio assets are usable")
 
 
 func _check_room_skins(bundle: Bundle) -> void:
 	for id: String in bundle.rooms:
 		var room := RoomView.build(bundle.room(id), true, bundle.assets)
 		assert_eq(room.theme_gameplay_node_count(), 0, "%s themes contain no gameplay collision" % id)
-		var canonical_tiles := 0
-		for row: String in room.definition.rows:
-			for tile: String in row:
-				if tile != ".":
-					canonical_tiles += 1
+		var canonical_tiles := room.definition.width * room.definition.height
 		for theme: Node2D in [room.theme_ember, room.theme_moss]:
 			var terrain := theme.get_node("Terrain") as TileMapLayer
 			assert_eq(terrain.get_used_cells().size(), canonical_tiles, "%s/%s covers the canonical grid" % [id, theme.name])
@@ -128,7 +133,13 @@ func _check_bridge(bundle: Bundle) -> void:
 	var room := RoomView.build(bundle.room("r02"), true, bundle.assets)
 	room.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(room)
-	var shape_count: int = room.collision.get_child_count()
+	var shape_count: int = room.water_body.get_child_count()
+	var blocker := room.water_body.get_node("Bridge_bridge_spindle") as CollisionShape2D
+	assert_true(not blocker.disabled, "unrepaired bridge has its named water blocker")
+	var bridge_cells := 0
+	for entity: Dictionary in room.definition.entities:
+		if entity.type == "anchor_pair" and entity.flag == "bridge_spindle":
+			bridge_cells = int(entity.bridge_rect[2]) * int(entity.bridge_rect[3])
 	var ember_count: int = room.theme_ember.get_child_count()
 	var moss_count: int = room.theme_moss.get_child_count()
 	var anchors: Array = []
@@ -140,21 +151,22 @@ func _check_bridge(bundle: Bundle) -> void:
 	var second_anchor: Sprite2D = room._visuals[anchors[1]["id"]]
 	assert_true(first_anchor.texture == bundle.assets.frame_texture("props_v1", 1), "first participant lights its own anchor immediately")
 	assert_true(second_anchor.texture == bundle.assets.frame_texture("props_v1", 0), "the other anchor remains unlatched until its player acts")
-	assert_eq(room.collision.get_child_count(), shape_count, "one latched anchor never creates bridge collision")
+	assert_eq(room.water_body.get_child_count(), shape_count, "one latched anchor never creates bridge collision")
 	assert_true(room.restore_bridge("bridge_spindle"), "restoring the authored bridge succeeds once")
 	assert_true(second_anchor.texture == bundle.assets.frame_texture("props_v1", 1), "restoration lights both anchor frames")
-	assert_eq(room.collision.get_child_count(), shape_count + 1, "one shared bridge collision shape is added")
+	assert_true(blocker.disabled, "restoration disables the named water blocker")
+	assert_eq(room.water_body.get_child_count(), shape_count, "repair adds no duplicate collision shape")
 	assert_eq(room.theme_ember.get_child_count(), ember_count + 1, "Ember receives one bridge skin")
 	assert_eq(room.theme_moss.get_child_count(), moss_count + 1, "Moss receives one bridge skin")
 	for theme: Node2D in [room.theme_ember, room.theme_moss]:
 		var bridge := theme.get_node_or_null("RestoredBridge") as TileMapLayer
 		assert_true(bridge != null, "restored bridge skin exists in %s" % theme.name)
 		if bridge != null:
-			assert_eq(bridge.get_used_cells().size(), 10, "bridge skin covers the complete ten-tile span")
+			assert_eq(bridge.get_used_cells().size(), bridge_cells, "bridge skin covers the complete authored span")
 			assert_eq(bridge.tile_set.get_physics_layers_count(), 0, "bridge skin contains no duplicate collision")
 	assert_true(not room.restore_bridge("bridge_spindle"), "repeating restoration is idempotent")
 	room.set_progress({"bridge_spindle": true})
-	assert_eq(room.collision.get_child_count(), shape_count + 1, "progress replay preserves a single bridge collider")
+	assert_eq(room.water_body.get_child_count(), shape_count, "progress replay preserves the named blocker layout")
 	assert_eq(room.theme_ember.get_child_count(), ember_count + 1, "progress replay preserves one Ember bridge")
 	assert_eq(room.theme_moss.get_child_count(), moss_count + 1, "progress replay preserves one Moss bridge")
 
@@ -166,10 +178,10 @@ func _check_animation(assets: AssetCatalog) -> void:
 	animator.process_mode = Node.PROCESS_MODE_PAUSABLE
 	sprite.add_child(animator)
 	animator.configure(sprite, assets, "fixed_tavi_v1")
-	animator.play("idle")
+	animator.play("idle_down")
 	assert_eq(sprite.offset, Vector2(-16, -43), "courier art uses its authored feet origin")
 	assert_true(not sprite.centered, "courier origin is independent of frame centering")
-	var clip := assets.animation("fixed_tavi_v1", "idle")
+	var clip := assets.animation("fixed_tavi_v1", "idle_down")
 	assert_true(sprite.texture == assets.frame_texture("fixed_tavi_v1", int(clip["frames"][0])), "animation begins at its authored first frame")
 	await ticks(int(clip["ticks"][0]) + 1)
 	await get_tree().process_frame

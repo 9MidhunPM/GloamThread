@@ -6,6 +6,11 @@ extends Node
 var failures: Array[String] = []
 
 
+## Long real-time routes may declare a larger bound; CLI overrides still win.
+func timeout_seconds() -> int:
+	return 30
+
+
 func run() -> void:
 	assert_true(false, "Scenario must implement run()")
 

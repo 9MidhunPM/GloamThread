@@ -6,6 +6,12 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 1 — runtime and integration
 
+### 2026-10-25T02:18:24+05:30 — Preserve tested overhead experiment before returning to side view
+
+- Changed: Retained active overhead resource/App/save regressions and archived platform-only fixtures with explicit historical mapping; switched native QA observer to the new ordinary-input overhead route.
+- Why: Preserve a complete reviewable experimental checkpoint before the user-requested return to the earlier side-view game.
+- Validation: Full112Python tests, both validators, fresh import and40/40 active Godot scenarios pass. Native first-room split-screen rendered; full overhead native/export and human gates remain unverified.
+
 ### 2026-10-25T02:13:07+05:30 — Reject malformed room epochs without script errors
 
 - Changed: Type-check the room content epoch before string comparison and retain overhead spawn/reference boundary checks.

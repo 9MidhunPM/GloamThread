@@ -30,7 +30,7 @@ func _test_progress_validation() -> void:
 	assert_true(loaded.to_save() == original, "all team progress and swapped profiles survive round trip")
 	var invalid_cases: Array[Dictionary] = []
 	for replacement: Dictionary in [
-		{"schema_version": 2}, {"schema_version": true}, {"schema_version": 1.5},
+		{"schema_version": TeamProgress.SAVE_SCHEMA_VERSION + 1}, {"schema_version": true}, {"schema_version": 1.5},
 		{"content_version": "other-content"}, {"profile_ids": ["tavi_fixed", "tavi_fixed"]},
 		{"content_version": true}, {"profile_ids": [true, 1]}, {"profile_ids": [null, []]},
 		{"profile_ids": ["tavi_fixed", "outside_profile"]}, {"checkpoint_id": "r07:unsafe"},
@@ -130,7 +130,7 @@ func _test_settings_files() -> void:
 	settings.sfx_volume = 0.25
 	settings.reduced_flash = true
 	settings.reduced_shake = true
-	settings.player_bindings[0].controls.jump = [KEY_Q]
+	settings.player_bindings[0].controls.roll = [KEY_Q]
 	settings.sources[0] = {"kind": "GAMEPAD", "guid": "fixture-guid", "name": "Fixture pad", "joy_id": 77, "device": 77}
 	assert_true(repository.save_settings(settings).ok, "write separate device and accessibility settings")
 	var loaded: Dictionary = repository.load_settings().settings
