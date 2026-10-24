@@ -129,3 +129,37 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 ## Overhead input and persistence lane
 
 <!-- overhead-input -->
+
+### 2026-10-25T01:24:34+05:30 — Codex: pure quest and route guidance
+
+Codex authored QuestDirector and fixture regressions in the exclusive input worktree. The module reads team/world/room state and returns objectives/targets without scene or campaign mutations. Human review is pending. Focused Godot guidance checks and import passed; rendered HUD/map integration remains with the integrator.
+
+
+### 2026-10-25T01:18:32+05:30 — Codex: protect foreign backups
+
+Codex identified and fixed silent replacement of incompatible backup data during ordinary rotation, with actual-file newer/corrupt backup regressions. Human review is pending. Both overhead save scenarios pass; storage hardware fault acceptance remains unverified.
+
+
+### 2026-10-25T01:16:49+05:30 — Codex: explicit gamepad admission
+
+Codex guarded negative device indices and verified owned Roll latching across synthetic reconnect/reassignment. Human review is pending. Three overhead input scenarios and editor import passed; physical hardware acceptance remains unverified.
+
+
+### 2026-10-25T01:15:46+05:30 — Codex: atomic overhead progression and recovery
+
+Codex hardened the live progress mutator against partial traversal rewards and wrote actual-file save/backup/fault/settings regressions. Human review is pending. Two focused save scenarios and editor import passed; physical storage power-loss testing was not performed.
+
+
+### 2026-10-25T01:13:15+05:30 — Codex: bounded planar input
+
+Codex implemented full-vector normalization at the snapshot boundary and added owned keyboard/synthetic gamepad regressions, including release and loss behavior. Human review is pending. All three focused input scenarios and editor import passed; hardware behavior remains unverified.
+
+
+### 2026-10-25T01:11:22+05:30 — Codex: overhead campaign version boundary
+
+Codex versioned team progress and campaign format handling, added met_oru, and verified actual file protection/replacement in the exclusive lane. Human review is pending. The focused schema scenario and editor import passed; separate application data-directory integration and gameplay remain with the integrator.
+
+
+### 2026-10-25T01:10:20+05:30 — Codex: overhead Roll migration
+
+Codex implemented the Roll action and legacy settings migration in the exclusive input lane, including canonical-name precedence and actual file/snapshot regression checks. Human review is pending. Godot4.7.2 import and the focused scenario passed; no physical-device or overhead-movement acceptance is claimed.

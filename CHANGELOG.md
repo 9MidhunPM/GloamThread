@@ -336,3 +336,58 @@ Record each meaningful project change, newest first. Update this file in the sam
 ## Overhead input and persistence lane
 
 <!-- overhead-input -->
+
+### 2026-10-25T01:24:34+05:30 — Derive overhead objectives and local route targets
+
+- Changed: Added pure QuestDirector queries for Oru, Spindle, Spoolwarden, Causeway, Loom and home objectives. Breadth-first routing uses only unlocked declared world connections, including the post-boss shortcut. Local targets expose authored NPC/boss/anchor/station identities and safe exit feet positions; unreachable routes are explicit and yield no invented targets.
+- Why: The integrator needs one reliable guidance boundary for HUD/map/proximity hints without making presentation own progression.
+- Validation: Godot4.7.2 overhead_quest_guidance PASS1/1 using pure fixtures: six stages, backtracking, locked/unlocked shortcuts, unreachable/malformed gates, local targets, canonical feet and no world/progress mutation. Import and whitespace checks pass.
+- Limitations: Root wiring, rendered guidance and ordinary overhead traversal are not acceptance evidence from these fixtures.
+
+
+### 2026-10-25T01:18:32+05:30 — Preserve foreign backup data before rotation
+
+- Changed: Normal save rotation now retains rejected copies of unsupported/newer or damaged existing backup files before installing a validated previous save. Failed preservation keeps the prior active save intact and returns a visible error. Primary replacement uses the same small preservation helper.
+- Why: A valid active campaign must not silently erase unknown backup data during its next autosave.
+- Validation: Godot4.7.2 overhead save scenarios PASS2/2, including actual newer/damaged backup-byte retention and all existing recovery/fault checks; whitespace check passes.
+- Limitations: No physical power-loss testing is claimed.
+
+
+### 2026-10-25T01:16:49+05:30 — Require a live gamepad index for input ownership
+
+- Changed: InputRouter rejects negative gamepad indices during assignment/reconnect and keeps invalid indices neutral during polling. Added synthetic reconnect/reassignment checks proving held Roll suppression until release and independent partner ownership.
+- Why: A disconnected index must remain a recovery state, never an admitted input source.
+- Validation: Godot4.7.2 overhead input scenarios PASS3/3, covering Roll migration, planar normalization and device lifecycle; editor import and whitespace checks pass.
+- Limitations: Synthetic notifications/events do not certify physical controller hotplug or menu recovery visuals.
+
+
+### 2026-10-25T01:15:46+05:30 — Protect live overhead reward transactions
+
+- Changed: TeamProgress validates dependency consistency before changing live flags, sharing the same rule with save admission. Incomplete boss/traversal outcomes leave progress untouched. Added actual-file overhead recovery, fault-boundary and settings-separation regressions.
+- Why: A boss-only live reward could otherwise remove its encounter before granting required team traversal, even though a later save would reject that state.
+- Validation: Godot4.7.2 overhead save scenarios PASS2/2: all four save/recovery failure stages preserve active/backup bytes, orphan backup recovery works, side-view backups are refused, rejected originals are retained, and settings/legacy Roll/device identity remain separate. Negative transaction warnings are expected; import and whitespace checks pass.
+- Limitations: Fault injection verifies local file boundaries, not hardware power-loss behavior.
+
+
+### 2026-10-25T01:13:15+05:30 — Normalize owned ground-plane commands
+
+- Changed: CommandSnapshot now sanitizes and caps the full two-axis vector while retaining gentle analogue magnitude. Added synthetic keyboard/gamepad checks for diagonal limits, independent devices, simultaneous actions, two-axis release latching and disconnect neutrality.
+- Why: Overhead diagonal movement must not gain speed or lose analogue control.
+- Validation: Godot4.7.2 input scenarios PASS3/3 (existing routing plus two overhead scenarios); non-finite/oversized axis checks and fresh editor import pass. Expected malformed-binding/duplicate-assignment warnings are retained in the legacy negative scenario.
+- Limitations: No actor-motion or physical-controller acceptance is claimed.
+
+
+### 2026-10-25T01:11:22+05:30 — Separate overhead campaign saves
+
+- Changed: Added public TeamProgress.SAVE_SCHEMA_VERSION=2, content version overhead-v1 and the shared met_oru introduction flag. Campaign reads distinguish schema2 from unsupported newer formats and visibly reject/preserve side-view data; backup notices retain the primary failure explanation.
+- Why: Overhead progress must never silently adopt the preserved side-view campaign format. The separate application data directory remains an integrator setting.
+- Validation: Godot4.7.2 overhead_save_version PASS1/1 with actual temporary files, swapped profile/checkpoint/met_oru round trip, partial boss reward rejection, schema1/newer protection and explicit replacement retaining rejected bytes; editor import and whitespace checks pass.
+- Limitations: This lane does not change project settings or certify full overhead gameplay.
+
+
+### 2026-10-25T01:10:20+05:30 — Migrate the overhead Roll action
+
+- Changed: Introduced canonical Roll at bit16, retained the transitional Jump alias, migrated legacy saved jump controls, and made canonical roll mappings win independent of JSON key order. Default keyboard/gamepad controls are preserved and the action appears once in polling/settings.
+- Why: The overhead contract replaces jumping with a roll without losing remapped controls or duplicating menu actions.
+- Validation: Clean Godot4.7.2 editor import in the isolated lane; focused `overhead_input_roll` scenario PASS1/1 in the relocated worktree; actual legacy settings serialization, owned action edges and release latching checked.
+- Limitations: This checks input/settings semantics, not overhead actor motion, physical controllers or rendered menus.

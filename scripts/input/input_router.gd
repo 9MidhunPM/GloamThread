@@ -18,7 +18,7 @@ signal joypad_list_changed()
 const SLOT_COUNT := 2
 const Action := CommandSnapshot.Action
 ## Actions suppressed by a flush until the player physically releases them.
-const LATCHABLE_MASK: int = Action.LEFT | Action.RIGHT | Action.UP | Action.DOWN | Action.JUMP | Action.ATTACK | Action.SPECIAL | Action.INTERACT | Action.DASH | Action.PAUSE | Action.MAP
+const LATCHABLE_MASK: int = Action.LEFT | Action.RIGHT | Action.UP | Action.DOWN | Action.ROLL | Action.ATTACK | Action.SPECIAL | Action.INTERACT | Action.DASH | Action.PAUSE | Action.MAP
 
 
 class PlayerSlot:
@@ -89,6 +89,8 @@ func is_waiting_for_device(slot_index: int) -> bool:
 ## owns the same physical device, so one controller can never drive both players.
 func assign(slot_index: int, source: DeviceSource, bindings: Bindings = null) -> Error:
 	if slot_index < 0 or slot_index >= SLOT_COUNT or source == null or source.kind == DeviceSource.Kind.NONE:
+		return ERR_INVALID_PARAMETER
+	if source.is_gamepad() and source.joy_id < 0:
 		return ERR_INVALID_PARAMETER
 	if bindings != null and bindings.kind != source.kind:
 		return ERR_INVALID_PARAMETER
@@ -231,6 +233,8 @@ func _pad_action_held(slot: PlayerSlot, action: Action) -> bool:
 
 func _pad_action_strength(slot: PlayerSlot, action: Action) -> float:
 	var id := slot.source.joy_id
+	if id < 0:
+		return 0.0
 	var strength := 0.0
 	for control: Dictionary in slot.bindings.pad_controls_for(action):
 		if control.has("button"):
@@ -296,6 +300,8 @@ func _on_joy_connection_changed(device: int, connected: bool) -> void:
 
 
 func _reconnect_device(device: int, guid: String, device_name: String) -> void:
+	if device < 0:
+		return
 	# A repeated notification or a second identical pad must not steal an
 	# already claimed OS index from the other player's live assignment.
 	for owner in _slots:
