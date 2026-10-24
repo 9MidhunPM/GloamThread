@@ -70,6 +70,11 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-input -->
 
+### 2026-10-25T01:18:32+05:30 — Codex: protect foreign backups
+
+Codex identified and fixed silent replacement of incompatible backup data during ordinary rotation, with actual-file newer/corrupt backup regressions. Human review is pending. Both overhead save scenarios pass; storage hardware fault acceptance remains unverified.
+
+
 ### 2026-10-25T01:16:49+05:30 — Codex: explicit gamepad admission
 
 Codex guarded negative device indices and verified owned Roll latching across synthetic reconnect/reassignment. Human review is pending. Three overhead input scenarios and editor import passed; physical hardware acceptance remains unverified.

@@ -20,6 +20,13 @@ func run() -> void:
 	var current := TeamProgress.new()
 	current.commit_flags(["met_oru", "bridge_spindle"])
 	assert_true(repository.save_campaign(current.to_save()).ok, "new progress rotates a valid backup")
+	var future_backup := first.duplicate(true)
+	future_backup.schema_version = TeamProgress.SAVE_SCHEMA_VERSION + 1
+	for foreign_bytes: String in [JSON.stringify(future_backup), "{damaged-backup"]:
+		_write(repository.path + ".bak", foreign_bytes)
+		assert_true(repository.save_campaign(current.to_save()).ok, "ordinary save may rotate a foreign backup after preserving it")
+		assert_true(_has_rejected(repository.path + ".bak", foreign_bytes), "rotation preserves unsupported/damaged backup bytes for recovery or diagnosis")
+		assert_eq(repository._read(repository.path + ".bak").status, "ok", "rotation still installs a validated last-known-good backup")
 	var active_bytes := FileAccess.get_file_as_string(repository.path)
 	team.commit_flags(["met_oru", "bridge_spindle", "bridge_causeway", "lantern_charm", "loom_restored"])
 	for stage: String in ["write", "verify", "rotate", "replace"]:

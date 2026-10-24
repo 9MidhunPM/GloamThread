@@ -210,6 +210,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-input -->
 
+### 2026-10-25T01:18:32+05:30 — Preserve foreign backup data before rotation
+
+- Changed: Normal save rotation now retains rejected copies of unsupported/newer or damaged existing backup files before installing a validated previous save. Failed preservation keeps the prior active save intact and returns a visible error. Primary replacement uses the same small preservation helper.
+- Why: A valid active campaign must not silently erase unknown backup data during its next autosave.
+- Validation: Godot4.7.2 overhead save scenarios PASS2/2, including actual newer/damaged backup-byte retention and all existing recovery/fault checks; whitespace check passes.
+- Limitations: No physical power-loss testing is claimed.
+
+
 ### 2026-10-25T01:16:49+05:30 — Require a live gamepad index for input ownership
 
 - Changed: InputRouter rejects negative gamepad indices during assignment/reconnect and keeps invalid indices neutral during polling. Added synthetic reconnect/reassignment checks proving held Roll suppression until release and independent partner ownership.

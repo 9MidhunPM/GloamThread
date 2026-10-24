@@ -29,8 +29,7 @@ func save_campaign(data: Dictionary, replace_incompatible: bool = false) -> Dict
 	if current.status not in ["ok", "missing"]:
 		if not replace_incompatible:
 			return _failure("The existing campaign is incompatible or damaged. Choose backup recovery or confirm New Game first.")
-		var rejected_path := path + ".rejected-%d" % Time.get_ticks_usec()
-		if DirAccess.copy_absolute(path, rejected_path) != OK:
+		if not _preserve_rejected(path):
 			return _failure("The previous campaign could not be preserved; it was left untouched.")
 	if failure_stage == "write":
 		return _failure("Simulated save write failure.")
@@ -47,6 +46,9 @@ func save_campaign(data: Dictionary, replace_incompatible: bool = false) -> Dict
 	if failure_stage == "rotate":
 		return _failure("Simulated backup rotation failure.")
 	if current.status == "ok":
+		var previous_backup := _read(path + ".bak")
+		if previous_backup.status not in ["ok", "missing"] and not _preserve_rejected(path + ".bak"):
+			return _failure("The incompatible or damaged backup could not be preserved; the previous save is intact.")
 		var backup_temporary := path + ".bak.tmp"
 		if DirAccess.copy_absolute(path, backup_temporary) != OK or _read(backup_temporary).status != "ok":
 			return _failure("A valid previous-save backup could not be created.")
@@ -92,6 +94,10 @@ func _read(file_path: String) -> Dictionary:
 
 func _valid(data: Dictionary) -> bool:
 	return TeamProgress.new().load_save(data)
+
+
+func _preserve_rejected(file_path: String) -> bool:
+	return DirAccess.copy_absolute(file_path, file_path + ".rejected-%d" % Time.get_ticks_usec()) == OK
 
 
 func _failure(message: String) -> Dictionary:
