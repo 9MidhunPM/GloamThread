@@ -19,6 +19,9 @@ var _objective_a: Label
 var _objective_b: Label
 var _hearts_a: Array[TextureRect] = []
 var _hearts_b: Array[TextureRect] = []
+var room_title_ticks_left: int = 0
+var _room_title_panels: Array[Control] = []
+var _room_title_labels: Array[Label] = []
 
 
 func _ready() -> void:
@@ -50,6 +53,8 @@ func _ready() -> void:
 	hud_b = _make_hud(488)
 	_objective_a = _make_objective(8)
 	_objective_b = _make_objective(488)
+	_make_room_title(0)
+	_make_room_title(480)
 	var divider := ColorRect.new()
 	divider.name = "Divider"
 	divider.position = Vector2(479, 0)
@@ -113,6 +118,46 @@ func _make_objective(x: int) -> Label:
 	return label
 
 
+func _make_room_title(view_x: int) -> void:
+	var panel := Control.new()
+	panel.name = "RoomTitleA" if view_x == 0 else "RoomTitleB"
+	panel.position = Vector2(view_x + 80, 84)
+	panel.size = Vector2(320, 34)
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.visible = false
+	add_child(panel)
+	var shade := ColorRect.new()
+	shade.size = panel.size
+	shade.color = Color(0.04, 0.06, 0.09, 0.86)
+	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(shade)
+	var label := Label.new()
+	label.position = Vector2(4, 3)
+	label.size = Vector2(312, 24)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 16)
+	label.add_theme_color_override("font_color", Color("e3d6b3"))
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(label)
+	var thread := ColorRect.new()
+	thread.position = Vector2(104, 30)
+	thread.size = Vector2(112, 1)
+	thread.color = Color("ad945e")
+	thread.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(thread)
+	_room_title_panels.append(panel)
+	_room_title_labels.append(label)
+
+
+func show_room_entry(room_name: String) -> void:
+	room_title_ticks_left = 120
+	for index in _room_title_panels.size():
+		_room_title_labels[index].text = room_name
+		_room_title_panels[index].modulate.a = 1.0
+		_room_title_panels[index].visible = true
+
+
 func set_themes(catalog: AssetCatalog, theme_a: String, theme_b: String) -> void:
 	_catalog = catalog
 	viewport_a.canvas_cull_mask = 1 | (2 if theme_a == "ember" else 4)
@@ -126,6 +171,8 @@ func set_themes(catalog: AssetCatalog, theme_a: String, theme_b: String) -> void
 	viewport_a.add_child(_background_a)
 	viewport_b.add_child(_background_b)
 	for label in [hud_a, hud_b, _objective_a, _objective_b]:
+		label.add_theme_font_override("font", catalog.font())
+	for label: Label in _room_title_labels:
 		label.add_theme_font_override("font", catalog.font())
 	if _hearts_a.is_empty():
 		for index in 6:
@@ -144,6 +191,11 @@ func _make_heart(x: int) -> TextureRect:
 
 
 func _physics_process(_delta: float) -> void:
+	if room_title_ticks_left > 0:
+		room_title_ticks_left -= 1
+		for panel: Control in _room_title_panels:
+			panel.visible = room_title_ticks_left > 0
+			panel.modulate.a = minf(1.0, room_title_ticks_left / 20.0)
 	if _catalog != null and is_instance_valid(_background_a) and is_instance_valid(camera_a.target):
 		ThemePresenter.update_background(_background_a, camera_a.position, camera_a.room_bounds)
 		ThemePresenter.update_background(_background_b, camera_b.position, camera_b.room_bounds)

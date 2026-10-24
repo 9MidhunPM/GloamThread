@@ -364,6 +364,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-world -->
 
+### 2026-10-25 02:14:52 +0530 — Orient room entries and lift the second boss phase
+
+- Added a restrained room-entry title in both views using the authored room name and original font, a quiet thread rule, and a 120-physics-tick lifetime with a final fade. Shared pause freezes the lifetime. Existing downed countdown, revive percentage and rescuer guidance remain unchanged.
+- GameSession now requests optional boss_final music once on the live boss's phase-two transition, with a per-encounter latch so HUD updates cannot restart it. Defeat still returns to exploration. Audio playback alignment is owned by the integrator; no App or audio source was edited.
+- Validation: focused production-asset presentation scenario PASS; combined overhead suite PASS 26/26 with isolated writable XDG_DATA_HOME. Checks cover matching titles, original font, exact playing-tick expiry/pause/fade, replacement room name, phase-two one-shot playback and defeat. The ordinary-input campaign still passes in 5,941 ticks with hearts [5,3] and zero recovery.
+- Limits: native title placement and listening are pending integrator review; headless checks do not prove those qualities. Editor import had no script errors and retained its known sandbox socket-listen messages.
+
+
 ### 2026-10-25 02:08:22 +0530 — Budget the campaign for real-time execution
 
 - Declared a 300-second scenario timeout for the ordinary-input campaign, whose verified route takes about 99 seconds at actual 60 Hz. This uses the input worker's coordinated runner API; explicit CLI timeout remains authoritative. Only the budget changes, not route commands, success criteria or test discovery. Whitespace check passes; native timing remains the integrator's pending gate.

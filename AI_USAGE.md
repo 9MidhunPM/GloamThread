@@ -117,6 +117,12 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-world -->
 
+### 2026-10-25 02:14:52 +0530 — Room orientation and boss intensity cues
+
+- Tool: OpenAI Codex added the exclusive Session/Presentation polish after checking the existing revive HUD. New room titles use retained original resources, and the optional second-phase music request is latched once per encounter.
+- Checks: new production-asset presentation scenario PASS and overhead suite PASS 26/26, including the unchanged successful ordinary-input campaign. No App/audio files changed and no listening/native-render claim; human review pending.
+
+
 ### 2026-10-25 02:08:22 +0530 — Budget the campaign for real-time execution
 
 - OpenAI Codex coordinated the route's 300-second wall-clock budget with the runner owner so the verified 99-second campaign can run without fixed-FPS acceleration. No gameplay or acceptance assertion changes; no new native-run claim.

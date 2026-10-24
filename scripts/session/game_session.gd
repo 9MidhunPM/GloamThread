@@ -43,6 +43,7 @@ var _damaged_slots: Dictionary = {}
 var _hazards: Array[Rect2] = []
 var _ending_presented: bool = false
 var _focus_pause_enabled: bool = true
+var _boss_final_music_started: bool = false
 
 
 func configure(bundle: ContentCatalog, team: TeamProgress, saves: SaveRepository = null, continuing: bool = false) -> void:
@@ -162,6 +163,7 @@ func _load_room(room_id: String, entrance: String, restore_health: bool) -> bool
 	presentation.room_slot.add_child(room)
 	room.entity_visuals.reparent(presentation.actors)
 	current_room_id = definition.id
+	_boss_final_music_started = false
 	_latches.clear()
 	_hazards.clear()
 	for y in definition.height:
@@ -208,6 +210,7 @@ func _load_room(room_id: String, entrance: String, restore_health: bool) -> bool
 	presentation.follow_players(players, room.bounds())
 	if catalog != null:
 		presentation.set_themes(catalog.assets, str(catalog.profiles[progress.profile_ids[0]].theme_id), str(catalog.profiles[progress.profile_ids[1]].theme_id))
+	presentation.show_room_entry(definition.display_name)
 	progress.visit(current_room_id)
 	if not fixture_mode:
 		AudioDirector.play_music("ending" if progress.has_flag("loom_restored") else ("boss" if room_id == "r05" and not progress.has_flag("boss_spoolwarden") else "exploration"))
@@ -527,8 +530,13 @@ func objective() -> String:
 
 
 func _refresh_hud() -> void:
+	var active_boss := boss()
+	if not fixture_mode and is_instance_valid(active_boss) and active_boss.phase >= 2 and not _boss_final_music_started:
+		if catalog != null and catalog.assets.music.has("boss_final"):
+			_boss_final_music_started = true
+			AudioDirector.play_music("boss_final")
 	if is_instance_valid(presentation):
-		presentation.update_hud(players, objective(), interaction_hints, boss(), progress, [local_targets(0), local_targets(1)])
+		presentation.update_hud(players, objective(), interaction_hints, active_boss, progress, [local_targets(0), local_targets(1)])
 
 
 func _locked_hint(required: Array) -> String:
