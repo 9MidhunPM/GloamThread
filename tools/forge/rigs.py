@@ -80,22 +80,73 @@ def load_rig(job_dir:Path,rig_id:str)->tuple[dict,dict,dict]:
     return parts,rig,masks
 
 
+def _json_digest(value:dict)->str:
+    encoded=json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode('utf-8')
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def _bake_provenance(job_dir:Path,proposal:dict,parts:dict,rig:dict,masks:dict,
+                     parent:dict,parent_digest:str|None,theme_images:tuple,theme_mode:str)->dict:
+    """Bind the actual decoded inputs as well as retained source-file identities."""
+    edits_path=job_dir/'rig_edits.json'
+    edits_digest=sha256(edits_path) if edits_path.exists() else None
+    inputs={
+        'schema_version':1,
+        'proposal_sha256':_json_digest(proposal),
+        'rig_file_sha256':sha256(job_dir/'rig.json'),
+        'applied_rig_sha256':_json_digest(rig),
+        'applied_pivots':{record['id']:{'pivot':record['pivot'],'anchor':record['anchor']} for record in rig['parts']},
+        'rig_edits_sha256':edits_digest,
+        'parts':{name:{'file_sha256':sha256(job_dir/f'parts/{name}.png'),
+                       'pixels_sha256':hashlib.sha256(image.tobytes()).hexdigest()} for name,image in sorted(parts.items())},
+        'masks':{name:{'file_sha256':sha256(job_dir/f'masks/{name}.png'),
+                       'applied_alpha_sha256':hashlib.sha256(mask.tobytes()).hexdigest()} for name,mask in sorted(masks.items())},
+        'theme':{'mode':theme_mode,'background_pixels_sha256':hashlib.sha256(theme_images[0].tobytes()).hexdigest(),
+                 'materials_pixels_sha256':hashlib.sha256(theme_images[1].tobytes()).hexdigest()},
+        'parent_generation_provenance_sha256':parent_digest,
+        'converter_source_sha256':sha256(Path(__file__)),
+        'animation_source_sha256':sha256(Path(__file__).with_name('art.py')),
+    }
+    if theme_mode!='authored':
+        inputs['theme'].update({'background_file_sha256':sha256(job_dir/'theme_background.png'),
+                                'materials_file_sha256':sha256(job_dir/'theme_materials.png')})
+    provenance=dict(parent)
+    provenance.update({'rig_sha256':inputs['rig_file_sha256'],
+                       'parent_generation_provenance_sha256':parent_digest,
+                       'bake_inputs':inputs,'bake_sha256':_json_digest(inputs)})
+    if edits_digest is not None:provenance['rig_edits_sha256']=edits_digest
+    return provenance
+
+
 def bake_job(job_json:Path)->Path:
     job_dir=job_json.parent;job=json.loads(job_json.read_text())
     proposal=job.get('proposal')
     if proposal is None:proposal=json.loads((job_dir/'proposal.json').read_text())
     validate_proposal(proposal);parts,rig,masks=load_rig(job_dir,proposal['rig_id'])
     source_provenance=job_dir/'source_provenance.json'
-    provenance=json.loads(source_provenance.read_text()) if source_provenance.exists() else {'method':'local authored rig bake','notice':'No provider request made by bake.'}
-    provenance['rig_sha256']=sha256(job_dir/'rig.json')
-    if (job_dir/'rig_edits.json').exists():provenance['rig_edits_sha256']=sha256(job_dir/'rig_edits.json')
+    parent_digest=None
+    provenance={'method':'local authored rig bake','notice':'No provider request made by bake.'}
+    if source_provenance.exists():
+        require(source_provenance.is_file() and not source_provenance.is_symlink() and source_provenance.stat().st_size<=512*1024,'Generation provenance is unsafe or oversized.')
+        provenance=json.loads(source_provenance.read_text())
+        require(isinstance(provenance,dict),'Generation provenance must be an object.')
+        parent_digest=sha256(source_provenance)
+    generated=rig.get('source_kind')=='generated-parts' or 'raw_theme_sha256' in provenance or 'raw_parts_sha256' in provenance
+    if generated:require(parent_digest is not None,'Generated rebake requires retained generation provenance.')
     theme_files=(job_dir/'theme_background.png',job_dir/'theme_materials.png')
-    theme_images=None
-    if all(p.is_file() for p in theme_files):
+    retained_theme=any(path.exists() for path in theme_files)
+    if generated or retained_theme:
+        require(all(path.is_file() for path in theme_files),'Rebake requires both retained theme images; the previous candidate is unchanged.')
+        images=[]
         for file,size in zip(theme_files,[(640,360),(256,256)]):
-            require(not file.is_symlink(),'Theme image is unsafe.')
-            with Image.open(file) as im:require(im.format=='PNG' and im.size==size,'Theme dimensions are invalid.')
-        theme_images=tuple(Image.open(p).convert('RGBA') for p in theme_files)
+            require(not file.is_symlink() and file.stat().st_size<=8*1024*1024,'Theme image is unsafe or oversized.')
+            with Image.open(file) as image:
+                require(image.format=='PNG' and image.size==size and getattr(image,'n_frames',1)==1,'Theme dimensions are invalid.')
+                image.load();images.append(image.convert('RGBA'))
+        theme_images=tuple(images);theme_mode='generated' if generated else 'retained'
+    else:
+        theme_images=(background(proposal['theme']),materials(proposal['theme']));theme_mode='authored'
+    provenance=_bake_provenance(job_dir,proposal,parts,rig,masks,provenance,parent_digest,theme_images,theme_mode)
     # Each rebake gets a new sibling so preview acceptance never replaces a prior candidate.
     destination=job_dir/'candidate'
     if destination.exists():
@@ -103,7 +154,7 @@ def bake_job(job_json:Path)->Path:
         while (job_dir/f'candidate-bake-{n}').exists():n+=1
         destination=job_dir/f'candidate-bake-{n}'
     return emit_bundle(parts,rig,proposal,destination,provenance,theme_images,masks,
-                       identifier=bundle_id(proposal,hashlib.sha256(b''.join(p.tobytes() for p in parts.values())).hexdigest()))
+                       identifier=bundle_id(proposal,provenance['bake_sha256']))
 
 
 def convert_generated(raw_parts:Path,raw_theme:Path,proposal:dict,job_dir:Path,provenance:dict)->Path:
@@ -133,7 +184,7 @@ def convert_generated(raw_parts:Path,raw_theme:Path,proposal:dict,job_dir:Path,p
     require(master_box[0]>2 and master_box[1]>2 and master_box[2]<raw_master.width-2 and master_box[3]<raw_master.height-2,'Generated master design is clipped by its grid slot.')
     master=raw_master.crop(master_box);master.thumbnail((116,116),Image.Resampling.NEAREST)
     master_preview=Image.new('RGBA',(128,128));master_preview.alpha_composite(master,((128-master.width)//2,(128-master.height)//2));master_preview.save(job_dir/'master.png')
-    (job_dir/'parts').mkdir();rig=make_rig(proposal['rig_id'])
+    (job_dir/'parts').mkdir();rig=make_rig(proposal['rig_id']);rig['source_kind']='generated-parts'
     for name,image in parts.items():image.save(job_dir/f'parts/{name}.png')
     write_json(job_dir/'rig.json',rig);write_json(job_dir/'proposal.json',proposal)
     theme.crop((0,0,1024,576)).resize((640,360),Image.Resampling.NEAREST).save(job_dir/'theme_background.png')
