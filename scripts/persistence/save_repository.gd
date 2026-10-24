@@ -15,7 +15,7 @@ func load_campaign() -> Dictionary:
 	if backup.status == "ok":
 		return {"status": "backup_available", "primary_status": primary.status,
 			"data": {}, "backup_data": backup.data,
-			"message": "The campaign could not load. A valid backup is available."}
+			"message": primary.message + " A valid overhead backup is available."}
 	return primary
 
 
@@ -80,8 +80,11 @@ func _read(file_path: String) -> Dictionary:
 		return {"status": "corrupt", "data": {}, "message": "The campaign file is damaged or incomplete."}
 	var parsed: Dictionary = parser.data
 	var version: Variant = parsed.get("schema_version")
-	if (version is int or version is float) and version > 1:
+	var integer_version := (version is int or version is float) and is_finite(float(version)) and float(version) == floorf(float(version))
+	if integer_version and version > TeamProgress.SAVE_SCHEMA_VERSION:
 		return {"status": "newer", "data": {}, "message": "This campaign belongs to a newer game version and has been preserved."}
+	if not integer_version or version != TeamProgress.SAVE_SCHEMA_VERSION or not parsed.get("content_version") is String or parsed.content_version != TeamProgress.CONTENT_VERSION:
+		return {"status": "incompatible", "data": {}, "message": "Campaign format is incompatible. The overhead adventure requires schema %d / %s; the file has been preserved." % [TeamProgress.SAVE_SCHEMA_VERSION, TeamProgress.CONTENT_VERSION]}
 	if not _valid(parsed):
 		return {"status": "incompatible", "data": {}, "message": "The campaign references unsupported profiles, checkpoints or progress."}
 	return {"status": "ok", "data": parsed, "message": ""}

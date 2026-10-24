@@ -70,6 +70,11 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-input -->
 
+### 2026-10-25T01:11:22+05:30 — Codex: overhead campaign version boundary
+
+Codex versioned team progress and campaign format handling, added met_oru, and verified actual file protection/replacement in the exclusive lane. Human review is pending. The focused schema scenario and editor import passed; separate application data-directory integration and gameplay remain with the integrator.
+
+
 ### 2026-10-25T01:10:20+05:30 — Codex: overhead Roll migration
 
 Codex implemented the Roll action and legacy settings migration in the exclusive input lane, including canonical-name precedence and actual file/snapshot regression checks. Human review is pending. Godot4.7.2 import and the focused scenario passed; no physical-device or overhead-movement acceptance is claimed.

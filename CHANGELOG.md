@@ -210,6 +210,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-input -->
 
+### 2026-10-25T01:11:22+05:30 — Separate overhead campaign saves
+
+- Changed: Added public TeamProgress.SAVE_SCHEMA_VERSION=2, content version overhead-v1 and the shared met_oru introduction flag. Campaign reads distinguish schema2 from unsupported newer formats and visibly reject/preserve side-view data; backup notices retain the primary failure explanation.
+- Why: Overhead progress must never silently adopt the preserved side-view campaign format. The separate application data directory remains an integrator setting.
+- Validation: Godot4.7.2 overhead_save_version PASS1/1 with actual temporary files, swapped profile/checkpoint/met_oru round trip, partial boss reward rejection, schema1/newer protection and explicit replacement retaining rejected bytes; editor import and whitespace checks pass.
+- Limitations: This lane does not change project settings or certify full overhead gameplay.
+
+
 ### 2026-10-25T01:10:20+05:30 — Migrate the overhead Roll action
 
 - Changed: Introduced canonical Roll at bit16, retained the transitional Jump alias, migrated legacy saved jump controls, and made canonical roll mappings win independent of JSON key order. Default keyboard/gamepad controls are preserved and the action appears once in polling/settings.

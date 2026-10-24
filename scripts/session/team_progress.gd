@@ -2,12 +2,13 @@ class_name TeamProgress
 extends RefCounted
 ## One team owns permanent outcomes. No actor/camera owns a second reward copy.
 
-const CONTENT_VERSION := "phase1-v1"
+const SAVE_SCHEMA_VERSION := 2
+const CONTENT_VERSION := "overhead-v1"
 const FLAG_GROUPS := {
 	"threadstep": "team_unlocks",
 	"bridge_spindle": "restored_pairs", "bridge_causeway": "restored_pairs",
 	"boss_spoolwarden": "boss_flags", "lantern_charm": "secret_flags",
-	"shortcut_bell": "world_flags", "loom_restored": "world_flags",
+	"shortcut_bell": "world_flags", "loom_restored": "world_flags", "met_oru": "world_flags",
 }
 const SAVE_GROUPS := ["team_unlocks", "restored_pairs", "boss_flags", "secret_flags", "world_flags"]
 const ROOM_IDS := ["r00", "r01", "r02", "r03", "r04", "r05", "r06", "r07"]
@@ -48,7 +49,7 @@ func visit(room_id: String) -> void:
 
 
 func to_save() -> Dictionary:
-	var data := {"schema_version": 1, "content_version": CONTENT_VERSION,
+	var data := {"schema_version": SAVE_SCHEMA_VERSION, "content_version": CONTENT_VERSION,
 		"profile_ids": profile_ids.duplicate(), "checkpoint_id": checkpoint_id,
 		"explored_rooms": explored_rooms.duplicate()}
 	for group: String in SAVE_GROUPS:
@@ -63,7 +64,7 @@ func to_save() -> Dictionary:
 
 func load_save(data: Dictionary) -> bool:
 	var version: Variant = data.get("schema_version")
-	if not (version is int or version is float) or not is_finite(float(version)) or float(version) != 1.0:
+	if not (version is int or version is float) or not is_finite(float(version)) or float(version) != SAVE_SCHEMA_VERSION:
 		return false
 	if not data.get("content_version") is String or data.content_version != CONTENT_VERSION:
 		return false
