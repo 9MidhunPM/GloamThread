@@ -52,7 +52,8 @@ class FighterContentTests(unittest.TestCase):
         self.assertEqual(len(validate_enemies(ROOT)['assets']),10)
     def test_shipped_bundles_and_hashes(self):
         index=json.loads((ROOT/'assets/arena/builtin/index.json').read_text())
-        self.assertEqual(len(index['bundles']),2)
+        self.assertEqual(index['bundles'],['cinderjack','thistlepaw','kiln-fox-ai'])
+        self.assertEqual(index['default_players'],['kiln-fox-ai','thistlepaw'])
         for identifier in index['bundles']:
             m=validate_bundle(ROOT/f'assets/arena/builtin/{identifier}');self.assertEqual(m['id'],identifier)
     def test_two_distinct_examples_of_each_rig_bake(self):

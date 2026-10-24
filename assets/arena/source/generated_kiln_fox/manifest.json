@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "kind": "retained-fighter-generation",
+  "id": "kiln-fox-ai",
+  "files": {
+    "source_provenance.json": "72ec55dc5e457f01324d60ec72a7275ff6010ab34b318fb080a5dbf0120cc7d9",
+    "theme_materials.png": "76cee120c52426950b0a9e3c4f63513bf14d79d962ab51708a1b9e933311bcaa",
+    "theme_background.png": "b2ee6930c3a50bac83ccb95e8fecdd3797f19f18554b82d71c54eb244f997722",
+    "master.png": "8797786f5987fe3252a3070ffa9f58ccb12f654623c105e0a837978346e12c4f",
+    "rig.json": "4dfe83e281744a99906307072183ae8c5d6fff214f1be88a65b4bdbd101b5959",
+    "generation.json": "0744a65180f970207d0912f5ed89c9bddabad7c47329de10fa5fb9092cf4b289",
+    "proposal.json": "d3a5b4ab041761f9a1aa862e575b380a9824b37cf32eb3547092e60f42d17044",
+    "source_layout.json": "9d3a07d757c3ed31d69fc6a8b21b00a7683fe5f9ba1cf2153e97511e10002ed7",
+    "raw_theme.png": "33420395c35d9d63c5b780841ac6e2411288f7dbf1c74b56718f1523744870d0",
+    "raw_parts.png": "6e0e8c76611ab018945fa9e8a1061206f6f7f3dceee8f5bb7b4d2e65eb489c93",
+    "request_source.png": "1281653ee18ee107f604e92512af38a8fa9096bd1834852aa1027b3433b43f72",
+    "original_source.png": "1281653ee18ee107f604e92512af38a8fa9096bd1834852aa1027b3433b43f72",
+    "parts/torso.png": "6a9c81d8d947e6cdd986d73193437dd77155212eb83d2c65e89aabe8ad71bc91",
+    "parts/head.png": "06ae96f7c90e25ba8072a015bfeb9913eeeaeafa4f5bc64e451e05e1594feea9",
+    "parts/arm_back.png": "39c76f24945208bcdea2cfd90c46ad75bb186cc2106fce7fb169907227c0d1e3",
+    "parts/arm_front.png": "b74c64fb7c77fa33af4e8a6c2eb9628f3ed67c992cbf673d55dd6e2048290791",
+    "parts/leg_back.png": "3fc602640b4cf8f55f834965939ca2177f1c6d77fa8aac1427bdcd9dc7550a72",
+    "parts/leg_front.png": "16ed3f19fc74f4a4ecaaa6673e5725c8062691a81b87192bf6aaecfa9fcb7dfb"
+  },
+  "review": "Root-supplied real image receipts; source/master/32pose plate manually inspected. Native final gate belongs to Root."
+}

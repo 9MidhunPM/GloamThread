@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "rig_id": "upright",
+  "parts": [
+    {
+      "id": "torso",
+      "file": "parts/torso.png",
+      "pivot": [
+        32,
+        36
+      ],
+      "anchor": [
+        32,
+        36
+      ]
+    },
+    {
+      "id": "head",
+      "file": "parts/head.png",
+      "pivot": [
+        33,
+        23
+      ],
+      "anchor": [
+        33,
+        23
+      ]
+    },
+    {
+      "id": "arm_back",
+      "file": "parts/arm_back.png",
+      "pivot": [
+        27,
+        31
+      ],
+      "anchor": [
+        27,
+        31
+      ]
+    },
+    {
+      "id": "arm_front",
+      "file": "parts/arm_front.png",
+      "pivot": [
+        38,
+        31
+      ],
+      "anchor": [
+        38,
+        31
+      ]
+    },
+    {
+      "id": "leg_back",
+      "file": "parts/leg_back.png",
+      "pivot": [
+        28,
+        43
+      ],
+      "anchor": [
+        28,
+        43
+      ]
+    },
+    {
+      "id": "leg_front",
+      "file": "parts/leg_front.png",
+      "pivot": [
+        36,
+        43
+      ],
+      "anchor": [
+        36,
+        43
+      ]
+    }
+  ],
+  "source_kind": "generated-parts"
+}
