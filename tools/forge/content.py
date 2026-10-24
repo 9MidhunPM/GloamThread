@@ -13,6 +13,7 @@ from .rigs import emit_bundle,write_json
 from .validation import validate_catalog,validate_bundle,sha256
 from .enemies import rebuild as rebuild_enemies,validate as validate_enemies
 from .audio import rebuild as rebuild_audio,validate as validate_audio
+from .fixtures import rebuild as rebuild_fixtures
 
 ROOT=Path(__file__).resolve().parents[2]
 
@@ -40,6 +41,7 @@ def rebuild(root:Path=ROOT)->dict:
     for name,image in authored_parts('floating',profiles[0]['theme']['palette']).items():(src/'parts').mkdir(exist_ok=True);image.save(src/f'parts/{name}.png')
     rebuild_enemies(root)
     rebuild_audio(root)
+    rebuild_fixtures(root)
     return validate(root)
 
 
