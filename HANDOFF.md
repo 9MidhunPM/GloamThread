@@ -2,6 +2,8 @@
 
 ## Current execution: two agents in separate checkouts
 
+Runtime checkpoint, 2026-10-24T22:23:11+05:30: preparation commit `2fea1ef` and both feature branches were published; Agent 2's separate clone is ready. Agent 1 added the scenario runner, input ownership/binding fixes and safe room-coordinate/spawn validation. Two component scenarios pass in Godot; the editor scan still reports the missing boot scene. See [current evidence](evidence/runtime/commands.md) and [status](docs/STATUS.md). Original M0 step 9 is partially implemented; its integrated session smoke test and the playable session remain outstanding.
+
 The user approved parallel execution on 2026-10-24. Start from [Agent 1's runtime/integration brief](docs/AGENT_1_RUNTIME.md) or [Agent 2's complete content/pipeline brief](docs/AGENT_2_CONTENT.md). They supersede the original ownership split in sections 1/6 and the integrator-owned generator/r00 instructions below. Agent 1 uses `feat/phase1-runtime` in this checkout; Agent 2 uses `feat/phase1-content` in `/home/midhun/Coading/GloamThread-content`. Both start at the preparation commit containing the briefs. Merge cumulative content packets into the runtime branch; preserve development history. The remainder of this file is the original M0 implementation handoff and remains useful for its technical steps.
 
 Written 2026-10-24 by Devin CLI (Claude) for the next coding agent (Codex). Read this first, then `AGENTS.md`, `MVP.md`, `docs/DECISIONS.md`, `docs/ARCHITECTURE.md`. The latest user instruction outranks every document.

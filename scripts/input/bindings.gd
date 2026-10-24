@@ -120,15 +120,67 @@ func to_dict() -> Dictionary:
 static func from_dict(data: Dictionary) -> Bindings:
 	var kind_name: String = str(data.get("kind", ""))
 	var kind_index: int = DeviceSource.Kind.keys().find(kind_name)
-	if kind_index < 0:
+	if kind_index <= DeviceSource.Kind.NONE:
 		push_warning("Bindings: unknown device kind '%s'; using keyboard defaults" % kind_name)
 		kind_index = DeviceSource.Kind.KEYBOARD_LEFT
 	var bindings := defaults_for(kind_index as DeviceSource.Kind)
-	bindings.deadzone = clampf(float(data.get("deadzone", bindings.deadzone)), 0.05, 0.9)
+	var saved_deadzone: Variant = data.get("deadzone", bindings.deadzone)
+	if (saved_deadzone is int or saved_deadzone is float) and is_finite(float(saved_deadzone)):
+		bindings.deadzone = clampf(float(saved_deadzone), 0.05, 0.9)
 	var saved: Variant = data.get("controls", {})
 	if saved is Dictionary:
-		for name: String in (saved as Dictionary):
-			var action := CommandSnapshot.action_from_name(name)
-			if action != 0 and (saved as Dictionary)[name] is Array:
-				bindings.controls[action] = ((saved as Dictionary)[name] as Array).duplicate(true)
+		for name: Variant in (saved as Dictionary):
+			if not (name is String):
+				continue
+			var action := CommandSnapshot.action_from_name(name as String)
+			if action == 0:
+				continue
+			var normalised: Variant = _normalise_controls((saved as Dictionary)[name], bindings.kind)
+			if normalised is Array:
+				bindings.controls[action] = normalised
+			else:
+				push_warning("Bindings: invalid controls for '%s'; retaining defaults" % name)
 	return bindings
+
+
+## Reject an entire malformed action, rather than installing a partially valid
+## mapping. Empty arrays deliberately unbind an action. JSON numbers may arrive
+## as floats, so accept only integral values and normalise them before polling.
+static func _normalise_controls(raw: Variant, device_kind: DeviceSource.Kind) -> Variant:
+	if not (raw is Array):
+		return null
+	var normalised: Array = []
+	for control: Variant in (raw as Array):
+		if device_kind != DeviceSource.Kind.GAMEPAD:
+			if not _integer_in_range(control, KEY_SPACE, KEY_UNKNOWN - 1):
+				return null
+			var keycode: int = int(control)
+			var label := OS.get_keycode_string(keycode as Key)
+			if label.is_empty() or OS.find_keycode_from_string(label) != keycode:
+				return null
+			normalised.append(keycode)
+		elif control is Dictionary:
+			var item: Dictionary = control
+			if item.size() == 1 and item.has("button"):
+				if not _integer_in_range(item["button"], 0, JOY_BUTTON_MAX - 1):
+					return null
+				normalised.append({"button": int(item["button"])})
+			elif item.size() == 2 and item.has("axis") and item.has("sign"):
+				if not _integer_in_range(item["axis"], 0, JOY_AXIS_MAX - 1):
+					return null
+				if not _integer_in_range(item["sign"], -1, 1) or int(item["sign"]) == 0:
+					return null
+				normalised.append({"axis": int(item["axis"]), "sign": int(item["sign"])})
+			else:
+				return null
+		else:
+			return null
+	return normalised
+
+
+static func _integer_in_range(value: Variant, minimum: int, maximum: int) -> bool:
+	if value is int:
+		return value >= minimum and value <= maximum
+	if value is float:
+		return is_finite(value) and value == floorf(value) and value >= minimum and value <= maximum
+	return false

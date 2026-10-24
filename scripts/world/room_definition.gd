@@ -11,6 +11,8 @@ const TILE := 16
 ## Smallest room that fills one 480x360 view (30 x 22.5 tiles).
 const MIN_WIDTH := 30
 const MIN_HEIGHT := 23
+const MAX_WIDTH := 90
+const MAX_HEIGHT := 30
 
 const CHAR_SOLID := "#"
 const CHAR_ONE_WAY := "="
@@ -51,13 +53,20 @@ func is_valid() -> bool:
 
 func parse(data: Dictionary) -> void:
 	errors.clear()
-	if int(data.get("schema_version", -1)) != SCHEMA_VERSION:
+	width = 0
+	height = 0
+	spawns = {}
+	entities = []
+	if not _is_integer(data.get("schema_version")) or data.get("schema_version") != SCHEMA_VERSION:
 		errors.append("schema_version must be %d" % SCHEMA_VERSION)
 	id = str(data.get("id", ""))
 	if id.is_empty():
 		errors.append("missing room id")
 	display_name = str(data.get("name", id))
 	_parse_tiles(data.get("tiles", []))
+	# Never inspect coordinates against incomplete or ragged geometry.
+	if not errors.is_empty():
+		return
 	_parse_spawns(data.get("spawns", {}))
 	_parse_entities(data.get("entities", []))
 
@@ -80,8 +89,8 @@ func _parse_tiles(raw: Variant) -> void:
 		for x in rows[y].length():
 			if not VALID_CHARS.contains(rows[y][x]):
 				errors.append("invalid tile char '%s' at (%d, %d)" % [rows[y][x], x, y])
-	if width < MIN_WIDTH or height < MIN_HEIGHT:
-		errors.append("room must be at least %dx%d tiles (got %dx%d)" % [MIN_WIDTH, MIN_HEIGHT, width, height])
+	if width < MIN_WIDTH or height < MIN_HEIGHT or width > MAX_WIDTH or height > MAX_HEIGHT:
+		errors.append("room must be %d..%d by %d..%d tiles (got %dx%d)" % [MIN_WIDTH, MAX_WIDTH, MIN_HEIGHT, MAX_HEIGHT, width, height])
 
 
 func _parse_spawns(raw: Variant) -> void:
@@ -103,6 +112,8 @@ func _parse_spawns(raw: Variant) -> void:
 				errors.append("spawn '%s' tile (%d, %d) is not an empty tile over solid ground" % [entrance, tile.x, tile.y])
 			tiles.append(tile)
 		if tiles.size() == 2:
+			if tiles[0] == tiles[1]:
+				errors.append("spawn '%s' must provide distinct feet tiles" % entrance)
 			spawns[str(entrance)] = tiles
 
 
@@ -122,10 +133,12 @@ func _parse_entities(raw: Variant) -> void:
 			errors.append("entity without type")
 			continue
 		var entity_id := str(entity.get("id", ""))
-		if not entity_id.is_empty():
-			if seen_ids.has(entity_id):
-				errors.append("duplicate entity id '%s'" % entity_id)
-			seen_ids[entity_id] = true
+		if entity_id.is_empty():
+			errors.append("entity '%s' requires an id" % type)
+			continue
+		if seen_ids.has(entity_id):
+			errors.append("duplicate entity id '%s'" % entity_id)
+		seen_ids[entity_id] = true
 		if entity.has("tile"):
 			var tile := _tile_from(entity["tile"], "entity '%s'" % type)
 			if tile.x >= 0 and not in_bounds(tile):
@@ -136,14 +149,18 @@ func _parse_entities(raw: Variant) -> void:
 func _tile_from(value: Variant, context: String) -> Vector2i:
 	if value is Array and (value as Array).size() == 2:
 		var list: Array = value
-		if (list[0] is float or list[0] is int) and (list[1] is float or list[1] is int):
+		if _is_integer(list[0]) and _is_integer(list[1]):
+			if list[0] < 0 or list[1] < 0 or list[0] >= width or list[1] >= height:
+				errors.append("%s tile is out of bounds" % context)
+				return Vector2i(-1, -1)
 			var tile := Vector2i(int(list[0]), int(list[1]))
-			if in_bounds(tile):
-				return tile
-			errors.append("%s tile (%d, %d) out of bounds" % [context, tile.x, tile.y])
-			return Vector2i(-1, -1)
-	errors.append("%s tile must be [x, y]" % context)
+			return tile
+	errors.append("%s tile must be an integer [x, y] pair" % context)
 	return Vector2i(-1, -1)
+
+
+static func _is_integer(value: Variant) -> bool:
+	return value is int or (value is float and is_finite(value) and value == floor(value))
 
 
 # --- queries ---------------------------------------------------------------------
@@ -154,6 +171,8 @@ func in_bounds(tile: Vector2i) -> bool:
 
 func char_at(tile: Vector2i) -> String:
 	if not in_bounds(tile):
+		return CHAR_SOLID
+	if tile.y >= rows.size() or tile.x >= rows[tile.y].length():
 		return CHAR_SOLID
 	return rows[tile.y][tile.x]
 
@@ -176,9 +195,11 @@ func is_ground(tile: Vector2i) -> bool:
 
 ## A safe spawn is an empty tile with headroom above and ground directly below.
 func is_safe_spawn(tile: Vector2i) -> bool:
-	if not in_bounds(tile) or char_at(tile) != CHAR_EMPTY:
+	# A 12x24 courier needs the feet tile plus the bottom half of the tile
+	# above. Out-of-room cells are query guards, never real supporting bodies.
+	if not in_bounds(tile) or tile.y < 1 or not in_bounds(tile + Vector2i.DOWN):
 		return false
-	if tile.y > 0 and char_at(tile + Vector2i.UP) == CHAR_SOLID:
+	if char_at(tile) != CHAR_EMPTY or char_at(tile + Vector2i.UP) != CHAR_EMPTY:
 		return false
 	return is_ground(tile + Vector2i.DOWN)
 

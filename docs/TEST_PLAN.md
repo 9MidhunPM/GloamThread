@@ -2,7 +2,7 @@
 
 Version 2.0 · Phase 1 acceptance contract · 24 October 2026.
 
-**Current status:** this starter pack specifies tests; it does not contain a Godot game, a scenario runner, gameplay captures, performance results, or a completed co-op playtest. The earlier single-player HTML proof supplies no evidence that these co-op gates pass.
+**Current status:** a built-in scenario runner now passes two focused input/room component cases; see [runtime evidence](../evidence/runtime/commands.md). The boot/session and playable game remain missing, and there are no gameplay captures, performance results or completed co-op playtests. These component checks and the earlier single-player HTML proof do not pass the co-op acceptance gates below.
 
 ## 1. Evidence levels
 

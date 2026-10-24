@@ -24,12 +24,13 @@ Commands marked *planned* become usable when the milestone that creates them lan
    - `python3 tools/preflight.py` — read-only toolchain check (works now).
    - `python3 tools/check_pack.py` — planning-pack document/link/example check (works now).
    - `python3 tools/validate_content.py`, `python3 tools/generate_assets.py --seed 18427`, `python3 tools/validate_assets.py` *(planned)*.
-   - `godot --headless --path . --import` and `godot --headless --path . --script tests/run_tests.gd` *(planned)*.
+   - `godot --headless --path . --editor --import --quit` — register scripts on a fresh checkout; currently reports the missing boot scene, so this is not a complete-game import pass.
+   - `godot --headless --path . --script tests/run_tests.gd` — input/room component scenarios; also available as `bash tools/run_tests.sh`, with optional `-- --filter room_loading`.
 
 ### Current status
 
-- **Current implementation:** M0 is in progress. `project.godot` and input, audio and room scaffolding exist alongside the design pack, example contracts and two Python utilities. The engine files have not been parsed, imported or run. See [HANDOFF.md](HANDOFF.md) for the remaining M0 work and [docs/STATUS.md](docs/STATUS.md) for verified and unverified work.
-- **Known limitations:** the main scene, player/session controllers, cameras, room content, generated assets, saves, scenario runner and export are missing, so the game is not runnable yet. Keyboard + keyboard (WASD / arrows) is the primary input mode to build and verify. Gamepad support requires hardware verification when a controller is available.
+- **Current implementation:** M0 is in progress. Project/input/audio/room scaffolding and a built-in scenario runner exist. Two real-engine component scenarios pass for input routing/bindings and room validation; the editor scan registers scripts but reports the missing boot scene. See [runtime evidence](evidence/runtime/commands.md), [HANDOFF.md](HANDOFF.md) and [docs/STATUS.md](docs/STATUS.md).
+- **Known limitations:** the main scene, player/session controllers, cameras, room content, generated assets, saves and export are missing, so the game is not runnable yet. Keyboard + keyboard (WASD / arrows) is the primary input mode to build and verify. Physical input, rendered gameplay and audio remain unverified.
 - **Libraries, APIs, and public datasets used:** [Godot Engine](https://godotengine.org/) 4.7.2 (MIT), [Pillow](https://python-pillow.org/) (MIT-CMU), [NumPy](https://numpy.org/) (BSD-3). No game-content packs, stock art, fonts, music or sound libraries: every shipped sprite, tile, glyph, sound and line of dialogue is authored in this repository.
 
 ## Start in this order (design pack)

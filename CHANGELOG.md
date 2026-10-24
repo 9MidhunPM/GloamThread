@@ -6,6 +6,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 1 — runtime and integration
 
+### 2026-10-24T22:23:11+05:30 — Start runtime verification and harden input/room data
+
+- Changed: Added the built-in scenario runner/filter/timeout and shell wrapper, input and room boundary scenarios, generated script UID metadata and runtime evidence. Validated saved controls and analog remapping, neutralized disconnected inputs, prevented duplicate identical-pad reconnect claims, and latched held movement/actions across flush. Room parsing rejects malformed geometry/fractional coordinates/oversized layouts and unsafe or duplicated paired spawns without indexing invalid rows or treating outside-room sentinels as real floors. Updated current setup/status/command instructions.
+- Why: Give Agent 1 reproducible engine checks and repair scaffold defects before the parallel content pipeline supplies real rooms/assets.
+- Validation: Final Godot run: 2 scenarios passed / 0 failed; wrapper's room filter passed; nonexistent-filter run correctly exited 1. A new held-stick regression first failed and then passed after directional latching was fixed. Editor scan registered 13 scripts but reported the still-missing boot scene despite exit 0; not a complete import/launch pass. Exact commands/configuration and remaining gaps are in `evidence/runtime/commands.md`; pack and whitespace checks run before commit.
+- Limitations: Synthetic input only; no physical devices, visible split screen, gameplay, audio, performance or human playtest. Boot/session/player/cameras and Agent 2's authored content remain outstanding; full entity schema validation is not yet implemented.
+
 ### 2026-10-24T22:10:33+05:30 — Prepare two-agent parallel execution
 
 - Changed: Added runtime and content agent briefs with exclusive files, shared JSON/asset/audio/room contracts, staged deliverables, separate checkouts/branches and integration gates. Linked the briefs from the agent guide, handoff, README, decisions, task list and original plan. Allocated independent changelog/AI-usage sections; made the pack checker require both briefs.

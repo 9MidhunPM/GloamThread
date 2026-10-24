@@ -56,11 +56,11 @@ python3 tools/preflight.py --godot /path/to/Godot_v4.7.2-stable_linux.x86_64
 4. Paste FIRST_AGENT_PROMPT.md's prompt block and start the build.
 5. Ask for the first one-room two-input proof early, then let the agent continue through the scoped MVP. Inspect visible output at each integration gate.
 
-`project.godot` and initial input/audio/room scripts exist, but the main scene and playable session are missing. The game cannot launch yet, and the scripts have not been imported or run. Continue from [the handoff](../HANDOFF.md) and use [STATUS.md](STATUS.md) for current verification evidence.
+Project/input/audio/room scripts and the scenario runner exist, but the main scene and playable session are missing. The editor scan registers classes while reporting the missing boot scene. Input/room component scenarios pass; these are not gameplay acceptance. Continue from [the handoff](../HANDOFF.md) and use [STATUS.md](STATUS.md) for current verification evidence.
 
 ## 5. Command contract after implementation
 
-The agent must create these interfaces. They are **planned**, and will not work from the planning pack alone:
+The generation/asset/content tools and playable launch below remain **planned**. The import command scans current scripts but reports the missing main scene; the scenario runner already exercises the focused input/room boundaries:
 
 ```sh
 python3 tools/generate_assets.py --seed 18427
