@@ -2,7 +2,9 @@
 
 Build the eight-room fixed-character split-screen co-op slice in Godot 4.7.2 on top of the DevDay Kochi hackathon template's repository workflow, implementing a one-room two-input tracer first, then combat/recovery, cooperation, original art/audio, the full route, persistence and release verification, with honest evidence at every gate.
 
-## 0. Where we are (verified 2026-10-24)
+## 0. Pre-implementation baseline (verified 2026-10-24)
+
+This table records the environment before repository bootstrap and M0 work. It is historical context; [STATUS.md](STATUS.md) and [the handoff](../HANDOFF.md) describe the current partial implementation. Publication uses `Midhun P M <midhun.titan@gmail.com>` for project commits and the authorized `9MidhunPM/GloamThread` repository.
 
 | Check | Result |
 | --- | --- |

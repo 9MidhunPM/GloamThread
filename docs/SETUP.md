@@ -56,7 +56,7 @@ python3 tools/preflight.py --godot /path/to/Godot_v4.7.2-stable_linux.x86_64
 4. Paste FIRST_AGENT_PROMPT.md's prompt block and start the build.
 5. Ask for the first one-room two-input proof early, then let the agent continue through the scoped MVP. Inspect visible output at each integration gate.
 
-There is no `project.godot` yet: importing this pack into Godot before the agent creates the game will not launch anything. The pack is the implementation contract, not a disguised unfinished executable.
+`project.godot` and initial input/audio/room scripts exist, but the main scene and playable session are missing. The game cannot launch yet, and the scripts have not been imported or run. Continue from [the handoff](../HANDOFF.md) and use [STATUS.md](STATUS.md) for current verification evidence.
 
 ## 5. Command contract after implementation
 

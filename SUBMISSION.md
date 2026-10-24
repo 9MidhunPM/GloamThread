@@ -6,9 +6,9 @@ Complete this file as the build progresses and use it to prepare the submission 
 
 - **Project name:** Gloamthread: Two Ends
 - **Short description:** Two players on one computer carry opposite ends of the last living thread through a kingdom each sees differently (Ember and Moss themes over one shared physical world). They fight readable enemies, revive each other, restore bridges from paired anchors, defeat the Spoolwarden to earn a shared dash, and reopen the Lantern Loom so a stranded district can cross home. It is for pairs who enjoy responsive action, exploration and cooperating on a small, complete problem.
-- **Code repository URL:** TODO — no remote has been authorized yet (the template remote was removed).
+- **Code repository URL:** [9MidhunPM/GloamThread](https://github.com/9MidhunPM/GloamThread).
 - **Final submitted implementation commit SHA:** TODO — recorded when the Phase 1 candidate is packaged.
-- **Working demo URL or local demo steps:** local desktop build; steps in [README.md](README.md#run-the-project). An exported Linux binary is planned for milestone M7.
+- **Working demo URL or local demo steps:** no runnable demo yet; the remaining M0 work is in [HANDOFF.md](HANDOFF.md). Planned launch steps are in [README.md](README.md#run-the-project), with an exported Linux binary targeted for milestone M7.
 - **Demo access requirements:** a Linux machine with Godot 4.7.2 standard (or the exported binary once it exists) and a keyboard; two gamepads are optional. No accounts, keys or network.
 
 ## Participants
@@ -25,7 +25,7 @@ Complete this file as the build progresses and use it to prepare the submission 
 - **Start command:** `godot --path .` *(available from milestone M0)*; exported build `./build/gloamthread.x86_64` *(planned, M7)*.
 - **Demo walkthrough:** TODO — to be written from the three-minute sequence in [docs/TRACK_ALIGNMENT.md](docs/TRACK_ALIGNMENT.md) once the slice is playable: two players join → same landmark in Ember and Moss → paired-anchor bridge → combat and a rescue → restoration payoff and ending card.
 - **Checks performed and results:** `python3 tools/preflight.py` → exit 0; `python3 tools/check_pack.py` → PASS (documents, links, example contracts). No engine, gameplay, rendering, audio or playtest checks exist yet; see [docs/STATUS.md](docs/STATUS.md) and [CHANGELOG.md](CHANGELOG.md) for the running record.
-- **Known limitations or incomplete features:** no implemented game yet. Gamepad input will be implemented but hardware-verified only if a controller becomes available; keyboard + keyboard is the primary tested mode. Two-human fresh playtests and performance measurements are reported only when they actually happen.
+- **Known limitations or incomplete features:** partial M0 engine scaffolding exists, but the main scene, playable session, content, assets and scenario runner are missing. The engine files remain unverified. Keyboard + keyboard is the primary mode to build and verify; gamepad checks require a controller. Two-human fresh playtests and performance measurements are reported only when they actually happen.
 - **Libraries, APIs, and public datasets used:** [Godot Engine 4.7.2](https://godotengine.org/) (MIT), [Pillow](https://python-pillow.org/) (MIT-CMU), [NumPy](https://numpy.org/) (BSD-3). No datasets, APIs, game-content packs, stock art, fonts, music or sound libraries.
 - **AI usage record:** [AI_USAGE.md](AI_USAGE.md)
 - **Development change log:** [CHANGELOG.md](CHANGELOG.md)

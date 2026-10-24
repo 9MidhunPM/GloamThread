@@ -1,10 +1,11 @@
 # Implementation status
 
-Updated 2026-10-24T21:40+05:30. Keep planned work distinct from verified behaviour.
+Updated 2026-10-24T21:51:38+05:30. Keep planned work distinct from verified behaviour.
 
 ## Implemented and verified
 
-- Repository bootstrapped on the DevDay Kochi hackathon template; documentation merged; `python3 tools/preflight.py` (exit 0) and `python3 tools/check_pack.py` (PASS, 58 links) run on the development machine with Godot 4.7.2.stable.arch_linux, Python 3.14.8, Pillow 13.0.0, numpy 2.5.4.
+- Repository bootstrapped on the DevDay Kochi hackathon template; documentation merged. The current review reran `python3 tools/preflight.py` (exit 0) and `python3 tools/check_pack.py` (PASS) with Godot 4.7.2.stable.arch_linux.ed1daf0bf, Python 3.14.8, Pillow 13.0.0 and numpy 2.5.4.
+- Publication preparation: original template root retained; the two unpublished project commits use `Midhun P M <midhun.titan@gmail.com>` with identical trees/messages and preserved author dates. `origin` points to the user-authorized `9MidhunPM/GloamThread` repository. Git integrity and whitespace checks passed; a targeted credential-pattern/filename scan of all 52 original tracked blobs found no matches (not an entropy-based audit).
 
 ## Implemented, not yet verified (M0 in progress)
 

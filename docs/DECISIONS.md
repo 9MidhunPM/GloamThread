@@ -2,7 +2,7 @@
 
 Version 2.0 · 24 October 2026 · Owner: Midhun P M.
 
-This is a planning and handoff pack. No Godot gameplay implementation is included or claimed. It supersedes the earlier C++/Raylib single-player production plan. The earlier HTML proof remains a separate, single-player experiment.
+This repository includes the planning and handoff pack plus unverified M0 project/input/audio/room scaffolding. A playable Godot session is still missing; see `STATUS.md`. It supersedes the earlier C++/Raylib single-player production plan. The earlier HTML proof remains a separate, single-player experiment.
 
 ## Product and phases
 

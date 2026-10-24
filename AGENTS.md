@@ -4,7 +4,7 @@
 
 Build the Phase 1 game in MVP.md: an original two-player local co-op action adventure with fixed split screen, two fixed characters and a complete eight-room story. All game content must be authored within this project. Prioritize responsive controls, readable combat and enjoyable cooperation before world size.
 
-This starter pack currently contains specifications, example data and two Python planning utilities. There is no `project.godot`, executable game, generated art pack or passed Godot gameplay test. The earlier single-player HTML proof is a separate reference; it is not the co-op implementation. Do not use its tests as evidence for this game.
+M0 is in progress: `project.godot` and input, audio and room scaffolding exist alongside the specifications, example data and two Python planning utilities. The main scene, playable session, generated art pack and gameplay tests are still missing; the engine files remain unverified. Read `HANDOFF.md` and `docs/STATUS.md` for the next steps. The earlier single-player HTML proof is a separate reference; it is not the co-op implementation. Do not use its tests as evidence for this game.
 
 ## Context map
 

@@ -2,6 +2,8 @@
 
 Written 2026-10-24 by Devin CLI (Claude) for the next coding agent (Codex). Read this first, then `AGENTS.md`, `MVP.md`, `docs/DECISIONS.md`, `docs/ARCHITECTURE.md`. The latest user instruction outranks every document.
 
+Publication preparation, 2026-10-24T21:51:38+05:30 (Codex): the user authorized `https://github.com/9MidhunPM/GloamThread`. The template root remains `4163290`; the two unpublished project commits were recreated with the account's normal `Midhun P M <midhun.titan@gmail.com>` author/committer identity: `14509f4` → `91bb494` and `fb5cac5` → `a972492`. Their file trees, messages, AI attribution and original author dates are preserved. Original history is retained locally at `refs/backup/pre-publication-20261024`. This changes publication metadata only; the M0 work below is still unverified and incomplete.
+
 ## 1. User decisions already made (do not re-ask)
 
 1. **Scope:** full Phase 1 (milestones M0–M7 in `docs/IMPLEMENTATION_PLAN.md`). Stop there — no Phase 2 generation, no 96-room world.

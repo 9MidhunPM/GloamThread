@@ -9,7 +9,7 @@ An original split-screen local co-op pixel action adventure built in Godot 4.7.2
 - **Project name:** Gloamthread: Two Ends
 - **Short description:** Two players share one computer and one physical world, but each sees it through a different visual theme (Ember and Moss). They fight, revive each other, restore broken bridges from paired anchors and reopen the Lantern Loom so a stranded district can cross home. It is for pairs who enjoy responsive action, exploration and solving a small problem together.
 - **Team:** Midhun P M ([9MidhunPM](https://github.com/9MidhunPM)) — solo, with coding-agent assistance recorded in [AI_USAGE.md](AI_USAGE.md).
-- **Working demo:** local only; see "Run the project" below. No hosted demo (the game is an offline desktop build).
+- **Working demo:** not available yet. An offline desktop build is planned; see "Current status" below.
 - **Technology stack:** Godot 4.7.2 standard (typed GDScript, Compatibility renderer), Python 3 + Pillow + numpy for original asset/audio generation and validation, Git.
 
 ### Run the project
@@ -28,8 +28,8 @@ Commands marked *planned* become usable when the milestone that creates them lan
 
 ### Current status
 
-- **Working features:** none yet. The repository contains the design pack, example contracts and two Python utilities. Implementation starts at milestone M0 (see [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md)); [docs/STATUS.md](docs/STATUS.md) is updated at every integration point and separates implemented, verified, unverified and planned work.
-- **Known limitations:** no `project.godot`, gameplay, assets, saves, tests or export exist yet. Gamepad support will be implemented but can only be hardware-verified when a controller is available; the primary tested input mode is keyboard + keyboard (WASD / arrows).
+- **Current implementation:** M0 is in progress. `project.godot` and input, audio and room scaffolding exist alongside the design pack, example contracts and two Python utilities. The engine files have not been parsed, imported or run. See [HANDOFF.md](HANDOFF.md) for the remaining M0 work and [docs/STATUS.md](docs/STATUS.md) for verified and unverified work.
+- **Known limitations:** the main scene, player/session controllers, cameras, room content, generated assets, saves, scenario runner and export are missing, so the game is not runnable yet. Keyboard + keyboard (WASD / arrows) is the primary input mode to build and verify. Gamepad support requires hardware verification when a controller is available.
 - **Libraries, APIs, and public datasets used:** [Godot Engine](https://godotengine.org/) 4.7.2 (MIT), [Pillow](https://python-pillow.org/) (MIT-CMU), [NumPy](https://numpy.org/) (BSD-3). No game-content packs, stock art, fonts, music or sound libraries: every shipped sprite, tile, glyph, sound and line of dialogue is authored in this repository.
 
 ## Start in this order (design pack)
