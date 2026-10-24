@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "content_version": "overhead-v1",
-  "generator_version": "2.0.0",
+  "generator_version": "2.1.0",
   "seed": 18427,
   "stage": "full",
   "assets": [
@@ -308,6 +308,102 @@
             5,
             5,
             5
+          ],
+          "loop": false
+        }
+      }
+    },
+    {
+      "id": "effect_enemy_warning_v1",
+      "kind": "sprite_atlas",
+      "path": "assets/generated/sprites/effect_enemy_warning_v1.png",
+      "sha256": "723de5163b799f4f534096d9086c58f4b8d2ef0e0e399a1562dc463c733a2973",
+      "diagnostic": false,
+      "sources": [
+        {
+          "path": "assets/source/art/direction.json",
+          "sha256": "38579223b74371066d618a7a909a2910511e859c80f9573179d494be06c8c4f6"
+        },
+        {
+          "path": "tools/gen/art.py",
+          "sha256": "72c58f65e4296ccef3c3fbe8fc105a99527e8a0302025ae3e18dcf9499a8189e"
+        },
+        {
+          "path": "tools/gen/actors.py",
+          "sha256": "397c61926bd7ad2300853f1c2828105f03faef7d12a74f2b64959086ce2939b0"
+        },
+        {
+          "path": "assets/source/art/actors.json",
+          "sha256": "18e7ed776b33823b25e8e8685d112df5b753d2ee06db4ab54c038c3f86edd17c"
+        }
+      ],
+      "size": [
+        216,
+        36
+      ],
+      "cell_size": [
+        32,
+        32
+      ],
+      "origin": [
+        16,
+        16
+      ],
+      "frames": [
+        [
+          2,
+          2,
+          32,
+          32
+        ],
+        [
+          38,
+          2,
+          32,
+          32
+        ],
+        [
+          74,
+          2,
+          32,
+          32
+        ],
+        [
+          110,
+          2,
+          32,
+          32
+        ],
+        [
+          146,
+          2,
+          32,
+          32
+        ],
+        [
+          182,
+          2,
+          32,
+          32
+        ]
+      ],
+      "animations": {
+        "play": {
+          "frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "ticks": [
+            6,
+            6,
+            6,
+            6,
+            6,
+            6
           ],
           "loop": false
         }
@@ -3737,11 +3833,11 @@
         },
         {
           "path": "tools/gen/actors.py",
-          "sha256": "e14c24bc513f32cecc18629536d716834dd860dd511c030067ef95ef5a9d12c6"
+          "sha256": "397c61926bd7ad2300853f1c2828105f03faef7d12a74f2b64959086ce2939b0"
         },
         {
           "path": "assets/source/art/actors.json",
-          "sha256": "4ad486485002169d3d107d5357ea4278eabd09dbad93fcb951cc3e29a3545ff5"
+          "sha256": "18e7ed776b33823b25e8e8685d112df5b753d2ee06db4ab54c038c3f86edd17c"
         }
       ],
       "size": [
@@ -4651,11 +4747,11 @@
         },
         {
           "path": "tools/gen/actors.py",
-          "sha256": "e14c24bc513f32cecc18629536d716834dd860dd511c030067ef95ef5a9d12c6"
+          "sha256": "397c61926bd7ad2300853f1c2828105f03faef7d12a74f2b64959086ce2939b0"
         },
         {
           "path": "assets/source/art/actors.json",
-          "sha256": "4ad486485002169d3d107d5357ea4278eabd09dbad93fcb951cc3e29a3545ff5"
+          "sha256": "18e7ed776b33823b25e8e8685d112df5b753d2ee06db4ab54c038c3f86edd17c"
         }
       ],
       "size": [
@@ -4862,11 +4958,11 @@
         },
         {
           "path": "tools/gen/actors.py",
-          "sha256": "e14c24bc513f32cecc18629536d716834dd860dd511c030067ef95ef5a9d12c6"
+          "sha256": "397c61926bd7ad2300853f1c2828105f03faef7d12a74f2b64959086ce2939b0"
         },
         {
           "path": "assets/source/art/actors.json",
-          "sha256": "4ad486485002169d3d107d5357ea4278eabd09dbad93fcb951cc3e29a3545ff5"
+          "sha256": "18e7ed776b33823b25e8e8685d112df5b753d2ee06db4ab54c038c3f86edd17c"
         }
       ],
       "size": [
@@ -6157,11 +6253,11 @@
         },
         {
           "path": "tools/gen/actors.py",
-          "sha256": "e14c24bc513f32cecc18629536d716834dd860dd511c030067ef95ef5a9d12c6"
+          "sha256": "397c61926bd7ad2300853f1c2828105f03faef7d12a74f2b64959086ce2939b0"
         },
         {
           "path": "assets/source/art/actors.json",
-          "sha256": "4ad486485002169d3d107d5357ea4278eabd09dbad93fcb951cc3e29a3545ff5"
+          "sha256": "18e7ed776b33823b25e8e8685d112df5b753d2ee06db4ab54c038c3f86edd17c"
         }
       ],
       "size": [

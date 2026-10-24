@@ -40,3 +40,5 @@ The original 18 SFX WAVs are byte-identical to `34ccb96`, checked against Git bl
 At the source base in this checkout, the old actual-content validator correctly rejects the new epoch and terrain. Its three errors are the old expected `phase1-v1` header and two old terrain mappings. Its legacy fixture tests remain in the Python suite; they do not establish that new overhead rooms are valid. Agent 1 must integrate the matching new validator, catalogs, rooms, movement and views, then run the complete ordinary-input route and native 1×/2× review before a playable main merge. Headless media import does not prove any of those gates.
 
 Physical controllers/rollover, listening, exported playback/performance and fresh two-person enjoyment remain unverified. No generated-character backend or new scope beyond the agreed overhead adventure is included.
+
+The subsequent [dedicated warning follow-up](warning.md) adds the 50th asset without changing any of the preceding 49 media outputs.

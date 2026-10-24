@@ -316,6 +316,12 @@ class AssetValidationTests(unittest.TestCase):
         record["animations"]["wrong_clip"] = record["animations"].pop("play")
         self.assert_error("play: required animation missing")
 
+    def test_transient_effect_playback_cannot_loop_forever(self):
+        self.full_fixture()
+        record = next(record for record in self.records if record["id"] == "effect_slash_v1")
+        record["animations"]["play"]["loop"] = True
+        self.assert_error("effect playback must finish")
+
     def test_sideview_version_does_not_admit_an_overhead_bundle(self):
         self.full_fixture()
         self.manifest["content_version"] = "phase1-v1"

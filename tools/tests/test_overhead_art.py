@@ -1,5 +1,6 @@
 """Original overhead art contracts, independent of runtime and the full generator."""
 from pathlib import Path
+import hashlib
 import json
 import shutil
 import sys
@@ -151,6 +152,71 @@ class OverheadArtTests(unittest.TestCase):
                 rotated = frame.transpose(Image.Transpose.ROTATE_90)
                 self.assert_pixel_surface(rotated, (size, size))
                 self.assertEqual(rotated.getchannel("A").histogram(), frame.getchannel("A").histogram())
+
+    def test_enemy_warning_is_immediate_hollow_and_rotates_around_its_origin(self):
+        warning = self.actor_source["effects"]["enemy_warning"]
+        frames = [actors.enemy_warning_image(pose, warning["palette"]) for pose in warning["poses"]]
+        self.assertEqual(len(frames), 6)
+        self.assertEqual(len({frame.tobytes() for frame in frames}), 6)
+        palette = {(34, 36, 51, 255), (240, 120, 101, 255), (255, 224, 161, 255)}
+        first_pixels = [frames[0].getpixel((x, y)) for y in range(32) for x in range(32)]
+        for frame in frames:
+            self.assert_pixel_surface(frame, (32, 32))
+            pixels = [frame.getpixel((x, y)) for y in range(32) for x in range(32)]
+            visible = {pixel for pixel in pixels if pixel[3]}
+            self.assertEqual(visible, palette)
+            left, top, right, bottom = frame.getbbox()
+            self.assertGreaterEqual(left, 16, "warning must point along local +X")
+            self.assertLess(right, 32, "the arrow tip must not be clipped")
+            self.assertGreater(top, 0)
+            self.assertLess(bottom, 32)
+            opaque = frame.getchannel("A").histogram()[255]
+            self.assertGreater(opaque, 80, "every frame must immediately show the warning")
+            self.assertLess(opaque, (right - left) * (bottom - top) / 2,
+                            "the hollow marker must leave most covered ground transparent")
+            changed = sum(a != b for a, b in zip(first_pixels, pixels))
+            self.assertLessEqual(changed, 4, "the rim must stay steady, without flashing")
+            for turns in range(4):
+                rotated = frame.rotate(turns * 90, center=(16, 16), resample=Image.Resampling.NEAREST)
+                self.assertEqual(rotated.getchannel("A").histogram(), frame.getchannel("A").histogram(),
+                                 "quarter turns around the declared origin cannot clip the warning")
+                opaque_positions = [(x - 16, y - 16) for y in range(32) for x in range(32)
+                                    if rotated.getpixel((x, y))[3]]
+                dx = sum(x for x, _ in opaque_positions)
+                dy = sum(y for _, y in opaque_positions)
+                forward, across = ((dx, dy), (-dy, dx), (-dx, dy), (dy, dx))[turns]
+                self.assertGreater(forward, abs(across) * 4,
+                                   "the marker must keep an unambiguous cardinal heading")
+        legacy_slashes = {art.effect_image(name, index).tobytes()
+                          for name in ("slash", "ember_arc") for index in range(6)}
+        self.assertTrue(all(frame.tobytes() not in legacy_slashes for frame in frames))
+
+    def test_enemy_warning_has_its_own_nonloop_atlas_and_editable_provenance(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._copy_sources(root)
+            records = actors.generate(root)
+            warnings = [record for record in records if record["id"] == "effect_enemy_warning_v1"]
+            self.assertEqual(len(warnings), 1)
+            record = warnings[0]
+            self.assertEqual(record["cell_size"], [32, 32])
+            self.assertEqual(record["origin"], [16, 16])
+            self.assertEqual(record["size"], [216, 36])
+            self.assertEqual(len(record["frames"]), 6)
+            self.assertEqual(record["animations"], {"play": {
+                "frames": list(range(6)), "ticks": [6] * 6, "loop": False}})
+            paths = {source["path"] for source in record["sources"]}
+            self.assertTrue({"tools/gen/actors.py", "assets/source/art/actors.json"} <= paths)
+            for source in record["sources"]:
+                self.assertEqual(source["sha256"], hashlib.sha256((root / source["path"]).read_bytes()).hexdigest())
+            with Image.open(root / record["path"]) as sheet:
+                for index, (x, y, width, height) in enumerate(record["frames"]):
+                    crop = sheet.crop((x, y, x + width, y + height))
+                    warning = self.actor_source["effects"]["enemy_warning"]
+                    expected = actors.enemy_warning_image(warning["poses"][index], warning["palette"])
+                    self.assertEqual(crop.tobytes(), expected.tobytes())
+                    self.assertIsNone(sheet.crop((x - 2, 0, x, 36)).getchannel("A").getbbox())
+                    self.assertIsNone(sheet.crop((x + width, 0, x + width + 2, 36)).getchannel("A").getbbox())
 
     def _copy_sources(self, root):
         for relative in ("assets/source/art/direction.json", "assets/source/art/actors.json",

@@ -83,13 +83,13 @@ Share terrain topology and clear material grammar. Bridge restoration removes it
 | Terrain variants | Ember and Moss treatment of all 48 slots | 96 rendered tile images, not 96 collision definitions |
 | Props | 16 logical props | Include anchor, loom, bell, lantern, sign, checkpoint and dressing |
 | Backgrounds | 3 parallax layers per theme | Six original source images; reuse with room composition changes |
-| Effects | 8 short sequences | Slash, Ember Arc, spore impact, dash, hit, weave, revive, restoration |
+| Effects | 9 short sequences | Slash, Ember Arc, spore impact, dash, hit, weave, revive, restoration, enemy warning |
 | UI icons | 20 original 16×16 icons | Hearts, prompts, map marks, abilities, partner state |
 | Font | Original 5×7 bitmap glyph source | Printable ASCII plus only explicitly needed extra glyphs |
 | Music | 4 original arrangements | Exploration, boss, boss final phase, restored ending |
 | Sound | 19 distinct semantic cues | Includes grounded roll and retained legacy jump |
 
-The generated bundle contains 49 manifested original assets. Structural validation establishes inventory/file contracts; engine playback and human review remain separate. Reuse coherent motifs; add an asset only when a scene needs it.
+The generated bundle contains 50 manifested original assets. Structural validation establishes inventory/file contracts; engine playback and human review remain separate. Reuse coherent motifs; add an asset only when a scene needs it.
 
 ### Courier animation rows
 
@@ -125,7 +125,7 @@ Allow room-specific arrangements of the same 16 props: rotated broken spindles, 
 
 Pack each 48-slot terrain atlas in 8 columns × 6 rows of padded 16×16 cells: 20×20 stride, 160×120 total. The two theme atlases use exactly the same semantic slot ordering. Padding is excluded from source rectangles and physical tile size.
 
-For the first effects budget, use six frames per sequence: 48 frames total. A 32×32 cell suffices for slash, special impacts, dash trail, hit and revive; restoration may use 64×64. Larger effects remain transient visual layers and never determine their own hitboxes. Exact effect rectangles and pivots go in the manifest.
+Use six frames per effect sequence: 54 frames total. A 32×32 cell suffices for slash, special impacts, dash trail, hit, revive and warning; restoration may use 64×64. Transient `play` clips do not loop. The hollow +X enemy-warning arrow stays visible from its first frame and may hold its final frame through windup. It indicates direction, not an exact hit-area outline; runtime owns placement, rotation and danger geometry. Effect art never determines hitboxes.
 
 The 20 UI icons can use a 5×4 atlas of padded 16×16 cells, 100×80 overall. Build the original font from 95 printable ASCII characters plus one replacement glyph: 16×6 cells of 6×8 pixels, giving a 96×48 atlas. Each visible glyph occupies at most 5×7 pixels; the remaining row/column supplies spacing. Restrict initial dialogue to this supported character set or explicitly extend it.
 

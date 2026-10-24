@@ -893,5 +893,43 @@
       }
     }
   },
-  "perspective": "Original overhead oblique actors. Enemies and boss are radial bodies; runtime directed weapons and telegraphs own attack heading."
+  "perspective": "Original overhead oblique actors. Enemies and boss are radial bodies; runtime directed weapons and telegraphs own attack heading.",
+  "effects": {
+    "enemy_warning": {
+      "description": "A hollow straight-edged arrow points along local +X in danger coral with a pale gold rim. The complete marker stays visible while a small inner stitch advances once; the actor holds the final frame through its windup. The transparent interior preserves the ground. This is a warning symbol, not a weapon swing.",
+      "palette": {
+        "outline": "#222433",
+        "danger": "#F07865",
+        "light": "#FFE0A1"
+      },
+      "poses": [
+        {
+          "stitch_x": 21
+        },
+        {
+          "stitch_x": 22
+        },
+        {
+          "stitch_x": 23
+        },
+        {
+          "stitch_x": 24
+        },
+        {
+          "stitch_x": 25
+        },
+        {
+          "stitch_x": 26
+        }
+      ],
+      "ticks": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ]
+    }
+  }
 }

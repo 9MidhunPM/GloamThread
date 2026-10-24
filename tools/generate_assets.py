@@ -8,7 +8,7 @@ import sys
 from gen import art, font
 from gen.common import write_json
 
-GENERATOR_VERSION = "2.0.0"
+GENERATOR_VERSION = "2.1.0"
 
 
 def generate(root: Path, seed: int = 18427, stage: str = "full") -> dict:

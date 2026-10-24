@@ -72,6 +72,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 2 — content and assets
 
+### 2026-10-25T01:29:53+05:30 — Separate enemy warnings from attack artwork
+
+- Changed: Added the original six-frame hollow +X warning arrow, editable source, retained atlas/provenance and focused tests. Required transient effect playback to be nonlooping. Generator 2.1.0 produces 50 assets.
+- Why: Agent 1's actor lane needs a readable overhead warning rather than reusing slash artwork; a marker must show danger direction immediately without hiding ground or flashing.
+- Validation: 103 Python tests PASS, two complete deterministic rebuilds, full50asset validation, Godot media import, pack/link and whitespace PASS. New finite-effect regression first failed then passed. Static marker/rotation sheet inspected; all previous49 media files remain byte-identical to e85fc2f.
+- Limitations: Runtime marker placement/rotation/windup holding and ordinary/boss encounter readability remain integration work. A direction arrow is not an exact hitbox contour or a human playtest result.
+
 ### 2026-10-25T01:18:03+05:30 — Author the overhead art and active original soundtrack
 
 - Changed: Rebuilt both couriers as four-direction 128-frame sets, radial actors/boss, all eight effects and 48 opaque overhead terrain slots. Added four original keyboard/bass/percussion arrangements including boss_final, plus a grounded roll cue while retaining 18 legacy SFX. Versioned the 49-asset packet as overhead-v1/generator 2.0.0 with source/output provenance. Updated asset admission, focused regressions, pipeline docs and branch integration notice.

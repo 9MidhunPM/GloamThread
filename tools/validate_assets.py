@@ -32,7 +32,7 @@ ENEMY_CLIPS = {
 SFX_NAMES = set("jump roll land slash hit hurt dash ember_arc spore_bolt enemy_warning enemy_defeat "
                 "boss_stagger cross_stitch anchor_latched bridge_restored checkpoint downed revive loom_restored".split())
 MUSIC_NAMES = {"exploration", "boss", "boss_final", "ending"}
-EFFECT_NAMES = ("slash", "ember_arc", "spore_impact", "dash", "hit", "weave", "revive", "restoration")
+EFFECT_NAMES = ("slash", "ember_arc", "spore_impact", "dash", "hit", "weave", "revive", "restoration", "enemy_warning")
 TILE_IDS = ["floor_path_1", "floor_path_2", "floor_grass_1", "floor_grass_2"]
 TILE_IDS += [f"wall_fill_{i}" for i in range(1, 5)]
 TILE_IDS += [f"wall_edge_{side}" for side in ("north", "east", "south", "west")]
@@ -517,6 +517,8 @@ class AssetValidator:
                        f"asset {identifier}.cell_size", "effect requires 32x32 cells; restoration may use 64x64")
             clips = self.assets.get(identifier, {}).get("animations", {})
             clip = clips.get("play", {}) if isinstance(clips, dict) else {}
+            self.check(isinstance(clip, dict) and clip.get("loop") is False,
+                       f"asset {identifier}.animations.play.loop", "effect playback must finish without looping")
             self.check(isinstance(clip, dict) and isinstance(clip.get("frames"), list)
                        and len(clip["frames"]) == 6 and all(integer(index) for index in clip["frames"])
                        and set(clip["frames"]) == set(range(6)),

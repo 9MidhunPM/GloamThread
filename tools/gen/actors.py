@@ -1,4 +1,4 @@
-"""Original pixel recipes for Oru, two ordinary enemies and the Spoolwarden.
+"""Original actor pixel recipes and their separate ground-plane warning.
 
 Palette and per-frame poses are retained in actors.json. These are presentation
 poses only: no hitbox, attack timing or gameplay tuning comes from this module.
@@ -273,8 +273,27 @@ def _spoolwarden(state: str, pose: dict, p: dict) -> Image.Image:
 DRAW = {"oru": _oru, "spoolmite": _spoolmite, "wickwing": _wickwing, "spoolwarden": _spoolwarden}
 
 
+def enemy_warning_image(pose: dict, palette: dict) -> Image.Image:
+    """A steady hollow arrow points +X; a small stitch advances during windup.
+
+    The complete warning is visible in every frame, including the first and
+    held last frame. Straight edges and an inset tail distinguish it from the
+    curved slash effects. The empty centre leaves the ground readable.
+    """
+    image = Image.new("RGBA", (32, 32))
+    draw = ImageDraw.Draw(image)
+    edge = [(18, 8), (29, 16), (18, 24), (20, 16), (18, 8)]
+    draw.line(edge, fill=palette["outline"], width=3, joint="curve")
+    draw.line(edge, fill=palette["danger"], width=2)
+    draw.line([(18, 7), (30, 16), (18, 25)], fill=palette["light"], width=1)
+    # This tiny forward stitch moves once, never blinks or erases the rim.
+    x = pose["stitch_x"]
+    draw.line((x, 16, x + 1, 16), fill=palette["light"])
+    return image
+
+
 def generate(root: Path) -> list[dict]:
-    """Author the four required atlases from their editable palette/pose tables."""
+    """Author the four actors and dedicated warning from editable source tables."""
     root = Path(root)
     path = root / "assets/source/art/actors.json"
     source = json.loads(path.read_text(encoding="utf-8"))
@@ -300,4 +319,17 @@ def generate(root: Path) -> list[dict]:
             record["animations"][state]["ticks"] = data["ticks"]
             record["animations"][state]["loop"] = data["loop"]
         records.append(record)
+    warning = source["effects"]["enemy_warning"]
+    if len(warning["poses"]) != 6 or len(warning["ticks"]) != 6:
+        raise ValueError(f"{path}: enemy_warning needs six poses and tick lengths")
+    if any(type(value) is not int or value <= 0 for value in warning["ticks"]):
+        raise ValueError(f"{path}: enemy_warning ticks must be positive integers")
+    if any(type(pose.get("stitch_x")) is not int or not 21 <= pose["stitch_x"] <= 26
+           for pose in warning["poses"]):
+        raise ValueError(f"{path}: enemy_warning stitch_x must stay inside the arrow")
+    images = [enemy_warning_image(pose, warning["palette"]) for pose in warning["poses"]]
+    record = atlas(root, "effect_enemy_warning_v1", images, (32, 32), 6, 1,
+                   (16, 16), {"play": 6}, source_files=SOURCES)
+    record["animations"]["play"]["ticks"] = warning["ticks"]
+    records.append(record)
     return records

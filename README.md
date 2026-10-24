@@ -39,7 +39,7 @@ The production game includes title/join, all eight rooms, combat, cooperation, s
 
 ### Overhead media checkpoint
 
-The new packet has 49 original manifested assets, four-facing 128-frame couriers, four music arrangements and 19 SFX including roll. The asset validator, 100 Python tests and Godot media import pass. The old actual-content validator still rejects the new version/terrain; game launch and normal-control overhead acceptance require Agent 1's matching implementation. See [packet evidence](evidence/content/overhead/README.md).
+The new packet has 50 original manifested assets, four-facing 128-frame couriers, a dedicated enemy-warning visual, four music arrangements and 19 SFX including roll. The asset validator, 103 Python tests and Godot media import pass. The old actual-content validator still rejects the new version/terrain; game launch and normal-control overhead acceptance require Agent 1's matching implementation. See [packet evidence](evidence/content/overhead/README.md).
 
 ```sh
 python3 tools/generate_assets.py --seed 18427
