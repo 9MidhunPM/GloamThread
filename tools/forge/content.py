@@ -11,6 +11,7 @@ from .art import authored_parts,make_rig
 from .catalog import catalog
 from .rigs import emit_bundle,write_json
 from .validation import validate_catalog,validate_bundle,sha256
+from .enemies import rebuild as rebuild_enemies,validate as validate_enemies
 
 ROOT=Path(__file__).resolve().parents[2]
 
@@ -36,6 +37,7 @@ def rebuild(root:Path=ROOT)->dict:
     # An explicit editable floating-rig fixture proves the third family exists without claiming AI quality.
     rig=make_rig('floating');src=root/'assets/arena/source/lantern_manta';src.mkdir(parents=True,exist_ok=True);write_json(src/'rig.json',rig)
     for name,image in authored_parts('floating',profiles[0]['theme']['palette']).items():(src/'parts').mkdir(exist_ok=True);image.save(src/f'parts/{name}.png')
+    rebuild_enemies(root)
     return validate(root)
 
 
@@ -43,7 +45,8 @@ def validate(root:Path=ROOT)->dict:
     data=validate_catalog(json.loads((root/'content/arena/catalog.json').read_text()))
     index=json.loads((root/'assets/arena/builtin/index.json').read_text());assert index['schema_version']==1
     for identifier in index['bundles']:validate_bundle(root/f'assets/arena/builtin/{identifier}')
-    return {'kits':len(data['kits']),'upgrades':len(data['upgrades']),'waves':len(data['waves']),'arenas':len(data['arenas']),'bundles':len(index['bundles'])}
+    enemies=validate_enemies(root)
+    return {'enemy_atlases':len(enemies['assets']),'kits':len(data['kits']),'upgrades':len(data['upgrades']),'waves':len(data['waves']),'arenas':len(data['arenas']),'bundles':len(index['bundles'])}
 
 
 def main()->None:

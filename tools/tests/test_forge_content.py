@@ -10,6 +10,7 @@ from PIL import Image
 
 from tools.forge.art import RIG_PARTS,authored_parts,make_rig,bake_atlas
 from tools.forge.catalog import catalog
+from tools.forge.enemies import validate as validate_enemies
 from tools.forge.rigs import emit_bundle,write_json,load_rig,bake_job,convert_generated
 from tools.forge.validation import BundleError,validate_catalog,validate_bundle,sha256
 
@@ -38,6 +39,8 @@ class FighterContentTests(unittest.TestCase):
         for mutate in mutations:
             c=catalog();mutate(c)
             with self.subTest(mutation=mutate),self.assertRaises(BundleError):validate_catalog(c)
+    def test_six_enemy_and_four_boss_atlases(self):
+        self.assertEqual(len(validate_enemies(ROOT)['assets']),10)
     def test_shipped_bundles_and_hashes(self):
         index=json.loads((ROOT/'assets/arena/builtin/index.json').read_text())
         self.assertEqual(len(index['bundles']),2)
@@ -78,17 +81,27 @@ class FighterContentTests(unittest.TestCase):
             crop=part.crop(part.getbbox());crop=crop.resize((crop.width*4,crop.height*4),Image.Resampling.NEAREST)
             x0,x1=(n%3)*1024//3,((n%3)+1)*1024//3;y0,y1=(n//3)*1024//3,((n//3)+1)*1024//3
             board.alpha_composite(crop,(x0+(x1-x0-crop.width)//2,y0+(y1-y0-crop.height)//2))
+        assembled=Image.new('RGBA',(64,64))
+        for part in authored_parts(rig,p['theme']['palette']).values():assembled.alpha_composite(part)
+        master=assembled.crop(assembled.getbbox());master=master.resize((master.width*4,master.height*4),Image.Resampling.NEAREST)
+        board.alpha_composite(master,(2*1024//3+(342-master.width)//2,2*1024//3+(342-master.height)//2))
         board.save(job/'raw_parts.png');Image.new('RGBA',(1024,1024),(40,60,80,255)).save(job/'raw_theme.png')
     def test_generated_parts_cross_same_boundary_for_all_three_rigs(self):
         for rig in RIG_PARTS:
             job=self.folder/rig;job.mkdir();p=self.proposal(rig);write_json(job/'job.json',{'schema_version':1,'proposal':p});self.make_raw_boards(job,rig)
             result=convert_generated(job/'raw_parts.png',job/'raw_theme.png',p,job,{'provider':'mock','provider_calls':0})
-            self.assertEqual(validate_bundle(result)['rig_id'],rig);self.assertTrue((job/'rig.json').is_file())
+            self.assertEqual(validate_bundle(result)['rig_id'],rig);self.assertTrue((job/'rig.json').is_file());self.assertTrue((job/'master.png').is_file())
     def test_empty_generated_part_rejects_without_installing(self):
         job=self.folder/'raw';job.mkdir();p=self.proposal();write_json(job/'job.json',{'schema_version':1,'proposal':p});self.make_raw_boards(job,'upright')
         with Image.open(job/'raw_parts.png') as im:
             im.paste((0,0,0,0),(0,0,341,341));im.save(job/'raw_parts.png')
         with self.assertRaisesRegex(BundleError,'blank'):convert_generated(job/'raw_parts.png',job/'raw_theme.png',p,job,{})
+        self.assertFalse((job/'candidate').exists())
+    def test_missing_generated_master_is_rejected(self):
+        job=self.folder/'master';job.mkdir();p=self.proposal();write_json(job/'job.json',{'schema_version':1,'proposal':p});self.make_raw_boards(job,'upright')
+        with Image.open(job/'raw_parts.png') as im:
+            im.paste((0,0,0,0),(682,682,1024,1024));im.save(job/'raw_parts.png')
+        with self.assertRaisesRegex(BundleError,'master design'):convert_generated(job/'raw_parts.png',job/'raw_theme.png',p,job,{})
         self.assertFalse((job/'candidate').exists())
     def test_symlinked_part_is_rejected(self):
         job=self.make_job();(job/'parts/head.png').unlink();(job/'parts/head.png').symlink_to(ROOT/'assets/arena/builtin/cinderjack/portrait.png')
