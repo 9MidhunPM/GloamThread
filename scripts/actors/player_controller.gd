@@ -295,35 +295,35 @@ func _update_attack() -> void:
 	if _attack_kind.is_empty():
 		return
 	_attack_tick += 1
-	var windup := 6 if _attack_kind == "slash" else 12
-	var active := 6 if _attack_kind == "slash" else 8
-	var total := 18 if _attack_kind == "slash" else 36
-	if _attack_kind == "spore_bolt":
-		if _attack_tick == 8:
+	if _attack_kind == "slash":
+		if _attack_tick > 6 and _attack_tick <= 12:
+			if _attack_tick == 7:
+				CombatQuery.effect(self, _catalog, "effect_slash_v1", global_position, _attack_direction)
+			var rectangle := CombatQuery.directional_rect(hurt_rect().get_center(), _attack_direction, 32.0, 28.0)
+			_hit_enemies(CombatQuery.enemies_in(self, rectangle), 1, 1)
+	elif _attack_tick == 8:
+		if _attack_kind == "ember_arc":
+			CombatQuery.effect(self, _catalog, "effect_ember_arc_v1", global_position, _attack_direction)
+			_hit_enemies(CombatQuery.enemies_in_fan(self, hurt_rect().get_center(), _attack_direction, 48.0), 2, 3)
+		elif _attack_kind == "spore_bolt":
 			var bolt := SporeBolt.new()
 			bolt.source_slot = slot_index
 			bolt.attack_id = _attack_id
 			bolt.direction = _attack_facing
 			bolt.catalog = _catalog
 			get_parent().add_child(bolt)
-			bolt.global_position = global_position + Vector2(_attack_facing * 10, -18)
-		total = 20
-	elif _attack_tick > windup and _attack_tick <= windup + active:
-		var reach := 32.0 if _attack_kind == "slash" else 48.0
-		var height := 30.0 if _attack_kind == "slash" else 40.0
-		var rectangle := Rect2(global_position + Vector2(0.0 if _attack_facing > 0 else -reach, -height), Vector2(reach, height))
-		if _attack_kind == "slash":
-			rectangle = CombatQuery.directional_rect(hurt_rect().get_center(), _attack_direction, 32.0, 28.0)
-		if _attack_tick == windup + 1:
-			CombatQuery.effect(self, _catalog, "effect_slash_v1" if _attack_kind == "slash" else "effect_ember_arc_v1", global_position, _attack_direction)
-		for enemy in CombatQuery.enemies_in(self, rectangle):
-			var target_id := enemy.get_instance_id()
-			if _hit_targets.has(target_id):
-				continue
-			_hit_targets[target_id] = true
-			enemy.call("receive_hit", 1 if _attack_kind == "slash" else 2, slot_index, _attack_id, 1 if _attack_kind == "slash" else 3)
-	if _attack_tick >= total:
+			bolt.global_position = hurt_rect().get_center() + _attack_direction * 10.0
+	if _attack_tick >= (18 if _attack_kind == "slash" else 22):
 		_attack_kind = ""
+
+
+func _hit_enemies(enemies: Array[Node2D], damage: int, stagger: int) -> void:
+	for enemy in enemies:
+		var target_id := enemy.get_instance_id()
+		if _hit_targets.has(target_id):
+			continue
+		_hit_targets[target_id] = true
+		enemy.call("receive_hit", damage, slot_index, _attack_id, stagger)
 
 
 func _update_animation() -> void:

@@ -58,6 +58,9 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-actors -->
 
+- 2026-10-25T01:17:53+05:30 | Codex | Implemented the directed Ember Arc and explicit special timing. Human review pending. Four isolated scenarios pass, including geometric fan and wall checks; authored effects have not been rendered here.
+
+
 - 2026-10-25T01:17:03+05:30 | Codex | Implemented cardinal slash timing and bounded attack buffering, plus real motor/query scenarios. Human review pending. Three isolated actor scenarios pass; checks use stationary enemy fixtures and make no authored-art claim.
 
 

@@ -198,6 +198,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T01:17:53+05:30 — Ground-plane Ember Arc
+
+- Changed: Ember Arc emits one 120-degree close fan on tick eight, with bounded reach, whole-hurtbox intersection, wall line-of-sight and a twenty-two-tick special sequence.
+- Why: Give Tavi a distinct directional close-range stagger tool on the overhead plane.
+- Validation: Isolated Godot 4.7.2 actor scenarios pass 4/4, including fan shoulders, excluded rear/flank/distant targets, emission/recovery ticks, damage/stagger values and wall rejection.
+- Limitations: Null-catalog fixture; Spore Bolt remains the next projectile migration.
+
+
 ### 2026-10-25T01:17:03+05:30 — Directional slash and input buffer
 
 - Changed: Slash now uses cardinal ground-plane reach, six windup/active/recovery ticks, a six-tick press buffer and unique per-swing hit sets; directed effects rotate instead of mirroring.

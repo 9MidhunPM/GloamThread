@@ -37,6 +37,21 @@ static func enemies_in(actor: Node2D, rectangle: Rect2) -> Array[Node2D]:
 	return targets
 
 
+## A 120-degree close fan on the ground plane, tested against whole hurtboxes.
+static func enemies_in_fan(actor: Node2D, origin: Vector2, direction: Vector2, reach: float) -> Array[Node2D]:
+	var fan := PackedVector2Array([origin])
+	for step in 13:
+		var angle := direction.angle() - PI / 3.0 + float(step) * PI / 18.0
+		fan.append(origin + Vector2.from_angle(angle) * reach)
+	var targets: Array[Node2D] = []
+	for enemy in enemies_in(actor, Rect2(origin - Vector2.ONE * reach, Vector2.ONE * reach * 2.0)):
+		var box: Rect2 = enemy.call("hurt_rect")
+		var corners := PackedVector2Array([box.position, Vector2(box.end.x, box.position.y), box.end, Vector2(box.position.x, box.end.y)])
+		if not Geometry2D.intersect_polygons(fan, corners).is_empty():
+			targets.append(enemy)
+	return targets
+
+
 ## Cardinal attack footprint around the actor's ground-plane centre.
 static func directional_rect(origin: Vector2, direction: Vector2, reach: float, width: float) -> Rect2:
 	if absf(direction.x) > absf(direction.y):
