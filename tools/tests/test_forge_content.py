@@ -79,6 +79,62 @@ class FighterContentTests(unittest.TestCase):
         mask.save(job/'masks/head.png')
         write_json(job/'rig_edits.json',{'schema_version':1,'parts':{'head':{'pivot':[31,23],'mask_file':'masks/head.png'}}})
         second=bake_job(job/'job.json');self.assertNotEqual(first,second);self.assertEqual(sha256(first/'character.png'),original);self.assertNotEqual(sha256(second/'character.png'),original)
+    def test_unchanged_rebake_has_stable_identity_and_provenance(self):
+        job=self.make_job();first=bake_job(job/'job.json');second=bake_job(job/'job.json')
+        self.assertEqual((first/'manifest.json').read_bytes(),(second/'manifest.json').read_bytes())
+        self.assertEqual((first/'provenance.json').read_bytes(),(second/'provenance.json').read_bytes())
+    def test_mask_pixels_bind_identity_even_when_edit_json_is_unchanged(self):
+        job=self.make_job();original=bake_job(job/'job.json');original_files={file.name:file.read_bytes() for file in original.iterdir()}
+        (job/'masks').mkdir();mask=Image.new('L',(64,64),255);mask.paste(0,(0,0,64,18));mask.save(job/'masks/head.png')
+        write_json(job/'rig_edits.json',{'schema_version':1,'parts':{'head':{'mask_file':'masks/head.png'}}})
+        first=bake_job(job/'job.json');first_manifest=validate_bundle(first);first_prov=json.loads((first/'provenance.json').read_text());edit_bytes=(job/'rig_edits.json').read_bytes()
+        mask.paste(0,(0,18,64,22));mask.save(job/'masks/head.png')
+        second=bake_job(job/'job.json');second_manifest=validate_bundle(second);second_prov=json.loads((second/'provenance.json').read_text())
+        self.assertEqual((job/'rig_edits.json').read_bytes(),edit_bytes)
+        self.assertNotEqual(first_manifest['id'],second_manifest['id'])
+        self.assertNotEqual(first_manifest['files']['character.png'],second_manifest['files']['character.png'])
+        self.assertNotEqual(first_prov['bake_sha256'],second_prov['bake_sha256'])
+        self.assertEqual(second_prov['bake_inputs']['masks']['head']['file_sha256'],sha256(job/'masks/head.png'))
+        self.assertNotEqual(first_prov['bake_inputs']['masks']['head']['applied_alpha_sha256'],second_prov['bake_inputs']['masks']['head']['applied_alpha_sha256'])
+        self.assertEqual({file.name:file.read_bytes() for file in original.iterdir()},original_files)
+    def test_part_pixels_bind_identity_and_provenance(self):
+        job=self.make_job();first=bake_job(job/'job.json');first_manifest=validate_bundle(first);first_prov=json.loads((first/'provenance.json').read_text())
+        with Image.open(job/'parts/head.png') as image:
+            image.putpixel((24,20),(19,200,120,255));image.save(job/'parts/head.png')
+        second=bake_job(job/'job.json');second_manifest=validate_bundle(second);second_prov=json.loads((second/'provenance.json').read_text())
+        self.assertNotEqual(first_manifest['id'],second_manifest['id'])
+        self.assertNotEqual(first_manifest['files']['character.png'],second_manifest['files']['character.png'])
+        self.assertNotEqual(first_prov['bake_inputs']['parts']['head']['pixels_sha256'],second_prov['bake_inputs']['parts']['head']['pixels_sha256'])
+        self.assertEqual(second_prov['bake_inputs']['parts']['head']['file_sha256'],sha256(job/'parts/head.png'))
+    def test_pivot_edits_bind_applied_rig_and_identity(self):
+        job=self.make_job();first=bake_job(job/'job.json');first_manifest=validate_bundle(first);first_prov=json.loads((first/'provenance.json').read_text())
+        write_json(job/'rig_edits.json',{'schema_version':1,'parts':{'head':{'pivot':[31,23]}}})
+        second=bake_job(job/'job.json');second_manifest=validate_bundle(second);second_prov=json.loads((second/'provenance.json').read_text())
+        self.assertNotEqual(first_manifest['id'],second_manifest['id'])
+        self.assertNotEqual(first_prov['bake_inputs']['applied_rig_sha256'],second_prov['bake_inputs']['applied_rig_sha256'])
+        self.assertEqual(second_prov['bake_inputs']['applied_pivots']['head']['pivot'],[31,23])
+        self.assertEqual(second_prov['bake_inputs']['rig_edits_sha256'],sha256(job/'rig_edits.json'))
+    def test_generated_rebake_requires_both_retained_theme_files(self):
+        for missing in ('theme_background.png','theme_materials.png'):
+            job=self.folder/missing;job.mkdir();p=self.proposal();write_json(job/'job.json',{'schema_version':1,'proposal':p});self.make_raw_boards(job,'upright')
+            first=convert_generated(job/'raw_parts.png',job/'raw_theme.png',p,job,{'provider':'mock','request_id':'req_parent'})
+            retained={file.name:file.read_bytes() for file in first.iterdir()};raw_hash=sha256(job/'raw_theme.png');parent=(job/'source_provenance.json').read_bytes()
+            (job/missing).unlink()
+            with self.assertRaisesRegex(BundleError,'both retained theme images'):bake_job(job/'job.json')
+            self.assertEqual({file.name:file.read_bytes() for file in first.iterdir()},retained)
+            self.assertEqual(sha256(job/'raw_theme.png'),raw_hash);self.assertEqual((job/'source_provenance.json').read_bytes(),parent)
+            self.assertFalse((job/'candidate-bake-1').exists())
+    def test_generated_rebake_keeps_parent_provenance_link(self):
+        job=self.folder/'generated';job.mkdir();p=self.proposal();write_json(job/'job.json',{'schema_version':1,'proposal':p});self.make_raw_boards(job,'upright')
+        first=convert_generated(job/'raw_parts.png',job/'raw_theme.png',p,job,{'provider':'mock','request_id':'req_parent'})
+        parent_hash=sha256(job/'source_provenance.json');original_theme=(first/'background.png').read_bytes()
+        write_json(job/'rig_edits.json',{'schema_version':1,'parts':{'head':{'pivot':[31,23]}}})
+        second=bake_job(job/'job.json');provenance=json.loads((second/'provenance.json').read_text())
+        self.assertEqual(provenance['request_id'],'req_parent');self.assertEqual(provenance['parent_generation_provenance_sha256'],parent_hash)
+        self.assertEqual(provenance['raw_theme_sha256'],sha256(job/'raw_theme.png'))
+        self.assertEqual(provenance['bake_inputs']['theme']['mode'],'generated')
+        self.assertEqual((second/'background.png').read_bytes(),original_theme)
+        self.assertEqual(sha256(job/'source_provenance.json'),parent_hash)
     def test_unknown_edit_and_path_traversal_are_rejected(self):
         job=self.make_job()
         for edit in ({'unknown':{'pivot':[1,1]}},{'head':{'mask_file':'../../secret.png'}},{'head':{'pivot':[1,100]}}):
