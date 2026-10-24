@@ -13,6 +13,7 @@ const BACKGROUND := Color("#10141c")
 const PANEL := Color("#1c2432")
 const EDGE := Color("#41465a")
 const FOCUS := Color("#ffe0a1")
+const TITLE_VIGNETTE := preload("res://scripts/ui/title_vignette.gd")
 
 var last_error: String = ""
 var _font: Font
@@ -32,6 +33,10 @@ var _scroll: ScrollContainer
 var _rows_box: VBoxContainer
 var _row_panels: Array[PanelContainer] = []
 var _row_marks: Array[Label] = []
+var _content: VBoxContainer
+var _seam: ColorRect
+var _owner_badge: Label
+var _vignette: Control
 
 
 func _init() -> void:
@@ -107,6 +112,7 @@ func show_menu(kind: String, title: String, body: String, rows: Array[Dictionary
 	_body.text = _glyph_text(body)
 	_body.visible = not body.is_empty()
 	_rebuild_rows()
+	_layout_menu()
 	_update_footer()
 	visible = true
 	last_error = ""
@@ -252,13 +258,24 @@ func _ensure_ui() -> void:
 	_title.size = Vector2(872, 32)
 	_title.clip_text = true
 	_screen.add_child(_title)
-	var seam := ColorRect.new()
-	seam.name = "Seam"
-	seam.position = Vector2(44, 72)
-	seam.size = Vector2(872, 2)
-	seam.color = FOCUS
-	seam.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_screen.add_child(seam)
+	_vignette = TITLE_VIGNETTE.new() as Control
+	_vignette.name = "TitleVignette"
+	_vignette.position = Vector2(524, 44)
+	_vignette.size = Vector2(388, 264)
+	_vignette.visible = false
+	_screen.add_child(_vignette)
+	_owner_badge = _label("MenuOwner", 8)
+	_owner_badge.position = Vector2(744, 44)
+	_owner_badge.size = Vector2(172, 16)
+	_owner_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_screen.add_child(_owner_badge)
+	_seam = ColorRect.new()
+	_seam.name = "Seam"
+	_seam.position = Vector2(44, 72)
+	_seam.size = Vector2(872, 2)
+	_seam.color = FOCUS
+	_seam.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_screen.add_child(_seam)
 	_scroll = ScrollContainer.new()
 	_scroll.name = "Scroll"
 	_scroll.position = Vector2(44, 84)
@@ -276,23 +293,23 @@ func _ensure_ui() -> void:
 	bar.add_theme_stylebox_override("scroll", _box(BACKGROUND, BACKGROUND, 0))
 	for state: String in ["grabber", "grabber_highlight", "grabber_pressed"]:
 		bar.add_theme_stylebox_override(state, _box(Color("#737b83") if state == "grabber" else FOCUS, EDGE, 0))
-	var content := VBoxContainer.new()
-	content.name = "Content"
-	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	content.custom_minimum_size.x = 848
-	content.add_theme_constant_override("separation", 12)
-	content.mouse_filter = Control.MOUSE_FILTER_PASS
-	_scroll.add_child(content)
+	_content = VBoxContainer.new()
+	_content.name = "Content"
+	_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_content.custom_minimum_size.x = 848
+	_content.add_theme_constant_override("separation", 12)
+	_content.mouse_filter = Control.MOUSE_FILTER_PASS
+	_scroll.add_child(_content)
 	_body = _label("Body", 16)
 	_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	content.add_child(_body)
+	_content.add_child(_body)
 	_rows_box = VBoxContainer.new()
 	_rows_box.name = "Rows"
 	_rows_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_rows_box.add_theme_constant_override("separation", 6)
 	_rows_box.mouse_filter = Control.MOUSE_FILTER_PASS
-	content.add_child(_rows_box)
+	_content.add_child(_rows_box)
 	_footer = _label("Footer", 8)
 	_footer.position = Vector2(44, 312)
 	_footer.size = Vector2(872, 16)
@@ -301,6 +318,19 @@ func _ensure_ui() -> void:
 	_screen.add_child(_footer)
 	if _font != null:
 		_apply_font()
+
+
+func _layout_menu() -> void:
+	var home := _kind == "title"
+	_content.custom_minimum_size.x = 420 if home else 848
+	_content.size.x = 420 if home else 848
+	_scroll.size = Vector2(444, 220) if home else Vector2(872, 212)
+	_title.size.x = 460 if home else 688
+	_seam.size.x = 444 if home else 872
+	_owner_badge.visible = not home
+	_vignette.visible = home
+	if home:
+		_vignette.call("configure", _font)
 
 
 func _apply_font() -> void:
@@ -347,7 +377,7 @@ func _rebuild_rows() -> void:
 		for edge: String in ["left", "right"]:
 			margin.add_theme_constant_override("margin_" + edge, 12)
 		for edge: String in ["top", "bottom"]:
-			margin.add_theme_constant_override("margin_" + edge, 8)
+			margin.add_theme_constant_override("margin_" + edge, 4 if _kind == "title" else 8)
 		margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		panel.add_child(margin)
 		var lines := VBoxContainer.new()
@@ -371,9 +401,13 @@ func _rebuild_rows() -> void:
 			arrows.custom_minimum_size.x = 60
 			heading.add_child(arrows)
 		if not str(row["detail"]).is_empty():
-			var detail := _label("Detail", 16)
+			var detail := _label("Detail", 8 if _kind == "title" else 16)
 			detail.text = _glyph_text(row["detail"])
 			detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			if _kind == "title":
+				detail.max_lines_visible = 2
+				detail.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+				panel.tooltip_text = detail.text
 			detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			detail.modulate = Color(0.78, 0.82, 0.86)
 			lines.add_child(detail)
@@ -388,7 +422,8 @@ func _rebuild_rows() -> void:
 func _refresh_selection() -> void:
 	for index in _row_panels.size():
 		var selected := index == _selected
-		_row_panels[index].add_theme_stylebox_override("panel", _box(Color("#293247") if selected else PANEL,
+		var active_fill := Color("#4a292b") if _kind == "title" else Color("#293247")
+		_row_panels[index].add_theme_stylebox_override("panel", _box(active_fill if selected else PANEL,
 			FOCUS if selected else EDGE, 2 if selected else 1))
 		_row_marks[index].text = ">" if selected else ("-" if not _rows[index]["enabled"] else " ")
 
@@ -418,6 +453,9 @@ func _update_footer() -> void:
 	var bindings: Bindings = InputRouter.bindings_of(_owner_slot)
 	var source: DeviceSource = InputRouter.source_of(_owner_slot)
 	var device := source.short_label() if source != null else "UNASSIGNED"
+	_owner_badge.text = "PLAYER %d / %s" % [_owner_slot + 1, device]
+	if _vignette.visible:
+		_vignette.call("update_controls")
 	if bindings == null:
 		_footer.text = "P%d %s | Assign an input source to use keyboard/gamepad controls" % [_owner_slot + 1, device]
 		return

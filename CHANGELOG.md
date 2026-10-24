@@ -72,6 +72,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 2 — content and assets
 
+### 2026-10-25T00:55:01+05:30 — Give the home screen an original illustrated composition
+
+- Changed: Added a render-only animated loom/courier vignette, compact home choices, live bound-key guides, operational-menu owner badge and a regression scenario for layout/remapping. Kept the shared menu intent API and owner input rules.
+- Why: The user requested a stronger home screen, clearer controls and continued verified integration. A native overlap and a long-detail overflow were found and fixed before delivery.
+- Validation: Baseline import/20 scenarios PASS; final 21 scenarios PASS including three UI cases. Private native X11 helper PASS at 1×/2×; actual captures retained in evidence/content/ui/polish. Pack/link, design scan and whitespace PASS.
+- Limitations: Captures use a UI fixture and original fixed art before the overhead asset replacement. No overhead gameplay, listening, controller hardware or human playtest claim; Agent 1 owns integrated runtime/main packaging.
+
 ### 2026-10-25T00:15:26+05:30 — Verify every UI capture and expected process lifetime
 
 - Changed: QA now checks the exact nine fixture kinds, fresh expected paths/dimensions, distinct nonblank pixels, and live preview processes before intentional shutdown.
