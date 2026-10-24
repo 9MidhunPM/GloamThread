@@ -198,6 +198,110 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T01:31:49+05:30 — Immediate damage and revive presentation
+
+- Changed: Accepted hurt/down/revive transitions now select their directional pose immediately; revive follows the authored sixteen-tick clip and reset/damage clear stale revival presentation.
+- Why: Keep visual response aligned with the authoritative health transition and ground-plane knockback.
+- Validation: New real-physics damage scenario passes: planar knockback, interrupted windup, exactly-once signals, bounded immunity, steady reduced-flash cue, pause, stationary downed state and two-heart revive timing. Own-clone import generated its UID; sandbox editor socket warnings remain environmental.
+- Limitations: Null-catalog physics/presentation-state assertions; original frame rendering still requires integrated QA.
+
+
+### 2026-10-25T01:30:41+05:30 — Preserve the bounded evasion window
+
+- Changed: Enemy hit sets now record accepted damage, allowing a lingering attack to connect after an initially immune contact expires.
+- Why: A six-tick roll evasion must not accidentally grant immunity for an entire longer boss attack. Accepted damage remains once per attack and player.
+- Validation: Focused boss scenario passes with an immune first contact, later accepted contact and no duplicate damage after artificial immunity removal.
+- Limitations: Controlled active-strike fixture; normal-input difficulty tuning remains pending.
+
+
+### 2026-10-25T01:28:41+05:30 — Shared boss phase and concurrent feedback
+
+- Changed: Half health advances Spoolwarden to phase two, with faster subsequent pursuit/charge and a shorter next idle gap; existing warning/recovery durations stay explicit. Partner-strike feedback takes the first line while slow resistance remains visible below it. Defeat clears stale notices.
+- Why: Add encounter escalation and readable simultaneous feedback without cancelling a co-op stagger opening or changing an already-active charge speed.
+- Validation: Focused boss scenario passes, including half-health transition during stagger, preserved opening timer, concurrent slow-resist notice and cleared defeat text.
+- Limitations: Escalation values need the integrated normal-input route and human balance review; no rendered readability claim yet.
+
+
+### 2026-10-25T01:27:48+05:30 — Overhead boss acceptance and stable script IDs
+
+- Changed: Added a boss-specific scenario covering real sweep/strike/charge clocks, ground-plane reach, immutable walls, shared stagger/Cross-stitch state and exactly-once defeat; retained generated UID sidecars for new actor fixtures/scenarios.
+- Why: Establish runtime evidence for the translated three-pattern encounter and stable imports before parallel integration.
+- Validation: Actor clone Godot 4.7.2 run passes all 8 overhead actor scenarios. Boss ordinary-hit/bonus checks are explicitly controlled API fixtures; pattern geometry/timing use actual physics. Import parsed scripts but reported restricted editor socket/config-write warnings; its unrelated font-import rewrite was restored.
+- Limitations: This is not a normal-input boss route, native art inspection or human balance review.
+
+
+### 2026-10-25T01:25:13+05:30 — Planar enemy movement and room ownership
+
+- Changed: Enemy bodies now use floating ground-plane footprints, XY target/attack vectors and two-axis bounds. Spoolmites telegraph locked charges; Wickwing hover is visual-only and its explicit water flight returns toward dry courier approaches. Added matching set_room_context seam. Boss movement/attack geometry is translated onto the same plane.
+- Why: Remove platform gravity/ground checks and keep flying traversal separate from solid-wall collision.
+- Validation: Focused real-physics enemy scenario passes: vertical charge, locked warning, recovery, pause, slow, Wickwing water/wall collision, dry close-range recovery and exactly-once defeat. Existing six actor scenarios remain green.
+- Limitations: Boss-specific timing, geometry and Cross-stitch checks are the next slice; original enemy art/telegraph rendering is pending the content packet.
+
+
+### 2026-10-25T01:22:30+05:30 — End roll at its declared travel distance
+
+- Changed: Clear roll velocity on its last movement tick instead of letting ordinary motor deceleration add unrequested drift.
+- Why: Keep the promised thirty-six-pixel roll distance true after the action ends, particularly beside water.
+- Validation: Focused roll scenario passes, including three neutral ticks after roll completion with no extra travel.
+- Limitations: Headless physics fixture; human controller feel review remains pending.
+
+
+### 2026-10-25T01:21:52+05:30 — Explicit projectile water flight
+
+- Changed: Couriers pass their known room water body to Spore Bolt; each projectile excepts only that body while retaining wall collision.
+- Why: Allow Neri shots across water without global terrain-mask changes or shots through walls.
+- Validation: The focused real-physics Spore scenario passes, including an owned emitted shot traversing a water span and retiring at the next wall without hitting an enemy beyond it.
+- Limitations: Dedicated water/wall fixtures; full content integration remains pending.
+
+
+### 2026-10-25T01:21:06+05:30 — Safe team Threadstep crossings
+
+- Changed: Threadstep now travels sixty pixels over twelve ticks with a forty-five-tick cooldown; room callbacks validate dry departure, full-footprint landing and swept walls. Only the known water body is excepted for that courier.
+- Why: Allow forgiving bounded water traversal while preserving walls, partner collision and safe interruption/recovery.
+- Validation: Isolated Godot 4.7.2 actor scenarios pass 6/6, including two-tile crossing, unlock/cooldown, partial landing rejection, paused crossing, damage/geometry rollback and room-reset exception cleanup.
+- Limitations: Dedicated callback/physics fixtures; complete authored-room integration remains with the world/session lanes.
+
+
+### 2026-10-25T01:19:15+05:30 — Swept overhead Spore Bolt
+
+- Changed: Spore Bolt follows a normalized two-axis direction, chooses earliest swept hurtbox contact before terrain, starts at the courier ground centre and expires after forty-eight physics ticks.
+- Why: Prevent tree-order hits, vertical-shot errors, duplicate impacts and close-wall spawn bypasses while retaining Neri slow.
+- Validation: Isolated Godot 4.7.2 actor scenarios pass 5/5: nearest ordering, vertical/diagonal hits, wall rejection, bounded lifetime and owned tick-eight/twenty-two-tick special emission.
+- Limitations: Null-catalog fixtures; water-flight policy and original effect presentation await integration.
+
+
+### 2026-10-25T01:17:53+05:30 — Ground-plane Ember Arc
+
+- Changed: Ember Arc emits one 120-degree close fan on tick eight, with bounded reach, whole-hurtbox intersection, wall line-of-sight and a twenty-two-tick special sequence.
+- Why: Give Tavi a distinct directional close-range stagger tool on the overhead plane.
+- Validation: Isolated Godot 4.7.2 actor scenarios pass 4/4, including fan shoulders, excluded rear/flank/distant targets, emission/recovery ticks, damage/stagger values and wall rejection.
+- Limitations: Null-catalog fixture; Spore Bolt remains the next projectile migration.
+
+
+### 2026-10-25T01:17:03+05:30 — Directional slash and input buffer
+
+- Changed: Slash now uses cardinal ground-plane reach, six windup/active/recovery ticks, a six-tick press buffer and unique per-swing hit sets; directed effects rotate instead of mirroring.
+- Why: Preserve responsive combos and readable four-direction combat without diagonal or shared-player hit ambiguity.
+- Validation: Isolated Godot 4.7.2 scenarios pass 3/3: four facing directions, exact timing, one hit per swing, no held-button repetition, buffer expiry, independent simultaneous swings and no friendly fire.
+- Limitations: Stationary enemy fixtures; directional original-art review and planar special/enemy migration remain pending.
+
+
+### 2026-10-25T01:15:39+05:30 — Bounded overhead roll
+
+- Changed: The former jump bit starts a twelve-tick, 36px cardinal roll with six invulnerable ticks and a 36-tick cooldown; damage, restore and pause retain explicit interruption semantics.
+- Why: Replace platform jumping with a readable, short defensive action that respects water and wall collision.
+- Validation: Isolated Godot 4.7.2 actor scenarios pass 2/2, including exact displacement, direction lock, six-tick evasion, paused timers and real water/wall bodies.
+- Limitations: Null-catalog fixture; the new roll cue is pending the parallel authored audio packet.
+
+
+### 2026-10-25T01:12:16+05:30 — Overhead courier motor and room context
+
+- Changed: Replaced gravity/platform movement with floating XY movement, 12x10 feet collision, cardinal facing and directional animation keys; introduced set_room_context(bounds, can_stand, can_threadstep, water_body).
+- Why: Establish the actor-side ground-plane contract before world integration. Existing health/revive APIs and owned snapshots remain intact.
+- Validation: Godot 4.7.2 isolated import and overhead_actor_motor scenario pass; actual bodies prove equal diagonal speed, analogue magnitude, wall/bounds collision, owner isolation, pause and stationary downing.
+- Limitations: Null-catalog physics fixture only; roll, new attack timing, water dash and planar enemies remain subsequent actor slices. No overhead art/rendered/full-route claim.
+
+
 
 
 ## Overhead world lane
