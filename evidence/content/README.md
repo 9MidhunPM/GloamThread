@@ -50,3 +50,43 @@ Remaining: complete animation/actor/prop/background/effect/UI inventory, 18 cues
 three arrangements, final eight-room content, traversal and runtime review.
 Godot imports, animation playback, listening, gamepads, physical traversal,
 performance, exports and human playtests are unverified by Agent 2.
+
+## Drop B — complete original asset inventory
+
+Previous packet: `34e14c96d9c2e78d94007b55ac7af5794b5157ec` (Drop A).
+Drop B supplies assets independently of the final room/story packet. The retained
+diagnostic image files remain available to the early runtime; they are absent
+from the full manifest and are not full-content dependencies.
+
+```sh
+python3 tools/generate_assets.py --seed 18427
+python3 tools/validate_assets.py
+python3 tools/gen/rebuild_check.py --seed 18427
+python3 -m unittest discover -s tools/tests -p test_assets.py
+python3 -m unittest discover -s tools/tests -p test_audio.py
+python3 -m unittest discover -s tools/tests -p test_generation.py
+```
+
+Results: 47 full-stage manifested assets; asset validation PASS; 27 asset,
+11 audio and two generator tests PASS (40 tests). Two full rebuilds produced
+identical hashes for all 47 listed outputs and the manifest, recorded in
+`rebuild.json`. The generator's default stage is now usable and complete.
+
+Inventory: 64 courier frames, 70 Oru/enemy/boss frames, both 48-slot terrain
+atlases, six finite 480x360 backgrounds, 16 logical props with 21 state frames,
+48 effect frames, 20 UI glyphs, the original font, 18 distinct semantic cues,
+and 48/36/18-second exploration/boss/ending arrangements. Every asset retains
+source paths/hashes. Sources include explicit palettes, pixel/pose recipes,
+glyph matrices, instruments, envelopes, cues and note scores.
+
+Native atlas/contact-sheet inspection covered both couriers, Oru, both normal
+enemies, boss phases and Ember/Moss authoring compositions. A review corrected
+inner-corner highlight orientation. Audio tests cover actual PCM format, peaks,
+loop seams and a representative simultaneous-event combination. These checks
+do not establish runtime mixing or listening comfort.
+
+Integration: map full manifest frame/tick tables into runtime animation and
+register all semantic audio names once through the shared mix. Props expose
+`prop_ids` aligned to frames and `logical_props` for inventory checks; the first
+16 frame indices remain stable. Full room delivery follows separately. No
+finished-room, physical-traversal, engine-import or motion gate is claimed.

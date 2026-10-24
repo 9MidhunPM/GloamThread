@@ -10,6 +10,24 @@ sys.path.insert(0, str(ROOT / "tools"))
 
 
 class GenerationTests(unittest.TestCase):
+    def test_full_bundle_rebuilds_byte_identically_and_validates(self):
+        from generate_assets import generate
+        from validate_assets import validate
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            shutil.copytree(ROOT / "assets/source", output / "assets/source")
+            shutil.copytree(ROOT / "tools", output / "tools")
+            first = generate(output, 18427, "full")
+            manifest_bytes = (output / "assets/manifest.json").read_bytes()
+            self.assertEqual(validate(output, "full"), [])
+            second = generate(output, 18427, "full")
+            self.assertEqual(first, second)
+            self.assertEqual(manifest_bytes, (output / "assets/manifest.json").read_bytes())
+            self.assertEqual(validate(output, "full"), [])
+            self.assertEqual(len(first["sfx"]), 18)
+            self.assertEqual(len(first["music"]), 3)
+            self.assertTrue(all(not item["diagnostic"] for item in first["assets"]))
+
     def test_diagnostic_contract_and_repeatability(self):
         from generate_assets import generate
         from PIL import Image

@@ -1,0 +1,1198 @@
+{
+  "schema_version": 1,
+  "content_version": "phase1-v1",
+  "authorship": "Original Gloamthread pixel palettes and pose tables authored with Codex. No downloaded or copied visual assets.",
+  "pose_contract": "Feet origins and colliders are fixed externally. Poses and ticks are presentation metadata only; they do not decide gameplay effects.",
+  "actors": {
+    "oru": {
+      "description": "Broad patched rain cape, copper spectacles and crooked lantern staff; a tired, warm keeper, facing right.",
+      "palette": {
+        "cape": "#6B8582",
+        "cape_dark": "#3D545B",
+        "cape_light": "#91A69B",
+        "face": "#C8B68C",
+        "brass": "#BC7852",
+        "wood": "#845044",
+        "glow": "#FFE0A1"
+      },
+      "clips": {
+        "idle": {
+          "poses": [
+            {
+              "bob": 0,
+              "hem": 0,
+              "lantern_sway": 0,
+              "staff_lift": 0,
+              "hand": 0,
+              "mouth": 0
+            },
+            {
+              "bob": 1,
+              "hem": 0,
+              "lantern_sway": -1,
+              "staff_lift": 0,
+              "hand": 0,
+              "mouth": 0
+            },
+            {
+              "bob": 0,
+              "hem": 1,
+              "lantern_sway": 1,
+              "staff_lift": 0,
+              "hand": 0,
+              "mouth": 0
+            },
+            {
+              "bob": -1,
+              "hem": 1,
+              "lantern_sway": 0,
+              "staff_lift": 0,
+              "hand": 0,
+              "mouth": 0
+            }
+          ],
+          "ticks": [
+            14,
+            12,
+            14,
+            12
+          ],
+          "loop": true
+        },
+        "talk": {
+          "poses": [
+            {
+              "bob": 0,
+              "hem": 1,
+              "lantern_sway": 0,
+              "staff_lift": 0,
+              "hand": -1,
+              "mouth": 0
+            },
+            {
+              "bob": 1,
+              "hem": 0,
+              "lantern_sway": -1,
+              "staff_lift": 0,
+              "hand": -2,
+              "mouth": 1
+            }
+          ],
+          "ticks": [
+            9,
+            11
+          ],
+          "loop": true
+        },
+        "acknowledge": {
+          "poses": [
+            {
+              "bob": -1,
+              "hem": 1,
+              "lantern_sway": -1,
+              "staff_lift": 2,
+              "hand": 1,
+              "mouth": 0
+            },
+            {
+              "bob": -1,
+              "hem": 0,
+              "lantern_sway": 1,
+              "staff_lift": 3,
+              "hand": 3,
+              "mouth": 0
+            }
+          ],
+          "ticks": [
+            14,
+            24
+          ],
+          "loop": false
+        }
+      }
+    },
+    "spoolmite": {
+      "description": "A wound wooden reel on six hinged twig feet, with a short forward shuttle claw. Its warning is a low crouch and lifted claw.",
+      "palette": {
+        "wood": "#845044",
+        "wood_light": "#BC7852",
+        "thread": "#737B83",
+        "brass": "#E3AD6A",
+        "glow": "#FFE0A1",
+        "danger": "#F07865"
+      },
+      "clips": {
+        "idle": {
+          "poses": [
+            {
+              "dx": 0,
+              "bob": 0,
+              "stride": 0,
+              "crouch": 0,
+              "coil": 0,
+              "claw_y": 21,
+              "unwind": 0
+            },
+            {
+              "dx": 0,
+              "bob": 1,
+              "stride": 0,
+              "crouch": 0,
+              "coil": 22,
+              "claw_y": 22,
+              "unwind": 0
+            }
+          ],
+          "ticks": [
+            14,
+            14
+          ],
+          "loop": true
+        },
+        "walk": {
+          "poses": [
+            {
+              "dx": 0,
+              "bob": 0,
+              "stride": -2,
+              "crouch": 0,
+              "coil": 35,
+              "claw_y": 21,
+              "unwind": 0
+            },
+            {
+              "dx": 1,
+              "bob": -1,
+              "stride": 1,
+              "crouch": 0,
+              "coil": 65,
+              "claw_y": 20,
+              "unwind": 0
+            },
+            {
+              "dx": 0,
+              "bob": 0,
+              "stride": 2,
+              "crouch": 0,
+              "coil": 100,
+              "claw_y": 22,
+              "unwind": 0
+            },
+            {
+              "dx": -1,
+              "bob": -1,
+              "stride": -1,
+              "crouch": 0,
+              "coil": 135,
+              "claw_y": 21,
+              "unwind": 0
+            }
+          ],
+          "ticks": [
+            6,
+            6,
+            6,
+            6
+          ],
+          "loop": true
+        },
+        "anticipation": {
+          "poses": [
+            {
+              "dx": -1,
+              "bob": 0,
+              "stride": -1,
+              "crouch": 2,
+              "coil": 170,
+              "claw_y": 16,
+              "unwind": 0
+            },
+            {
+              "dx": -2,
+              "bob": 0,
+              "stride": -2,
+              "crouch": 3,
+              "coil": 200,
+              "claw_y": 12,
+              "unwind": 0
+            }
+          ],
+          "ticks": [
+            10,
+            12
+          ],
+          "loop": false
+        },
+        "charge": {
+          "poses": [
+            {
+              "dx": 1,
+              "bob": 0,
+              "stride": 2,
+              "crouch": 1,
+              "coil": 240,
+              "claw_y": 19,
+              "unwind": 0
+            },
+            {
+              "dx": 2,
+              "bob": 0,
+              "stride": -2,
+              "crouch": 0,
+              "coil": 280,
+              "claw_y": 18,
+              "unwind": 0
+            }
+          ],
+          "ticks": [
+            5,
+            5
+          ],
+          "loop": false
+        },
+        "recovery": {
+          "poses": [
+            {
+              "dx": 1,
+              "bob": 0,
+              "stride": -1,
+              "crouch": 3,
+              "coil": 310,
+              "claw_y": 25,
+              "unwind": 0
+            },
+            {
+              "dx": 0,
+              "bob": 0,
+              "stride": 1,
+              "crouch": 1,
+              "coil": 340,
+              "claw_y": 23,
+              "unwind": 0
+            }
+          ],
+          "ticks": [
+            10,
+            12
+          ],
+          "loop": false
+        },
+        "defeat": {
+          "poses": [
+            {
+              "dx": 0,
+              "bob": 0,
+              "stride": 0,
+              "crouch": 0,
+              "coil": 0,
+              "claw_y": 21,
+              "unwind": 0
+            },
+            {
+              "dx": -1,
+              "bob": 0,
+              "stride": 0,
+              "crouch": 0,
+              "coil": 0,
+              "claw_y": 21,
+              "unwind": 1
+            },
+            {
+              "dx": 0,
+              "bob": 0,
+              "stride": 0,
+              "crouch": 0,
+              "coil": 0,
+              "claw_y": 21,
+              "unwind": 2
+            },
+            {
+              "dx": -1,
+              "bob": 0,
+              "stride": 0,
+              "crouch": 0,
+              "coil": 0,
+              "claw_y": 21,
+              "unwind": 3
+            }
+          ],
+          "ticks": [
+            7,
+            9,
+            12,
+            20
+          ],
+          "loop": false
+        }
+      }
+    },
+    "wickwing": {
+      "description": "A small hanging brass bell carried by asymmetrical folded bell-glass wings. Dive poses become a narrow right-facing arrow.",
+      "palette": {
+        "glass": "#8FBDB5",
+        "glass_dark": "#3C6570",
+        "bell": "#BC7852",
+        "rim": "#B5E5B4",
+        "thread": "#737B83",
+        "glow": "#FFE0A1",
+        "danger": "#F07865"
+      },
+      "clips": {
+        "flap": {
+          "poses": [
+            {
+              "body_y": 14,
+              "fold": 0,
+              "tip_y": 2,
+              "tail": -1,
+              "drop": 0
+            },
+            {
+              "body_y": 13,
+              "fold": 0,
+              "tip_y": 7,
+              "tail": 0,
+              "drop": 0
+            },
+            {
+              "body_y": 12,
+              "fold": 0,
+              "tip_y": 13,
+              "tail": 1,
+              "drop": 0
+            },
+            {
+              "body_y": 13,
+              "fold": 1,
+              "tip_y": 5,
+              "tail": 0,
+              "drop": 0
+            }
+          ],
+          "ticks": [
+            6,
+            5,
+            6,
+            5
+          ],
+          "loop": true
+        },
+        "anticipation": {
+          "poses": [
+            {
+              "body_y": 14,
+              "fold": 3,
+              "tip_y": 3,
+              "tail": 1,
+              "drop": 0
+            },
+            {
+              "body_y": 15,
+              "fold": 5,
+              "tip_y": 1,
+              "tail": -1,
+              "drop": 0
+            }
+          ],
+          "ticks": [
+            10,
+            12
+          ],
+          "loop": false
+        },
+        "dive": {
+          "poses": [
+            {
+              "body_y": 17,
+              "fold": 5,
+              "tip_y": 5,
+              "tail": 0,
+              "drop": 0
+            },
+            {
+              "body_y": 16,
+              "fold": 4,
+              "tip_y": 7,
+              "tail": 0,
+              "drop": 0
+            }
+          ],
+          "ticks": [
+            5,
+            5
+          ],
+          "loop": false
+        },
+        "recovery": {
+          "poses": [
+            {
+              "body_y": 15,
+              "fold": 2,
+              "tip_y": 14,
+              "tail": 2,
+              "drop": 0
+            },
+            {
+              "body_y": 14,
+              "fold": 1,
+              "tip_y": 8,
+              "tail": -2,
+              "drop": 0
+            }
+          ],
+          "ticks": [
+            10,
+            12
+          ],
+          "loop": false
+        },
+        "defeat": {
+          "poses": [
+            {
+              "body_y": 13,
+              "fold": 0,
+              "tip_y": 4,
+              "tail": 0,
+              "drop": 0
+            },
+            {
+              "body_y": 13,
+              "fold": 0,
+              "tip_y": 4,
+              "tail": 0,
+              "drop": 1
+            },
+            {
+              "body_y": 13,
+              "fold": 0,
+              "tip_y": 4,
+              "tail": 0,
+              "drop": 2
+            },
+            {
+              "body_y": 13,
+              "fold": 0,
+              "tip_y": 4,
+              "tail": 0,
+              "drop": 3
+            }
+          ],
+          "ticks": [
+            7,
+            9,
+            12,
+            20
+          ],
+          "loop": false
+        }
+      }
+    },
+    "spoolwarden": {
+      "description": "An asymmetric wooden loom tender under a cracked brass bell, dragging a hollow shuttle. Open torso threads become a bright diamond seam during stagger.",
+      "palette": {
+        "wood": "#845044",
+        "wood_light": "#BC7852",
+        "brass": "#E3AD6A",
+        "brass_dark": "#644258",
+        "thread": "#D5D2B8",
+        "thread_dark": "#737B83",
+        "glow": "#FFE0A1",
+        "danger": "#F07865"
+      },
+      "clips": {
+        "idle": {
+          "poses": [
+            {
+              "dx": 0,
+              "bob": 0,
+              "stance": 0,
+              "tilt": 0,
+              "thread": 0,
+              "arm": [
+                48,
+                36
+              ],
+              "weapon": [
+                47,
+                35,
+                59,
+                47
+              ],
+              "collapse": 0
+            },
+            {
+              "dx": 0,
+              "bob": 1,
+              "stance": 0,
+              "tilt": 0,
+              "thread": 1,
+              "arm": [
+                48,
+                37
+              ],
+              "weapon": [
+                47,
+                36,
+                59,
+                48
+              ],
+              "collapse": 0
+            },
+            {
+              "dx": 0,
+              "bob": 0,
+              "stance": 0,
+              "tilt": 1,
+              "thread": 2,
+              "arm": [
+                49,
+                36
+              ],
+              "weapon": [
+                48,
+                35,
+                60,
+                46
+              ],
+              "collapse": 0
+            },
+            {
+              "dx": 0,
+              "bob": -1,
+              "stance": 0,
+              "tilt": -1,
+              "thread": 3,
+              "arm": [
+                48,
+                35
+              ],
+              "weapon": [
+                47,
+                34,
+                59,
+                46
+              ],
+              "collapse": 0
+            }
+          ],
+          "ticks": [
+            12,
+            12,
+            12,
+            12
+          ],
+          "loop": true
+        },
+        "sweep_anticipation": {
+          "poses": [
+            {
+              "dx": -1,
+              "bob": 1,
+              "stance": 1,
+              "tilt": -1,
+              "thread": 0,
+              "arm": [
+                27,
+                32
+              ],
+              "weapon": [
+                25,
+                30,
+                7,
+                28
+              ],
+              "collapse": 0
+            },
+            {
+              "dx": -2,
+              "bob": 2,
+              "stance": 2,
+              "tilt": -1,
+              "thread": 2,
+              "arm": [
+                25,
+                30
+              ],
+              "weapon": [
+                23,
+                28,
+                4,
+                25
+              ],
+              "collapse": 0
+            }
+          ],
+          "ticks": [
+            10,
+            12
+          ],
+          "loop": false
+        },
+        "sweep_active": {
+          "poses": [
+            {
+              "dx": 2,
+              "bob": 1,
+              "stance": 2,
+              "tilt": 1,
+              "thread": 1,
+              "arm": [
+                47,
+                31
+              ],
+              "weapon": [
+                45,
+                32,
+                62,
+                29
+              ],
+              "collapse": 0
+            },
+            {
+              "dx": 3,
+              "bob": 0,
+              "stance": 1,
+              "tilt": 2,
+              "thread": 2,
+              "arm": [
+                50,
+                37
+              ],
+              "weapon": [
+                48,
+                36,
+                62,
+                43
+              ],
+              "collapse": 0
+            }
+          ],
+          "ticks": [
+            5,
+            5
+          ],
+          "loop": false
+        },
+        "sweep_recovery": {
+          "poses": [
+            {
+              "dx": 2,
+              "bob": 3,
+              "stance": 2,
+              "tilt": 0,
+              "thread": 1,
+              "arm": [
+                50,
+                42
+              ],
+              "weapon": [
+                48,
+                41,
+                61,
+                53
+              ],
+              "collapse": 0
+            },
+            {
+              "dx": 1,
+              "bob": 1,
+              "stance": 1,
+              "tilt": 0,
+              "thread": 2,
+              "arm": [
+                49,
+                39
+              ],
+              "weapon": [
+                47,
+                38,
+                60,
+                50
+              ],
+              "collapse": 0
+            }
+          ],
+          "ticks": [
+            9,
+            12
+          ],
+          "loop": false
+        },
+        "strike_anticipation": {
+          "poses": [
+            {
+              "dx": 0,
+              "bob": -1,
+              "stance": 1,
+              "tilt": -1,
+              "thread": 0,
+              "arm": [
+                47,
+                20
+              ],
+              "weapon": [
+                47,
+                19,
+                44,
+                3
+              ],
+              "collapse": 0
+            },
+            {
+              "dx": -1,
+              "bob": -2,
+              "stance": 2,
+              "tilt": -1,
+              "thread": 1,
+              "arm": [
+                48,
+                18
+              ],
+              "weapon": [
+                47,
+                18,
+                43,
+                1
+              ],
+              "collapse": 0
+            }
+          ],
+          "ticks": [
+            10,
+            13
+          ],
+          "loop": false
+        },
+        "strike_active": {
+          "poses": [
+            {
+              "dx": 1,
+              "bob": 2,
+              "stance": 2,
+              "tilt": 1,
+              "thread": 1,
+              "arm": [
+                49,
+                43
+              ],
+              "weapon": [
+                50,
+                42,
+                55,
+                60
+              ],
+              "collapse": 0
+            },
+            {
+              "dx": 1,
+              "bob": 4,
+              "stance": 3,
+              "tilt": 2,
+              "thread": 2,
+              "arm": [
+                50,
+                45
+              ],
+              "weapon": [
+                51,
+                44,
+                57,
+                61
+              ],
+              "collapse": 0
+            }
+          ],
+          "ticks": [
+            5,
+            6
+          ],
+          "loop": false
+        },
+        "strike_recovery": {
+          "poses": [
+            {
+              "dx": 0,
+              "bob": 4,
+              "stance": 2,
+              "tilt": 0,
+              "thread": 3,
+              "arm": [
+                50,
+                44
+              ],
+              "weapon": [
+                51,
+                43,
+                56,
+                59
+              ],
+              "collapse": 0
+            },
+            {
+              "dx": 0,
+              "bob": 2,
+              "stance": 1,
+              "tilt": 0,
+              "thread": 2,
+              "arm": [
+                49,
+                40
+              ],
+              "weapon": [
+                49,
+                39,
+                57,
+                55
+              ],
+              "collapse": 0
+            }
+          ],
+          "ticks": [
+            12,
+            10
+          ],
+          "loop": false
+        },
+        "charge_anticipation": {
+          "poses": [
+            {
+              "dx": -1,
+              "bob": 4,
+              "stance": 2,
+              "tilt": 2,
+              "thread": 0,
+              "arm": [
+                47,
+                34
+              ],
+              "weapon": [
+                44,
+                33,
+                59,
+                32
+              ],
+              "collapse": 0
+            },
+            {
+              "dx": -2,
+              "bob": 5,
+              "stance": 3,
+              "tilt": 3,
+              "thread": 1,
+              "arm": [
+                46,
+                35
+              ],
+              "weapon": [
+                43,
+                34,
+                60,
+                33
+              ],
+              "collapse": 0
+            }
+          ],
+          "ticks": [
+            10,
+            12
+          ],
+          "loop": false
+        },
+        "charge_active": {
+          "poses": [
+            {
+              "dx": 5,
+              "bob": 1,
+              "stance": 2,
+              "tilt": 2,
+              "thread": 2,
+              "arm": [
+                49,
+                34
+              ],
+              "weapon": [
+                46,
+                33,
+                62,
+                32
+              ],
+              "collapse": 0
+            },
+            {
+              "dx": 6,
+              "bob": 2,
+              "stance": -1,
+              "tilt": 2,
+              "thread": 3,
+              "arm": [
+                50,
+                35
+              ],
+              "weapon": [
+                47,
+                34,
+                62,
+                34
+              ],
+              "collapse": 0
+            }
+          ],
+          "ticks": [
+            5,
+            5
+          ],
+          "loop": false
+        },
+        "charge_recovery": {
+          "poses": [
+            {
+              "dx": 3,
+              "bob": 5,
+              "stance": 3,
+              "tilt": 2,
+              "thread": 1,
+              "arm": [
+                50,
+                42
+              ],
+              "weapon": [
+                48,
+                41,
+                61,
+                49
+              ],
+              "collapse": 0
+            },
+            {
+              "dx": 1,
+              "bob": 3,
+              "stance": 1,
+              "tilt": 1,
+              "thread": 2,
+              "arm": [
+                49,
+                40
+              ],
+              "weapon": [
+                47,
+                39,
+                60,
+                49
+              ],
+              "collapse": 0
+            }
+          ],
+          "ticks": [
+            12,
+            12
+          ],
+          "loop": false
+        },
+        "stagger": {
+          "poses": [
+            {
+              "dx": -1,
+              "bob": 2,
+              "stance": 2,
+              "tilt": -2,
+              "thread": 0,
+              "arm": [
+                48,
+                43
+              ],
+              "weapon": [
+                48,
+                43,
+                60,
+                54
+              ],
+              "collapse": 0
+            },
+            {
+              "dx": 0,
+              "bob": 3,
+              "stance": 2,
+              "tilt": -1,
+              "thread": 1,
+              "arm": [
+                49,
+                45
+              ],
+              "weapon": [
+                49,
+                44,
+                60,
+                56
+              ],
+              "collapse": 0
+            },
+            {
+              "dx": 1,
+              "bob": 2,
+              "stance": 2,
+              "tilt": -2,
+              "thread": 2,
+              "arm": [
+                50,
+                43
+              ],
+              "weapon": [
+                49,
+                43,
+                61,
+                54
+              ],
+              "collapse": 0
+            },
+            {
+              "dx": 0,
+              "bob": 3,
+              "stance": 2,
+              "tilt": -1,
+              "thread": 3,
+              "arm": [
+                49,
+                44
+              ],
+              "weapon": [
+                48,
+                44,
+                60,
+                55
+              ],
+              "collapse": 0
+            }
+          ],
+          "ticks": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "loop": false
+        },
+        "defeat": {
+          "poses": [
+            {
+              "dx": 0,
+              "bob": 2,
+              "stance": 2,
+              "tilt": -1,
+              "thread": 0,
+              "arm": [
+                48,
+                45
+              ],
+              "weapon": [
+                48,
+                44,
+                60,
+                55
+              ],
+              "collapse": 0
+            },
+            {
+              "dx": 0,
+              "bob": 2,
+              "stance": 3,
+              "tilt": -2,
+              "thread": 1,
+              "arm": [
+                49,
+                49
+              ],
+              "weapon": [
+                48,
+                48,
+                61,
+                56
+              ],
+              "collapse": 2
+            },
+            {
+              "dx": 0,
+              "bob": 2,
+              "stance": 4,
+              "tilt": -2,
+              "thread": 2,
+              "arm": [
+                50,
+                52
+              ],
+              "weapon": [
+                48,
+                52,
+                61,
+                57
+              ],
+              "collapse": 4
+            },
+            {
+              "dx": 0,
+              "bob": 2,
+              "stance": 4,
+              "tilt": -3,
+              "thread": 3,
+              "arm": [
+                50,
+                54
+              ],
+              "weapon": [
+                47,
+                55,
+                61,
+                58
+              ],
+              "collapse": 6
+            },
+            {
+              "dx": 0,
+              "bob": 1,
+              "stance": 4,
+              "tilt": -3,
+              "thread": 4,
+              "arm": [
+                50,
+                55
+              ],
+              "weapon": [
+                47,
+                56,
+                61,
+                59
+              ],
+              "collapse": 8
+            },
+            {
+              "dx": 0,
+              "bob": 1,
+              "stance": 4,
+              "tilt": -4,
+              "thread": 5,
+              "arm": [
+                50,
+                55
+              ],
+              "weapon": [
+                47,
+                56,
+                61,
+                59
+              ],
+              "collapse": 9
+            }
+          ],
+          "ticks": [
+            7,
+            7,
+            9,
+            12,
+            16,
+            24
+          ],
+          "loop": false
+        }
+      }
+    }
+  }
+}

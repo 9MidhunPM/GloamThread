@@ -1,0 +1,475 @@
+{
+  "schema_version": 1,
+  "content_version": "phase1-v1",
+  "authorship": "Original Gloamthread project synthesis and note data authored with Codex; no samples, soundfonts or external music.",
+  "cues": {
+    "jump": {
+      "description": "A small upward plucked breath, restrained for repeated jumps.",
+      "duration_seconds": 0.19,
+      "peak": 0.22,
+      "events": [
+        {
+          "at_seconds": 0,
+          "instrument": "thread_pluck",
+          "note": 61,
+          "duration_seconds": 0.18,
+          "gain": 0.8,
+          "end_note": 69
+        },
+        {
+          "at_seconds": 0,
+          "instrument": "thread_air",
+          "note": 65,
+          "duration_seconds": 0.1,
+          "gain": 0.16
+        }
+      ]
+    },
+    "land": {
+      "description": "Soft low wooden contact.",
+      "duration_seconds": 0.17,
+      "peak": 0.2,
+      "events": [
+        {
+          "at_seconds": 0,
+          "instrument": "wood_knock",
+          "note": 44,
+          "duration_seconds": 0.16,
+          "gain": 1
+        },
+        {
+          "at_seconds": 0.02,
+          "instrument": "thread_air",
+          "note": 38,
+          "duration_seconds": 0.11,
+          "gain": 0.18
+        }
+      ]
+    },
+    "slash": {
+      "description": "A short dry cloth sweep with a little shuttle body.",
+      "duration_seconds": 0.22,
+      "peak": 0.25,
+      "events": [
+        {
+          "at_seconds": 0,
+          "instrument": "thread_air",
+          "note": 81,
+          "duration_seconds": 0.21,
+          "gain": 0.85,
+          "end_note": 59
+        },
+        {
+          "at_seconds": 0.025,
+          "instrument": "wood_knock",
+          "note": 64,
+          "duration_seconds": 0.13,
+          "gain": 0.35
+        }
+      ]
+    },
+    "hit": {
+      "description": "Confirmed contact: compact knock and a bright stitch.",
+      "duration_seconds": 0.24,
+      "peak": 0.29,
+      "events": [
+        {
+          "at_seconds": 0,
+          "instrument": "wood_knock",
+          "note": 48,
+          "duration_seconds": 0.2,
+          "gain": 1
+        },
+        {
+          "at_seconds": 0.012,
+          "instrument": "brass_shiver",
+          "note": 76,
+          "duration_seconds": 0.22,
+          "gain": 0.28
+        }
+      ]
+    },
+    "hurt": {
+      "description": "A descending broken thread that differs from confirmed enemy contact.",
+      "duration_seconds": 0.38,
+      "peak": 0.3,
+      "events": [
+        {
+          "at_seconds": 0,
+          "instrument": "brass_shiver",
+          "note": 65,
+          "duration_seconds": 0.36,
+          "gain": 0.7,
+          "end_note": 50
+        },
+        {
+          "at_seconds": 0,
+          "instrument": "low_pulse",
+          "note": 42,
+          "duration_seconds": 0.27,
+          "gain": 0.8
+        }
+      ]
+    },
+    "dash": {
+      "description": "Longer airy motion and a high soft release.",
+      "duration_seconds": 0.31,
+      "peak": 0.23,
+      "events": [
+        {
+          "at_seconds": 0,
+          "instrument": "thread_air",
+          "note": 55,
+          "duration_seconds": 0.3,
+          "gain": 1,
+          "end_note": 82
+        },
+        {
+          "at_seconds": 0.12,
+          "instrument": "thread_pluck",
+          "note": 81,
+          "duration_seconds": 0.18,
+          "gain": 0.2
+        }
+      ]
+    },
+    "ember_arc": {
+      "description": "A heavier warm metal sweep followed by body, distinct from the basic slash.",
+      "duration_seconds": 0.48,
+      "peak": 0.3,
+      "events": [
+        {
+          "at_seconds": 0,
+          "instrument": "thread_air",
+          "note": 52,
+          "duration_seconds": 0.4,
+          "gain": 0.65,
+          "end_note": 76
+        },
+        {
+          "at_seconds": 0.06,
+          "instrument": "brass_shiver",
+          "note": 52,
+          "duration_seconds": 0.4,
+          "gain": 0.7
+        },
+        {
+          "at_seconds": 0.13,
+          "instrument": "wood_knock",
+          "note": 40,
+          "duration_seconds": 0.22,
+          "gain": 0.8
+        }
+      ]
+    },
+    "spore_bolt": {
+      "description": "A hollow plucked bubble rising away from the courier.",
+      "duration_seconds": 0.36,
+      "peak": 0.26,
+      "events": [
+        {
+          "at_seconds": 0,
+          "instrument": "thread_pluck",
+          "note": 67,
+          "duration_seconds": 0.28,
+          "gain": 0.8,
+          "end_note": 83
+        },
+        {
+          "at_seconds": 0.1,
+          "instrument": "soft_chime",
+          "note": 79,
+          "duration_seconds": 0.25,
+          "gain": 0.3
+        }
+      ]
+    },
+    "enemy_warning": {
+      "description": "One clear descending brass interval before a telegraphed attack.",
+      "duration_seconds": 0.56,
+      "peak": 0.28,
+      "events": [
+        {
+          "at_seconds": 0,
+          "instrument": "brass_shiver",
+          "note": 74,
+          "duration_seconds": 0.29,
+          "gain": 0.65
+        },
+        {
+          "at_seconds": 0.2,
+          "instrument": "brass_shiver",
+          "note": 69,
+          "duration_seconds": 0.35,
+          "gain": 0.8
+        }
+      ]
+    },
+    "enemy_defeat": {
+      "description": "A loose wooden rattle descending into a quiet end.",
+      "duration_seconds": 0.56,
+      "peak": 0.25,
+      "events": [
+        {
+          "at_seconds": 0,
+          "instrument": "wood_knock",
+          "note": 60,
+          "duration_seconds": 0.25,
+          "gain": 1
+        },
+        {
+          "at_seconds": 0.09,
+          "instrument": "wood_knock",
+          "note": 53,
+          "duration_seconds": 0.25,
+          "gain": 0.6
+        },
+        {
+          "at_seconds": 0.2,
+          "instrument": "thread_pluck",
+          "note": 46,
+          "duration_seconds": 0.35,
+          "gain": 0.4
+        }
+      ]
+    },
+    "boss_stagger": {
+      "description": "The bell opens and reveals a clean seam pitch.",
+      "duration_seconds": 0.88,
+      "peak": 0.31,
+      "events": [
+        {
+          "at_seconds": 0,
+          "instrument": "brass_shiver",
+          "note": 45,
+          "duration_seconds": 0.54,
+          "gain": 0.55
+        },
+        {
+          "at_seconds": 0.04,
+          "instrument": "soft_bell",
+          "note": 74,
+          "duration_seconds": 0.83,
+          "gain": 0.85
+        }
+      ]
+    },
+    "cross_stitch": {
+      "description": "Two threads cross in a short rising three-note resolution.",
+      "duration_seconds": 0.95,
+      "peak": 0.32,
+      "events": [
+        {
+          "at_seconds": 0,
+          "instrument": "thread_pluck",
+          "note": 62,
+          "duration_seconds": 0.55,
+          "gain": 0.7
+        },
+        {
+          "at_seconds": 0.08,
+          "instrument": "thread_pluck",
+          "note": 69,
+          "duration_seconds": 0.55,
+          "gain": 0.7
+        },
+        {
+          "at_seconds": 0.16,
+          "instrument": "soft_bell",
+          "note": 78,
+          "duration_seconds": 0.78,
+          "gain": 0.65
+        },
+        {
+          "at_seconds": 0.03,
+          "instrument": "wood_knock",
+          "note": 45,
+          "duration_seconds": 0.22,
+          "gain": 0.45
+        }
+      ]
+    },
+    "anchor_latched": {
+      "description": "A firm small click and one sustained confirmation stitch.",
+      "duration_seconds": 0.5,
+      "peak": 0.23,
+      "events": [
+        {
+          "at_seconds": 0,
+          "instrument": "wood_knock",
+          "note": 58,
+          "duration_seconds": 0.13,
+          "gain": 0.55
+        },
+        {
+          "at_seconds": 0.03,
+          "instrument": "soft_chime",
+          "note": 74,
+          "duration_seconds": 0.46,
+          "gain": 0.75
+        }
+      ]
+    },
+    "bridge_restored": {
+      "description": "An ascending braid makes a path feel secure.",
+      "duration_seconds": 1.35,
+      "peak": 0.28,
+      "events": [
+        {
+          "at_seconds": 0,
+          "instrument": "thread_pluck",
+          "note": 50,
+          "duration_seconds": 0.6,
+          "gain": 0.65
+        },
+        {
+          "at_seconds": 0.12,
+          "instrument": "thread_pluck",
+          "note": 57,
+          "duration_seconds": 0.65,
+          "gain": 0.65
+        },
+        {
+          "at_seconds": 0.24,
+          "instrument": "thread_pluck",
+          "note": 64,
+          "duration_seconds": 0.8,
+          "gain": 0.65
+        },
+        {
+          "at_seconds": 0.36,
+          "instrument": "soft_chime",
+          "note": 74,
+          "duration_seconds": 0.98,
+          "gain": 0.65
+        }
+      ]
+    },
+    "checkpoint": {
+      "description": "The same calm resting interval can recur without urgency.",
+      "duration_seconds": 1.25,
+      "peak": 0.25,
+      "events": [
+        {
+          "at_seconds": 0,
+          "instrument": "soft_chime",
+          "note": 62,
+          "duration_seconds": 1.2,
+          "gain": 0.8
+        },
+        {
+          "at_seconds": 0.16,
+          "instrument": "soft_chime",
+          "note": 69,
+          "duration_seconds": 1.05,
+          "gain": 0.55
+        },
+        {
+          "at_seconds": 0.32,
+          "instrument": "thread_pluck",
+          "note": 76,
+          "duration_seconds": 0.9,
+          "gain": 0.4
+        }
+      ]
+    },
+    "downed": {
+      "description": "A single low falling phrase asks for help without a continuous alarm.",
+      "duration_seconds": 0.98,
+      "peak": 0.29,
+      "events": [
+        {
+          "at_seconds": 0,
+          "instrument": "soft_bell",
+          "note": 62,
+          "duration_seconds": 0.54,
+          "gain": 0.75
+        },
+        {
+          "at_seconds": 0.26,
+          "instrument": "soft_bell",
+          "note": 57,
+          "duration_seconds": 0.68,
+          "gain": 0.8
+        },
+        {
+          "at_seconds": 0.26,
+          "instrument": "low_pulse",
+          "note": 38,
+          "duration_seconds": 0.6,
+          "gain": 0.5
+        }
+      ]
+    },
+    "revive": {
+      "description": "The fallen phrase rises back into the resting interval.",
+      "duration_seconds": 1.1,
+      "peak": 0.27,
+      "events": [
+        {
+          "at_seconds": 0,
+          "instrument": "soft_chime",
+          "note": 57,
+          "duration_seconds": 0.7,
+          "gain": 0.6
+        },
+        {
+          "at_seconds": 0.14,
+          "instrument": "thread_pluck",
+          "note": 64,
+          "duration_seconds": 0.7,
+          "gain": 0.6
+        },
+        {
+          "at_seconds": 0.28,
+          "instrument": "soft_chime",
+          "note": 74,
+          "duration_seconds": 0.81,
+          "gain": 0.8
+        }
+      ]
+    },
+    "loom_restored": {
+      "description": "Both threads join a quiet major-add-nine chord, leaving space for the ending.",
+      "duration_seconds": 2.2,
+      "peak": 0.3,
+      "events": [
+        {
+          "at_seconds": 0,
+          "instrument": "warm_drone",
+          "note": 38,
+          "duration_seconds": 2.18,
+          "gain": 0.5
+        },
+        {
+          "at_seconds": 0.05,
+          "instrument": "soft_bell",
+          "note": 62,
+          "duration_seconds": 2.1,
+          "gain": 0.6
+        },
+        {
+          "at_seconds": 0.24,
+          "instrument": "soft_chime",
+          "note": 66,
+          "duration_seconds": 1.9,
+          "gain": 0.55
+        },
+        {
+          "at_seconds": 0.43,
+          "instrument": "soft_chime",
+          "note": 69,
+          "duration_seconds": 1.7,
+          "gain": 0.5
+        },
+        {
+          "at_seconds": 0.62,
+          "instrument": "soft_bell",
+          "note": 76,
+          "duration_seconds": 1.55,
+          "gain": 0.55
+        }
+      ]
+    }
+  }
+}
