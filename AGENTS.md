@@ -4,7 +4,7 @@
 
 Build the Phase 1 game in MVP.md: an original two-player local co-op action adventure with fixed split screen, two fixed characters and a complete eight-room story. All game content must be authored within this project. Prioritize responsive controls, readable combat and enjoyable cooperation before world size.
 
-M0 is in progress: project/input/audio/room scaffolding and a built-in scenario runner exist. Focused input-routing and room-validation scenarios pass in Godot, but the boot scene, playable session, generated art pack and gameplay acceptance tests are still missing. Read `HANDOFF.md` and `docs/STATUS.md` for next steps and exact evidence. The earlier single-player HTML proof is a separate reference; it is not the co-op implementation. Do not use its tests as evidence for this game.
+M0 is in progress: boot/session/player/cameras and a built-in scenario runner exist. Focused input/room checks and a shared-session physics fixture pass in Godot. Production-content integration, visible play and later gameplay acceptance remain incomplete. Read `HANDOFF.md` and `docs/STATUS.md` for exact evidence and next steps. The earlier single-player HTML proof is a separate reference; it is not the co-op implementation. Do not use its tests as evidence for this game.
 
 ## Context map
 
@@ -62,7 +62,7 @@ python3 tools/check_pack.py
 godot --headless --path . --script tests/run_tests.gd
 ```
 
-The runner currently covers input/room component boundaries. Register classes with the documented editor import command on a fresh checkout; it still reports the missing boot scene. Target interfaces/full-game gates to complete during Phase 1:
+The runner covers input/room boundaries and an explicit physics session fixture. Register classes/resources with the documented editor import command on a fresh checkout. Target interfaces/full-game gates to complete during Phase 1:
 
 ```sh
 python3 tools/generate_assets.py --seed 18427

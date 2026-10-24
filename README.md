@@ -24,13 +24,13 @@ Commands marked *planned* become usable when the milestone that creates them lan
    - `python3 tools/preflight.py` — read-only toolchain check (works now).
    - `python3 tools/check_pack.py` — planning-pack document/link/example check (works now).
    - `python3 tools/validate_content.py`, `python3 tools/generate_assets.py --seed 18427`, `python3 tools/validate_assets.py` *(planned)*.
-   - `godot --headless --path . --editor --import --quit` — register scripts on a fresh checkout; currently reports the missing boot scene, so this is not a complete-game import pass.
+   - `godot --headless --path . --editor --import --quit` — register scripts/resources on a fresh checkout; this does not establish rendered gameplay.
    - `godot --headless --path . --script tests/run_tests.gd` — input/room component scenarios; also available as `bash tools/run_tests.sh`, with optional `-- --filter room_loading`.
 
 ### Current status
 
-- **Current implementation:** M0 is in progress. Project/input/audio/room scaffolding and a built-in scenario runner exist. Two real-engine component scenarios pass for input routing/bindings and room validation; the editor scan registers scripts but reports the missing boot scene. See [runtime evidence](evidence/runtime/commands.md), [HANDOFF.md](HANDOFF.md) and [docs/STATUS.md](docs/STATUS.md).
-- **Known limitations:** the main scene, player/session controllers, cameras, room content, generated assets, saves and export are missing, so the game is not runnable yet. Keyboard + keyboard (WASD / arrows) is the primary input mode to build and verify. Physical input, rendered gameplay and audio remain unverified.
+- **Current implementation:** M0 is in progress. Boot/session/player/cameras now exist with a shared world, owned movement/jump and shared pause. Component scenarios and an actual-physics session fixture pass; the latest editor import is clean. See [runtime evidence](evidence/runtime/commands.md), [HANDOFF.md](HANDOFF.md) and [docs/STATUS.md](docs/STATUS.md).
+- **Known limitations:** production room content and generated assets await Agent 2's packet; normal startup explains missing data rather than running the test fixture. The complete game, saves and export remain unfinished. Keyboard + keyboard is the primary input mode to verify. Physical input, rendered gameplay and audio remain unverified.
 - **Libraries, APIs, and public datasets used:** [Godot Engine](https://godotengine.org/) 4.7.2 (MIT), [Pillow](https://python-pillow.org/) (MIT-CMU), [NumPy](https://numpy.org/) (BSD-3). No game-content packs, stock art, fonts, music or sound libraries: every shipped sprite, tile, glyph, sound and line of dialogue is authored in this repository.
 
 ## Start in this order (design pack)

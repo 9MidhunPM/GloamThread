@@ -6,6 +6,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 1 — runtime and integration
 
+### 2026-10-24T22:32:31+05:30 — Add the shared session and motor before content integration
+
+- Changed: Added boot/session scenes, one authoritative world with two viewports/cameras/HUDs, a manifest image boundary, owned player motor and stable sprite pivot, diagnostic mover, shared focus/pause overlay and an explicit test-only room fixture. Production boot reports missing content rather than substituting test geometry.
+- Why: Complete the runtime side of the first parallel handoff and test real physics/session ownership before merging Agent 2's first packet.
+- Validation: Fresh headless editor import exited 0 without resource/script errors. The real-session fixture smoke scenario passed: one world/room/mover, two independent nonblocking players, stable grounding, diverging cameras, masks, jump and shared pause/resume. The isolated motor/camera harness passed 19 checks. Visual, actual device and production-content checks remain pending.
+- Limitations: This pre-merge checkpoint has no production content/assets yet. The explicit fixture disables art only for engine tests; it cannot satisfy rendered or ordinary-input acceptance. Full manifest/entity validation, one-way drop-through, combat and later milestones are outstanding.
+
 ### 2026-10-24T22:23:11+05:30 — Start runtime verification and harden input/room data
 
 - Changed: Added the built-in scenario runner/filter/timeout and shell wrapper, input and room boundary scenarios, generated script UID metadata and runtime evidence. Validated saved controls and analog remapping, neutralized disconnected inputs, prevented duplicate identical-pad reconnect claims, and latched held movement/actions across flush. Room parsing rejects malformed geometry/fractional coordinates/oversized layouts and unsafe or duplicated paired spawns without indexing invalid rows or treating outside-room sentinels as real floors. Updated current setup/status/command instructions.

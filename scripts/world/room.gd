@@ -21,12 +21,14 @@ var common: Node2D
 var theme_ember: Node2D
 var theme_moss: Node2D
 var entities: Node2D
+var draw_visuals: bool = true
 
 
-static func build(room_definition: RoomDefinition) -> Room:
+static func build(room_definition: RoomDefinition, with_visuals: bool = true) -> Room:
 	var room := Room.new()
 	room.name = "Room_%s" % room_definition.id
 	room.definition = room_definition
+	room.draw_visuals = with_visuals
 	room._build_children()
 	return room
 
@@ -43,13 +45,15 @@ func _build_children() -> void:
 	theme_ember = Node2D.new()
 	theme_ember.name = "ThemeEmber"
 	theme_ember.visibility_layer = VISIBILITY_EMBER
-	theme_ember.add_child(GrayboxSkin.build_layer(definition, "GrayboxEmber", EMBER_TINT))
+	if draw_visuals:
+		theme_ember.add_child(GrayboxSkin.build_layer(definition, "GrayboxEmber", EMBER_TINT))
 	add_child(theme_ember)
 
 	theme_moss = Node2D.new()
 	theme_moss.name = "ThemeMoss"
 	theme_moss.visibility_layer = VISIBILITY_MOSS
-	theme_moss.add_child(GrayboxSkin.build_layer(definition, "GrayboxMoss", MOSS_TINT))
+	if draw_visuals:
+		theme_moss.add_child(GrayboxSkin.build_layer(definition, "GrayboxMoss", MOSS_TINT))
 	add_child(theme_moss)
 
 	entities = Node2D.new()

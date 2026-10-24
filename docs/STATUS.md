@@ -2,6 +2,8 @@
 
 Updated 2026-10-24T22:23:11+05:30. Keep planned work distinct from verified behaviour.
 
+Latest runtime checkpoint (2026-10-24T22:32:31+05:30): boot/session/player/cameras now exist. A fresh editor import is clean, and the shared-session physics fixture passes grounding, owned movement/jump, body overlap, world/masks and pause checks. Production art/content has not yet been merged into this checkpoint, so visible/ordinary-input M0 acceptance is still pending. Older missing-boot observations below describe the preceding checkpoint; the original handoff remains historical.
+
 ## Parallel execution setup
 
 - Two agent briefs define exclusive ownership, shared data formats, diagnostic-first packets and separate branches/checkouts: [runtime/integration](AGENT_1_RUNTIME.md) and [content/assets](AGENT_2_CONTENT.md).
@@ -17,7 +19,7 @@ Updated 2026-10-24T22:23:11+05:30. Keep planned work distinct from verified beha
 ## Implemented, not yet verified (M0 in progress)
 
 - The editor scan registers scripts/classes and generates UID sidecars, but reports missing `scenes/app/boot.tscn` despite exit 0. This is not a clean integrated import/launch pass. Audio/world rendering/collision behaviour remains unverified; room validation is still a partial boundary rather than the complete entity schema.
-- Main scene, player, cameras, split presentation, session, integrated smoke scenario, diagnostic assets and `content/rooms/r00.json` are missing. Continue from the two briefs and original `HANDOFF.md` M0 steps.
+- Boot/session/player/cameras and a test-fixture session smoke now exist; production diagnostic assets and `content/rooms/r00.json` await Agent 2's packet. Continue from the two briefs; completed portions of the original handoff are documented above.
 
 ## Planned; not implemented
 

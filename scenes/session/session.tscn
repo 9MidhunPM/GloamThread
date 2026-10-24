@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/session/game_session.gd" id="1_session"]
+[ext_resource type="Script" path="res://scripts/presentation/split_presentation.gd" id="2_presentation"]
+
+[node name="Session" type="Node"]
+script = ExtResource("1_session")
+
+[node name="Presentation" type="Control" parent="."]
+layout_mode = 0
+offset_right = 960.0
+offset_bottom = 360.0
+script = ExtResource("2_presentation")

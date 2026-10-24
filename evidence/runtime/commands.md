@@ -32,3 +32,7 @@ The temporary isolated input harness also passed 80 checks before integration. I
 ## Still missing or unverified
 
 Boot/session/player/cameras, real room/content/assets from Agent 2, rendered split screen, shared gameplay pause, collision/movement/combat, full entity-schema validation, audio playback, actual keyboard/gamepad ownership, saves, the eight-room route, export/performance and human playtests. Neither these component scenarios nor the import process's zero exit code passes the integrated M0 gate.
+
+## Shared-session checkpoint — 2026-10-24T22:32:31+05:30
+
+The missing boot/session/player/cameras above have now been implemented. `godot --headless --path . --editor --import --quit --log-file /tmp/gloamthread-session-import.log` exited 0 without resource/script errors. `godot --headless --fixed-fps 60 --path . --script tests/run_tests.gd --log-file /tmp/gloamthread-session-smoke.log -- --filter smoke_session` exited 0: the real session and Godot physics passed one shared room/world/mover, two players, grounded feet, independent movement/jump, body overlap, diverging bounded cameras and shared pause/resume. This scenario explicitly uses `tests/fixtures/m0_room.json` and disables art; normal boot never uses that fixture. No rendered or ordinary-input proof is claimed before Agent 2's packet is merged.
