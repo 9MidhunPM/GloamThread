@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "example_only": true,
+  "content_version": "phase1-v1",
+  "profile_ids": ["tavi_fixed", "neri_fixed"],
+  "checkpoint_id": "checkpoint_b",
+  "explored_rooms": ["r00", "r01", "r02", "r03", "r04", "r05"],
+  "team_unlocks": ["threadstep"],
+  "restored_pairs": ["bridge_spindle"],
+  "boss_flags": ["boss_spoolwarden"],
+  "secret_flags": [],
+  "world_flags": ["shortcut_bell"]
+}

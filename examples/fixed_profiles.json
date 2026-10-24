@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "example_only": true,
+  "collider_contract": "courier_v1",
+  "required_team_unlocks_are_separate": true,
+  "profiles": [
+    {"id": "tavi_fixed", "display_name": "Tavi", "visual_bundle_id": "fixed_tavi_v1", "max_hearts": 5, "special_id": "ember_arc", "theme_id": "ember"},
+    {"id": "neri_fixed", "display_name": "Neri", "visual_bundle_id": "fixed_neri_v1", "max_hearts": 4, "special_id": "spore_bolt", "theme_id": "moss"}
+  ]
+}

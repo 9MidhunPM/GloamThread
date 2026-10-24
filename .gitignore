@@ -21,4 +21,13 @@ __pycache__/
 Thumbs.db
 *.log
 
-# Add entries appropriate to your chosen language or framework.
+# Godot 4 editor cache and local state (generated on import; never commit).
+.godot/
+*.tmp
+export_presets.cfg.credentials
+
+# Editor lock files (LibreOffice and similar) left while a document is open.
+.~lock.*#
+
+# Evidence captures can be large; keep curated stills, ignore raw movie dumps.
+evidence/raw/

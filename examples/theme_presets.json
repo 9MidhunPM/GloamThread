@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "example_only": true,
+  "geometry_source": "canonical_room_data",
+  "tile_size": [16, 16],
+  "required_tile_slots": ["solid_top", "solid_fill", "solid_left", "solid_right", "solid_corner", "one_way", "background", "hazard_marker"],
+  "themes": [
+    {"id": "ember", "visibility_bit": 2, "palette": ["#10141C", "#293247", "#41465A", "#737B83", "#D5D2B8", "#F07865", "#FFE0A1", "#4A292B", "#845044", "#BC7852", "#E3AD6A", "#30283E", "#644258", "#A26671", "#F5CC83"], "motifs": ["cooled brass", "woven iron", "floating embers"], "critical_cues": "common_shapes_and_contrast"},
+    {"id": "moss", "visibility_bit": 4, "palette": ["#10141C", "#293247", "#41465A", "#737B83", "#D5D2B8", "#F07865", "#FFE0A1", "#243F38", "#3E6B51", "#73965D", "#BCD184", "#243C48", "#3C6570", "#6BA49B", "#B5E5B4"], "motifs": ["stitched roots", "luminous fungi", "seed motes"], "critical_cues": "common_shapes_and_contrast"}
+  ]
+}
