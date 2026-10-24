@@ -58,6 +58,9 @@ On 10 October 2026, Codex prepared the documentation template this repository st
 
 <!-- overhead-actors -->
 
+- 2026-10-25T01:17:03+05:30 | Codex | Implemented cardinal slash timing and bounded attack buffering, plus real motor/query scenarios. Human review pending. Three isolated actor scenarios pass; checks use stationary enemy fixtures and make no authored-art claim.
+
+
 - 2026-10-25T01:15:39+05:30 | Codex | Added the overhead roll and actual-physics boundary tests. Human review pending. Isolated Godot 4.7.2 actor scenarios pass 2/2; original roll sound/rendered animation remain pending.
 
 

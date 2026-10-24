@@ -198,6 +198,14 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 <!-- overhead-actors -->
 
+### 2026-10-25T01:17:03+05:30 — Directional slash and input buffer
+
+- Changed: Slash now uses cardinal ground-plane reach, six windup/active/recovery ticks, a six-tick press buffer and unique per-swing hit sets; directed effects rotate instead of mirroring.
+- Why: Preserve responsive combos and readable four-direction combat without diagonal or shared-player hit ambiguity.
+- Validation: Isolated Godot 4.7.2 scenarios pass 3/3: four facing directions, exact timing, one hit per swing, no held-button repetition, buffer expiry, independent simultaneous swings and no friendly fire.
+- Limitations: Stationary enemy fixtures; directional original-art review and planar special/enemy migration remain pending.
+
+
 ### 2026-10-25T01:15:39+05:30 — Bounded overhead roll
 
 - Changed: The former jump bit starts a twelve-tick, 36px cardinal roll with six invulnerable ticks and a 36-tick cooldown; damage, restore and pause retain explicit interruption semantics.

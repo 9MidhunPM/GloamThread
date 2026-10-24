@@ -11,6 +11,7 @@ const FACING_VECTORS: Array[Vector2] = [Vector2.DOWN, Vector2.LEFT, Vector2.RIGH
 const DIRECTION_NAMES: Array[String] = ["down", "left", "right", "up"]
 const MAX_SPEED := 110.0
 const MOVE_ACCEL := 900.0
+const ATTACK_BUFFER_TICKS := 6
 const DASH_SPEED := 360.0
 const DASH_TICKS := 12
 const DASH_COOLDOWN_TICKS := 30
@@ -57,6 +58,8 @@ var _attack_kind: String = ""
 var _attack_tick: int = 0
 var _attack_id: int = 0
 var _attack_facing: int = 1
+var _attack_direction := Vector2.DOWN
+var _attack_buffer_ticks: int = 0
 var _hit_targets: Dictionary = {}
 var _catalog: AssetCatalog
 var _progress: TeamProgress
@@ -119,6 +122,8 @@ func _physics_process(delta: float) -> void:
 		return
 	var commands: CommandSnapshot = InputRouter.snapshot(slot_index)
 	var movement := Vector2(commands.move_x, commands.move_y).limit_length(1.0)
+	if commands.just_pressed(Action.ATTACK):
+		_attack_buffer_ticks = ATTACK_BUFFER_TICKS
 	if _attack_kind.is_empty() and _hurt_ticks == 0 and dash_ticks == 0 and roll_ticks == 0:
 		_update_facing(movement)
 		if commands.just_pressed(Action.DASH) and _can_dash():
@@ -127,7 +132,7 @@ func _physics_process(delta: float) -> void:
 			_start_roll()
 		elif commands.just_pressed(Action.SPECIAL) and special_cooldown_ticks == 0:
 			_start_attack(special_id)
-		elif commands.just_pressed(Action.ATTACK):
+		elif _attack_buffer_ticks > 0:
 			_start_attack("slash")
 	if dash_ticks > 0:
 		velocity = facing_vector * DASH_SPEED
@@ -173,6 +178,7 @@ func reset_at(feet_position: Vector2) -> void:
 	global_position = feet_position
 	velocity = Vector2.ZERO
 	_attack_kind = ""
+	_attack_buffer_ticks = 0
 	_hit_targets.clear()
 	dash_ticks = 0
 	roll_ticks = 0
@@ -218,6 +224,7 @@ func take_hit(amount: int, knockback: Vector2 = Vector2.ZERO) -> bool:
 	immunity_ticks = DAMAGE_IMMUNITY_TICKS
 	_hurt_ticks = 12
 	_attack_kind = ""
+	_attack_buffer_ticks = 0
 	dash_ticks = 0
 	roll_ticks = 0
 	velocity = knockback
@@ -237,6 +244,7 @@ func hurt_rect() -> Rect2:
 
 
 func _tick_cooldowns() -> void:
+	_attack_buffer_ticks = maxi(0, _attack_buffer_ticks - 1)
 	immunity_ticks = maxi(0, immunity_ticks - 1)
 	special_cooldown_ticks = maxi(0, special_cooldown_ticks - 1)
 	dash_cooldown_ticks = maxi(0, dash_cooldown_ticks - 1)
@@ -267,7 +275,7 @@ func _start_dash(movement: Vector2) -> void:
 	dash_ticks = DASH_TICKS
 	dash_cooldown_ticks = DASH_COOLDOWN_TICKS
 	AudioDirector.play_cue(&"dash")
-	CombatQuery.effect(self, _catalog, "effect_dash_v1", global_position, -1 if facing == Facing.LEFT else 1)
+	CombatQuery.effect(self, _catalog, "effect_dash_v1", global_position, facing_vector)
 
 
 func _start_attack(kind: String) -> void:
@@ -275,6 +283,8 @@ func _start_attack(kind: String) -> void:
 	_attack_tick = 0
 	_attack_id = CombatQuery.next_attack_id()
 	_attack_facing = -1 if facing == Facing.LEFT else 1
+	_attack_direction = facing_vector
+	_attack_buffer_ticks = 0
 	_hit_targets.clear()
 	if kind != "slash":
 		special_cooldown_ticks = 90 if kind == "ember_arc" else 75
@@ -287,7 +297,7 @@ func _update_attack() -> void:
 	_attack_tick += 1
 	var windup := 6 if _attack_kind == "slash" else 12
 	var active := 6 if _attack_kind == "slash" else 8
-	var total := 24 if _attack_kind == "slash" else 36
+	var total := 18 if _attack_kind == "slash" else 36
 	if _attack_kind == "spore_bolt":
 		if _attack_tick == 8:
 			var bolt := SporeBolt.new()
@@ -298,12 +308,14 @@ func _update_attack() -> void:
 			get_parent().add_child(bolt)
 			bolt.global_position = global_position + Vector2(_attack_facing * 10, -18)
 		total = 20
-	elif _attack_tick >= windup and _attack_tick < windup + active:
+	elif _attack_tick > windup and _attack_tick <= windup + active:
 		var reach := 32.0 if _attack_kind == "slash" else 48.0
 		var height := 30.0 if _attack_kind == "slash" else 40.0
 		var rectangle := Rect2(global_position + Vector2(0.0 if _attack_facing > 0 else -reach, -height), Vector2(reach, height))
-		if _attack_tick == windup:
-			CombatQuery.effect(self, _catalog, "effect_slash_v1" if _attack_kind == "slash" else "effect_ember_arc_v1", global_position, _attack_facing)
+		if _attack_kind == "slash":
+			rectangle = CombatQuery.directional_rect(hurt_rect().get_center(), _attack_direction, 32.0, 28.0)
+		if _attack_tick == windup + 1:
+			CombatQuery.effect(self, _catalog, "effect_slash_v1" if _attack_kind == "slash" else "effect_ember_arc_v1", global_position, _attack_direction)
 		for enemy in CombatQuery.enemies_in(self, rectangle):
 			var target_id := enemy.get_instance_id()
 			if _hit_targets.has(target_id):
