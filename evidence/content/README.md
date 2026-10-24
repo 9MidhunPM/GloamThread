@@ -164,3 +164,41 @@ notified to preserve newer runtime facts when merging. `tools/check_pack.py` now
 rejects inherited event names/registration references in active guidance; it first
 failed on the old README and passed after correction. This gate and link checks
 do not add engine or gameplay evidence.
+
+## Content QA follow-up
+
+The next content review reproduced invalid bundles that still passed after their
+hashes were updated: blank terrain in both themes, invisible UI, duplicated
+couriers/background layers and silent PCM. Validation now checks frozen canonical
+terrain alpha masks, visible images/frames, decoded visible-pixel differences and
+nonzero audio signal. A further regression caught an individually transparent
+background layer; that case first failed as an accepted bad bundle, then passed
+after the visibility check. Intentional animation-frame reuse remains permitted.
+
+Room QA widens/insets east approaches in r02/r06, raises r03's optional hazard
+shelf for 80 px of ground-combat clearance, and gives r06's safe catch bed a
+west-only recovery shelf. `traversal_requests.md` records coordinates and the
+remaining need for measured Threadstep/ordinary-input verification. Entities,
+spawns, exits and permanent progression flags are preserved.
+
+Actual commands and outcomes:
+
+```sh
+python3 -m unittest discover -s tools/tests -p 'test_*.py'
+python3 tools/validate_assets.py
+python3 tools/validate_content.py
+python3 tools/gen/preview.py
+python3 tools/check_pack.py
+git diff --check
+```
+
+All **79 tests PASS** (37 asset, 29 content, 11 audio, two generator). Both full
+validators PASS; event/document/link/example checks and whitespace PASS. A fresh
+temporary diagnostic generation/validation also passed during validator review.
+The preview helper now writes nine labelled source-art views/sheets, including
+the raised hazard, east approaches and catch bed, with room-height-aware framing.
+These were inspected at native resolution; they remain **authoring-only**.
+
+No shipped asset recipe/output changed, so the prior 47-output deterministic
+rebuild record remains applicable. No engine, listening, controller, performance,
+export or human-playtest result is added by this follow-up.

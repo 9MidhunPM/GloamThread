@@ -18,6 +18,23 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def tile_visible(tile_id, x, y):
+    """Small authored fixture silhouettes, independent of the validator masks."""
+    if tile_id.startswith("corner_outer_"):
+        corner = tile_id.rsplit("_", 1)[1]
+        xx, yy = (15 - x if corner[1] == "r" else x), (15 - y if corner[0] == "b" else y)
+        return xx + yy > 3
+    if tile_id.startswith(("one_way_", "bridge_")):
+        part = tile_id.rsplit("_", 1)[1]
+        left, right = (2 if part in ("left", "single") else 0), (13 if part in ("right", "single") else 15)
+        return 1 <= y <= 4 and left <= x <= right or y == 5 and left + 2 <= x <= right - 2
+    if tile_id.startswith("hazard_"):
+        rows = (0, 0, 0, 0, 0x1010, 0x1010, 0x3838, 0x3838, 0x3838, 0x3838,
+                0x7c7c, 0x7c7c, 0x7c7c, 0x7e7e, 0xfefe, 0xffff)
+        return bool(rows[y] & (1 << (15 - x)))
+    return True
+
+
 class AssetValidationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -66,8 +83,19 @@ class AssetValidationTests(unittest.TestCase):
         path.parent.mkdir(parents=True, exist_ok=True)
         image = Image.new("RGBA", size)
         if frames:
-            for x, y, width, height in frames:
-                image.paste((120, 170, 90, 255), (x, y, x + width, y + height))
+            colour = (85, 130, 150, 255) if identifier == "fixed_neri_v1" else (120, 170, 90, 255)
+            for index, (x, y, width, height) in enumerate(frames):
+                if identifier.startswith("terrain_") or identifier == "diagnostic_terrain_v1":
+                    for yy in range(height):
+                        for xx in range(width):
+                            if tile_visible(validator.TILE_IDS[index], xx, yy):
+                                image.putpixel((x + xx, y + yy), colour)
+                else:
+                    image.paste(colour, (x, y, x + width, y + height))
+        if identifier.startswith("background_"):
+            layer = identifier.rsplit("_", 2)[1]
+            point = {"far": (1, 1), "middle": (2, 2), "near": (3, 3)}[layer]
+            image.putpixel(point, (80, 120, 140, 255))
         if identifier == "font_texture_v1":
             for i in range(1, 96):
                 image.putpixel(((i % 16) * 6, (i // 16) * 8), (255, 255, 255, 255))
@@ -249,7 +277,8 @@ class AssetValidationTests(unittest.TestCase):
                 path = self.root / f"assets/generated/full/{family}_{name}.wav"
                 with wave.open(str(path), "wb") as output:
                     output.setparams((channels, 2, 44100, 0, "NONE", "not compressed"))
-                    output.writeframes(b"\x00\x00" * 441 * channels)
+                    pcm = b"".join((256 if i % 4 == 1 else -256 if i % 4 == 3 else 0).to_bytes(2, "little", signed=True) * channels for i in range(441))
+                    output.writeframes(pcm)
                 loops = family == "music" and name != "ending"
                 record = {"id": f"{family}_{name}", "kind": family, "path": str(path.relative_to(self.root)),
                           "sha256": digest(path), "diagnostic": False, "sources": [self.source],
@@ -260,6 +289,111 @@ class AssetValidationTests(unittest.TestCase):
 
     def test_full_inventory_passes(self):
         self.full_fixture()
+        self.assertEqual(self.validate(), [])
+
+    def test_equal_but_erased_terrain_masks_are_rejected(self):
+        self.full_fixture()
+        for theme in ("ember", "moss"):
+            record = next(record for record in self.records if record["id"] == f"terrain_{theme}_v1")
+            path = self.root / record["path"]
+            Image.new("RGBA", tuple(record["size"])).save(path)
+            record["sha256"] = digest(path)
+        self.assert_error("canonical_mask")
+
+    def test_equal_theme_edge_damage_is_rejected(self):
+        self.full_fixture()
+        for theme in ("ember", "moss"):
+            record = next(record for record in self.records if record["id"] == f"terrain_{theme}_v1")
+            path = self.root / record["path"]
+            image = Image.open(path).convert("RGBA")
+            x, y, _, _ = record["frames"][record["tile_ids"].index("solid_top")]
+            image.putpixel((x + 8, y), (0, 0, 0, 0))
+            image.save(path)
+            record["sha256"] = digest(path)
+        self.assert_error("canonical physical silhouette")
+
+    def test_ui_icons_must_each_be_visible(self):
+        self.full_fixture()
+        record = next(record for record in self.records if record["id"] == "ui_v1")
+        path = self.root / record["path"]
+        image = Image.open(path).convert("RGBA")
+        x, y, width, height = record["frames"][3]
+        image.paste((0, 0, 0, 0), (x, y, x + width, y + height))
+        image.save(path)
+        record["sha256"] = digest(path)
+        self.assert_error("ui_v1.frames[3].visibility")
+        Image.new("RGBA", tuple(record["size"])).save(path)
+        record["sha256"] = digest(path)
+        self.assert_error("ui_v1.frames[19].visibility")
+
+    def test_sprite_and_effect_frames_must_be_visible(self):
+        self.full_fixture()
+        for identifier in ("fixed_tavi_v1", "effect_slash_v1"):
+            record = next(record for record in self.records if record["id"] == identifier)
+            path = self.root / record["path"]
+            image = Image.open(path).convert("RGBA")
+            x, y, width, height = record["frames"][0]
+            image.paste((0, 0, 0, 0), (x, y, x + width, y + height))
+            image.save(path)
+            record["sha256"] = digest(path)
+            self.assert_error(f"{identifier}.frames[0].visibility")
+
+    def test_couriers_cannot_copy_decoded_pixels_even_with_different_png_bytes(self):
+        self.full_fixture()
+        tavi = next(record for record in self.records if record["id"] == "fixed_tavi_v1")
+        neri = next(record for record in self.records if record["id"] == "fixed_neri_v1")
+        path = self.root / neri["path"]
+        Image.open(self.root / tavi["path"]).convert("RGBA").save(path, compress_level=0)
+        neri["sha256"] = digest(path)
+        self.assertNotEqual(neri["sha256"], tavi["sha256"])
+        self.assert_error("couriers.visuals")
+
+    def test_invisible_rgb_changes_do_not_make_couriers_distinct(self):
+        self.full_fixture()
+        tavi = next(record for record in self.records if record["id"] == "fixed_tavi_v1")
+        neri = next(record for record in self.records if record["id"] == "fixed_neri_v1")
+        path = self.root / neri["path"]
+        image = Image.open(self.root / tavi["path"]).convert("RGBA")
+        image.putpixel((0, 0), (40, 80, 120, 0))
+        image.save(path)
+        neri["sha256"] = digest(path)
+        self.assertNotEqual(neri["sha256"], tavi["sha256"])
+        self.assert_error("couriers.visuals")
+
+    def test_background_layers_cannot_copy_decoded_compositions(self):
+        self.full_fixture()
+        far = next(record for record in self.records if record["id"] == "background_ember_far_v1")
+        middle = next(record for record in self.records if record["id"] == "background_ember_middle_v1")
+        path = self.root / middle["path"]
+        Image.open(self.root / far["path"]).convert("RGBA").save(path, compress_level=0)
+        middle["sha256"] = digest(path)
+        self.assertNotEqual(middle["sha256"], far["sha256"])
+        self.assert_error("distinct decoded compositions")
+
+    def test_background_layer_cannot_be_fully_transparent(self):
+        self.full_fixture()
+        record = next(record for record in self.records if record["id"] == "background_moss_middle_v1")
+        path = self.root / record["path"]
+        Image.new("RGBA", tuple(record["size"])).save(path)
+        record["sha256"] = digest(path)
+        self.assert_error("background_moss_middle_v1.visibility")
+
+    def test_silent_or_near_silent_audio_is_rejected(self):
+        self.full_fixture()
+        record = next(record for record in self.records if record["id"] == "sfx_jump")
+        path = self.root / record["path"]
+        for value in (0, 1):
+            with self.subTest(sample=value):
+                with wave.open(str(path), "wb") as output:
+                    output.setparams((1, 2, 44100, 0, "NONE", "not compressed"))
+                    output.writeframes(value.to_bytes(2, "little", signed=True) * 441)
+                record["sha256"] = digest(path)
+                self.assert_error("signal above the 0.001")
+
+    def test_intentional_animation_frame_repeats_remain_valid(self):
+        self.full_fixture()
+        record = next(record for record in self.records if record["id"] == "fixed_tavi_v1")
+        record["animations"]["idle"]["frames"] = [0, 0, 0, 0]
         self.assertEqual(self.validate(), [])
 
     def test_full_marker_and_directory_cannot_hide_diagnostic_dependency(self):

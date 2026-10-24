@@ -35,7 +35,7 @@ The content branch supports the Python commands below. Launch and engine scenari
 
 ### Current status
 
-- **Content branch:** eight authored rooms, fixed profiles, dialogue, 47 original manifested art/audio/font assets and the complete Python pipeline. Both full validators and 69 Python tests passed at delivery; two seed-18427 rebuilds matched. See [content evidence](evidence/content/README.md).
+- **Content branch:** eight authored rooms, fixed profiles, dialogue, 47 original manifested art/audio/font assets and the complete Python pipeline. Both full validators and 79 Python tests pass after content QA; two seed-18427 rebuilds matched. See [content evidence](evidence/content/README.md).
 - **Runtime branch:** Agent 1's `b1ff5d6` checkpoint integrates the diagnostic packet with one shared world, two owned-input couriers, split views, engine scenarios and measured movement. Its first window capture is a diagnostic snapshot. Production content integration remains separate from these results.
 - **Known limitations:** the complete combat/recovery/cooperation/boss/dash/loom/save loop is not accepted. Physical room traversal, animation, listening, ordinary-input playthrough, gamepad hardware, export, performance and human playtests remain pending. Keyboard + keyboard is the primary input mode. [STATUS.md](docs/STATUS.md) records the current boundaries.
 - **Libraries, APIs, and public datasets used:** [Godot Engine](https://godotengine.org/) 4.7.2 (MIT), [Pillow](https://python-pillow.org/) (MIT-CMU), [NumPy](https://numpy.org/) (BSD-3). No game-content packs, stock art, fonts, music or sound libraries: every shipped sprite, tile, glyph, sound and line of dialogue is authored in this repository.

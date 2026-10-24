@@ -15,6 +15,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 2 — content and assets
 
+### 2026-10-24T23:06:44+05:30 — Tighten asset acceptance and improve room approaches
+
+- Changed: Reject invisible images/frames, changed canonical terrain silhouettes, duplicated decoded courier/background pixels and silent or near-silent PCM, with regression fixtures that update hashes correctly. Widened/inset east footholds in r02/r06, raised r03's optional hazard shelf for 80 px combat clearance, and restricted r06's catch shelf to westward recovery. Expanded labelled authoring previews and updated current content evidence.
+- Why: Manifest counts and matching hashes previously accepted visually empty/cloned bundles. Layout review also exposed narrow boundary approaches, a 48 px combat ceiling and a lower-route ordinary-jump bypass.
+- Validation: All 79 Python tests PASS, both full validators PASS, temporary diagnostic generation/validation PASS, pack/event/link checks and diff whitespace PASS. The transparent-background regression first reproduced the failure, then passed after the fix. Native authoring views inspected; generated asset recipes/outputs remain unchanged and earlier deterministic hashes still apply.
+- Limitations: Geometry corrections use measured ordinary movement as a constraint; real both-character traversal, Threadstep reach, combat readability, listening and the remaining runtime/human MVP gates remain unverified. Source-art views exercise no physics.
+
 ### 2026-10-24T23:00:02+05:30 — Correct the project documentation for Devin Hack Kochi
 
 - Changed: Aligned README, event guidance, agent instructions, submission checklist, AI record and PR checklist with the user-linked corrected template at `cb4db78169a8d199b43b077fbcc8f2ff4b798a14`. Removed inherited logistics, participation limits and credit promises; clarified provider-neutral event guidance and the project's own documentation conventions. Refreshed stale setup/status/prompt references against the separate content delivery and runtime checkpoint. Added a read-only event-consistency gate to `tools/check_pack.py`.
