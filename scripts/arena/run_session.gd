@@ -2,6 +2,9 @@ class_name ArenaRunSession
 extends Node2D
 ## The only owner of wave transitions, wallets, purchases and run outcomes.
 const Identity := preload("res://scripts/forge/fighter_identity.gd")
+const COUNTDOWN_TICKS := 45
+const CLEAR_TICKS := 24
+const SPAWN_WARNING_TICKS := 24
 
 signal phase_changed(value: String)
 signal changed
@@ -139,11 +142,11 @@ func _physics_process(_delta: float) -> void:
 	if phase in ["combat", "shop", "countdown", "clear"]:
 		_process_discoveries()
 	if phase == "countdown":
-		if phase_ticks >= 150:
+		if phase_ticks >= COUNTDOWN_TICKS:
 			_set_phase("combat")
 		return
 	if phase == "clear":
-		if phase_ticks >= 75:
+		if phase_ticks >= CLEAR_TICKS:
 			if wave == 20 and not endless:
 				_set_phase("victory")
 			else:
@@ -271,7 +274,7 @@ func _process_spawns() -> void:
 				var replacement := _choose_spawn(warning)
 				if not replacement.is_empty():
 					warning.position = replacement.position
-				warning.ticks = 42 if not replacement.is_empty() else 12
+				warning.ticks = SPAWN_WARNING_TICKS if not replacement.is_empty() else 12
 				continue
 			telegraphs.remove_at(i)
 	_spawn_ticks -= 1
@@ -279,18 +282,27 @@ func _process_spawns() -> void:
 	for warning: Dictionary in telegraphs:
 		if warning.get("kind", "spawn") == "spawn":
 			arriving += 1
-	if _spawn_ticks > 0 or spawn_queue.is_empty() or living_enemies() + arriving >= director.live_cap(wave):
+	var living := living_enemies()
+	# Fast kills immediately release the cadence gate; warnings still give players
+	# time to move and pending arrivals still consume the single team-wide cap.
+	if living == 0 and arriving == 0:
+		_spawn_ticks = 0
+	if _spawn_ticks > 0 or spawn_queue.is_empty() or living + arriving >= director.live_cap(wave):
 		return
-	var record: Dictionary = spawn_queue[0]
-	var selected := _choose_spawn(record)
-	if selected.is_empty():
-		return
-	spawn_queue.pop_front()
-	record.position = selected.position
-	record.ticks = 42
-	record.duration = 42
-	telegraphs.append(record)
-	_spawn_ticks = int(wave_record.get("interval_ticks", 30))
+	var batch := mini(3 if living == 0 else 1, director.live_cap(wave) - living - arriving)
+	for _index in batch:
+		if spawn_queue.is_empty():
+			break
+		var record: Dictionary = spawn_queue[0]
+		var selected := _choose_spawn(record)
+		if selected.is_empty():
+			break
+		spawn_queue.pop_front()
+		record.position = selected.position
+		record.ticks = SPAWN_WARNING_TICKS
+		record.duration = SPAWN_WARNING_TICKS
+		telegraphs.append(record)
+	_spawn_ticks = mini(18, int(wave_record.get("interval_ticks", 30)))
 
 
 func _choose_spawn(record: Dictionary) -> Dictionary:
@@ -303,18 +315,29 @@ func _choose_spawn(record: Dictionary) -> Dictionary:
 	var target := living[(_spawn_serial + telegraphs.size()) % living.size()]
 	var candidates: Array = map.spawn_candidates(target.position, 720.0)
 	var choices: Array[Vector2] = []
-	var outer: Array[Vector2] = []
+	var near_lane: Array[Vector2] = []
+	var visible_lane: Array[Vector2] = []
 	for point: Vector2 in candidates:
 		var at := point - Vector2(0, 100) if str(record.get("role", "")) == "flyer" else point
 		if not _spawn_clear(at, str(record.get("boss", "")) != "", 96):
 			continue
+		var reserved := false
+		for warning: Dictionary in telegraphs:
+			if at.distance_squared_to(warning.position) < 48.0 * 48.0:
+				reserved = true
+		if reserved:
+			continue
 		choices.append(at)
-		var inside := false
-		for view: Rect2 in visible_world_rects():
-			inside = inside or view.grow(-54).has_point(at)
-		if not inside:
-			outer.append(at)
-	var pool := outer if not outer.is_empty() else choices
+		# Cave anchors can be close in distance but take a long route to the
+		# player. Prefer the current fighting lane and visible, warned arrivals.
+		var feet := point
+		if absf(feet.y - target.position.y) <= 96 and absf(feet.x - target.position.x) <= 420:
+			near_lane.append(at)
+			for view: Rect2 in visible_world_rects():
+				if view.has_point(at - Vector2(0, 20)):
+					visible_lane.append(at)
+					break
+	var pool := visible_lane if not visible_lane.is_empty() else (near_lane if not near_lane.is_empty() else choices)
 	return {} if pool.is_empty() else {"position": pool[_spawn_rng.randi_range(0, pool.size() - 1)]}
 
 
@@ -335,7 +358,7 @@ func _spawn_clear(at: Vector2, boss: bool, clearance: float = 96.0) -> bool:
 
 func _enemy_visible(enemy: ArenaEnemy) -> bool:
 	for rect: Rect2 in visible_world_rects():
-		if rect.grow(96).intersects(enemy.get_hurt_rect()):
+		if rect.grow(16).intersects(enemy.get_hurt_rect()):
 			return true
 	return false
 
@@ -344,12 +367,9 @@ func _process_pursuit() -> void:
 	for enemy: ArenaEnemy in enemies:
 		if not is_instance_valid(enemy) or enemy.dead:
 			continue
-		var distance := INF
-		for fighter: ArenaFighter in fighters:
-			if not fighter.downed:
-				distance = minf(distance, enemy.position.distance_to(fighter.position))
-		var far := 1280.0 if enemy.boss_id != "" else 960.0
-		if distance <= far or _enemy_visible(enemy):
+		# Nearby enemies hidden in another elevation must also catch up. The old
+		# distance gate excluded every initial spawn (720px) from pursuit (960px).
+		if _enemy_visible(enemy):
 			_unseen_ticks[enemy.spawn_id] = 0
 			_cancel_pursuit(enemy)
 			continue
@@ -402,6 +422,7 @@ func _on_enemy_defeated(enemy: Node2D, source_slot: int) -> void:
 	if phase != "combat" or _paid.has(enemy.spawn_id):
 		return
 	_paid[enemy.spawn_id] = true
+	_spawn_ticks = mini(_spawn_ticks, 1)
 	if source_slot >= 0 and source_slot < player_states.size():
 		var amount := 15 if not str(enemy.boss_id).is_empty() else (4 if bool(enemy.get("elite")) else 1)
 		player_states[source_slot].coins += amount

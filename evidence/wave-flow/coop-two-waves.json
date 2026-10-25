@@ -1,0 +1,291 @@
+{
+	"bot": "State-aware bot reads target positions and attack phases, then uses normal move/jump/attack/special/dodge/revive commands. Random critical hits and shop rolls remain enabled.",
+	"captures": [],
+	"display": "headless",
+	"downs": [
+		0,
+		0
+	],
+	"engine": "4.7.2-stable (arch_linux)",
+	"engine_errors": [],
+	"errors": [],
+	"explorations": [
+		{
+			"after_wave": 1,
+			"positions": [
+				[
+					576.913269042969,
+					319.925262451172
+				],
+				[
+					1767.17431640625,
+					319.925262451172
+				]
+			],
+			"reached": true,
+			"regions": 1,
+			"ticks": 616
+		}
+	],
+	"final_actors": [
+		{
+			"health": 100.0,
+			"max_health": 100.0,
+			"position": [
+				1700.70239257812,
+				319.925262451172
+			],
+			"slot": 0,
+			"stats": {
+				"area": 1.25,
+				"attack_speed": 1.0,
+				"burn": 1.0,
+				"chain": 0.0,
+				"crit": 0.05,
+				"damage": 12.0,
+				"dodge_cooldown": 48.0,
+				"freeze": 0.0,
+				"lifesteal": 0.025,
+				"max_health": 100.0,
+				"move_speed": 145.0,
+				"pierce": 0.0,
+				"projectile_count": 1.0,
+				"regen": 0.0,
+				"special_cooldown": 300.0,
+				"stagger": 0.0,
+				"thorns": 0.0
+			}
+		},
+		{
+			"health": 100.0,
+			"max_health": 100.0,
+			"position": [
+				1837.57055664062,
+				319.925262451172
+			],
+			"slot": 1,
+			"stats": {
+				"area": 1.0,
+				"attack_speed": 1.0,
+				"burn": 0.0,
+				"chain": 0.0,
+				"crit": 0.05,
+				"damage": 10.0,
+				"dodge_cooldown": 48.0,
+				"freeze": 0.0,
+				"lifesteal": 0.0,
+				"max_health": 100.0,
+				"move_speed": 145.0,
+				"pierce": 0.0,
+				"projectile_count": 1.0,
+				"regen": 0.85,
+				"special_cooldown": 300.0,
+				"stagger": 0.0,
+				"thorns": 0.0
+			}
+		}
+	],
+	"final_phase": "clear",
+	"final_summary": {
+		"best_combo": 13,
+		"chunks": 4,
+		"discoveries": 1,
+		"endless": false,
+		"loot": 4,
+		"players": [
+			{
+				"coins": 23,
+				"kills": 17,
+				"kit": "ember",
+				"spent": 19,
+				"upgrades": {
+					"bellows": 1,
+					"blood_bloom": 1
+				}
+			},
+			{
+				"coins": 27,
+				"kills": 10,
+				"kit": "nature",
+				"spent": 8,
+				"upgrades": {
+					"field_stitch": 1
+				}
+			}
+		],
+		"seconds": 26,
+		"seed": 18427,
+		"wave": 2,
+		"won": false
+	},
+	"fixed_fps": false,
+	"furthest_x": [
+		1700.70239257812,
+		2007.80297851562
+	],
+	"human_playtest": false,
+	"input": "Synthetic owned keyboard snapshots; no actor position, health, damage, currency, timer, or progression writes.",
+	"kits": [
+		"ember",
+		"nature"
+	],
+	"landmarks_discovered": 1,
+	"loot_collected": 4,
+	"map_regions": 1,
+	"menu": "Production App title/lobby/start, actual shop offers and purchase/ready methods.",
+	"physics_hz": 60,
+	"players": 2,
+	"purchases": [
+		{
+			"after_wave": 1,
+			"id": "blood_bloom",
+			"slot": 0
+		},
+		{
+			"after_wave": 1,
+			"id": "bellows",
+			"slot": 0
+		},
+		{
+			"after_wave": 1,
+			"id": "field_stitch",
+			"slot": 1
+		}
+	],
+	"selected_fighters": [
+		{
+			"id": "kiln-fox-ai",
+			"manifest_sha256": "d00efc670eb8b885b3ba87ff3d20d70797158dda44d3aeb9a7553699c7fdc8a5"
+		},
+		{
+			"id": "thistlepaw",
+			"manifest_sha256": "39ac1fc34a16f39a24e6422c180c357485b7a40c2188b9097dfe1f7b718ec7bb"
+		}
+	],
+	"source_hashes": {
+		"res://content/arena/catalog.json": "0837d9a9bbae2688190b0b0bc62979a3f454b3e36078c379d05db87714ac8fab",
+		"res://content/arena/world.json": "d624d040b1a1b92b03a06e446bd7fb4999085684fac411221f13c928d4034251",
+		"res://scripts/arena/actors/arena_enemy.gd": "134207dc4c3f52a80bbaec9e7c466593aa5897a32c43b3e4c682031edf28b070",
+		"res://scripts/arena/actors/arena_fighter.gd": "8074c520be7b2697cd9ddce95a711614e2f1375b192f17003060fdf9d29197ca",
+		"res://scripts/arena/actors/arena_projectile.gd": "1943e25ea841957409e7139e7c902d6afd5670272af98840d8d31b6745de66f6",
+		"res://scripts/arena/arena_map.gd": "3f1206616aad23fe94a56121101ea1ca9eef0bbdd999eb22d47b5894f5cd6f26",
+		"res://scripts/arena/arena_player_state.gd": "ba5d4a3602f4367de0c261dc9b0876fa0eb4aaae8359a670054ff775c0f0cff0",
+		"res://scripts/arena/arena_presentation.gd": "aa5f86e00db6649475691f3eeafdbd6b558e639d64f20a8b0bbfd42e16e0c7de",
+		"res://scripts/arena/run_session.gd": "8fc1022ba75c502b3ea0ed28c156ba77df132f2c834e729c4d845ef6f00a9dd3",
+		"res://tests/arena/route_driver.gd": "7705b1dab6fd96d8e702c22ac8fbaf7cdf9aa830d447fc42e2e3fa5f8ecf05d8"
+	},
+	"split_changes": [
+		{
+			"split": true,
+			"tick": 579,
+			"wave": 1
+		},
+		{
+			"split": false,
+			"tick": 624,
+			"wave": 1
+		},
+		{
+			"split": true,
+			"tick": 907,
+			"wave": 1
+		},
+		{
+			"split": false,
+			"tick": 2240,
+			"wave": 2
+		}
+	],
+	"success": true,
+	"target_waves": 2,
+	"ticks": 2267,
+	"wall_seconds": 3.156,
+	"waves": [
+		{
+			"boss": "",
+			"health": [
+				93.0,
+				100.0
+			],
+			"observed_health_loss": [
+				15.0,
+				0.0
+			],
+			"summary": {
+				"best_combo": 12,
+				"chunks": 4,
+				"discoveries": 0,
+				"endless": false,
+				"loot": 1,
+				"players": [
+					{
+						"coins": 20,
+						"kills": 9,
+						"kit": "ember",
+						"spent": 0,
+						"upgrades": {}
+					},
+					{
+						"coins": 14,
+						"kills": 3,
+						"kit": "nature",
+						"spent": 0,
+						"upgrades": {}
+					}
+				],
+				"seconds": 8,
+				"seed": 18427,
+				"wave": 1,
+				"won": false
+			},
+			"ticks": 553,
+			"wave": 1
+		},
+		{
+			"boss": "",
+			"health": [
+				100.0,
+				100.0
+			],
+			"observed_health_loss": [
+				6.20999999999999,
+				27.9141666666667
+			],
+			"summary": {
+				"best_combo": 13,
+				"chunks": 4,
+				"discoveries": 1,
+				"endless": false,
+				"loot": 4,
+				"players": [
+					{
+						"coins": 23,
+						"kills": 17,
+						"kit": "ember",
+						"spent": 19,
+						"upgrades": {
+							"bellows": 1,
+							"blood_bloom": 1
+						}
+					},
+					{
+						"coins": 27,
+						"kills": 10,
+						"kit": "nature",
+						"spent": 8,
+						"upgrades": {
+							"field_stitch": 1
+						}
+					}
+				],
+				"seconds": 26,
+				"seed": 18427,
+				"wave": 2,
+				"won": false
+			},
+			"ticks": 1073,
+			"wave": 2
+		}
+	],
+	"world_seed": 18427
+}

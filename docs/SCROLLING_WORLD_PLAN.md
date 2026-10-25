@@ -32,8 +32,8 @@ Session/actor boundary (integrator):
 
 - `movement_allowed(slot:int)->bool` supports traversal combat/countdown/clear/intermission, except an open owned shop. `world_bounds`, `safe_position(at)`, `navigation_step(from,to)`, `visible_world_rects` replace fixed640px assumptions. Actor fixture will expose these too.
 - Use phase `shop` for the free intermission to preserve existing transaction interface; shop_open controls per-player overlay/input independently. No physics-tree pause for personal shops. Real pause/device loss still pauses shared simulation.
-- Spawns sample reachable anchors near living players, minimum96px clearance from all players,42tick telegraph, existing team-wide caps. Delay when no safe anchor exists. Separate deterministic RNG streams for map/spawn/loot/shop.
-- Offscreen catch-up: ordinary enemy farther than960px from every living player and unseen in expanded active rects for180ticks; boss farther than1280px for300ticks. Warn42ordinary/90boss ticks before relocation to a safe nearby anchor, cancel if visible/dead, retain identity/HP/status/reward ownership. Reposition into recovery, never duplicate an enemy.
+- Spawns prefer visible anchors on the living target's current elevation (within96px vertically/420px horizontally), with safe nearby fallbacks. Minimum96px player clearance and24tick warnings remain mandatory; pending warnings consume team-wide caps and reserve48px around their positions. Empty fields schedule up to three arrivals, normal cadence is at most18ticks, and accepted kills release the cadence gate. Delay when no safe anchor exists. Separate deterministic RNG streams for map/spawn/loot/shop. Countdown45ticks; clear celebration24ticks; personal shops remain untimed with all active slots Ready.
+- Offscreen catch-up: ordinary enemy unseen in active camera rects with a16px edge margin for180ticks; boss for300ticks. No minimum distance: nearby cave stragglers must also catch up. Warn42ordinary/90boss ticks before relocation to a safe nearby anchor, cancel if visible/dead, retain identity/HP/status/reward ownership. Reposition into recovery, never duplicate an enemy.
 
 ## Exclusive lanes
 

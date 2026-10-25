@@ -1,0 +1,201 @@
+{
+	"bot": "State-aware bot reads target positions and attack phases, then uses normal move/jump/attack/special/dodge/revive commands. Random critical hits and shop rolls remain enabled.",
+	"captures": [],
+	"display": "headless",
+	"downs": [
+		0,
+		0
+	],
+	"engine": "4.7.2-stable (arch_linux)",
+	"engine_errors": [],
+	"errors": [],
+	"explorations": [
+		{
+			"after_wave": 1,
+			"positions": [
+				[
+					568.161865234375,
+					319.925262451172
+				]
+			],
+			"reached": true,
+			"regions": 1,
+			"ticks": 62
+		}
+	],
+	"final_actors": [
+		{
+			"health": 87.438,
+			"max_health": 100.0,
+			"position": [
+				905.098205566406,
+				319.925262451172
+			],
+			"slot": 0,
+			"stats": {
+				"area": 1.0,
+				"attack_speed": 1.0,
+				"burn": 2.0,
+				"chain": 0.0,
+				"crit": 0.05,
+				"damage": 12.0,
+				"dodge_cooldown": 48.0,
+				"freeze": 0.0,
+				"lifesteal": 0.025,
+				"max_health": 100.0,
+				"move_speed": 145.0,
+				"pierce": 0.0,
+				"projectile_count": 1.0,
+				"regen": 0.0,
+				"special_cooldown": 300.0,
+				"stagger": 0.0,
+				"thorns": 0.0
+			}
+		}
+	],
+	"final_phase": "clear",
+	"final_summary": {
+		"best_combo": 18,
+		"chunks": 4,
+		"discoveries": 0,
+		"endless": false,
+		"loot": 2,
+		"players": [
+			{
+				"coins": 22,
+				"kills": 18,
+				"kit": "ember",
+				"spent": 18,
+				"upgrades": {
+					"blood_bloom": 1,
+					"wildfire": 1
+				}
+			}
+		],
+		"seconds": 17,
+		"seed": 18427,
+		"wave": 2,
+		"won": false
+	},
+	"fixed_fps": false,
+	"furthest_x": [
+		978.647766113281,
+		0.0
+	],
+	"human_playtest": false,
+	"input": "Synthetic owned keyboard snapshots; no actor position, health, damage, currency, timer, or progression writes.",
+	"kits": [
+		"ember"
+	],
+	"landmarks_discovered": 0,
+	"loot_collected": 2,
+	"map_regions": 1,
+	"menu": "Production App title/lobby/start, actual shop offers and purchase/ready methods.",
+	"physics_hz": 60,
+	"players": 1,
+	"purchases": [
+		{
+			"after_wave": 1,
+			"id": "blood_bloom",
+			"slot": 0
+		},
+		{
+			"after_wave": 1,
+			"id": "wildfire",
+			"slot": 0
+		}
+	],
+	"selected_fighters": [
+		{
+			"id": "kiln-fox-ai",
+			"manifest_sha256": "d00efc670eb8b885b3ba87ff3d20d70797158dda44d3aeb9a7553699c7fdc8a5"
+		}
+	],
+	"source_hashes": {
+		"res://content/arena/catalog.json": "0837d9a9bbae2688190b0b0bc62979a3f454b3e36078c379d05db87714ac8fab",
+		"res://content/arena/world.json": "d624d040b1a1b92b03a06e446bd7fb4999085684fac411221f13c928d4034251",
+		"res://scripts/arena/actors/arena_enemy.gd": "134207dc4c3f52a80bbaec9e7c466593aa5897a32c43b3e4c682031edf28b070",
+		"res://scripts/arena/actors/arena_fighter.gd": "8074c520be7b2697cd9ddce95a711614e2f1375b192f17003060fdf9d29197ca",
+		"res://scripts/arena/actors/arena_projectile.gd": "1943e25ea841957409e7139e7c902d6afd5670272af98840d8d31b6745de66f6",
+		"res://scripts/arena/arena_map.gd": "3f1206616aad23fe94a56121101ea1ca9eef0bbdd999eb22d47b5894f5cd6f26",
+		"res://scripts/arena/arena_player_state.gd": "ba5d4a3602f4367de0c261dc9b0876fa0eb4aaae8359a670054ff775c0f0cff0",
+		"res://scripts/arena/arena_presentation.gd": "aa5f86e00db6649475691f3eeafdbd6b558e639d64f20a8b0bbfd42e16e0c7de",
+		"res://scripts/arena/run_session.gd": "8fc1022ba75c502b3ea0ed28c156ba77df132f2c834e729c4d845ef6f00a9dd3",
+		"res://tests/arena/route_driver.gd": "7705b1dab6fd96d8e702c22ac8fbaf7cdf9aa830d447fc42e2e3fa5f8ecf05d8"
+	},
+	"split_changes": [],
+	"success": true,
+	"target_waves": 2,
+	"ticks": 1198,
+	"wall_seconds": 1.705,
+	"waves": [
+		{
+			"boss": "",
+			"health": [
+				100.0
+			],
+			"observed_health_loss": [
+				0.0,
+				0.0
+			],
+			"summary": {
+				"best_combo": 8,
+				"chunks": 4,
+				"discoveries": 0,
+				"endless": false,
+				"loot": 1,
+				"players": [
+					{
+						"coins": 19,
+						"kills": 8,
+						"kit": "ember",
+						"spent": 0,
+						"upgrades": {}
+					}
+				],
+				"seconds": 8,
+				"seed": 18427,
+				"wave": 1,
+				"won": false
+			},
+			"ticks": 521,
+			"wave": 1
+		},
+		{
+			"boss": "",
+			"health": [
+				87.438
+			],
+			"observed_health_loss": [
+				24.84,
+				0.0
+			],
+			"summary": {
+				"best_combo": 18,
+				"chunks": 4,
+				"discoveries": 0,
+				"endless": false,
+				"loot": 2,
+				"players": [
+					{
+						"coins": 22,
+						"kills": 18,
+						"kit": "ember",
+						"spent": 18,
+						"upgrades": {
+							"blood_bloom": 1,
+							"wildfire": 1
+						}
+					}
+				],
+				"seconds": 17,
+				"seed": 18427,
+				"wave": 2,
+				"won": false
+			},
+			"ticks": 590,
+			"wave": 2
+		}
+	],
+	"world_seed": 18427
+}

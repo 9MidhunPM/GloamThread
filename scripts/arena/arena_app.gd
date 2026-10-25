@@ -611,7 +611,7 @@ func _update_hud() -> void:
 	if boss != null:
 		_boss_bar.value = 100 * boss.health / maxf(1, boss.max_health)
 	match session.phase:
-		"countdown": _centre_label.text = "WAVE %02d\n%s" % [session.wave, str(maxi(1, ceili((150 - session.phase_ticks) / 60.0)))]
+		"countdown": _centre_label.text = "WAVE %02d\n%s" % [session.wave, str(maxi(1, ceili((ArenaRunSession.COUNTDOWN_TICKS - session.phase_ticks) / 60.0)))]
 		"clear": _centre_label.text = "WAVE CLEARED\n+%d COINS EACH" % (8 + 2 * ((session.wave - 1) / 5))
 		_: _centre_label.text = ""
 

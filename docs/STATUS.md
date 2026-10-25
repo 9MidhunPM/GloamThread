@@ -2,6 +2,12 @@
 
 Current product: solo/two-player scrolling wave fighter with dynamic split screen. The approved [world contract](SCROLLING_WORLD_PLAN.md) extends the [wave specification](WAVE_FIGHTER_SPEC.md). Earlier campaign and overhead work remains historical.
 
+## Current wave-flow hotfix
+
+Fixed the reproduced nearby-cave catch-up gap: spawns prefer the visible fighting lane; unseen ordinary enemies catch up after180ticks regardless of distance, with42tick warning and original identity/HP. Camera visibility uses a16px edge margin. Normal arrivals warn24ticks, schedule at most18ticks apart, release their delay after kills and request up to three when empty. Pending warnings still consume caps and reserve space. Wave countdown45ticks; clear celebration24ticks; shops retain all-player Ready.
+
+Focused `--filter wave_flow`:1passed/0failed. Actual owned-input solo and co-op bots both clear the first two waves (1198/2267ticks respectively), no route/engine errors, seed18427, Godot4.7.2 headless60Hz. [Exact commands and reports](../evidence/wave-flow/README.md). No broad suite/export/model call. Full-run balance and physical/visible play remain unverified for this patch; use current source rather than the older published ZIP.
+
 ## Implemented
 
 The seeded world begins four screens wide and expands after waves 5/10/15 to sixteen screens (10,240×720 logical pixels). Existing terrain, loot IDs and player positions remain intact. Connected raised routes and shallow caves use the same shared physics world. Four parallax layers, twenty-four authored props, four landmark families, cave texture/support details and visible frontier signs ship with editable sources.

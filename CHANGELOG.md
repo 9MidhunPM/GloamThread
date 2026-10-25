@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-25T08:07:35+05:30 — Fix wave-one stalls and accelerate reinforcements
+
+- Reproduced an invisible cave enemy434px away receiving no catch-up: spawn radius720px was below pursuit's960px minimum. Removed that minimum, narrowed visibility margin to16px and prioritized visible/same-elevation spawn anchors in `run_session.gd`.
+- Added24tick arrival warnings, up-to-three empty-field batches, at-most18tick cadence and kill-triggered release while retaining caps/player clearance. Countdown45ticks, clear24ticks; synchronized the HUD. Shops still wait for all active Ready votes.
+- Added `tests/arena/wave_flow.gd`, retained focused source evidence and updated README/status/world/wave contracts. Focused scenario passes; ordinary-input solo/co-op first-two-wave runs pass (1198/2267ticks), no engine errors. No broad tests/export/API calls; human/render/full-run balance unverified.
+
 ### 2026-10-25T07:19:34+05:30 — Integrate all branch histories and prepare final review
 
 - Normally merged final-review/player-guide/no-cap histories and the retained sideview prompt packet. Integrated superseded overhead ancestry with the current 2D tree retained because its old HUD/session APIs conflict; no branches deleted or histories rewritten.
