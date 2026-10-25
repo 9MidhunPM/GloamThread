@@ -225,6 +225,13 @@ Record each meaningful project change, newest first. Update this file in the sam
 
 ## Agent 2 — content and assets
 
+### 2026-10-25T02:24:46+05:30 — Specify original side-view image studies
+
+- Changed: Added two retained authoring prompts for an original Ember/Moss material board and a registered 32-slot Tavi animation sheet, with explicit layout, identity, state order and transparency constraints.
+- Why: Agent 1 can run the separately authorized image experiment while conversion and candidate QA are implemented in parallel. Prompts avoid reference-game imagery and preserve the existing gameplay boundary.
+- Validation: JSON parses; exactly two CLI-compatible jobs declare opaque materials and transparent Tavi. Pack/link and whitespace checks pass.
+- Limitations: These are instructions to a provider, not generated art or accepted candidates. No provider request, image quality, runtime overlay or human review is claimed by this commit.
+
 ### 2026-10-25T01:49:29+05:30 — Repair the authoring tool for overhead content
 
 - Changed: Replaced side-view preview assumptions with explicit overhead material/pose studies, correct feet/crop/sort rules, strict epoch guards, selected-room/output options and original manifested captions. Versioned the default study directory to preserve old side-view evidence; added nine public-CLI tests and a hashed r00 working-snapshot example.
