@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-25T08:27:56+05:30 — Add the entire Story campaign showcase
+
+- Added executable `story_showcase.sh`, story viewer/driver and guide for the original eight-room RPG. Reuses owned-input movement/combat/menu boundaries, adds safe Gallery survivor cleanup and the normal-input hidden-charm detour, preserves both split views and temporary-save isolation.
+- Shows every active authored dialogue line through Next, both bridges/checkpoints, Spoolwarden, earned dash and ending. Added pause/speed/quit handling, neutral-input resume, modal-boundary timing and safe cancellation/audio/save cleanup. Campaign test behavior stays unchanged; its dialogue log description is overridable.
+- Complete headless/native runs pass12,305/12,198steps with all flags/secret, valid saves, zero recoveries/failures/engine errors; pause/frozen/resume/4x and early-exit reports verified. Actual viewport captures inspected. Launcher syntax/help/errors and docs checked. No API/export/broad suite; human/hardware/listening unverified.
+
 ### 2026-10-25T08:15:19+05:30 — Add a watchable gameplay tour
 
 - Added executable `showcase.sh`, visible `tools/arena_showcase.gd` controls/reporting and a route adapter for co-op basics, shops/exploration, four bosses, endless25 and a staged64-foe/32-live crowd finale. Full mode uses normal progression; stage presets are labeled onscreen and in reports. No API/install/export required.

@@ -1,0 +1,166 @@
+{
+	"completed": true,
+	"dialogue": [
+		{
+			"id": "oru_intro",
+			"line": 0
+		},
+		{
+			"id": "oru_intro",
+			"line": 1
+		},
+		{
+			"id": "oru_intro",
+			"line": 2
+		},
+		{
+			"id": "oru_intro",
+			"line": 3
+		},
+		{
+			"id": "ending",
+			"line": 0
+		},
+		{
+			"id": "ending",
+			"line": 1
+		},
+		{
+			"id": "ending",
+			"line": 2
+		}
+	],
+	"display": "headless",
+	"downed": [
+		false,
+		false
+	],
+	"engine": "4.7.2-stable (arch_linux)",
+	"errors": [],
+	"failures": [],
+	"final_mode": "ending",
+	"flags": {
+		"boss_spoolwarden": true,
+		"bridge_causeway": true,
+		"bridge_spindle": true,
+		"lantern_charm": true,
+		"loom_restored": true,
+		"shortcut_bell": true,
+		"threadstep": true
+	},
+	"hearts": [
+		4,
+		3
+	],
+	"human_playtest": false,
+	"input": "Owned keyboard snapshots and actual menu actions, sequential eight-room campaign. No actor placement, damage/health overrides, room skips or progression grants.",
+	"interrupted": false,
+	"mode": "smoke",
+	"physics_ticks": 12305,
+	"recoveries": 0,
+	"rooms": [
+		{
+			"flags": {},
+			"room": "r00",
+			"tick": 0
+		},
+		{
+			"flags": {},
+			"room": "r01",
+			"tick": 875
+		},
+		{
+			"flags": {},
+			"room": "r02",
+			"tick": 1948
+		},
+		{
+			"flags": {
+				"bridge_spindle": true
+			},
+			"room": "r03",
+			"tick": 3390
+		},
+		{
+			"flags": {
+				"bridge_spindle": true,
+				"lantern_charm": true
+			},
+			"room": "r04",
+			"tick": 6896
+		},
+		{
+			"flags": {
+				"bridge_spindle": true,
+				"lantern_charm": true
+			},
+			"room": "r05",
+			"tick": 7698
+		},
+		{
+			"flags": {
+				"boss_spoolwarden": true,
+				"bridge_spindle": true,
+				"lantern_charm": true,
+				"shortcut_bell": true,
+				"threadstep": true
+			},
+			"room": "r01",
+			"tick": 9028
+		},
+		{
+			"flags": {
+				"boss_spoolwarden": true,
+				"bridge_spindle": true,
+				"lantern_charm": true,
+				"shortcut_bell": true,
+				"threadstep": true
+			},
+			"room": "r06",
+			"tick": 9483
+		},
+		{
+			"flags": {
+				"boss_spoolwarden": true,
+				"bridge_causeway": true,
+				"bridge_spindle": true,
+				"lantern_charm": true,
+				"shortcut_bell": true,
+				"threadstep": true
+			},
+			"room": "r07",
+			"tick": 11143
+		},
+		{
+			"flags": {
+				"boss_spoolwarden": true,
+				"bridge_causeway": true,
+				"bridge_spindle": true,
+				"lantern_charm": true,
+				"loom_restored": true,
+				"shortcut_bell": true,
+				"threadstep": true
+			},
+			"room": "r00",
+			"tick": 12305
+		}
+	],
+	"saved": "ok",
+	"source_hashes": {
+		"scripts/app/app_controller.gd": "8281036f3ba6050259e5563de376a1f7b4f12d7da39d282200e8db50586a12d9",
+		"scripts/session/game_session.gd": "6e1e795644ede29566c082603209f3874b668ce595af17a42899b2c49dcbb440",
+		"tests/scenarios/campaign_route.gd": "56b34b33f2cce4f52a7a1ef2bfc37d9c5bf403315625d772273db3b39d1387e2",
+		"tools/story_showcase.gd": "fae8d79794807a2914f4b75b3cfbecadc8930bc4057c3585ddfb42e15772e2ed",
+		"tools/story_showcase_driver.gd": "adc1fa49c51297291264d2661058c6ef0aba0eb5ec8d3ebaf93ffe977e922c4a"
+	},
+	"visited": [
+		"r00",
+		"r01",
+		"r02",
+		"r03",
+		"r04",
+		"r05",
+		"r06",
+		"r07"
+	]
+}

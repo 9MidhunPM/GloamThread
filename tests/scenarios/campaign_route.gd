@@ -129,7 +129,7 @@ func _route() -> void:
 	var saved := session.save_repository.load_campaign()
 	assert_eq(saved.status,"ok","the isolated campaign save remains valid after the ending")
 	assert_true("loom_restored" in saved.data.get("world_flags",[]),"Loom completion survives the actual save boundary")
-	print("CAMPAIGN_ROUTE " + JSON.stringify({"visited":_visited,"physics_ticks":_tick_count,"ending":session.mode,"flags":session.progress.flags,"hearts":[session.players[0].hearts,session.players[1].hearts],"dialogue_boundary":"actual app Skip intent","save_path":session.save_repository.path}))
+	print("CAMPAIGN_ROUTE " + JSON.stringify({"visited":_visited,"physics_ticks":_tick_count,"ending":session.mode,"flags":session.progress.flags,"hearts":[session.players[0].hearts,session.players[1].hearts],"dialogue_boundary":_dialogue_boundary_description(),"save_path":session.save_repository.path}))
 	_route_complete = true
 
 
@@ -138,6 +138,9 @@ func _complete_dialogue_boundary() -> void:
 	# No actor, room or progression state is changed by the test.
 	assert_eq(session.mode,"dialogue","only an active dialogue is completed by the UI boundary")
 	app._on_action("skip")
+
+func _dialogue_boundary_description() -> String:
+	return "actual app Skip intent"
 
 
 func _pair(a: Vector2, b: Vector2) -> bool:

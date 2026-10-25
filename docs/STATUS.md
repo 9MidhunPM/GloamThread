@@ -1,6 +1,12 @@
 # Implementation status
 
-Current product: solo/two-player scrolling wave fighter with dynamic split screen. The approved [world contract](SCROLLING_WORLD_PLAN.md) extends the [wave specification](WAVE_FIGHTER_SPEC.md). Earlier campaign and overhead work remains historical.
+Current product: solo/two-player scrolling wave fighter with dynamic split screen. The approved [world contract](SCROLLING_WORLD_PLAN.md) extends the [wave specification](WAVE_FIGHTER_SPEC.md). The original eight-room Story Mode remains selectable alongside the arena; overhead work remains historical.
+
+## Entire Story autoplay
+
+`./story_showcase.sh` starts a new isolated Tavi/Neri campaign and sequentially demonstrates all eight rooms, Oru/ending dialogue, both checkpoints, paired bridges, the hidden charm, Spoolwarden, earned Threadstep and return-home ending. It extends the existing owned-input campaign route with real Gallery cleanup and the secret staircase; no actor placement, room skips, health grants or debug combat. Space pause/resume,1/2/4 speed,Esc quit. Original two480×360 views retain their dimensions; a60px viewing banner sits below them. Temporary campaign/settings are removed after validation.
+
+Complete headless/native routes pass (12,305/12,198 route steps), all permanent flags and valid save, zero recoveries/failures/engine errors; final4/3hearts. Native viewport captures and handler pause/frozen/resume/speed checks pass. Early exit reports interrupted=true/completed=false without stale-instance cleanup errors. [Evidence](../evidence/story-showcase/README.md), [launch/options](STORY_SHOWCASE.md). No broad suite, API request, new export or human/hardware/listening claim.
 
 ## Watchable gameplay showcase
 

@@ -1,0 +1,42 @@
+{
+	"completed": false,
+	"dialogue": [],
+	"display": "headless",
+	"downed": [
+		false,
+		false
+	],
+	"engine": "4.7.2-stable (arch_linux)",
+	"errors": [],
+	"failures": [],
+	"final_mode": "playing",
+	"flags": {},
+	"hearts": [
+		5,
+		4
+	],
+	"human_playtest": false,
+	"input": "Owned keyboard snapshots and actual menu actions, sequential eight-room campaign. No actor placement, damage/health overrides, room skips or progression grants.",
+	"interrupted": true,
+	"mode": "smoke",
+	"physics_ticks": 101,
+	"recoveries": 0,
+	"rooms": [
+		{
+			"flags": {},
+			"room": "r00",
+			"tick": 0
+		}
+	],
+	"saved": "ok",
+	"source_hashes": {
+		"scripts/app/app_controller.gd": "8281036f3ba6050259e5563de376a1f7b4f12d7da39d282200e8db50586a12d9",
+		"scripts/session/game_session.gd": "6e1e795644ede29566c082603209f3874b668ce595af17a42899b2c49dcbb440",
+		"tests/scenarios/campaign_route.gd": "56b34b33f2cce4f52a7a1ef2bfc37d9c5bf403315625d772273db3b39d1387e2",
+		"tools/story_showcase.gd": "fae8d79794807a2914f4b75b3cfbecadc8930bc4057c3585ddfb42e15772e2ed",
+		"tools/story_showcase_driver.gd": "adc1fa49c51297291264d2661058c6ef0aba0eb5ec8d3ebaf93ffe977e922c4a"
+	},
+	"visited": [
+		"r00"
+	]
+}

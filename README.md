@@ -12,6 +12,8 @@ The game uses fullscreen 1920×1080 presentation: a 640×360 pixel shared view, 
 
 Watch co-op combat, earned shop purchases, split-camera exploration, all four bosses, endless wave25 and a staged64-foe finale capped at32 live enemies. Highlights clearly label their wave jumps/preset upgrades. Use `./showcase.sh --full --speed 2` for the full25-wave input bot with normal progression. **Space** pauses, **1/2/4** changes speed, **N** skips highlight chapters and **Esc** quits. No API key needed. [Showcase options and evidence](docs/SHOWCASE.md).
 
+For the entire original eight-room RPG campaign, run `./story_showcase.sh` (or add `--speed 2`). Tavi and Neri autoplay the story dialogue, encounters, hidden charm, paired bridges, Spoolwarden, earned dash and ending. It uses temporary saves. [Story tour guide](docs/STORY_SHOWCASE.md).
+
 ## Play
 
 **[Final review: real game gallery and quick demo](docs/FINAL_REVIEW.md)**
