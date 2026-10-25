@@ -14,7 +14,7 @@ Spawns use reachable nearby anchors and 96 pixel player clearance. Unseen pursui
 
 Chargers now commit to a marked lane and expose miss/wall recovery; heavies use directional guards with rear/control/late-swing counters; shooters announce locked three-shot bursts; flyers mark committed dives and retreat. Contact direction follows actual melee/projectile/chain origins. A moving target crossing behind terrain cannot cancel/rewrite the flyer's announced attack. [Mechanics](ENEMY_MECHANICS.md).
 
-The current source passes **21 arena scenarios, 173 creator assertions and 187 Python tests**. Ordinary-input solo 20 (36,998 ticks) and co-op 25 (50,023 ticks) both pass with no route/engine errors. Four actual native 1080p snapshots were inspected with matching source hashes and no errors. [Current evidence](../evidence/enemy-counterplay/README.md). Physical/human balance and a new performance claim remain unverified.
+The current source passes **21 arena scenarios, 173 creator assertions and 187 Python tests**. Ordinary-input solo 20 (36,998 ticks) and co-op 25 (50,023 ticks) both pass with no route/engine errors. Four actual native 1080p snapshots were inspected with matching source hashes and no errors. [Current evidence](../evidence/enemy-counterplay/README.md). Physical/human balance and a new performance claim remain unverified. The [v0.4 prerelease](https://github.com/9MidhunPM/GloamThread/releases/tag/v0.4.0-counterplay) packages `a65bf14a2a2676a290aab7505bf2cca5fcf4fede`; its official 25-wave export passes offline in 50,487 ticks, and its normal package boots offline. All 30 archive entries/payload hashes match.
 
 ## Verified v0.3 baseline
 

@@ -1,0 +1,10 @@
+{
+  "archive": "Gloamthread-0.4.0-counterplay-linux-x86_64.zip",
+  "archive_sha256": "a1960a34bfbd01342e23eb30cfa61f91c46c1222df2f9afaa5ea76e91d1ee6e8",
+  "entries": 30,
+  "implementation_commit": "a65bf14a2a2676a290aab7505bf2cca5fcf4fede",
+  "source_tree": "d5b21b8c760dc55e297976a33c796ccf43392989",
+  "executable_sha256": "161e0df83256ee07ff6ecd681a7ffbaf08ee49910cc8b827c78f9c81598c6b0d",
+  "all_payload_hashes_match": true,
+  "credentials_included": false
+}

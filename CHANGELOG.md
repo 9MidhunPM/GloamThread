@@ -1,5 +1,10 @@
 # Change log
 
+### 2026-10-25T06:38:49+05:30 — Publish the counterplay/creator fixes
+
+- Packaged clean implementation `a65bf14` as v0.4.0-counterplay. All 30 entries/payload hashes match; no private art, jobs or credentials included. Updated download, exact submission/evidence records and stale Agent 2 cap guidance.
+- Official exported co-op25 passes offline outside the checkout in 50,487 ticks with no overrides or route/engine errors; normal offline boot passes. Existing source/native/creator evidence remains distinct from export checks. Further optional tests skipped at user request; human/device/listening gates remain unverified.
+
 ### 2026-10-25T06:32:57+05:30 — Add committed enemy attacks and directional counterplay
 
 - Chargers announce a bounded lane and expose long miss/wall recovery; heavies guard their front with rear/control/late-windup counters; shooters fire locked three-shot bursts; flyers mark fixed dive targets and retreat. Authored amber/red/teal cues remain in the shared world. Existing health, wave counts/caps, boss patterns and reward ownership remain.
