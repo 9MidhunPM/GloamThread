@@ -6,6 +6,8 @@ Build and maintain the approved solo/two-player shared-screen wave fighter in [d
 
 Twenty waves, four stages/bosses, optional endless, personal last-hit wallets and between-wave shops; fixed roster per run. Run power resets. Saved creations/settings/scores persist. Three body rigs and six game-owned ability families support drawn/uploaded characters. Current original and retained-generation content must remain reproducible.
 
+The user also restored the original eight-room Tavi/Neri story as a separate selectable mode. Preserve **STORY MODE (2 PLAYERS)** → `scenes/app/boot.tscn` and the save-safe return to `scenes/arena/boot.tscn`. Each mode has one active scene/world and restores its logical size; do not remove this mode as obsolete campaign scaffolding. The source includes name-led fighter art/kit selection; v0.4 binaries predate both changes.
+
 ## Runtime boundaries
 
 - Godot4.7.2standard, typed GDScript, Compatibility, Python3authoring. One authoritative shared world, merged/split scrolling cameras, one audio mix. Target1920×1080with640×360nearest/integer pixel world; letterbox other aspect ratios.

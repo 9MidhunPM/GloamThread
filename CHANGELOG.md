@@ -1,5 +1,10 @@
 # Change log
 
+### 2026-10-25T06:50:14+05:30 — Publish the illustrated source player guide
+
+- Integrated Agent 2's detailed player guide, 11 real screenshots, capture provenance and source-only documentation helper. Linked current launch/mode/forge instructions and updated active agent guidance to preserve Story Mode.
+- Native documentation captures show Story entry, r00 and return to arena, plus the new name/weapon field. Tests/import/build/API calls were skipped as requested; no fresh full campaign or generated-output quality claim. The v0.4 download predates the latest source changes.
+
 ### 2026-10-25T06:47:19+05:30 — Make fighter identity drive art and attacks
 
 - Added explicit preferred_name to pre-analysis jobs and preserved it exactly. Fresh image prompts bind name plus description, prioritize declared weapon/class over ambiguous sketches, retain held weapons in front-arm/master artwork, and keep scenery free of characters. Legacy paid caches retain their original prompts/recovery.
