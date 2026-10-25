@@ -2,6 +2,7 @@ class_name ArenaFighter
 extends CharacterBody2D
 ## One owned-input fighter. RunSession owns wallets, shopping and team recovery.
 const Action := CommandSnapshot.Action
+const Identity := preload("res://scripts/forge/fighter_identity.gd")
 const GRAVITY := 1600.0
 const JUMP_SPEED := -400.0
 const DODGE_TICKS := 10
@@ -41,7 +42,8 @@ var _rng := RandomNumberGenerator.new()
 
 func setup(slot: int, family: String, world: Node, appearance: Dictionary) -> void:
 	slot_index = slot
-	kit_id = family if COLORS.has(family) else "ember"
+	var character_name := str(appearance.get("name", ""))
+	kit_id = Identity.effective_kit(character_name, family)
 	_world = world
 	_appearance = appearance
 	_rng.randomize()

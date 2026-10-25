@@ -72,3 +72,9 @@ Packaging requires a clean committed checkout, including untracked source outsid
 This is a playtest candidate. Automated checks do not prove physical gamepad behavior, keyboard rollover, listening quality, human balance, a 10–15 minute clear or performance on other hardware. Native/export evidence must be recorded for the packaged revision separately from source checks. Fullscreen UI layout and model-generated artwork require visual inspection; structural validation alone does not establish art quality.
 
 Source and editable assets: [9MidhunPM/GloamThread](https://github.com/9MidhunPM/GloamThread). See `THIRD_PARTY_NOTICES.md` and `docs/licenses/` for bundled engine notices.
+
+## Illustrated characters and attack identity
+
+New source generations use one complete detailed transparent character as the actual sprite source, followed by environment artwork. Thirty-two authored whole-body cutout poses preserve its design and proportions; this is not independent limb animation. Older parts-based jobs and fighters remain valid. To use a detailed version from an old background, extract it to an RGBA PNG, open its retained draft and choose **Use detailed character cutout PNG**. The fixed source/hash is retained, masks/pivots remain editable, and local conversion makes no API-key requests. Background/material crops can be adjusted separately.
+
+Wizard/mage/other magical identities use projectile kits (Frost or Nature); physical sword/spear/axe identities use melee kits (Stone/Ember/Storm). Incompatible dropdown choices are corrected, and older mislabeled accepted fighters are corrected at runtime without rewriting their saved art/manifests.

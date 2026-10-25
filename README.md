@@ -35,9 +35,9 @@ Run power and coins reset on defeat/restart. Saved fighters/settings/scores are 
 
 ## Draw and forge
 
-**Name your fighter before analysing.** Names and weapon descriptions now lead the artwork: “Swordsman” keeps a visible sword and suggests a melee Stone build; uncertain drawing guesses no longer default it to Nature shooting. The ability dropdown remains an explicit override. Name/description changes create a new generation rather than reusing mismatched paid artwork. Existing accepted fighters stay intact.
+**Name your fighter before analysing.** Names and weapon descriptions lead the artwork. Magic identities such as Wizard use projectile kits; physical sword/spear identities use melee kits. The ability dropdown selects a compatible kit, and the same rule corrects older saved fighters at runtime. Name/description changes create a new generation rather than reusing mismatched paid artwork. Existing accepted fighters stay intact.
 
-Character Forge supports a drawing canvas, PNG/JPEG import, editable body/ability/theme proposals, animation preview, raw-board crop correction, part masks/pivots and offline local rebaking. Three built-in fighters (including the reviewed AI-generated Kiln Fox) and accepted creations work without a network or API key. Supported bodies are upright, four-legged and floating; abilities use six tested families.
+Character Forge supports a drawing canvas, PNG/JPEG import, editable body/ability/theme proposals, animation preview and offline local rebaking. New generations create one complete illustrated character and animate that full design, preserving its proportions, shading and held gear. **Use detailed character cutout PNG** can replace a retained draft’s sprite with a transparent full-character cutout; old parts rigs remain supported. Three built-in fighters (including the reviewed AI-generated Kiln Fox) and accepted creations work without a network or API key. Supported bodies are upright, four-legged and floating; abilities use six tested families.
 
 ```sh
 python3 -m venv --system-site-packages .venv

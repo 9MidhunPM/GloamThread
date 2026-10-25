@@ -295,3 +295,9 @@ Story saves keep a validated previous-save backup. If the game offers backup rec
 Screenshots illustrate real captured game states. The retained Arena shop/split scenes are controlled native setups. Story title/join/Lantern Rest images cover the freshly restored entry flow; the bridge image comes from the original campaign route. They do not establish a fresh full human playthrough of the combined mode-switch build.
 
 For the current implementation, exact checks and limitations, see [STATUS.md](STATUS.md). Physical gamepads/hotplug, keyboard hardware rollover, fresh-human balance, listening quality and other hardware/distributions remain separate acceptance questions. When reporting a problem, include the mode, version/commit from the package's `BUILD.json`, player/input assignments, what you pressed and what happened. Keep credentials and private artwork out of shared logs or screenshots.
+
+### Latest source: use the complete illustrated design
+
+New generations create a complete illustrated character, used directly for the playable sprite and portrait. The 32 poses transform that whole cutout rather than squeezing its limbs into starter shapes. For an older draft, **Use detailed character cutout PNG** imports a transparent full-character PNG (32–2048 pixels per side, at most 8 MB); it creates a fresh local correction draft, retaining the older job. Edit the Master mask/pivot in the preview and use cached layout correction for scenery/material crops. An opaque background crop requires a genuine transparent cutout first.
+
+Wizard/mage/sorcerer/other magical identities use projectile kits; sword/spear/axe fighters use melee kits. Name and description guide new proposals, and the runtime also corrects incompatible kits on older named fighters. Manual choices stay within the compatible category. No new image requests are made by cutout import or local rebaking.

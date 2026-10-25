@@ -9,6 +9,7 @@ const Library = preload("res://scripts/forge/fighter_library.gd")
 const Canvas = preload("res://scripts/forge/forge_canvas.gd")
 const Bridge = preload("res://scripts/forge/forge_bridge.gd")
 const LayoutEditor = preload("res://scripts/forge/forge_layout_editor.gd")
+const Identity = preload("res://scripts/forge/fighter_identity.gd")
 const CLIPS := {"idle": [0, 4], "run": [4, 6], "rise": [10, 2], "fall": [12, 2], "land": [14, 2], "slash": [16, 4], "special": [20, 4], "hurt": [24, 2], "dash": [26, 2], "downed": [28, 2], "revive": [30, 2]}
 const PART_IDS := {"upright": ["torso", "head", "arm_back", "arm_front", "leg_back", "leg_front"], "quadruped": ["torso", "head", "leg_back_left", "leg_back_right", "leg_front_left", "leg_front_right", "tail"], "floating": ["torso", "arm_back", "arm_front"]}
 
@@ -51,6 +52,8 @@ var _mask_data: Dictionary = {}
 var _joint_data: Dictionary = {}
 var _selected_part: String = ""
 var _dialog: FileDialog
+var _master_dialog: FileDialog
+var _use_master: Button
 var _poll_elapsed: float = 0.0
 var _animation_tick: int = 0
 var _last_preview_frame: int = -1
@@ -161,6 +164,13 @@ func _build_ui() -> void:
 	_dialog.title = "Choose your original drawing"
 	_dialog.file_selected.connect(import_source)
 	add_child(_dialog)
+	_master_dialog = FileDialog.new()
+	_master_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	_master_dialog.access = FileDialog.ACCESS_FILESYSTEM
+	_master_dialog.filters = PackedStringArray(["*.png ; Transparent character PNG"])
+	_master_dialog.title = "Choose the complete detailed character cutout"
+	_master_dialog.file_selected.connect(import_illustrated_master)
+	add_child(_master_dialog)
 	_message = _label("Saved fighters work offline. New AI artwork uses your configured local authoring service.", 20)
 	_message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_message.custom_minimum_size.y = 54
@@ -171,6 +181,7 @@ func _build_ui() -> void:
 	_rig.item_selected.connect(func(_index: int) -> void: _proposal_edited())
 	_kit.item_selected.connect(func(_index: int) -> void:
 		_kit_chosen_by_player = true
+		_apply_identity_kit()
 		_proposal_edited())
 	_name.text_changed.connect(func(_text: String) -> void: _identity_edited())
 	_description.text_changed.connect(_identity_edited)
@@ -244,7 +255,7 @@ func _build_proposal(parent: HBoxContainer) -> void:
 	_theme_name = _field(column, "Arena theme", "Copper dusk", 60)
 	_palette = _field(column, "Palette · 4–8 hex colours, separated by commas", "#17232E,#355D69,#E4A85B,#E8E1C9", 80)
 	_motif = _field(column, "Theme motif", "Copper threads and drifting stars", 400)
-	var notice := _label("Body shape changes animation. Your selected ability family supplies tested combat powers.", 18, Color("#a2b5bc"))
+	var notice := _label("Magic identities cast projectiles; physical weapon identities fight in melee. Choose a compatible ability family.", 18, Color("#a2b5bc"))
 	notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	column.add_child(notice)
 	_generate = _button("Generate artwork", generate_candidate)
@@ -287,6 +298,8 @@ func _build_preview(parent: HBoxContainer) -> void:
 	_clip = _options(CLIPS.keys())
 	_clip.item_selected.connect(func(_index: int) -> void: _animation_tick = 0)
 	column.add_child(_clip)
+	_use_master = _button("Use detailed character cutout PNG", func() -> void: _master_dialog.popup_centered_ratio(0.8))
+	column.add_child(_use_master)
 	var corrections := HBoxContainer.new()
 	corrections.add_theme_constant_override("separation", 14)
 	column.add_child(corrections)
@@ -620,7 +633,7 @@ func _convert_layout(layout: Dictionary) -> void:
 		return
 	var retained := bridge.read_json(job_path)
 	var current := _proposal()
-	if current.is_empty() or bridge.proposal_hash(current) != bridge.proposal_hash(retained.get("proposal", {})):
+	if current.is_empty() or not _same_cached_design(current, retained.get("proposal", {})):
 		_layout_editor.notice.text = "Restore the retained draft's approved settings before correcting its cached art. New designs need a separate generation."
 		return
 	var created := bridge.create_layout_job(job_path, layout)
@@ -669,31 +682,47 @@ func _identity_edited() -> void:
 
 
 func _apply_identity_kit() -> void:
-	if _kit_chosen_by_player:
-		return
-	# A named weapon is stronger evidence than an uncertain sketch or theme.
-	# The player can explicitly override this suggestion in the ability dropdown.
-	for text: String in [_name.text, _description.text]:
-		var intent := _identity_kit(text)
-		if not intent.is_empty():
-			_kit.select(Library.KITS.find(intent))
-			return
+	var requested: String = Library.KITS[_kit.selected]
+	var suggestion: String = Identity.suggested_kit(_name.text, _description.text)
+	if not _kit_chosen_by_player and not suggestion.is_empty():
+		requested = suggestion
+	var effective: String = Identity.effective_kit(_name.text, requested, _description.text)
+	_kit.select(Library.KITS.find(effective))
 
 
 func _identity_kit(text: String) -> String:
-	var rules := {
-		"stone": "sword|swordsman|swordswoman|swordsmen|knight|warrior|samurai|katana|blade|duelist|saber|sabre|greatsword|longsword|broadsword|axe|axeman|hammer|paladin|spear|spearman|lancer|shield",
-		"shadow": "dagger|rogue|assassin|ninja|scythe|reaper",
-		"storm": "brawler|boxer|monk|fist|punch",
-		"frost": "archer|bow|bowman|crossbow|gunner|gun|rifle|sniper|wizard|mage|sorcerer|witch",
-		"nature": "druid|thorn|thorns|plant|vine|vines|dryad|healer",
-	}
-	for kit: String in rules:
-		var words := RegEx.new()
-		words.compile("(?i)\\b(" + rules[kit] + ")\\b")
-		if words.search(text) != null:
-			return kit
-	return ""
+	return Identity.suggested_kit(text)
+
+
+func _same_cached_design(current: Dictionary, retained: Dictionary) -> bool:
+	var compared := current.duplicate(true)
+	if Identity.effective_kit(str(current.get("name", "")), str(current.get("kit_id", "")), _description.text) != Identity.resolve(retained):
+		return false
+	# Runtime correction of an old misclassified kit does not invalidate its art.
+	compared["kit_id"] = retained.get("kit_id")
+	return bridge.proposal_hash(compared) == bridge.proposal_hash(retained)
+
+
+func import_illustrated_master(path: String) -> void:
+	if _busy or job_path.is_empty():
+		return
+	var retained := bridge.read_json(job_path)
+	var current := _proposal()
+	if current.is_empty() or not _same_cached_design(current, retained.get("proposal", {})):
+		_notice("Restore this draft's design before replacing its art. A new design needs a separate generation.")
+		return
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null or file.get_length() > 8 * 1024 * 1024:
+		_notice("Choose a transparent full-character PNG, at most 8 MB.")
+		return
+	var created := bridge.create_illustrated_job(job_path, file.get_buffer(file.get_length()))
+	if not created.get("ok", false):
+		_notice(str(created.get("error", "The illustrated character could not be retained.")))
+		return
+	job_path = created["path"]
+	_job_source_hash = FileAccess.get_sha256(job_path.get_base_dir().path_join("source.png"))
+	_start("bake")
+	_notice("Baking the complete illustrated character locally. Its design and proportions are preserved; no image request is made.")
 
 
 func _preview_candidate(reported_path: Variant = "") -> void:
@@ -718,6 +747,7 @@ func _preview_candidate(reported_path: Variant = "") -> void:
 	_load_parts()
 	# Candidate metadata is the accepted truth, including after reopening a draft.
 	_apply_proposal({"name": candidate["name"], "rig_id": candidate["rig_id"], "kit_id": candidate["kit_id"], "theme": candidate["theme"], "features": _features.duplicate()})
+	_apply_identity_kit()
 	_notice("Conversion complete. Review every animation, then Accept fighter & play to save it in Your fighters.")
 
 
@@ -750,8 +780,9 @@ func _load_parts() -> void:
 		return
 	var edits := bridge.read_json(folder.path_join("rig_edits.json"))
 	var overrides: Dictionary = edits.get("parts", {}) if edits.get("parts") is Dictionary else {}
+	var allowed: Array = ["master"] if rig.get("source_kind") == "illustrated-master" else PART_IDS[rig["rig_id"]]
 	for raw: Variant in rig["parts"]:
-		if not raw is Dictionary or raw.get("id") not in PART_IDS[rig["rig_id"]]:
+		if not raw is Dictionary or raw.get("id") not in allowed:
 			continue
 		var id: String = raw["id"]
 		if raw.get("file") != "parts/" + id + ".png" or not _valid_joint(raw.get("pivot")):
@@ -906,6 +937,7 @@ func _update_controls() -> void:
 	_analyse.disabled = _busy
 	_setup_check.disabled = _busy
 	_generate.disabled = _busy
+	_use_master.disabled = _busy or job_path.is_empty()
 	_cancel_job.disabled = not _busy
 	_retry.disabled = _busy or state not in ["failed", "cancelled"]
 	_retry.text = "Resume blocked job" if _retry_allowed else "New attempt"
@@ -936,7 +968,7 @@ func _proposal_edited() -> void:
 func _matches_preview() -> bool:
 	if candidate.is_empty():
 		return false
-	return _name.text.strip_edges() == candidate.get("name") and Library.RIGS[_rig.selected] == candidate.get("rig_id") and Library.KITS[_kit.selected] == candidate.get("kit_id") and _theme_name.text.strip_edges() == candidate.get("theme", {}).get("name") and _motif.text.strip_edges() == candidate.get("theme", {}).get("motif") and _palette.text.replace(" ", "") == ",".join(candidate.get("theme", {}).get("palette", []))
+	return _name.text.strip_edges() == candidate.get("name") and Library.RIGS[_rig.selected] == candidate.get("rig_id") and Library.KITS[_kit.selected] == Identity.resolve(candidate) and _theme_name.text.strip_edges() == candidate.get("theme", {}).get("name") and _motif.text.strip_edges() == candidate.get("theme", {}).get("motif") and _palette.text.replace(" ", "") == ",".join(candidate.get("theme", {}).get("palette", []))
 
 
 func _drawing_hash() -> String:

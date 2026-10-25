@@ -3,6 +3,7 @@ extends Control
 ## Fullscreen app flow and owner-scoped menus. ArenaRunSession owns simulation.
 
 const Action := CommandSnapshot.Action
+const Identity := preload("res://scripts/forge/fighter_identity.gd")
 const INK := Color("eee9d9")
 const MUTED := Color("9caeb3")
 const GOLD := Color("f1bc68")
@@ -172,7 +173,7 @@ func _show_lobby(count: int = 0) -> void:
 	for slot in roster_size:
 		var x := 130.0 + slot * 850 if roster_size == 2 else 520.0
 		_panel(Rect2(x, 235, 800, 590))
-		var kit: Dictionary = catalog.kits[selected[slot].kit_id]
+		var kit: Dictionary = catalog.kits[Identity.resolve(selected[slot])]
 		_label("PLAYER %d" % (slot + 1), Vector2(x + 36, 267), Vector2(700, 40), 22, GOLD)
 		_preview(selected[slot], Rect2(x + 35, 320, 260, 260), slot == 1)
 		_label(str(selected[slot].name).to_upper(), Vector2(x + 320, 330), Vector2(440, 60), 28, INK)

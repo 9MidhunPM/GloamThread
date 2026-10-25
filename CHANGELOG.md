@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-25T07:16:10+05:30 — Preserve detailed fighter illustrations and correct attack roles
+
+- New generation mode requests one complete illustrated character and uses it for the actual atlas/portrait, bypassing starter limb envelopes. Added fixed/hash-bound transparent cutout import, editable Master masks/pivots, 32 authored whole-body poses, staged provenance and packaged helper closure; old jobs remain compatible.
+- Shared creator/lobby/session/fighter rules make magical identities fire projectiles and physical weapon identities use melee, correcting older named profiles at runtime without rewriting their manifests.
+- Actual supplied wizard extracted with one built-in image edit, locally converted/accepted and inspected in preview, atlas and combat. Frost confirmed in session/fighter; user-API ledger unchanged, no user-key requests. Broad tests/builds skipped as requested. Private art stays outside Git; future live generation and full-game balance remain unverified.
+
 ### 2026-10-25T06:50:14+05:30 — Publish the illustrated source player guide
 
 - Integrated Agent 2's detailed player guide, 11 real screenshots, capture provenance and source-only documentation helper. Linked current launch/mode/forge instructions and updated active agent guidance to preserve Story Mode.

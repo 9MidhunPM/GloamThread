@@ -20,7 +20,7 @@ func create_job(source: Image, description: String, preferred_name: String = "")
 	var source_path := folder.path_join("source.png")
 	if source.save_png(source_path) != OK:
 		return {"ok": false, "error": "Could not retain the source drawing."}
-	var job := {"schema_version": 1, "source_image": source_path, "description": description.strip_edges()}
+	var job := {"schema_version": 1, "source_image": source_path, "description": description.strip_edges(), "art_mode": "illustrated-master-v1"}
 	if not preferred_name.strip_edges().is_empty():
 		job["preferred_name"] = preferred_name.strip_edges().left(40)
 	var job_path := folder.path_join("job.json")
@@ -140,7 +140,7 @@ func raw_layout_context(path: String) -> Dictionary:
 	var proposal: Variant = read_json(path).get("proposal")
 	if not proposal is Dictionary or proposal.get("rig_id") not in LAYOUT_PARTS:
 		return {"ok": false, "error": "The retained job has no approved body shape."}
-	var result := {"ok": true, "error": "", "rig_id": proposal["rig_id"]}
+	var result := {"ok": true, "error": "", "rig_id": proposal["rig_id"], "art_mode": read_json(path).get("art_mode", "")}
 	for board: String in ["parts", "theme"]:
 		var file := FileAccess.open(folder.path_join("raw/" + board + ".png"), FileAccess.READ)
 		if file == null or file.get_length() > 16 * 1024 * 1024:
@@ -163,6 +163,11 @@ func raw_layout_context(path: String) -> Dictionary:
 	if source_layout_error(retained, result).is_empty():
 		layout = retained
 	result["layout"] = layout
+	if layout.has("master_file"):
+		var master := _retained_master(path.get_base_dir(), layout)
+		if not master["ok"]:
+			return master
+		result["illustrated_master"] = master["image"]
 	return result
 
 
@@ -183,7 +188,7 @@ func _grid_crop(index: int) -> Array:
 
 
 func source_layout_error(layout: Dictionary, context: Dictionary) -> String:
-	var allowed := ["schema_version", "raw_parts_sha256", "raw_theme_sha256", "alpha_cutoff", "parts", "master_crop", "background_crop", "material_crops"]
+	var allowed := ["schema_version", "raw_parts_sha256", "raw_theme_sha256", "alpha_cutoff", "parts", "master_crop", "background_crop", "material_crops", "master_file", "illustrated_master_sha256"]
 	for key: Variant in layout:
 		if key not in allowed:
 			return "Layout contains an unsupported field."
@@ -194,6 +199,10 @@ func source_layout_error(layout: Dictionary, context: Dictionary) -> String:
 			return "Raw artwork changed. Reopen the correction screen before saving."
 	if not _layout_integer(layout.get("alpha_cutoff"), 1, 255):
 		return "Alpha cutoff must be a whole number from 1 to 255."
+	if layout.has("master_file") or layout.has("illustrated_master_sha256"):
+		var hash: Variant = layout.get("illustrated_master_sha256")
+		if layout.get("master_file") != "illustrated_master.png" or not hash is String or hash.length() != 64 or hash != hash.to_lower() or not hash.is_valid_hex_number(false):
+			return "The illustrated character needs its fixed PNG filename and matching SHA-256."
 	var parts: Variant = layout.get("parts")
 	var ids: Array = LAYOUT_PARTS[context["rig_id"]]
 	if not parts is Dictionary or parts.size() != ids.size():
@@ -222,6 +231,10 @@ func _layout_integer(value: Variant, minimum: int, maximum: int) -> bool:
 func source_layout_pixel_issue(layout: Dictionary, context: Dictionary) -> Dictionary:
 	# Match Python's alpha threshold before cloning a draft or starting a worker.
 	# A bounded rectangle alone says nothing about whether it contains artwork.
+	if layout.has("master_file") or context.get("art_mode") == "illustrated-master-v1":
+		var image: Image = context.get("illustrated_master", context.get("parts"))
+		var error := _master_pixel_error(image, int(layout["alpha_cutoff"]))
+		return {} if error.is_empty() else {"target": "master", "error": error}
 	var board: Image = context.get("parts")
 	if board == null:
 		return {"target": "torso", "error": "The retained parts image is unavailable. Reopen the correction editor."}
@@ -264,10 +277,15 @@ func save_source_layout(path: String, layout: Dictionary) -> Dictionary:
 	return {"ok": true, "error": ""}
 
 
-func create_layout_job(path: String, layout: Dictionary) -> Dictionary:
+func create_layout_job(path: String, layout: Dictionary, illustrated_bytes: PackedByteArray = PackedByteArray()) -> Dictionary:
 	var context := raw_layout_context(path)
 	if not context["ok"]:
 		return context
+	if not illustrated_bytes.is_empty():
+		var master := _decode_master(illustrated_bytes, int(layout.get("alpha_cutoff", 192)))
+		if not master["ok"]:
+			return master
+		context["illustrated_master"] = master["image"]
 	var error := source_layout_error(layout, context)
 	if not error.is_empty():
 		return {"ok": false, "error": error}
@@ -282,16 +300,23 @@ func create_layout_job(path: String, layout: Dictionary) -> Dictionary:
 	if provenance.get("schema_version") != 1 or not source is Dictionary or not requests is Dictionary or not provenance.get("approved_proposal") is Dictionary or proposal_hash(provenance["approved_proposal"]) != proposal_hash(job["proposal"]) or job.get("source_image") != folder.path_join("source.png"):
 		return {"ok": false, "error": "The retained approved design or source provenance is invalid. No new request was made."}
 	var expected := {"source.png": source.get("original_sha256"), "raw/source.png": source.get("sha256"), "raw/parts.png": context["raw_parts_sha256"], "raw/theme.png": context["raw_theme_sha256"]}
+	if layout.has("master_file"):
+		expected["illustrated_master.png"] = layout["illustrated_master_sha256"]
 	for board: String in ["parts", "theme"]:
 		var record: Variant = requests.get(board)
 		if not record is Dictionary or record.get("file") != "raw/" + board + ".png" or record.get("sha256") != context["raw_" + board + "_sha256"]:
 			return {"ok": false, "error": "Retained " + board + " pixels do not match their request provenance."}
 	var copies: Dictionary = {}
 	for name: String in expected:
-		var file := FileAccess.open(folder.path_join(name), FileAccess.READ)
-		if file == null or file.get_length() > 20 * 1024 * 1024 or not expected[name] is String or expected[name].length() != 64:
-			return {"ok": false, "error": "The retained source cache is missing or oversized."}
-		var bytes := file.get_buffer(file.get_length())
+		var bytes := illustrated_bytes if name == "illustrated_master.png" and not illustrated_bytes.is_empty() else PackedByteArray()
+		if bytes.is_empty():
+			var directory := DirAccess.open(folder)
+			var file := FileAccess.open(folder.path_join(name), FileAccess.READ)
+			if directory == null or directory.is_link(name) or file == null or file.get_length() > 20 * 1024 * 1024:
+				return {"ok": false, "error": "The retained source cache is missing or oversized."}
+			bytes = file.get_buffer(file.get_length())
+		if not expected[name] is String or expected[name].length() != 64:
+			return {"ok": false, "error": "The retained source cache hash is invalid."}
 		var hash := HashingContext.new()
 		hash.start(HashingContext.HASH_SHA256)
 		hash.update(bytes)
@@ -322,6 +347,70 @@ func create_layout_job(path: String, layout: Dictionary) -> Dictionary:
 	if not write_json(fresh_path, job) or not write_json(fresh.path_join("provenance.json"), provenance) or not write_json(fresh.path_join("proposal.json"), job["proposal"]) or not write_json(fresh.path_join("source_layout.json"), layout) or not freeze_generation_proposal(fresh_path, job["proposal"]):
 		return {"ok": false, "error": "Could not finish the local correction draft. Previous draft is preserved."}
 	return {"ok": true, "error": "", "path": fresh_path}
+
+
+func create_illustrated_job(path: String, bytes: PackedByteArray) -> Dictionary:
+	var context := raw_layout_context(path)
+	if not context["ok"]:
+		return context
+	var layout: Dictionary = context["layout"].duplicate(true)
+	# A new cutout starts with the normal haze/fringe threshold, independent of
+	# the opacity used while correcting an older parts board.
+	layout["alpha_cutoff"] = 192
+	var hash := HashingContext.new()
+	hash.start(HashingContext.HASH_SHA256)
+	hash.update(bytes)
+	layout["master_file"] = "illustrated_master.png"
+	layout["illustrated_master_sha256"] = hash.finish().hex_encode()
+	return create_layout_job(path, layout, bytes)
+
+
+func _retained_master(folder: String, layout: Dictionary) -> Dictionary:
+	var directory := DirAccess.open(folder)
+	var path := folder.path_join("illustrated_master.png")
+	if directory == null or directory.is_link("illustrated_master.png") or FileAccess.get_sha256(path) != layout["illustrated_master_sha256"]:
+		return {"ok": false, "error": "The retained illustrated character is missing or its hash changed."}
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null or file.get_length() > 8 * 1024 * 1024:
+		return {"ok": false, "error": "The illustrated character PNG must be at most 8 MB."}
+	return _decode_master(file.get_buffer(file.get_length()), int(layout["alpha_cutoff"]))
+
+
+func _decode_master(bytes: PackedByteArray, cutoff: int) -> Dictionary:
+	if bytes.size() < 33 or bytes.size() > 8 * 1024 * 1024 or bytes.slice(0, 8) != PackedByteArray([137, 80, 78, 71, 13, 10, 26, 10]) or bytes[25] != 6:
+		return {"ok": false, "error": "Choose an RGBA PNG cutout with genuine transparency, at most 8 MB."}
+	var width := (int(bytes[16]) << 24) | (int(bytes[17]) << 16) | (int(bytes[18]) << 8) | int(bytes[19])
+	var height := (int(bytes[20]) << 24) | (int(bytes[21]) << 16) | (int(bytes[22]) << 8) | int(bytes[23])
+	if width < 32 or height < 32 or width > 2048 or height > 2048:
+		return {"ok": false, "error": "The illustrated character must be between 32 and 2048 pixels on each side."}
+	var image := Image.new()
+	if image.load_png_from_buffer(bytes) != OK:
+		return {"ok": false, "error": "Could not decode the illustrated character PNG."}
+	image.convert(Image.FORMAT_RGBA8)
+	var error := _master_pixel_error(image, cutoff)
+	return {"ok": true, "error": "", "image": image} if error.is_empty() else {"ok": false, "error": error}
+
+
+func _master_pixel_error(image: Image, cutoff: int) -> String:
+	if image == null:
+		return "The illustrated character source is unavailable."
+	var bytes := image.get_data()
+	var width := image.get_width()
+	var height := image.get_height()
+	var visible := false
+	for index in range(3, bytes.size(), 4):
+		if bytes[index] >= cutoff:
+			visible = true
+			break
+	if not visible:
+		return "The full character is empty at this opacity. Lower the cutoff or choose the visible cutout."
+	for x in width:
+		if bytes[x * 4 + 3] >= cutoff or bytes[((height - 1) * width + x) * 4 + 3] >= cutoff:
+			return "Leave a transparent margin around the whole character and weapon."
+	for y in height:
+		if bytes[(y * width) * 4 + 3] >= cutoff or bytes[(y * width + width - 1) * 4 + 3] >= cutoff:
+			return "Leave a transparent margin around the whole character and weapon."
+	return ""
 
 
 func cancel(job_path: String) -> bool:

@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 AUTHORING_FILES = (
     "tools/fighter_forge.py", "tools/ai_assets.py", "tools/forge/__init__.py",
     "tools/forge/provider.py", "tools/forge/jobs.py", "tools/forge/validation.py",
-    "tools/forge/rigs.py", "tools/forge/art.py", "requirements-authoring.txt", ".env.example",
+    "tools/forge/rigs.py", "tools/forge/art.py", "tools/forge/illustrated.py", "requirements-authoring.txt", ".env.example",
 )
 DOCUMENT_FILES = {
     "docs/ARENA_DEMO.md": "README.md",

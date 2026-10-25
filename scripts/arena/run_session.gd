@@ -1,6 +1,7 @@
 class_name ArenaRunSession
 extends Node2D
 ## The only owner of wave transitions, wallets, purchases and run outcomes.
+const Identity := preload("res://scripts/forge/fighter_identity.gd")
 
 signal phase_changed(value: String)
 signal changed
@@ -72,7 +73,7 @@ func configure(data: ArenaCatalog, bundles: Array[Dictionary], seed_value: int =
 	for i in appearances.size():
 		var state := ArenaPlayerState.new()
 		state.slot_index = i
-		state.kit_id = str(appearances[i].get("kit_id", "ember"))
+		state.kit_id = Identity.resolve(appearances[i])
 		player_states.append(state)
 		shop_offers.append([])
 		shop_ready.append(false)
