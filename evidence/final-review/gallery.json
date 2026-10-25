@@ -1,0 +1,88 @@
+{
+  "recorded_at": "2026-10-25T07:15:49+05:30",
+  "new_captures": false,
+  "private_artwork_included": false,
+  "images": [
+    {
+      "path": "docs/screenshots/title.png",
+      "sha256": "6d04cffcffb001193fd986db54e76a81584ad83bcc51481055a1127cde7b6c3d",
+      "size": [
+        1920,
+        1080
+      ],
+      "retained_real_engine_capture": true
+    },
+    {
+      "path": "docs/screenshots/arena-lobby.png",
+      "sha256": "66c92d7d8573b130f69bc572730322392e092bf6f87dff753267a117d6d35750",
+      "size": [
+        1920,
+        1080
+      ],
+      "retained_real_engine_capture": true
+    },
+    {
+      "path": "docs/screenshots/arena-split.png",
+      "sha256": "2e2dc942461321f32fb2763360dff2fa871cb4066ee4bef81d734c3cbb1983af",
+      "size": [
+        1920,
+        1080
+      ],
+      "retained_real_engine_capture": true
+    },
+    {
+      "path": "docs/screenshots/arena-shop.png",
+      "sha256": "ed976d0ee44bb405e04cbe8d81807cbe1fd527f37c71e1e927813b0eacb649a4",
+      "size": [
+        1920,
+        1080
+      ],
+      "retained_real_engine_capture": true
+    },
+    {
+      "path": "docs/screenshots/story-play.png",
+      "sha256": "744679b0a8b85ad2a5547aa7f16c09ffdd65a0924c9633c5c0d72f9061b53c1c",
+      "size": [
+        960,
+        360
+      ],
+      "retained_real_engine_capture": true
+    },
+    {
+      "path": "docs/screenshots/story-bridge.png",
+      "sha256": "49773742305df0260580dfe4175d1e83fbc410e6c50893a6fb611e02549c891f",
+      "size": [
+        960,
+        360
+      ],
+      "retained_real_engine_capture": true
+    },
+    {
+      "path": "docs/screenshots/layout-correction.png",
+      "sha256": "65b5cbd8991379d7f7d82f7e5e78b2149fe547a83bf5be64f2c5f101698ee7be",
+      "size": [
+        1920,
+        1080
+      ],
+      "retained_real_engine_capture": true
+    },
+    {
+      "path": "evidence/enemy-counterplay/native/heavy_guard_counter.png",
+      "sha256": "c50aead684946227ed7e0f9e44bf2110429eea3e8985a0e599efc8f6fe88d585",
+      "size": [
+        1920,
+        1080
+      ],
+      "retained_real_engine_capture": true
+    },
+    {
+      "path": "evidence/enemy-counterplay/native/charge_tell_recovery.png",
+      "sha256": "28f091e5bcbd918170374e1e55bc1527e96b894039cdd6e16050915e3ef9cf80",
+      "size": [
+        1920,
+        1080
+      ],
+      "retained_real_engine_capture": true
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+{
+  "recorded_at": "2026-10-25T07:14:43+05:30",
+  "baseline_main": "baf981cc2534ac44815b01ed34964059296646f6",
+  "scope": "All fetched origin feature/fix refs; baseline audit for Agent 1 integration, not an assertion that subsequent integration is done",
+  "refs": [
+    {
+      "ref": "origin",
+      "commit": "baf981cc2534ac44815b01ed34964059296646f6",
+      "ancestor_of_baseline_main": true
+    },
+    {
+      "ref": "origin/feat/arena-content",
+      "commit": "3d2970f5e5e70de45f30f467e3ebff4db74af0cd",
+      "ancestor_of_baseline_main": true
+    },
+    {
+      "ref": "origin/feat/arena-fighter",
+      "commit": "e565260493f0f985f55686ed30b5d4bcf2f4ba19",
+      "ancestor_of_baseline_main": true
+    },
+    {
+      "ref": "origin/feat/arena-forge",
+      "commit": "19eb57ac3221107cb4a4e77ff9ccedcb2dc8a2b2",
+      "ancestor_of_baseline_main": true
+    },
+    {
+      "ref": "origin/feat/drawing-preparation",
+      "commit": "9d49df24f45be2250a74c5c75e7591341b507999",
+      "ancestor_of_baseline_main": true
+    },
+    {
+      "ref": "origin/feat/enemy-counterplay",
+      "commit": "edcf8a4dba0969b4e7e0f877c36b862488b83030",
+      "ancestor_of_baseline_main": true
+    },
+    {
+      "ref": "origin/feat/forge-no-dollar-cap",
+      "commit": "0304a5bbfdd75de31685b77eaffb83fe7c1b3fe9",
+      "ancestor_of_baseline_main": false,
+      "patch_equivalent_commits": [
+        "0304a5bbfdd75de31685b77eaffb83fe7c1b3fe9"
+      ],
+      "unique_patch_commits": []
+    },
+    {
+      "ref": "origin/feat/overhead-actors",
+      "commit": "6af82bdb54c1ed31adf224289037544bc442a90f",
+      "ancestor_of_baseline_main": true
+    },
+    {
+      "ref": "origin/feat/overhead-core",
+      "commit": "4aac2629bbd8a53f463d82841b5634d91d1259f9",
+      "ancestor_of_baseline_main": true
+    },
+    {
+      "ref": "origin/feat/overhead-input",
+      "commit": "bd7f7122ead2b451ad32e6caf73fd37de05abb94",
+      "ancestor_of_baseline_main": true
+    },
+    {
+      "ref": "origin/feat/overhead-world",
+      "commit": "be091ed845f0f72ba834cec31687c010063c46d2",
+      "ancestor_of_baseline_main": false,
+      "patch_equivalent_commits": [],
+      "unique_patch_commits": [
+        "be091ed845f0f72ba834cec31687c010063c46d2"
+      ]
+    },
+    {
+      "ref": "origin/feat/phase1-content",
+      "commit": "af2cb4c9cd1ed25eb34a40e96d056f29cd2c245d",
+      "ancestor_of_baseline_main": true
+    },
+    {
+      "ref": "origin/feat/phase1-polish",
+      "commit": "b0c2f774909b3ddd7582f1711742b26466c6286b",
+      "ancestor_of_baseline_main": true
+    },
+    {
+      "ref": "origin/feat/phase1-runtime",
+      "commit": "aa8b1d0266644b03ca9077b939695db31fb94557",
+      "ancestor_of_baseline_main": true
+    },
+    {
+      "ref": "origin/feat/phase1-ui",
+      "commit": "75cba5800c3a8bd12ec0f69f43f2df964278b25f",
+      "ancestor_of_baseline_main": true
+    },
+    {
+      "ref": "origin/feat/scrolling-world",
+      "commit": "52ac4b19c6bcec247f74b90ef5d5c8c984e6b220",
+      "ancestor_of_baseline_main": true
+    },
+    {
+      "ref": "origin/feat/sideview-candidate-conversion",
+      "commit": "1cf70c872325c491c5d0e117f54aeeaa520e96e1",
+      "ancestor_of_baseline_main": false,
+      "patch_equivalent_commits": [],
+      "unique_patch_commits": [
+        "1cf70c872325c491c5d0e117f54aeeaa520e96e1"
+      ]
+    },
+    {
+      "ref": "origin/feat/sideview-image-workflow",
+      "commit": "a9a0f01c79d24e0e4cd001205ff300bfee9339f8",
+      "ancestor_of_baseline_main": true
+    },
+    {
+      "ref": "origin/feat/story-player-guide",
+      "commit": "7d20e3889bfb29de1d7b8a2da00507d177e879d6",
+      "ancestor_of_baseline_main": false,
+      "patch_equivalent_commits": [
+        "7d20e3889bfb29de1d7b8a2da00507d177e879d6"
+      ],
+      "unique_patch_commits": [
+        "0304a5bbfdd75de31685b77eaffb83fe7c1b3fe9"
+      ]
+    },
+    {
+      "ref": "origin/fix/fighter-identity",
+      "commit": "fffd26d24416a3ec92975d1930ee8a388cda4403",
+      "ancestor_of_baseline_main": true
+    }
+  ],
+  "new_runtime_work": "Agent 1 active feat/illustrated-fighters work remains outside this baseline snapshot"
+}
