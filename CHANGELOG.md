@@ -1,5 +1,16 @@
 # Change log
 
+### 2026-10-25T06:47:19+05:30 — Make fighter identity drive art and attacks
+
+- Added explicit preferred_name to pre-analysis jobs and preserved it exactly. Fresh image prompts bind name plus description, prioritize declared weapon/class over ambiguous sketches, retain held weapons in front-arm/master artwork, and keep scenery free of characters. Legacy paid caches retain their original prompts/recovery.
+- Creator suggests a melee Stone kit for sword/knight archetypes instead of Nature shooting; explicit ability choices override suggestions. Identity changes use a fresh generation and leave old accepted fighters intact.
+- Validation: code/diff review only. Tests, imports, builds and API requests skipped at user request; no claim of verified new generated output. Source restart required.
+
+### 2026-10-25T06:46:40+05:30 — Reopen the original two-player story
+
+- Added Story Mode on the arena title, using the retained Tavi/Neri campaign scene. Added title/pause return-to-arena actions with existing save-failure protection, owned-input flushing and per-mode logical sizing. Save/settings paths remain intact.
+- Validation: dependency and diff review only; tests/import/build skipped at the user's request. Fresh full campaign acceptance is not claimed. Source restart required; the v0.4 executable predates this change.
+
 ### 2026-10-25T06:38:49+05:30 — Publish the counterplay/creator fixes
 
 - Packaged clean implementation `a65bf14` as v0.4.0-counterplay. All 30 entries/payload hashes match; no private art, jobs or credentials included. Updated download, exact submission/evidence records and stale Agent 2 cap guidance.

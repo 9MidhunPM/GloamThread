@@ -13,7 +13,7 @@ godot --headless --path . --editor --import --quit
 godot --path .
 ```
 
-Choose Solo Run or Local Co-op, change fighters/inputs, then Start Run. F11 toggles fullscreen. For a window: `godot --path . --windowed --resolution 1920x1080`.
+Choose Solo Run or Local Co-op, change fighters/inputs, then Start Run. **Story Mode (2 Players)** opens the retained Tavi/Neri campaign; its title and pause menus return to the arena. These latest source changes require restarting Godot; the v0.4 download predates them. F11 toggles fullscreen. For a window: `godot --path . --windowed --resolution 1920x1080`.
 
 | Action | Player 1 | Player 2 | Gamepad |
 | --- | --- | --- | --- |
@@ -32,6 +32,8 @@ Chargers commit to a marked rush lane, heavies guard their front but expose coun
 Run power and coins reset on defeat/restart. Saved fighters/settings/scores are local under Godot's `Gloamthread-Arena` user directory, separate from the old campaign.
 
 ## Draw and forge
+
+**Name your fighter before analysing.** Names and weapon descriptions now lead the artwork: “Swordsman” keeps a visible sword and suggests a melee Stone build; uncertain drawing guesses no longer default it to Nature shooting. The ability dropdown remains an explicit override. Name/description changes create a new generation rather than reusing mismatched paid artwork. Existing accepted fighters stay intact.
 
 Character Forge supports a drawing canvas, PNG/JPEG import, editable body/ability/theme proposals, animation preview, raw-board crop correction, part masks/pivots and offline local rebaking. Three built-in fighters (including the reviewed AI-generated Kiln Fox) and accepted creations work without a network or API key. Supported bodies are upright, four-legged and floating; abilities use six tested families.
 
