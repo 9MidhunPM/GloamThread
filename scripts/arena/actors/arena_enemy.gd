@@ -48,6 +48,7 @@ var _texture: Texture2D
 var _last_source := -1
 var _boss_meter := 0
 var _target_point := Vector2.ZERO
+var _attack_point := Vector2.ZERO
 var _visual_key := -1
 var _flight_routing := false
 var _flight_waypoint := Vector2.ZERO
@@ -98,6 +99,20 @@ func take_damage(amount: float, slot: int, attack_id: int, tags: Dictionary = {}
 	if _received.size() > 256: _received.erase(_received.keys()[0])
 	_last_source = slot
 	var damage := amount
+	var counter_recovery := 0
+	if _guarding() and not bool(tags.get("dot", false)):
+		var side := _hit_side(slot, tags)
+		if int(tags.get("stagger", 0)) >= 2 or int(tags.get("freeze", 0)) > 0:
+			counter_recovery = 48
+		elif side < 0:
+			counter_recovery = 36
+		elif side > 0:
+			damage *= 0.35
+			ArenaCombat.effect(_world, get_hurt_rect().get_center() + Vector2(_facing * 18,0), Color("#ffe4a1"), "guard")
+		if counter_recovery > 0:
+			damage *= 1.25
+			_enter("recover", counter_recovery)
+			ArenaCombat.effect(_world, get_hurt_rect().get_center(), Color("#9be0c9"), "guard_break")
 	if bool(tags.get("shatter", false)) and (_freeze > 0 or _slow > 0):
 		damage *= 1.5
 		_freeze = 0
@@ -117,10 +132,30 @@ func take_damage(amount: float, slot: int, attack_id: int, tags: Dictionary = {}
 		defeated.emit(self, slot)
 	else:
 		_apply_statuses(damage, slot, tags)
+		if counter_recovery > 0:
+			_enter("recover", maxi(_state_ticks, counter_recovery))
 	if int(tags.get("chain", 0)) > 0:
 		_chain(damage * 0.7, slot, attack_id, tags)
 	queue_redraw()
 	return true
+
+func _guarding() -> bool:
+	if role != "heavy" or not boss_id.is_empty() or dead or _freeze > 0 or _stagger > 0:
+		return false
+	return _state == "approach" or (_state == "windup" and _state_ticks > 18)
+
+func _hit_side(slot: int, tags: Dictionary) -> int:
+	# Damage direction comes from the actual contact, not the owner's current
+	# position after a projectile has travelled or a chain has changed hands.
+	var from: Variant = tags.get("hit_from")
+	if not from is Vector2:
+		for fighter: ArenaFighter in ArenaCombat.actors(_world, "fighters"):
+			if is_instance_valid(fighter) and fighter.slot_index == slot:
+				from = fighter.get_hurt_rect().get_center()
+				break
+	if not from is Vector2 or not from.is_finite(): return 0
+	var offset: float = (from.x - global_position.x) * _facing
+	return 1 if offset > 2 else (-1 if offset < -2 else 0)
 
 func _apply_statuses(damage: float, slot: int, tags: Dictionary) -> void:
 	if int(tags.get("mark", 0)) > 0:
@@ -164,6 +199,7 @@ func _chain(damage: float, slot: int, attack_id: int, tags: Dictionary) -> void:
 		var packet := tags.duplicate(true)
 		packet.chain = mini(8, int(tags.chain)) - 1
 		packet.visited = visited
+		packet.hit_from = get_hurt_rect().get_center()
 		ArenaCombat.effect(_world, global_position.lerp(nearest.global_position, 0.5) + Vector2(0,-24), Color("#f4e78b"), "chain")
 		nearest.take_damage(damage, slot, attack_id, packet)
 
@@ -198,8 +234,12 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if _state == "active":
 		_active_hits()
-		if get_slide_collision_count() > 0 and ((role == "charger" and boss_id.is_empty()) or (not boss_id.is_empty() and _pattern == 2)) and is_on_wall():
-			_enter("recover", 36)
+		if flying and get_slide_collision_count() > 0:
+			velocity = Vector2.ZERO
+			_enter("recover", 50)
+		elif get_slide_collision_count() > 0 and ((role == "charger" and boss_id.is_empty()) or (not boss_id.is_empty() and _pattern == 2)) and is_on_wall():
+			velocity.x = 0
+			_enter("recover", 52 if boss_id.is_empty() else 36)
 	var bounds := ArenaCombat.bounds(_world)
 	global_position.x = clampf(global_position.x, bounds.position.x + _size.x * 0.5, bounds.end.x - _size.x * 0.5)
 	if global_position.y > bounds.end.y + 48:
@@ -255,13 +295,20 @@ func _ground_tick(target: Node2D, delta: float) -> void:
 	var slow_scale := 0.55 if _slow > 0 else 1.0
 	if _state == "approach":
 		_facing = 1 if gap >= 0 else -1
-		var reach := 210.0 if role == "shooter" or boss_id in ["artillery", "loom"] else (120.0 if not boss_id.is_empty() else 40.0)
+		var reach := 120.0 if not boss_id.is_empty() else 40.0
+		if role == "shooter" or boss_id in ["artillery","loom"]: reach=210.0
+		elif role == "charger" and boss_id.is_empty(): reach=156.0
+		elif role == "heavy" and boss_id.is_empty(): reach=68.0
 		var movement := signf(gap) if absf(gap) > reach * 0.8 else 0.0
 		if role == "shooter" and absf(gap) < 130.0: movement = -signf(gap)
 		movement = _platform_approach(target, movement)
 		velocity.x = move_toward(velocity.x, movement * _speed * slow_scale + _separation(), 900 * delta)
-		if absf(gap) < reach and absf(target.global_position.y - global_position.y) < (160 if role == "shooter" else 55) and (role != "shooter" or absf(gap) >= 110.0) and ArenaCombat.clear_line(self, get_hurt_rect().get_center(), target.get_hurt_rect().get_center()) and _reserve():
-			_aim = (target.get_hurt_rect().get_center() - get_hurt_rect().get_center()).normalized()
+		var height := 55.0
+		if role == "shooter": height=160.0
+		elif role in ["charger","heavy"] and boss_id.is_empty(): height=28.0
+		if absf(gap) < reach and absf(target.global_position.y - global_position.y) < height and (role != "shooter" or absf(gap) >= 110.0) and ArenaCombat.clear_line(self, get_hurt_rect().get_center(), target.get_hurt_rect().get_center()) and _reserve():
+			_attack_point = target.get_hurt_rect().get_center()
+			_aim = (_attack_point - get_hurt_rect().get_center()).normalized()
 			_target_point = target.global_position
 			_pattern = (_pattern + 1) % 3
 			_enter("windup", _windup_ticks())
@@ -276,10 +323,12 @@ func _ground_tick(target: Node2D, delta: float) -> void:
 			_emit_ranged()
 	elif _state == "active":
 		velocity.x = _charge_speed() * _facing
+		if role == "shooter" and boss_id.is_empty() and _active_ticks() - _state_ticks + 1 in [9,18]:
+			_shot(get_hurt_rect().get_center(), _aim, _damage * 0.7, 190)
 		if boss_id == "tempest" and _pattern == 1 and _state_ticks == _active_ticks():
 			velocity.y = -380
 		_state_ticks -= 1
-		if _state_ticks <= 0: _enter("recover", 36 if boss_id.is_empty() else 48)
+		if _state_ticks <= 0: _enter("recover", _recovery_ticks())
 	else:
 		velocity.x = move_toward(velocity.x, 0, 1200 * delta)
 		_state_ticks -= 1
@@ -288,37 +337,41 @@ func _ground_tick(target: Node2D, delta: float) -> void:
 			_enter("approach", 0)
 
 func _fly_tick(target: Node2D) -> void:
-	var clear := ArenaCombat.clear_line(self, get_hurt_rect().get_center(), target.get_hurt_rect().get_center(), ArenaCombat.SOLID_MASK)
-	if not clear and _world.has_method("flight_anchor"):
-		if not _flight_routing:
-			_flight_waypoint = _world.call("flight_anchor", global_position)
-			_flight_routing = true
-			_enter("approach", 0)
-		if global_position.distance_to(_flight_waypoint) < 12:
-			var step: Dictionary = _world.call("navigation_step", global_position, target.global_position)
-			_flight_waypoint = step.get("point", global_position)
-		velocity = (_flight_waypoint - global_position).normalized() * _speed
-		return
-	if _flight_routing:
-		_flight_routing = false
-		_enter("approach", 0)
 	if _state == "approach":
+		# Only pursuit may choose a new route. Once the marked tell begins, a
+		# hidden/moving live target cannot rewrite the locked attack or recovery.
+		var clear := ArenaCombat.clear_line(self, get_hurt_rect().get_center(), target.get_hurt_rect().get_center(), ArenaCombat.SOLID_MASK)
+		if not clear and _world.has_method("flight_anchor"):
+			if not _flight_routing:
+				_flight_waypoint = _world.call("flight_anchor", global_position)
+				_flight_routing = true
+			if global_position.distance_to(_flight_waypoint) < 12:
+				var step: Dictionary = _world.call("navigation_step", global_position, target.global_position)
+				_flight_waypoint = step.get("point", global_position)
+			velocity = (_flight_waypoint - global_position).normalized() * _speed
+			return
+		_flight_routing = false
 		var hover := target.global_position + Vector2(-100 if spawn_id % 2 == 0 else 100, -95)
 		velocity = (hover - global_position).limit_length(_speed)
-		if clear and global_position.distance_to(target.global_position) < 200 and _reserve():
-			_aim = (target.get_hurt_rect().get_center() - get_hurt_rect().get_center()).normalized()
-			_enter("windup", 30)
+		if clear and get_hurt_rect().get_center().distance_to(target.get_hurt_rect().get_center()) < 158 and _reserve():
+			_target_point = target.global_position
+			_attack_point = target.get_hurt_rect().get_center()
+			_aim = (_attack_point - get_hurt_rect().get_center()).normalized()
+			_facing = 1 if _aim.x >= 0 else -1
+			_enter("windup", 34)
 	elif _state == "windup":
 		velocity = Vector2.ZERO
 		_state_ticks -= 1
 		if _state_ticks <= 0:
-			_enter("active", 28)
+			_enter("active", 36)
 			_attack_id = ArenaCombat.next_id()
 			_hit_slots.clear()
 	elif _state == "active":
-		velocity = _aim * 210
+		velocity = _aim * 260
 		_state_ticks -= 1
-		if _state_ticks <= 0 or is_on_wall(): _enter("recover", 42)
+		if _state_ticks <= 0 or is_on_wall() or (_attack_point - get_hurt_rect().get_center()).dot(_aim) <= 0:
+			velocity = Vector2.ZERO
+			_enter("recover", 50)
 	else:
 		velocity = Vector2(0,-65) if global_position.y > target.global_position.y - 95 else Vector2.ZERO
 		_state_ticks -= 1
@@ -328,17 +381,21 @@ func _fly_tick(target: Node2D) -> void:
 
 func _windup_ticks() -> int:
 	if not boss_id.is_empty(): return 55 if _pattern == 1 else 40
-	return {"swarm":16,"chaser":22,"charger":32,"shooter":28,"flyer":30,"heavy":42}[role]
+	return {"swarm":16,"chaser":22,"charger":36,"shooter":32,"flyer":34,"heavy":48}[role]
 
 func _active_ticks() -> int:
 	if not boss_id.is_empty(): return 26 if _pattern == 2 else 16
-	return 24 if role == "charger" else 8
+	return 24 if role in ["charger","shooter"] else 8
+
+func _recovery_ticks() -> int:
+	if not boss_id.is_empty(): return 48
+	return {"charger":52,"shooter":48,"heavy":54}.get(role,36)
 
 func _charge_speed() -> float:
 	if not boss_id.is_empty():
 		if boss_id == "tempest": return 260.0 if _pattern != 0 else 0.0
 		return 240.0 if boss_id == "warden" and _pattern == 2 else 0.0
-	return 230.0 if role == "charger" else 0.0
+	return 280.0 if role == "charger" else 0.0
 
 func _emit_ranged() -> void:
 	var origin := get_hurt_rect().get_center()
@@ -346,7 +403,7 @@ func _emit_ranged() -> void:
 	if _world.has_method("encounter_rect"):
 		encounter = _world.call("encounter_rect", _target_point)
 	if boss_id.is_empty():
-		if role == "shooter": _shot(origin, _aim, _damage, 190)
+		if role == "shooter": _shot(origin, _aim, _damage * 0.7, 190)
 		return
 	match boss_id:
 		"warden":
@@ -472,8 +529,10 @@ func _release() -> void:
 func _enter(state: String, ticks: int) -> void:
 	_state=state
 	_state_ticks=ticks
+	if state == "recover" and role == "charger" and boss_id.is_empty(): velocity.x=0
 	if state not in ["windup","active"]: _release()
 	if state=="windup": ArenaCombat.effect(_world,get_hurt_rect().get_center(),Color("#ffe4a1"),"enemy_warning")
+	queue_redraw()
 
 func _try_drop() -> void:
 	for index in get_slide_collision_count():
@@ -513,6 +572,8 @@ func _update_visual() -> void:
 	if _facing > 0: key |= 256
 	if _state == "windup": key |= 512
 	if dead: key |= 1024
+	if _guarding(): key |= 2048
+	if _state == "windup" and _state_ticks <= 12: key |= 4096
 	if key != _visual_key:
 		_visual_key = key
 		queue_redraw()
@@ -529,6 +590,7 @@ func _draw() -> void:
 		draw_texture_rect_region(_texture,Rect2(Vector2(-size.x*0.5,-size.y),size),Rect2((frame%4)*cell,(frame/4)*cell,cell,cell),Color("#b4e7ff") if _freeze > 0 else Color.WHITE)
 	else:
 		_draw_silhouette(color)
+	_draw_mechanic_cues()
 	if _state=="windup":
 		draw_line(Vector2(_facing*18,-_size.y-8),Vector2(_facing*32,-_size.y-8),Color("#ffe9a6"),3)
 		draw_circle(Vector2(0,-_size.y-9),3,Color("#ffe9a6"))
@@ -537,6 +599,37 @@ func _draw() -> void:
 	if health < max_health and not dead:
 		draw_rect(Rect2(-_size.x*0.5,-_size.y-5,_size.x,2),Color("#302c39"))
 		draw_rect(Rect2(-_size.x*0.5,-_size.y-5,_size.x*health/max_health,2),Color("#e6ba85"))
+
+func _draw_mechanic_cues() -> void:
+	if dead or not boss_id.is_empty(): return
+	if role == "heavy":
+		if _guarding():
+			var shield := PackedVector2Array([Vector2(_facing*17,-38),Vector2(_facing*23,-29),Vector2(_facing*23,-13),Vector2(_facing*17,-7)])
+			draw_polyline(shield,Color("#ffe4a1"),3)
+			draw_line(Vector2(_facing*18,-28),Vector2(_facing*18,-16),Color("#ba8754"),2)
+		elif _state in ["windup","recover"]:
+			# Broken shield brackets stay teal throughout the punish window.
+			for y in [-35,-11]:
+				draw_line(Vector2(_facing*18,y),Vector2(_facing*23,y+3),Color("#9be0c9"),2)
+	if _state != "windup": return
+	var warning := Color("#ed765c") if _state_ticks<=12 else Color("#ffe4a1")
+	if role == "charger":
+		var reach := _charge_speed()*_active_ticks()/60.0
+		draw_line(Vector2(0,-3),Vector2(_facing*reach,-3),Color(warning,0.35),3)
+		for step in [32,64,96]:
+			var at := Vector2(_facing*step,-3)
+			draw_polyline(PackedVector2Array([at+Vector2(-_facing*5,-4),at,at+Vector2(-_facing*5,4)]),warning,1)
+	elif role == "shooter":
+		var centre := Vector2(0,-_size.y*0.5)
+		for step in range(1,11):
+			draw_line(centre+_aim*(step*20),centre+_aim*(step*20+9),Color(warning,0.65),1)
+	elif role == "flyer":
+		var mark := _target_point-global_position
+		draw_line(Vector2(0,-_size.y*0.5),_attack_point-global_position,Color(warning,0.25),1)
+		draw_arc(mark-Vector2(0,3),16,PI,TAU,12,warning,2)
+		draw_line(mark+Vector2(-19,0),mark+Vector2(19,0),warning,2)
+		for side in [-1,1]:
+			draw_line(mark+Vector2(side*23,-5),mark+Vector2(side*19,0),warning,1)
 
 func _draw_silhouette(color: Color) -> void:
 	var centre:=Vector2(0,-_size.y*0.5)

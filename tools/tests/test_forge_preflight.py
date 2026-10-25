@@ -1,4 +1,4 @@
-"""Mock-only checks for whole-generation cost/cache preflight.
+"""Uncapped generation still preflights cache validity and prior attempts.
 
 Every job, ledger and image here is a disposable fixture. No SDK, environment
 file, real account or network request is used.
@@ -52,22 +52,21 @@ class ForgePreflightTests(unittest.TestCase):
         (self.fx.job_dir / "cancel").unlink()
         self.fx.provider.reset_mock()
 
-    def test_shared_fifteen_cents_remaining_never_starts_fresh_twenty_cent_generation(self):
+    def test_generation_continues_past_retired_shared_limit(self):
         self.seed_analysis_reservations(7)
         self.assertAlmostEqual(self.fx.ledger()["reserved_usd"], 0.35)
-        before = self.ledger_path.read_bytes()
-        with self.assertRaises(ForgeError):
-            self.generate()
-        self.assertEqual(self.fx.provider.image.call_count, 0,
-                         "The complete missing-image cost must fit before the first image request")
+        status = self.generate()
+        self.assertEqual(status["state"], "complete")
+        self.assertEqual(self.fx.provider.image.call_count, 2)
         self.fx.provider.analyse.assert_not_called()
-        self.fx.converter.assert_not_called()
-        self.assertEqual(self.ledger_path.read_bytes(), before)
-        self.assertEqual(self.fx.status()["state"], "failed")
-        self.assertFalse((self.fx.job_dir / "raw/parts.png").exists())
+        self.fx.converter.assert_called_once()
+        self.assertAlmostEqual(self.fx.ledger()["reserved_usd"], 0.55)
+        self.assertIs(status["budget"]["limits_enabled"], False)
+        self.assertIsNone(status["budget"]["total_limit_usd"])
 
-    def test_exact_twenty_cent_job_budget_completes_both_image_requests(self):
-        self.fx.job["budget_usd"] = 0.20
+    def test_legacy_zero_budgets_do_not_block_both_image_requests(self):
+        self.fx.job["budget_usd"] = 0
+        self.fx.config["forge_total_budget_usd"] = "0.00"
         self.fx.write_job()
         status = self.generate()
         self.assertEqual(status["state"], "complete")
@@ -77,9 +76,10 @@ class ForgePreflightTests(unittest.TestCase):
         self.fx.converter.assert_called_once()
         self.assertAlmostEqual(self.fx.ledger()["reserved_usd"], 0.20)
 
-    def test_valid_cached_parts_need_only_remaining_ten_cent_theme_reservation(self):
+    def test_valid_cached_parts_still_dispatch_only_the_missing_theme(self):
         self.seed_analysis_reservations(6)
-        self.fx.job["budget_usd"] = 0.20
+        self.fx.job["budget_usd"] = 0
+        self.fx.config["forge_total_budget_usd"] = "0.00"
         self.fx.write_job()
         self.seed_parts_only()
         self.assertAlmostEqual(self.fx.ledger()["reserved_usd"], 0.40)

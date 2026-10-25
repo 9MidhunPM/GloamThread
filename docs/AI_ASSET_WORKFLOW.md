@@ -6,7 +6,7 @@ The active workflow is drawing/upload → bounded proposal → generated parts/t
 
 Use the optional `requirements-authoring.txt` environment and put your key in ignored root `.env`; exported packages use `authoring/.env`. Godot never reads the key. The local Python process uses the official SDK with explicit `gpt-6-luna` vision and `gpt-image-1-mini` low square PNG edits. Both models must be enabled for the key's API project. No requests happen during combat, and accepted/built-in fighters work offline.
 
-The selected total allowance is $2 via `FORGE_TOTAL_BUDGET_USD=2.00` in the private authoring `.env`, with $0.50 per character. Unconfigured installations retain the conservative $0.50 total. Reservations remain durable with no automatic retries or model fallback. The initial $0.35 history is preserved; the resumed image pair raises the development reservation total to $0.55, not actual billed cost. Separate total/job status and explicit resume avoid repeating analysis. Model changes need a new cost review; mini is scheduled to retire1December2026.
+The user removed local total and per-character dollar admission caps. Legacy allowance settings and job limits are ignored, while request estimates, caches and uncertain attempts stay durable. Status reports `budget.limits_enabled=false`, null limit/remaining fields and numeric estimates; these are not actual billing. Generation remains explicit with no automatic retry or model fallback. Cached local correction does not call a provider.
 
 ## Real output and correction
 

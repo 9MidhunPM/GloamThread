@@ -1,0 +1,27 @@
+{
+  "arena": {
+    "log_sha256": "be19cee036807587b4cba219785e16ad197ded7f8197092534fc5819f6a21355",
+    "summary": [
+      "PASS run_shop_input.gd",
+      "RUN world_runtime.gd",
+      "PASS world_runtime.gd",
+      "Arena scenarios: 21 passed, 0 failed"
+    ]
+  },
+  "python": {
+    "log_sha256": "85edf1a0cfc56e7266ce9d7b6ad4611f18c087266dae3014bb3e589b5bddcb87",
+    "summary": [
+      "----------------------------------------------------------------------",
+      "Ran 187 tests in 24.190s",
+      "",
+      "OK"
+    ]
+  },
+  "creator": {
+    "log_sha256": "0e90e10ef68fc739506ae1394a7ec54fa1311a0b62192c668f5632a8138a64c3",
+    "summary": [
+      "",
+      "Forge boundary/UI checks: 173 assertions, 0 failures; no providers called."
+    ]
+  }
+}

@@ -81,7 +81,10 @@ func _physics_process(delta: float) -> void:
 		if _hostile:
 			(target as ArenaFighter).take_damage(_damage, before, -1)
 		else:
-			target.take_damage(_damage, _slot, _attack_id, _tags)
+			var impact_tags := _tags.duplicate(true)
+			# A moved shooter or an earlier piercing hit cannot change this approach side.
+			impact_tags["hit_from"] = before
+			target.take_damage(_damage, _slot, _attack_id, impact_tags)
 		ArenaCombat.effect(_world, before.lerp(after, _entries[index]), _color, "impact")
 		if _pierce <= 0:
 			queue_free()

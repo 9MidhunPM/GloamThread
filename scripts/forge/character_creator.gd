@@ -243,7 +243,7 @@ func _build_proposal(parent: HBoxContainer) -> void:
 	column.add_child(notice)
 	_generate = _button("Generate artwork", generate_candidate)
 	column.add_child(_generate)
-	_cost = _label("Up to $0.50 per character. Check AI setup for the shared allowance.\nLocal edits and accepted fighters work offline.", 17, Color("#a2b5bc"))
+	_cost = _label("No local dollar cap. Model requests use your API account.\nLocal edits and accepted fighters work offline.", 17, Color("#a2b5bc"))
 	_cost.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	column.add_child(_cost)
 	var actions := HBoxContainer.new()
@@ -548,6 +548,9 @@ func _update_budget(report: Dictionary) -> void:
 	var budget: Variant = report.get("budget")
 	if not budget is Dictionary or not budget.has("total_limit_usd"):
 		return
+	if budget.get("limits_enabled", true) == false:
+		_cost.text = "No local dollar cap | recorded estimates $%.2f\nNext request estimate $%.2f; local edits free" % [float(budget.get("total_reserved_usd", 0)), float(budget.get("required_usd", 0))]
+		return
 	_cost.text = "Total $%.2f / $%.2f reserved | $%.2f left\nJob $%.2f / $%.2f left | Need $%.2f; local edits free" % [float(budget.get("total_reserved_usd", 0)), float(budget.get("total_limit_usd", 0)), float(budget.get("total_remaining_usd", 0)), float(budget.get("job_remaining_usd", 0)), float(budget.get("job_limit_usd", 0.5)), float(budget.get("required_usd", 0))]
 
 
@@ -561,10 +564,10 @@ func _offer_layout_correction() -> void:
 		return
 	_layout_context = context
 	_layout_job_path = job_path
-	_open_layout_editor()
+	_open_layout_editor(_message.text)
 
 
-func _open_layout_editor() -> void:
+func _open_layout_editor(error_message: String = "") -> void:
 	if _busy or _layout_context.is_empty() or job_path != _layout_job_path or is_instance_valid(_layout_editor):
 		return
 	# Mouse blocking alone does not stop Tab reaching hidden paid actions.
@@ -577,6 +580,8 @@ func _open_layout_editor() -> void:
 	_layout_editor.dismissed.connect(_close_layout_editor)
 	_layout_editor.apply_requested.connect(_convert_layout)
 	add_child(_layout_editor)
+	if not error_message.is_empty():
+		_layout_editor.notice.text = error_message + " Review the highlighted crops, then convert locally. No new image request is needed."
 	_layout_editor.save_button.grab_focus()
 
 
@@ -659,7 +664,7 @@ func _preview_candidate(reported_path: Variant = "") -> void:
 	_load_parts()
 	# Candidate metadata is the accepted truth, including after reopening a draft.
 	_apply_proposal({"name": candidate["name"], "rig_id": candidate["rig_id"], "kit_id": candidate["kit_id"], "theme": candidate["theme"], "features": _features.duplicate()})
-	_notice("Inspect the silhouette and every animation. Accept when this looks like your character.")
+	_notice("Conversion complete. Review every animation, then Accept fighter & play to save it in Your fighters.")
 
 
 func resume_job(path: String) -> void:

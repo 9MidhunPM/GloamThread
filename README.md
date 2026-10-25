@@ -27,6 +27,8 @@ Choose Solo Run or Local Co-op, change fighters/inputs, then Start Run. F11 togg
 
 Down+Jump drops through a platform. Shops use each player's Up/Down and Attack/Jump independently. Choose Explore to close your panel and move while your partner shops; E/M/Y reopens your own shop during breaks. Every active player must Ready. Regions open after waves 5/10/15 without replacing terrain or moving players. Attack caches to open them; healing plants restore 20% to their collector. Mouse controls also work. Keyboard sharing depends on hardware rollover; physical controller and fresh human balance/listening checks are recorded only when performed.
 
+Chargers commit to a marked rush lane, heavies guard their front but expose counter windows, shooters lock a three-shot burst, and flyers mark their dives. Bait, flank, use cover and punish recovery. [Enemy mechanics](docs/ENEMY_MECHANICS.md).
+
 Run power and coins reset on defeat/restart. Saved fighters/settings/scores are local under Godot's `Gloamthread-Arena` user directory, separate from the old campaign.
 
 ## Draw and forge
@@ -41,7 +43,9 @@ python3 -m venv --system-site-packages .venv
 
 Keep `OPENAI_API_KEY` in the ignored root `.env` (settings in `.env.example`); never paste it into chat or commit it. Godot launches Python without reading the key. Analysis uses `gpt-6-luna`; image edits use `gpt-image-1-mini`, low quality. Generating requires explicit creator actions, retains source/prompts/provenance and validates the complete result before acceptance. No provider calls occur during combat.
 
-Set `FORGE_TOTAL_BUDGET_USD=2.00` in the private `.env` for the approved local allowance. Each character still has a $0.50 maximum; existing reservations are preserved. The creator shows total/job remaining amounts and the next operation’s required reservation. There are no automatic retries or model fallback. Reservations are conservative allowances, not billing receipts. The mini image model retires 1 December 2026; changing models requires a fresh cost review. See [worker details](evidence/arena-content/forge/README.md). The live drawing-analysis and image requests succeeded; the resulting fox and forest ship with retained source/provenance. Nonconforming image layouts can be corrected locally from cached output. See [status](docs/STATUS.md).
+The user removed the local total/per-character dollar caps. Old `FORGE_TOTAL_BUDGET_USD` and job limits no longer block generation; the worker retains request estimates and uncertain outcomes as history, not billing receipts. Analyse/Generate remain explicit actions, with no automatic retries or model fallback. Provider account limits still apply. See [worker details](evidence/arena-content/forge/README.md).
+
+If a returned image board needs correction, each part and the complete-character crop must contain visible pixels at the chosen opacity cutoff. Save checks this locally, selects the crop needing attention and keeps the editor open. A click without dragging preserves the old crop. Conversion creates the animation preview; **Accept fighter & play** saves the validated fighter and takes you to the lobby with it selected. Cached corrections make no model request. See [recovery evidence](evidence/creator-recovery/README.md).
 
 ## Verify
 

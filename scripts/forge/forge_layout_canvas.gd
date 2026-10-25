@@ -10,6 +10,8 @@ var lock_widescreen: bool = false
 var _texture: ImageTexture
 var _dragging: bool = false
 var _start := Vector2i.ZERO
+var _press_position := Vector2.ZERO
+var _previous_crop := Rect2i()
 
 
 func set_board(value: Image) -> void:
@@ -57,17 +59,25 @@ func _gui_input(event: InputEvent) -> void:
 				return
 			_dragging = true
 			_start = source_point(event.position)
-			select_between(_start, _start)
+			_press_position = event.position
+			_previous_crop = crop
 		elif _dragging:
-			select_between(_start, source_point(event.position))
 			_dragging = false
-			selection_changed.emit([crop.position.x, crop.position.y, crop.size.x, crop.size.y])
+			if event.position.distance_to(_press_position) >= 4.0:
+				select_between(_start, source_point(event.position))
+				selection_changed.emit([crop.position.x, crop.position.y, crop.size.x, crop.size.y])
+			else:
+				crop = _previous_crop
+				queue_redraw()
 		accept_event()
 	elif event is InputEventMouseMotion and _dragging:
 		if not event.button_mask & MOUSE_BUTTON_MASK_LEFT:
 			_dragging = false
+			crop = _previous_crop
+			queue_redraw()
 			return
-		select_between(_start, source_point(event.position))
+		if event.position.distance_to(_press_position) >= 4.0:
+			select_between(_start, source_point(event.position))
 		accept_event()
 
 

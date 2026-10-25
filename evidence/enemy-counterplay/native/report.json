@@ -1,0 +1,200 @@
+{
+	"cases": [
+		{
+			"actors": [
+				{
+					"aim": [
+						0.999541163444519,
+						-0.030289126560092
+					],
+					"mark": [
+						300.0,
+						320.0
+					],
+					"position": [
+						168.0,
+						320.0
+					],
+					"role": "charger",
+					"state": "windup",
+					"ticks": 36
+				},
+				{
+					"aim": [
+						-0.999766290187836,
+						-0.0216165687888861
+					],
+					"mark": [
+						300.0,
+						320.0
+					],
+					"position": [
+						485.0,
+						320.0
+					],
+					"role": "charger",
+					"state": "recover",
+					"ticks": 52
+				}
+			],
+			"name": "charge_tell_recovery",
+			"note": "Left: locked112px charge lane. Right:52tick recovery. Two explicitly placed same-role actors.",
+			"projectiles": 0,
+			"same_world": true,
+			"sha256": "28f091e5bcbd918170374e1e55bc1527e96b894039cdd6e16050915e3ef9cf80"
+		},
+		{
+			"actors": [
+				{
+					"aim": [
+						0.999916732311249,
+						0.0129021508619189
+					],
+					"mark": [
+						300.0,
+						320.0
+					],
+					"position": [
+						145.0,
+						320.0
+					],
+					"role": "heavy",
+					"state": "approach",
+					"ticks": 0
+				},
+				{
+					"aim": [
+						-0.999926567077637,
+						0.0121203223243356
+					],
+					"mark": [
+						300.0,
+						320.0
+					],
+					"position": [
+						465.0,
+						320.0
+					],
+					"role": "heavy",
+					"state": "recover",
+					"ticks": 48
+				}
+			],
+			"name": "heavy_guard_counter",
+			"note": "Left: guarded approach. Right: broken/recovering teal shield brackets; controlled recovery state, no claimed player counter input.",
+			"projectiles": 0,
+			"same_world": true,
+			"sha256": "c50aead684946227ed7e0f9e44bf2110429eea3e8985a0e599efc8f6fe88d585"
+		},
+		{
+			"actors": [
+				{
+					"aim": [
+						0.999592125415802,
+						-0.0285597741603851
+					],
+					"mark": [
+						300.0,
+						320.0
+					],
+					"position": [
+						160.0,
+						320.0
+					],
+					"role": "shooter",
+					"state": "windup",
+					"ticks": 32
+				},
+				{
+					"aim": [
+						-0.999827027320862,
+						-0.0186014324426651
+					],
+					"mark": [
+						300.0,
+						320.0
+					],
+					"position": [
+						515.0,
+						320.0
+					],
+					"role": "shooter",
+					"state": "active",
+					"ticks": 13
+				}
+			],
+			"name": "shooter_aim_burst",
+			"note": "Left: stationary locked-aim tell. Right: real burst advanced12manual60Hz actor/projectile ticks, two shots emitted. Fighter has fixture immunity.",
+			"projectiles": 2,
+			"same_world": true,
+			"sha256": "827bf2de2b4d845b4089f53913876090b38070db54ca0881f6ca6d847fa5c246"
+		},
+		{
+			"actors": [
+				{
+					"aim": [
+						0.793606340885162,
+						0.60843151807785
+					],
+					"mark": [
+						300.0,
+						320.0
+					],
+					"position": [
+						180.0,
+						220.0
+					],
+					"role": "flyer",
+					"state": "windup",
+					"ticks": 34
+				},
+				{
+					"aim": [
+						-0.793606340885162,
+						0.60843151807785
+					],
+					"mark": [
+						300.0,
+						320.0
+					],
+					"position": [
+						385.6103515625,
+						246.365356445312
+					],
+					"role": "flyer",
+					"state": "active",
+					"ticks": 26
+				}
+			],
+			"name": "flyer_mark_dive",
+			"note": "Left: announced fixed landing mark. Right: committed dive advanced11manual60Hz actor ticks. Same production shared world.",
+			"projectiles": 0,
+			"same_world": true,
+			"sha256": "7cae3fb32db757867eb7cecf556e47649279b4172d38b44f27fd370e99b5fa8d"
+		}
+	],
+	"display": "Wayland",
+	"engine": "4.7.2-stable (arch_linux)",
+	"errors": [],
+	"fixture": "Controlled paired role snapshots in actual production App/session. Explicit positions, states and manual60Hz stepping; frozen encounter/fighter, fixture immunity10000, temporary settings/records. Native offscreen force_draw; no normal-input, performance or human-playtest claim.",
+	"passed": true,
+	"renderer": "Mesa Intel(R) Graphics (ARL)",
+	"root_size": [
+		1920,
+		1080
+	],
+	"source_changed": false,
+	"source_sha256": {
+		"assets/arena/enemies/index.json": "622d8ada3e8441986740729844b132c4280b519df5645dfe6cf26dfd3798e476",
+		"scripts/arena/actors/arena_enemy.gd": "134207dc4c3f52a80bbaec9e7c466593aa5897a32c43b3e4c682031edf28b070",
+		"scripts/arena/actors/arena_fighter.gd": "fb40d9933cae3784e2326e00328ef0414d435fb737a7eba7421188b5ca7703d6",
+		"scripts/arena/actors/arena_projectile.gd": "1943e25ea841957409e7139e7c902d6afd5670272af98840d8d31b6745de66f6",
+		"scripts/arena/arena_app.gd": "bab8d9c691d9b2ae872639c02f9f856e6f5aaf82353a4a1277e7c04af8531920",
+		"scripts/arena/arena_chunk.gd": "21b2dca4d3e53728e74065f0036f2f9abbc6ae6b631f31dc4fac4e1e2da343d9",
+		"scripts/arena/arena_map.gd": "3f1206616aad23fe94a56121101ea1ca9eef0bbdd999eb22d47b5894f5cd6f26",
+		"scripts/arena/arena_parallax.gd": "e2f37f227ea1f3bd8c8f1da57e47fc4d6843cdf1015a9e937a3f2480305eba1e",
+		"scripts/arena/arena_presentation.gd": "aa5f86e00db6649475691f3eeafdbd6b558e639d64f20a8b0bbfd42e16e0c7de",
+		"scripts/arena/run_session.gd": "bacbcb7a0b4b203e324aeb0832b115aa69662f31671d53fd927db8e8d4446203",
+		"tools/enemy_native_qa.gd": "82e5ae30875f645456e853f5d7a09dadfff5b0f68f18a0d463572eabb9b25d05"
+	}
+}

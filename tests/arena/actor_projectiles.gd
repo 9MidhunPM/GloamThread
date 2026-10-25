@@ -2,7 +2,14 @@ extends Scenario
 ## Controlled target placements isolate actual projectile sweep and ownership.
 const FIXTURE := preload("res://tests/arena/actor_fixture.gd")
 
+class ImpactTarget extends ArenaEnemy:
+	var impacts: Array[Dictionary] = []
+	func take_damage(amount: float, slot: int, attack_id: int, tags: Dictionary = {}) -> bool:
+		impacts.append({"slot": slot, "id": attack_id, "tags": tags.duplicate(true)})
+		return super.take_damage(amount, slot, attack_id, tags)
+
 func run() -> void:
+	_check_direct_origins()
 	InputRouter.clear(0)
 	InputRouter.assign(0,DeviceSource.keyboard_left())
 	InputRouter.set_test_input(0,0)
@@ -21,7 +28,8 @@ func run() -> void:
 	var near:=_target(world,Vector2(140,320))
 	var beyond:=_target(world,Vector2(250,320))
 	world.box(Vector2(220,260),Vector2(4,120))
-	world.spawn_projectile(Vector2(100,300),Vector2.RIGHT,20,0,{"kit":"frost","pierce":5,"freeze":2,"lifesteal":0.1})
+	var source_tags := {"kit":"frost","pierce":5,"freeze":2,"lifesteal":0.1,"critical":true,"hit_from":Vector2(600,300)}
+	world.spawn_projectile(Vector2(100,300),Vector2.RIGHT,20,0,source_tags)
 	await _steps(30)
 	assert_eq(near.health,80.0,"projectile reaches first swept target")
 	assert_eq(far.health,80.0,"bounded pierce continues to second target")
@@ -29,6 +37,10 @@ func run() -> void:
 	assert_eq(fighter.health,54.0,"direct projectile hits apply source-owned lifesteal once each")
 	assert_true(near.get("_freeze")>0 and far.get("_freeze")>0,"projectile path applies control upgrades through the same damage boundary")
 	assert_eq(near.get("_last_source"),0,"projectile source identity survives travel")
+	assert_true(near.impacts[0].tags.get("hit_from") is Vector2 and near.impacts[0].tags.get("hit_from", Vector2.INF).x < near.position.x, "a shot arriving from the left retains that direction when its owner is on the right")
+	assert_true(far.impacts[0].tags.get("hit_from", Vector2.INF).x > near.impacts[0].tags.get("hit_from", Vector2.INF).x and far.impacts[0].tags.get("hit_from", Vector2.INF).x < far.position.x, "a piercing shot supplies the local approach side at each later target")
+	assert_true(near.impacts[0].tags.get("critical", false) and far.impacts[0].tags.get("critical", false), "impact direction preserves the critical tag on each pierced hit")
+	assert_eq(source_tags.hit_from, Vector2(600,300), "impact tags do not mutate the caller's retained packet")
 	for old:Node in world.enemies:old.queue_free()
 	world.enemies.clear()
 	await _steps(1)
@@ -73,8 +85,8 @@ func run() -> void:
 	InputRouter.clear_test_input()
 	InputRouter.clear(0)
 
-func _target(world:Node2D,at:Vector2)->ArenaEnemy:
-	var enemy:=ArenaEnemy.new()
+func _target(world:Node2D,at:Vector2)->ImpactTarget:
+	var enemy:=ImpactTarget.new()
 	enemy.setup("chaser",world,world.enemies.size()+1,1)
 	enemy.position=at
 	world.add_child(enemy)
@@ -83,6 +95,33 @@ func _target(world:Node2D,at:Vector2)->ArenaEnemy:
 	enemy.set_physics_process(false)
 	world.enemies.append(enemy)
 	return enemy
+
+func _check_direct_origins() -> void:
+	var world: Node2D = FIXTURE.new()
+	add_child(world)
+	var fighter := ArenaFighter.new()
+	fighter.setup(0, "ember", world, {})
+	fighter.position = Vector2(100, 320)
+	world.add_child(fighter)
+	world.fighters.append(fighter)
+	fighter.set_physics_process(false)
+	# Moving after windup must not leave the guard testing an obsolete source side.
+	fighter._start_attack(false)
+	fighter.position = Vector2(200, 320)
+	fighter._emit_attack(false)
+	assert_eq(world.hits[-1].tags.get("hit_from"), fighter.get_hurt_rect().get_center(), "direct melee direction uses the attacker at impact, after movement during windup")
+	for family: String in ["stone", "nature"]:
+		fighter.kit_id = family
+		fighter._start_attack(true)
+		fighter.position.x += 30
+		fighter._emit_attack(true)
+		assert_eq(world.hits[-1].tags.get("hit_from"), fighter.get_hurt_rect().get_center(), "%s area damage retains its actual source point" % family)
+	fighter.kit_id = "ember"
+	fighter.stats.thorns = 1.0
+	fighter.take_damage(10, fighter.position + Vector2(40, 0), -1)
+	assert_true(world.hits[-1].tags.get("reflected", false), "reflected damage keeps its existing combat tag")
+	assert_eq(world.hits[-1].tags.get("hit_from"), fighter.get_hurt_rect().get_center(), "reflected damage approaches from the struck fighter")
+	world.free()
 
 func _steps(count:int)->void:
 	for tick in count:

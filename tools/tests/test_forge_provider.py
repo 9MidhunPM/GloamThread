@@ -236,8 +236,8 @@ class ForgeProviderTests(unittest.TestCase):
             self.assertEqual(first.result(timeout=3)["state"], "awaiting_approval")
         self.assertAlmostEqual(self.ledger()["reserved_usd"], 0.05)
 
-    def test_two_jobs_racing_for_last_reservation_never_exceed_shared_cap(self):
-        # Spend 0.45 through the same public seam, without forging a ledger.
+    def test_two_concurrent_jobs_both_record_requests_past_the_former_cap(self):
+        # Record 0.45 through the same public seam, without forging a ledger.
         self.provider.image.side_effect = lambda _s, _p, transparent: (
             self.parts if transparent else self.theme, {"request_id": "req_mock_seed"})
         for number in range(3):
@@ -280,20 +280,18 @@ class ForgeProviderTests(unittest.TestCase):
             finally:
                 release.set()
             results = [future.result(timeout=3) for future in futures]
-        self.assertEqual(sorted(kind for kind, _ in results), ["error", "ok"])
-        self.assertIn("budget", next(value for kind, value in results if kind == "error").lower())
-        self.provider.analyse.assert_called_once()
-        self.assertAlmostEqual(self.ledger()["reserved_usd"], 0.50)
-        self.assertEqual(sum(record["microusd"] for record in self.ledger()["reservations"]), 500000)
+        self.assertEqual([kind for kind, _ in results], ["ok", "ok"])
+        self.assertEqual(self.provider.analyse.call_count, 2)
+        self.assertAlmostEqual(self.ledger()["reserved_usd"], 0.55)
+        self.assertEqual(sum(record["microusd"] for record in self.ledger()["reservations"]), 550000)
 
-    def test_insufficient_job_budget_never_calls_provider(self):
-        self.job["budget_usd"] = 0.01
+    def test_legacy_job_budget_does_not_block_analysis(self):
+        self.job["budget_usd"] = 0
         self.write_job()
-        with self.assertRaises(ForgeError):
-            self.invoke("analyse")
-        self.assertEqual(self.status()["state"], "failed")
-        self.provider.analyse.assert_not_called()
+        self.assertEqual(self.invoke("analyse")["state"], "awaiting_approval")
+        self.provider.analyse.assert_called_once()
         self.provider.image.assert_not_called()
+        self.assertAlmostEqual(self.ledger()["reserved_usd"], 0.05)
 
     def test_timeout_keeps_reservation_does_not_retry_or_echo_provider_text(self):
         self.provider.analyse.side_effect = TimeoutError("provider-body-canary " + self.config["key"])
@@ -415,7 +413,7 @@ class ForgeProviderTests(unittest.TestCase):
         self.assertEqual(self.ledger()["reserved_usd"], reserved)
         self.converter.assert_called_once()
 
-    def test_shared_budget_blocks_later_jobs_before_exceeding_initial_cap(self):
+    def test_generation_continues_past_the_former_shared_cap(self):
         self.provider.image.side_effect = lambda _s, _p, transparent: (
             self.parts if transparent else self.theme, {"request_id": "req_mock_budget"})
         for number in range(3):
@@ -423,16 +421,10 @@ class ForgeProviderTests(unittest.TestCase):
             self.job_dir.mkdir()
             self.job_path = self.job_dir / "job.json"
             self.approve()
-            if number < 2:
-                self.assertEqual(self.invoke("generate")["state"], "complete")
-            else:
-                with self.assertRaises(ForgeError):
-                    self.invoke("generate")
-                self.assertEqual(self.status()["state"], "failed")
-                self.assertFalse((self.job_dir / "candidate").exists())
-        self.assertAlmostEqual(self.ledger()["reserved_usd"], 0.40)
-        self.assertEqual(self.provider.image.call_count, 4)
-        self.assertEqual(self.converter.call_count, 2)
+            self.assertEqual(self.invoke("generate")["state"], "complete")
+        self.assertAlmostEqual(self.ledger()["reserved_usd"], 0.60)
+        self.assertEqual(self.provider.image.call_count, 6)
+        self.assertEqual(self.converter.call_count, 3)
 
     def test_existing_candidate_is_never_replaced_by_new_generation(self):
         self.approve()

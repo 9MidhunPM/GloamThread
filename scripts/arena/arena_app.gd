@@ -210,7 +210,8 @@ func _open_creator(slot: int) -> void:
 		selected[slot] = bundle
 		bundles = library.list_bundles()
 		creator.queue_free()
-		_show_lobby() if _creation_return == "lobby" else _show_title())
+		_show_lobby()
+		_toast("%s selected for P%d. Start a run when ready." % [bundle.name, slot + 1]))
 	creator.cancelled.connect(func() -> void:
 		creator.queue_free()
 		_show_lobby() if _creation_return == "lobby" else _show_title())
