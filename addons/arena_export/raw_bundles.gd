@@ -11,7 +11,9 @@ func _export_begin(_features: PackedStringArray, _debug: bool, _path: String, _f
 	_add_json("res://assets/arena/builtin")
 	_add_json("res://assets/arena/enemies")
 	_add_json("res://assets/arena/audio")
+	_add_json("res://assets/arena/scenery")
 	add_file("res://content/arena/catalog.json", FileAccess.get_file_as_bytes("res://content/arena/catalog.json"), false)
+	add_file("res://content/arena/world.json", FileAccess.get_file_as_bytes("res://content/arena/world.json"), false)
 
 
 func _add_json(folder: String) -> void:

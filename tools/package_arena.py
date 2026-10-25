@@ -28,9 +28,11 @@ DOCUMENT_FILES = {
     "docs/licenses/GODOT_COPYRIGHT.txt": "docs/licenses/GODOT_COPYRIGHT.txt",
     "assets/manifest.json": "provenance/campaign_assets.json",
     "content/arena/catalog.json": "provenance/arena_catalog.json",
+    "content/arena/world.json": "provenance/world.json",
     "assets/arena/builtin/index.json": "provenance/builtin_index.json",
     "assets/arena/enemies/index.json": "provenance/enemy_index.json",
     "assets/arena/audio/index.json": "provenance/audio_index.json",
+    "assets/arena/scenery/index.json": "provenance/scenery_index.json",
 }
 
 

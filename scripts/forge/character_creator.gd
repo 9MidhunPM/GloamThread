@@ -33,6 +33,7 @@ var _motif: LineEdit
 var _message: Label
 var _cost: Label
 var _analyse: Button
+var _setup_check: Button
 var _generate: Button
 var _retry: Button
 var _cancel_job: Button
@@ -70,6 +71,7 @@ var _layout_editor: ForgeLayoutEditor
 var _layout_context: Dictionary = {}
 var _layout_job_path: String = ""
 var _layout_focus: Dictionary = {}
+var _retry_allowed: bool = false
 
 
 func setup(player_slot: int, fighter_library: FighterLibrary) -> void:
@@ -86,6 +88,7 @@ func _ready() -> void:
 		library = Library.new()
 	_build_ui()
 	_refresh_library()
+	_refresh_configuration(false)
 
 
 func _build_ui() -> void:
@@ -222,6 +225,8 @@ func _build_proposal(parent: HBoxContainer) -> void:
 	column.add_child(_label("02 / SHAPE THE IDEA", 23))
 	_analyse = _button("Analyse drawing", analyse_source)
 	column.add_child(_analyse)
+	_setup_check = _button("Check AI setup / budget", _refresh_configuration)
+	column.add_child(_setup_check)
 	column.add_child(_label("Review every suggestion before generating.", 17, Color("#a2b5bc")))
 	_name = _field(column, "Name", "My fighter", 40)
 	column.add_child(_label("Body shape", 18))
@@ -238,7 +243,7 @@ func _build_proposal(parent: HBoxContainer) -> void:
 	column.add_child(notice)
 	_generate = _button("Generate artwork", generate_candidate)
 	column.add_child(_generate)
-	_cost = _label("Request budget: up to $0.50 per job.\nGeneration uses the configured service; baking edits is local.", 17, Color("#a2b5bc"))
+	_cost = _label("Up to $0.50 per character. Check AI setup for the shared allowance.\nLocal edits and accepted fighters work offline.", 17, Color("#a2b5bc"))
 	_cost.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	column.add_child(_cost)
 	var actions := HBoxContainer.new()
@@ -247,7 +252,7 @@ func _build_proposal(parent: HBoxContainer) -> void:
 	actions.add_child(_cancel_job)
 	_retry = _button("New attempt", _retry_job)
 	actions.add_child(_retry)
-	var caution := _label("Cancellation stops later work. A request already sent may still be billed.", 16, Color("#a2b5bc"))
+	var caution := _label("Reservations are conservative allowances, not billing. Cancellation stops later work; a request already sent may still be billed.", 16, Color("#a2b5bc"))
 	caution.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	column.add_child(caution)
 
@@ -341,13 +346,13 @@ func _refresh_library() -> void:
 		empty.custom_minimum_size.x = 700
 		empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		_library_grid.add_child(empty)
-	var jobs := DirAccess.get_directories_at(Bridge.JOB_ROOT) if DirAccess.dir_exists_absolute(Bridge.JOB_ROOT) else PackedStringArray()
+	var jobs := DirAccess.get_directories_at(bridge.job_root) if DirAccess.dir_exists_absolute(bridge.job_root) else PackedStringArray()
 	jobs.reverse()
 	var shown := 0
 	for folder: String in jobs:
 		if shown >= 8:
 			break
-		var path := ProjectSettings.globalize_path(Bridge.JOB_ROOT).path_join(folder).path_join("job.json")
+		var path := ProjectSettings.globalize_path(bridge.job_root).path_join(folder).path_join("job.json")
 		if not bridge.trusted_job(path):
 			continue
 		var status := bridge.status(path)
@@ -500,7 +505,11 @@ func _handle_status(report: Dictionary) -> void:
 	_last_status = serial
 	state = str(report.get("state", "failed"))
 	_notice(str(report.get("message", state.capitalize())))
-	_cost.text = "Estimate: $%.3f · Reserved: $%.3f\nJob budget: $0.50; local rebakes use no model." % [float(report.get("estimated_usd", 0)), float(report.get("reserved_usd", 0))]
+	_update_budget(report)
+	_retry_allowed = bool(report.get("retry_allowed", false))
+	# The legacy preflight message means no missing image was attempted. An
+	# earlier analysis or verified cached image can still have a retained cost.
+	_retry_allowed = _retry_allowed or (state == "failed" and str(report.get("message", "")) == "The remaining shared or job budget cannot cover all missing image requests. No image request or new reservation was made.")
 	if state == "awaiting_approval":
 		var proposal: Dictionary = report.get("proposal", {}) if report.get("proposal", {}) is Dictionary else {}
 		if proposal.is_empty():
@@ -515,6 +524,31 @@ func _handle_status(report: Dictionary) -> void:
 	if state == "failed":
 		_offer_layout_correction()
 	_update_controls()
+
+
+func _refresh_configuration(show_notice: bool = true) -> void:
+	if _busy:
+		return
+	var report := bridge.configuration()
+	if not report.get("ok", false):
+		if show_notice:
+			_notice(str(report.get("error", "Local AI setup is unavailable.")))
+		return
+	var current := bridge.status(job_path) if not job_path.is_empty() else {}
+	if current.get("budget") is Dictionary:
+		for field: String in ["job_limit_usd", "job_reserved_usd", "job_remaining_usd", "required_usd"]:
+			if current["budget"].has(field):
+				report["budget"][field] = current["budget"][field]
+	_update_budget(report)
+	if show_notice:
+		_notice("AI setup ready. No request was made." if report.get("key_present", false) else "Add OPENAI_API_KEY to " + str(report.get("configuration_file", "the local authoring .env")) + ". No request was made.")
+
+
+func _update_budget(report: Dictionary) -> void:
+	var budget: Variant = report.get("budget")
+	if not budget is Dictionary or not budget.has("total_limit_usd"):
+		return
+	_cost.text = "Total $%.2f / $%.2f reserved | $%.2f left\nJob $%.2f / $%.2f left | Need $%.2f; local edits free" % [float(budget.get("total_reserved_usd", 0)), float(budget.get("total_limit_usd", 0)), float(budget.get("total_remaining_usd", 0)), float(budget.get("job_remaining_usd", 0)), float(budget.get("job_limit_usd", 0.5)), float(budget.get("required_usd", 0))]
 
 
 func _offer_layout_correction() -> void:
@@ -633,6 +667,7 @@ func resume_job(path: String) -> void:
 		return
 	job_path = path
 	var job := bridge.read_json(path)
+	_operation = "generate" if job.has("proposal") else "analyse"
 	var source_path := path.get_base_dir().path_join("source.png")
 	if FileAccess.file_exists(source_path):
 		import_source(source_path)
@@ -787,6 +822,12 @@ func _cancel_request() -> void:
 func _retry_job() -> void:
 	if _busy:
 		return
+	if _retry_allowed and not job_path.is_empty():
+		if _operation == "analyse":
+			_start("analyse")
+		else:
+			generate_candidate()
+		return
 	job_path = ""
 	if _operation == "analyse":
 		analyse_source()
@@ -804,9 +845,11 @@ func _update_controls() -> void:
 	if _analyse == null:
 		return
 	_analyse.disabled = _busy
+	_setup_check.disabled = _busy
 	_generate.disabled = _busy
 	_cancel_job.disabled = not _busy
 	_retry.disabled = _busy or state not in ["failed", "cancelled"]
+	_retry.text = "Resume blocked job" if _retry_allowed else "New attempt"
 	_repair.visible = not _busy and not _layout_context.is_empty() and job_path == _layout_job_path
 	_accept.disabled = _busy or candidate.is_empty() or _edit_dirty or not _matches_preview()
 	var can_edit_parts := not _busy and not _part_records.is_empty() and job_path == _preview_job_path

@@ -53,7 +53,7 @@ func _ready() -> void:
 	# Fighters stay readable when nonblocking enemy bodies overlap them.
 	z_index = 10
 	collision_layer = 2
-	collision_mask = 1
+	collision_mask = ArenaCombat.TERRAIN_MASK
 	var shape := RectangleShape2D.new()
 	shape.size = Vector2(18, 38)
 	var collision := CollisionShape2D.new()
@@ -83,7 +83,7 @@ func get_hurt_rect() -> Rect2:
 	return Rect2(global_position + Vector2(-9, -38), Vector2(18, 38))
 
 func _physics_process(delta: float) -> void:
-	if not ArenaCombat.playing(_world):
+	if not ArenaCombat.moving(_world, slot_index):
 		return
 	_tick_clocks()
 	if downed:
@@ -92,7 +92,8 @@ func _physics_process(delta: float) -> void:
 		_avatar.play("downed")
 		_avatar.tick()
 		return
-	heal((float(stats.regen) + (1.0 if kit_id == "nature" else 0.0)) * delta)
+	if ArenaCombat.playing(_world):
+		heal((float(stats.regen) + (1.0 if kit_id == "nature" else 0.0)) * delta)
 	var input := InputRouter.snapshot(slot_index)
 	var grounded := is_on_floor() and velocity.y >= 0.0
 	_coyote = 6 if grounded else maxi(0, _coyote - 1)
@@ -112,7 +113,7 @@ func _physics_process(delta: float) -> void:
 			_avatar.play("dash", true)
 			ArenaCombat.effect(_world, global_position, COLORS[kit_id], "dodge")
 		elif _attack.is_empty():
-			if input.just_pressed(Action.SPECIAL) and special_ticks == 0:
+			if input.just_pressed(Action.SPECIAL) and special_ticks == 0 and ArenaCombat.playing(_world):
 				_start_attack(true)
 			elif input.is_held(Action.ATTACK):
 				_start_attack(false)
@@ -137,6 +138,9 @@ func _physics_process(delta: float) -> void:
 	if not input.is_held(Action.JUMP) and velocity.y < -180.0:
 		velocity.y = -180.0
 	move_and_slide()
+	if global_position.y > ArenaCombat.bounds(_world).end.y + 64:
+		global_position = ArenaCombat.safe_position(_world, global_position)
+		velocity = Vector2.ZERO
 	if is_on_floor() and _jump_buffer > 0 and _hurt == 0:
 		velocity.y = JUMP_SPEED
 		_jump_buffer = 0

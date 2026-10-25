@@ -1,0 +1,402 @@
+{
+  "schema_version": 1,
+  "content_version": "scrolling-world-v1",
+  "layers": [
+    {
+      "id": "sky",
+      "file": "sky.png",
+      "sha256": "893096d3b714f2bac073ba0e586c64cc0f35c991f9ebc28f13068301eb5d0635",
+      "size": [
+        640,
+        360
+      ],
+      "factor": 0.08,
+      "y_factor": 0.03
+    },
+    {
+      "id": "far",
+      "file": "far.png",
+      "sha256": "7c31ae3c47e853b08d8bed0838777bcd09db1380181e23a316effac37c134390",
+      "size": [
+        640,
+        360
+      ],
+      "factor": 0.22,
+      "y_factor": 0.1
+    },
+    {
+      "id": "canopy",
+      "file": "canopy.png",
+      "sha256": "1d252538f7e7f603743b85a702092b8f25b3426e339c90276f840c77202ae413",
+      "size": [
+        640,
+        360
+      ],
+      "factor": 0.42,
+      "y_factor": 0.25
+    },
+    {
+      "id": "foreground",
+      "file": "foreground.png",
+      "sha256": "0b5b666d4ada5c8c2a91e4ebb7c86766e02305e90067f1b96dbbaa1d56f4d848",
+      "size": [
+        640,
+        360
+      ],
+      "factor": 0.68,
+      "y_factor": 0.5
+    }
+  ],
+  "props": {
+    "lantern_pole": {
+      "rect": [
+        0,
+        0,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "kiln_brazier": {
+      "rect": [
+        64,
+        0,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "thread_spool": {
+      "rect": [
+        128,
+        0,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "root_arch": {
+      "rect": [
+        192,
+        0,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "glass_fern": {
+      "rect": [
+        256,
+        0,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "hanging_bell": {
+      "rect": [
+        320,
+        0,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "broken_column": {
+      "rect": [
+        384,
+        0,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "ivy_pillar": {
+      "rect": [
+        448,
+        0,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "iron_gate": {
+      "rect": [
+        0,
+        64,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "seed_pod": {
+      "rect": [
+        64,
+        64,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "crystal_cluster": {
+      "rect": [
+        128,
+        64,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "woven_banner": {
+      "rect": [
+        192,
+        64,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "stone_stack": {
+      "rect": [
+        256,
+        64,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "hollow_log": {
+      "rect": [
+        320,
+        64,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "little_shrine": {
+      "rect": [
+        384,
+        64,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "water_pipe": {
+      "rect": [
+        448,
+        64,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "copper_cogs": {
+      "rect": [
+        0,
+        128,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "thorn_bush": {
+      "rect": [
+        64,
+        128,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "blue_mushrooms": {
+      "rect": [
+        128,
+        128,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "tomb_marker": {
+      "rect": [
+        192,
+        128,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "rope_coil": {
+      "rect": [
+        256,
+        128,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "wind_chimes": {
+      "rect": [
+        320,
+        128,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "cave_lantern": {
+      "rect": [
+        384,
+        128,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    },
+    "old_crate": {
+      "rect": [
+        448,
+        128,
+        64,
+        64
+      ],
+      "origin": [
+        32,
+        56
+      ]
+    }
+  },
+  "landmarks": {
+    "bell_oak": {
+      "rect": [
+        0,
+        0,
+        128,
+        192
+      ],
+      "origin": [
+        64,
+        176
+      ]
+    },
+    "glass_gate": {
+      "rect": [
+        128,
+        0,
+        128,
+        192
+      ],
+      "origin": [
+        64,
+        176
+      ]
+    },
+    "spool_tower": {
+      "rect": [
+        256,
+        0,
+        128,
+        192
+      ],
+      "origin": [
+        64,
+        176
+      ]
+    },
+    "crown_loom": {
+      "rect": [
+        384,
+        0,
+        128,
+        192
+      ],
+      "origin": [
+        64,
+        176
+      ]
+    }
+  },
+  "files": {
+    "props.png": "d950c49605dca21fc70a76daccd801ebfc047c76b104d5b109ec990f31960620",
+    "landmarks.png": "72401279f49148f1dac068546e1e2cd3f2bdee676d74338868ad73e2fbe6e60a",
+    "sky.png": "893096d3b714f2bac073ba0e586c64cc0f35c991f9ebc28f13068301eb5d0635",
+    "far.png": "7c31ae3c47e853b08d8bed0838777bcd09db1380181e23a316effac37c134390",
+    "canopy.png": "1d252538f7e7f603743b85a702092b8f25b3426e339c90276f840c77202ae413",
+    "foreground.png": "0b5b666d4ada5c8c2a91e4ebb7c86766e02305e90067f1b96dbbaa1d56f4d848"
+  },
+  "sources": {
+    "tools/forge/scenery.py": "5d04a2baf111aea20bf18abc2e91a6e4072df5d05379b7c666c3bb467837d1f8",
+    "assets/arena/source/scenery.json": "8203e8d881b3b4d3af17ec467a79785877e31c18bb64999a7479b51dc0e9f409"
+  }
+}

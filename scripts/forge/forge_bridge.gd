@@ -8,12 +8,13 @@ const COMMANDS := ["analyse", "generate", "bake"]
 const APPROVAL_FILE := "creator_generation.json"
 const LAYOUT_PARTS := {"upright": ["torso", "head", "arm_back", "arm_front", "leg_back", "leg_front"], "quadruped": ["torso", "head", "leg_back_left", "leg_back_right", "leg_front_left", "leg_front_right", "tail"], "floating": ["torso", "arm_back", "arm_front"]}
 var pid: int = -1
+var job_root: String = JOB_ROOT
 
 
 func create_job(source: Image, description: String) -> Dictionary:
 	if source == null or source.is_invisible() or description.length() > 2000:
 		return {"ok": false, "error": "Draw or import a character first; descriptions are limited to 2,000 characters."}
-	var folder := ProjectSettings.globalize_path(JOB_ROOT).path_join("job-%d-%d" % [Time.get_unix_time_from_system(), Time.get_ticks_usec()])
+	var folder := ProjectSettings.globalize_path(job_root).path_join("job-%d-%d" % [Time.get_unix_time_from_system(), Time.get_ticks_usec()])
 	if DirAccess.make_dir_recursive_absolute(folder) != OK:
 		return {"ok": false, "error": "Could not create a local authoring job."}
 	var source_path := folder.path_join("source.png")
@@ -31,11 +32,9 @@ func start(command: String, job_path: String) -> Dictionary:
 		return {"ok": false, "error": "Invalid authoring command or job location."}
 	if pid > 0 and OS.is_process_running(pid):
 		return {"ok": false, "error": "The current request is still finishing. Its cost reservation remains in place."}
-	var worker := ProjectSettings.globalize_path(WORKER)
-	if OS.has_feature("standalone") or not FileAccess.file_exists(WORKER):
-		worker = OS.get_executable_path().get_base_dir().path_join("authoring/tools/fighter_forge.py")
-	if not FileAccess.file_exists(worker):
-		return {"ok": false, "error": "Local authoring tools are unavailable. Saved and built-in fighters remain playable."}
+	var executable := _worker_command()
+	if not executable["ok"]:
+		return executable
 	# A cancelled paid job is never silently resumed; Retry creates a fresh job.
 	if FileAccess.file_exists(job_path.get_base_dir().path_join("cancel")):
 		return {"ok": false, "error": "This job was cancelled. Start a new attempt to continue."}
@@ -47,14 +46,38 @@ func start(command: String, job_path: String) -> Dictionary:
 	queued.erase("candidate_path")
 	if not write_json(job_path.get_base_dir().path_join("status.json"), queued):
 		return {"ok": false, "error": "Could not record the queued authoring request."}
-	var authoring_root := worker.get_base_dir().get_base_dir()
-	var interpreter := authoring_root.path_join(".venv/bin/python")
-	if not FileAccess.file_exists(interpreter):
-		interpreter = "python3"
-	pid = OS.create_process(interpreter, PackedStringArray([worker, command, "--job", job_path]))
+	pid = OS.create_process(executable["interpreter"], PackedStringArray([executable["worker"], command, "--job", job_path]))
 	if pid < 0:
 		return {"ok": false, "error": "Could not launch Python authoring. Check the local authoring setup."}
 	return {"ok": true, "error": "", "pid": pid}
+
+
+func _worker_command() -> Dictionary:
+	var worker := ProjectSettings.globalize_path(WORKER)
+	if OS.has_feature("standalone") or not FileAccess.file_exists(WORKER):
+		worker = OS.get_executable_path().get_base_dir().path_join("authoring/tools/fighter_forge.py")
+	if not FileAccess.file_exists(worker):
+		return {"ok": false, "error": "Local authoring tools are unavailable. Saved and built-in fighters remain playable."}
+	var interpreter := worker.get_base_dir().get_base_dir().path_join(".venv/bin/python")
+	if not FileAccess.file_exists(interpreter):
+		interpreter = "python3"
+	return {"ok": true, "worker": worker, "interpreter": interpreter}
+
+
+func configuration() -> Dictionary:
+	# The worker returns only safe metadata. Godot never opens the credential file.
+	var executable := _worker_command()
+	if not executable["ok"]:
+		return executable
+	var output: Array = []
+	var code := OS.execute(executable["interpreter"], PackedStringArray([executable["worker"], "status"]), output, true)
+	var parsed: Variant = JSON.parse_string("".join(output).strip_edges())
+	if not parsed is Dictionary:
+		return {"ok": false, "error": "Could not read local AI setup. Install the optional authoring dependencies."}
+	if code != 0:
+		return {"ok": false, "error": str(parsed.get("message", "Local AI setup is unavailable."))}
+	parsed["ok"] = true
+	return parsed
 
 
 func candidate_path(job_path: String, reported: Variant = "") -> String:
@@ -243,7 +266,7 @@ func create_layout_job(path: String, layout: Dictionary) -> Dictionary:
 		if hash.finish().hex_encode() != expected[name]:
 			return {"ok": false, "error": "The retained cache changed. Reopen the correction screen."}
 		copies[name] = bytes
-	var fresh := ProjectSettings.globalize_path(JOB_ROOT).path_join("job-local-%d-%d" % [Time.get_unix_time_from_system(), Time.get_ticks_usec()])
+	var fresh := ProjectSettings.globalize_path(job_root).path_join("job-local-%d-%d" % [Time.get_unix_time_from_system(), Time.get_ticks_usec()])
 	if DirAccess.make_dir_recursive_absolute(fresh.path_join("raw")) != OK:
 		return {"ok": false, "error": "Could not create a fresh local correction draft."}
 	for name: String in copies:
@@ -281,7 +304,7 @@ func cancel(job_path: String) -> bool:
 
 
 func trusted_job(path: String) -> bool:
-	var root := ProjectSettings.globalize_path(JOB_ROOT).simplify_path().trim_suffix("/") + "/"
+	var root := ProjectSettings.globalize_path(job_root).simplify_path().trim_suffix("/") + "/"
 	return path.is_absolute_path() and path.simplify_path() == path and path.begins_with(root) and path.get_file() == "job.json" and path.get_base_dir().get_base_dir() + "/" == root
 
 

@@ -1,0 +1,54 @@
+{
+  "recorded_at": "2026-10-25T05:57:15+05:30",
+  "checks": {
+    "arena": {
+      "log_sha256": "1c06c38f786c401fe3683f015a5fda9cc650f979d8e1889be7fc97d3c337e38b",
+      "summary": [
+        "RUN run_shop_input.gd",
+        "PASS run_shop_input.gd",
+        "RUN world_runtime.gd",
+        "PASS world_runtime.gd",
+        "Arena scenarios: 19 passed, 0 failed"
+      ]
+    },
+    "forge": {
+      "log_sha256": "6eaa17e76724c006f41c58be5196fb2e64008dd6695ec88cb59557d50f95334f",
+      "summary": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "Forge boundary/UI checks: 162 assertions, 0 failures; no providers called."
+      ]
+    },
+    "python": {
+      "log_sha256": "40b026c665afa6c50a93ad8b551a04ef3a246551c4b9f3afce3c363304cfcd44",
+      "summary": [
+        "..........................................................................................................................................................................................",
+        "----------------------------------------------------------------------",
+        "Ran 186 tests in 28.223s",
+        "",
+        "OK"
+      ]
+    },
+    "import": {
+      "log_sha256": "990b5a540244c4e03d90470ada9fff5e10ac7b4572a6f65ab2af6d0d5f700797",
+      "summary": [
+        "[   0% ] \u001b[90m\u001b[1mloading_editor_layout\u001b[22m | Started Loading editor (5 steps)\u001b[39m\u001b[0m",
+        "[   0% ] \u001b[90m\u001b[1mloading_editor_layout\u001b[22m | Loading editor layout...\u001b[39m\u001b[0m",
+        "[  16% ] \u001b[90m\u001b[1mloading_editor_layout\u001b[22m | Loading docks...\u001b[39m\u001b[0m",
+        "\u001b[92m[ DONE ]\u001b[39m \u001b[1mloading_editor_layout\u001b[22m",
+        "\u001b[0m"
+      ]
+    }
+  },
+  "budget": {
+    "configured_total_usd": 2,
+    "per_job_max_usd": 0.5,
+    "reserved_total_usd": 0.55,
+    "previous_reservations_preserved": true,
+    "new_image_calls": 2,
+    "automatic_retries": 0,
+    "local_correction_new_calls": 0,
+    "actual_billing_claim": false
+  },
+  "private_user_art_included": false
+}

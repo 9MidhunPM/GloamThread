@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import base64
+from decimal import Decimal, DecimalException, InvalidOperation
 import json
 from pathlib import Path
 import re
@@ -9,6 +10,13 @@ import re
 
 class ForgeError(Exception):
     """Only project-authored, credential-free messages may cross the UI boundary."""
+
+    def __init__(self, message: str, *, code: str = "authoring_error", retry_allowed: bool = False,
+                 required_microusd: int = 0):
+        super().__init__(message)
+        self.code = code
+        self.retry_allowed = retry_allowed
+        self.required_microusd = required_microusd
 
 
 RIGS = ("upright", "quadruped", "floating")
@@ -78,11 +86,30 @@ def validate_config(config: dict) -> None:
     if (config.get("model") != "gpt-image-1-mini" or config.get("quality") != "low"
             or config.get("analysis_model") != "gpt-6-luna"):
         raise ForgeError("This budget review permits only gpt-6-luna and gpt-image-1-mini low. No model fallback was made.")
+    total_budget_microusd(config)
+
+
+def total_budget_microusd(config: dict) -> int:
+    """The user configures total allowance; job files cannot increase it."""
+    value = config.get("forge_total_budget_usd", "0.50")
+    if type(value) not in (str, int, float):
+        raise ForgeError("FORGE_TOTAL_BUDGET_USD must be a dollar amount from 0 to 100.")
+    try:
+        money = Decimal(str(value))
+        if not money.is_finite() or not 0 <= money <= 100:
+            raise InvalidOperation
+        exact = money.quantize(Decimal("0.000001"))
+        if exact != money:
+            raise InvalidOperation
+        return int(exact * 1000000)
+    except (DecimalException, ValueError, OverflowError):
+        raise ForgeError("FORGE_TOTAL_BUDGET_USD must be a dollar amount from 0 to 100, with at most six decimal places.") from None
 
 
 def public_settings(config: dict) -> dict:
     return {"key_present": bool(config.get("key")), "analysis_model": config["analysis_model"],
-            "image_model": config["model"], "image_quality": config["quality"]}
+            "image_model": config["model"], "image_quality": config["quality"],
+            "total_budget_usd": total_budget_microusd(config) / 1000000}
 
 
 def safe_metadata(response: object) -> dict:

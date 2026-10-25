@@ -15,6 +15,7 @@ var selected: Array[Dictionary] = []
 var session: ArenaRunSession
 var world_view: SubViewport
 var world_container: SubViewportContainer
+var presentation: Control
 var viewport_root: Control
 var overlay: Control
 var hud: Control
@@ -128,6 +129,7 @@ func _show_title() -> void:
 		session = null
 		world_view = null
 		world_container = null
+		presentation = null
 	if is_instance_valid(hud):
 		hud.free()
 	_clear_menu("title")
@@ -135,7 +137,7 @@ func _show_title() -> void:
 	_label("LOCAL ARCADE  /  1-2 PLAYERS", Vector2(106, 91), Vector2(900, 36), 22, GOLD)
 	_label("GLOAMTHREAD", Vector2(96, 149), Vector2(1600, 110), 80, INK)
 	_label("WEAVE. FIGHT. REPEAT.", Vector2(106, 277), Vector2(900, 52), 30, GOLD)
-	_label("Draw your fighter. Build a ridiculous run.\nTwenty waves. One arena. Bring a friend.", Vector2(108, 355), Vector2(760, 100), 24, MUTED)
+	_label("Draw your fighter. Explore a changing world.\nTwenty waves. Hidden trails. Bring a friend.", Vector2(108, 355), Vector2(900, 100), 24, MUTED)
 	_button("SOLO RUN", Rect2(108, 502, 650, 80), func() -> void: _show_lobby(1), true)
 	_button("LOCAL CO-OP", Rect2(108, 596, 650, 80), func() -> void: _show_lobby(2))
 	_button("CHARACTER FORGE", Rect2(108, 690, 650, 80), func() -> void: _open_creator(0))
@@ -215,7 +217,7 @@ func _open_creator(slot: int) -> void:
 	overlay.add_child(creator)
 
 
-func _begin_run() -> void:
+func _begin_run(seed: int = 0) -> void:
 	for slot in roster_size:
 		if not InputRouter.is_joined(slot) or InputRouter.is_waiting_for_device(slot):
 			_toast("Assign a connected input to every active player.")
@@ -225,28 +227,20 @@ func _begin_run() -> void:
 	var bundles_for_run: Array[Dictionary] = []
 	for slot in roster_size:
 		bundles_for_run.append(selected[slot])
-	world_container = SubViewportContainer.new()
-	world_container.name = "SharedArena"
-	world_container.size = Vector2(640, 360)
-	world_container.scale = Vector2(3, 3)
-	world_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	world_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	viewport_root.add_child(world_container)
-	world_view = SubViewport.new()
-	world_view.size = Vector2i(640, 360)
-	world_view.handle_input_locally = false
-	world_view.audio_listener_enable_2d = false
-	world_view.render_target_update_mode = SubViewport.UPDATE_ALWAYS
-	world_container.add_child(world_view)
 	session = ArenaRunSession.new()
-	session.configure(catalog, bundles_for_run)
+	session.configure(catalog, bundles_for_run, seed)
 	session.font = font
 	session.reduced_flash = settings.reduced_flash
 	session.reduced_shake = settings.reduced_shake
 	session.phase_changed.connect(_phase_changed)
 	session.changed.connect(_run_changed)
 	session.notice.connect(_toast)
-	world_view.add_child(session)
+	presentation = load("res://scripts/arena/arena_presentation.gd").new()
+	viewport_root.add_child(presentation)
+	presentation.setup(session)
+	session.presentation = presentation
+	world_view = presentation.viewport_a
+	world_container = presentation.container_a
 	_build_hud()
 	_persist_settings()
 
@@ -284,7 +278,9 @@ func _build_hud() -> void:
 
 
 func _phase_changed(value: String) -> void:
-	if value == "shop":
+	if value == "error":
+		_show_error(session.load_error)
+	elif value == "shop":
 		_show_shop()
 	elif value in ["victory", "defeat"]:
 		_show_results()
@@ -303,36 +299,48 @@ func _show_shop(reset: bool = true) -> void:
 	if reset:
 		shop_cursor = [0, 0]
 	shop_buttons.clear()
-	_shade()
-	_label("WAVE %02d CLEARED" % session.wave, Vector2(130, 90), Vector2(1660, 80), 52, INK)
-	_label("Spend your coins. Shape your build. Ready when you both are.", Vector2(134, 178), Vector2(1660, 50), 23, MUTED)
 	for slot in roster_size:
-		var x := 120.0 + slot * 850 if roster_size == 2 else 520.0
-		_panel(Rect2(x, 260, 810, 705))
+		var half_x := slot * 960.0 if roster_size == 2 else 0.0
+		if not session.shop_open[slot]:
+			shop_buttons.append([])
+			var caption := "READY - CHANGE SHOP" if session.shop_ready[slot] else "EXPLORE / OPEN SHOP"
+			_button("P%d  %s [%s]" % [slot + 1, caption, InputRouter.bindings_of(slot).prompt_label(Action.INTERACT)], Rect2(half_x + 35, 980, 820, 60), session.set_shop_open.bind(slot, true), false, false)
+			continue
+		var shade := ColorRect.new()
+		shade.position = Vector2(half_x, 0)
+		shade.size = Vector2(960 if roster_size == 2 else 1920, 1080)
+		shade.color = Color(0.02, 0.04, 0.06, 0.78)
+		shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		overlay.add_child(shade)
+		var x := half_x + 72 if roster_size == 2 else 520.0
+		_panel(Rect2(x, 220, 816, 742))
 		var state := session.player_states[slot]
-		_label("P%d  %s  /  %d COINS" % [slot + 1, selected[slot].name, state.coins], Vector2(x + 28, 290), Vector2(750, 55), 26, GOLD)
+		_label("WAVE %02d CLEAR / P%d" % [session.wave, slot + 1], Vector2(x + 28, 244), Vector2(750, 35), 23, MUTED)
+		_label("%s / %d COINS" % [selected[slot].name, state.coins], Vector2(x + 28, 288), Vector2(750, 45), 27, GOLD)
 		var buttons: Array = []
 		var row := 0
 		for offer: Dictionary in session.shop_offers[slot]:
-			var button := _button("", Rect2(x + 28, 365 + row * 100, 754, 88), _shop_purchase.bind(slot, str(offer.id)), false, false)
-			_label("%s  %s" % [offer.name, "I".repeat(int(offer.rank))], Vector2(20, 12), Vector2(510, 30), 22, INK, button)
-			var price := _label("%d COINS" % offer.price, Vector2(560, 12), Vector2(174, 30), 20, GOLD, button)
+			var button := _button("", Rect2(x + 28, 343 + row * 94, 760, 84), _shop_purchase.bind(slot, str(offer.id)), false, false)
+			_label("%s %s" % [offer.name, "I".repeat(int(offer.rank))], Vector2(18, 9), Vector2(510, 28), 22, INK, button)
+			var price := _label("%d COINS" % offer.price, Vector2(563, 10), Vector2(175, 28), 20, GOLD, button)
 			price.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-			var description := _label(str(offer.description), Vector2(20, 46), Vector2(712, 38), 18, MUTED, button)
+			var description := _label(str(offer.description), Vector2(18, 43), Vector2(716, 35), 18, MUTED, button)
 			description.max_lines_visible = 2
-			button.disabled = state.coins < int(offer.price) or session.shop_ready[slot]
+			button.disabled = state.coins < int(offer.price)
 			buttons.append(button)
 			row += 1
-		var heal := _button("HEAL +35% / 5C", Rect2(x + 28, 782, 366, 62), _shop_purchase.bind(slot, "heal"), false, false)
-		heal.disabled = session.shop_ready[slot] or state.coins < 5 or session.fighters[slot].health >= session.fighters[slot].max_health
+		var heal := _button("HEAL +35% / 5C", Rect2(x + 28, 730, 370, 54), _shop_purchase.bind(slot, "heal"), false, false)
+		heal.disabled = state.coins < 5 or session.fighters[slot].health >= session.fighters[slot].max_health
 		buttons.append(heal)
-		var roll := _button("REROLL  |  FREE" if not session.rerolled[slot] else "REROLL USED", Rect2(x + 412, 782, 370, 62), _shop_reroll.bind(slot), false, false)
-		roll.disabled = session.rerolled[slot] or session.shop_ready[slot]
+		var roll := _button("REROLL / FREE" if not session.rerolled[slot] else "REROLL USED", Rect2(x + 416, 730, 372, 54), _shop_reroll.bind(slot), false, false)
+		roll.disabled = session.rerolled[slot]
 		buttons.append(roll)
-		buttons.append(_button("READY!  CONFIRM AGAIN TO UNREADY" if session.shop_ready[slot] else "READY FOR NEXT WAVE", Rect2(x + 28, 872, 754, 64), _shop_ready.bind(slot), true, false))
+		buttons.append(_button("EXPLORE - KEEP SHOPPING LATER", Rect2(x + 28, 802, 760, 56), session.set_shop_open.bind(slot, false), false, false))
+		buttons.append(_button("READY FOR NEXT WAVE", Rect2(x + 28, 878, 760, 56), _shop_ready.bind(slot), true, false))
 		shop_buttons.append(buttons)
 		shop_cursor[slot] = mini(shop_cursor[slot], buttons.size() - 1)
-	_label("Each panel uses its player's controls. Up/Down selects; Attack/Jump confirms.\nReady players can confirm again to keep shopping.", Vector2(130, 988), Vector2(1660, 62), 20, MUTED)
+		_label("Own Up/Down selects; Attack/Jump confirms.
+Explore freely. Everyone must Ready.", Vector2(x + 6, 980), Vector2(810, 62), 19, MUTED)
 	_focus_shop()
 
 
@@ -358,6 +366,7 @@ func _show_pause() -> void:
 	_button("RESUME", Rect2(615, 440, 690, 80), _resume, true)
 	_button("SETTINGS & CONTROLS", Rect2(615, 540, 690, 80), _show_settings)
 	_button("END RUN", Rect2(615, 640, 690, 80), _confirm_end_run)
+	_label("WORLD SEED %d" % session.seed_value, Vector2(615, 393), Vector2(690, 30), 18, MUTED)
 	_focus_menu()
 
 
@@ -489,13 +498,22 @@ func _restart_run() -> void:
 
 func _physics_process(_delta: float) -> void:
 	_ticks += 1
+	if is_instance_valid(session):
+		_message.position.y = 170
+		_message.visible = screen != "playing" or not is_instance_valid(_boss_bar) or not _boss_bar.visible
+	else:
+		_message.position.y = 1000
+		_message.show()
 	if _toast_ticks > 0:
-		_toast_ticks -= 1
+		if _message.visible:
+			_toast_ticks -= 1
 		if _toast_ticks == 0:
 			_message.text = ""
 	if screen == "creator" or screen == "error":
 		return
 	if is_instance_valid(session) and screen in ["playing", "shop"]:
+		if is_instance_valid(presentation):
+			presentation.force_split = session.shop_open.has(true)
 		for slot in roster_size:
 			if InputRouter.snapshot(slot).just_pressed(Action.PAUSE):
 				_show_pause()
@@ -504,8 +522,6 @@ func _physics_process(_delta: float) -> void:
 			_poll_shop()
 		if _ticks % 6 == 0:
 			_update_hud()
-		if is_instance_valid(world_container):
-			world_container.position = Vector2((1 if _ticks % 2 == 0 else -1) * 3, 0) if session.shake_ticks > 0 and not settings.reduced_shake else Vector2.ZERO
 	elif not menu_buttons.is_empty():
 		var command := InputRouter.snapshot(0)
 		if command.just_pressed(Action.DOWN) or command.just_pressed(Action.RIGHT):
@@ -522,6 +538,10 @@ func _physics_process(_delta: float) -> void:
 
 func _poll_shop() -> void:
 	for slot in roster_size:
+		if not session.shop_open[slot]:
+			if InputRouter.snapshot(slot).just_pressed(Action.INTERACT):
+				session.set_shop_open(slot, true)
+			continue
 		if slot >= shop_buttons.size() or shop_buttons[slot].is_empty():
 			continue
 		var command := InputRouter.snapshot(slot)

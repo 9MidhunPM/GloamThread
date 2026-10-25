@@ -15,6 +15,8 @@ from .enemies import rebuild as rebuild_enemies,validate as validate_enemies
 from .audio import rebuild as rebuild_audio,validate as validate_audio
 from .fixtures import rebuild as rebuild_fixtures
 from .retained import validate_sources,source_registry,publish_all
+from .world import validate as validate_world
+from .scenery import validate as validate_scenery
 
 ROOT=Path(__file__).resolve().parents[2]
 
@@ -60,7 +62,9 @@ def validate(root:Path=ROOT)->dict:
     for identifier in index['bundles']:validate_bundle(root/f'assets/arena/builtin/{identifier}')
     enemies=validate_enemies(root)
     audio=validate_audio(root)
-    return {'music_tracks':len(audio['music']),'arena_cues':len(audio['sfx']),'enemy_atlases':len(enemies['assets']),'kits':len(data['kits']),'upgrades':len(data['upgrades']),'waves':len(data['waves']),'arenas':len(data['arenas']),'bundles':len(index['bundles'])}
+    world=validate_world(json.loads((root/'content/arena/world.json').read_text()))
+    scenery=validate_scenery(root)
+    return {'world_regions':len(world['regions']),'world_templates':len(world['templates']),'scenery_props':len(scenery['props']),'landmark_families':len(scenery['landmarks']),'parallax_layers':len(scenery['layers']),'music_tracks':len(audio['music']),'arena_cues':len(audio['sfx']),'enemy_atlases':len(enemies['assets']),'kits':len(data['kits']),'upgrades':len(data['upgrades']),'waves':len(data['waves']),'arenas':len(data['arenas']),'bundles':len(index['bundles'])}
 
 
 def main()->None:

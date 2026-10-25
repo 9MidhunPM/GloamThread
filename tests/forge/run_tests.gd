@@ -109,6 +109,7 @@ func _run() -> void:
 	directory.list_dir_end()
 	_check(retained_backup, "valid replacement retains original backup")
 	var bridge := Bridge.new()
+	bridge.job_root = folder.path_join("jobs")
 	var round_trip := bridge._integer_json(JSON.parse_string('{"schema_version":1,"crop":[0,2,16,9],"budget_usd":0.5,"flag":true}')) as Dictionary
 	_check(typeof(round_trip["schema_version"]) == TYPE_INT and typeof(round_trip["crop"][0]) == TYPE_INT and round_trip["budget_usd"] == 0.5 and typeof(round_trip["flag"]) == TYPE_BOOL, "JSON writer restores strict integer tokens after Godot parsing without changing fractional costs or booleans")
 	_check(not bridge.trusted_job("/tmp/outside/job.json"), "worker rejects jobs outside trusted cache")
@@ -119,6 +120,7 @@ func _run() -> void:
 	drawing.fill_rect(Rect2i(10, 10, 20, 40), Color("#e4a85b"))
 	var job := bridge.create_job(drawing, "Synthetic fixture; never send to a provider.")
 	_check(job["ok"] and bridge.trusted_job(job["path"]), "drawing persists in trusted job directory")
+	_check(str(job["path"]).begins_with(folder + "/jobs/"), "boundary test jobs stay outside the production user library")
 	_check(bridge.cancel(job["path"]), "cancellation marker is retained")
 	_check(FileAccess.file_exists(job["path"].get_base_dir().path_join("cancel")), "cancel never relies on killing a process")
 	_check(bridge.candidate_path(job["path"], "/tmp/outside/candidate").is_empty(), "status cannot redirect candidate outside its trusted job")
@@ -128,6 +130,7 @@ func _run() -> void:
 	view.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	root.add_child(view)
 	var creator := Creator.new()
+	creator.bridge = FakeBridge.new()
 	creator.setup(1, library)
 	view.add_child(creator)
 	await process_frame
@@ -213,6 +216,7 @@ func _run() -> void:
 	creator.bake_edits()
 	_check(mock.commands.size() == commands_before, "old preview parts cannot be baked into a newly created job")
 	_check_proposal_revisions(view, library, loaded["bundle"], drawing)
+	_check_budget_resume(view, library, drawing)
 	await _check_layout_correction(view, library, loaded["bundle"], drawing)
 	var args := OS.get_cmdline_user_args()
 	if args.size() == 2 and args[0] == "--capture":
@@ -243,6 +247,7 @@ func _make_bundle(folder: String) -> void:
 
 func _check_proposal_revisions(view: SubViewport, library: FighterLibrary, previous: Dictionary, drawing: Image) -> void:
 	var creator := Creator.new()
+	creator.bridge = FakeBridge.new()
 	creator.setup(0, library)
 	view.add_child(creator)
 	var mock := FakeBridge.new()
@@ -322,6 +327,7 @@ func _check_proposal_revisions(view: SubViewport, library: FighterLibrary, previ
 
 func _check_layout_correction(view: SubViewport, library: FighterLibrary, previous: Dictionary, drawing: Image) -> void:
 	var creator := Creator.new()
+	creator.bridge = FakeBridge.new()
 	creator.setup(0, library)
 	view.add_child(creator)
 	var mock := FakeBridge.new()
@@ -455,6 +461,32 @@ func _check_layout_correction(view: SubViewport, library: FighterLibrary, previo
 	board.save_png(folder.path_join("raw/theme.png"))
 	_check(not mock.save_source_layout(path, layout)["ok"] and not mock.create_layout_job(path, layout)["ok"], "raw hash change after opening blocks both annotation save and local cloning")
 	_check(mock.commands == ["bake"], "all layout correction regressions perform no generation or analysis calls")
+	creator.free()
+
+
+func _check_budget_resume(view: SubViewport, library: FighterLibrary, drawing: Image) -> void:
+	var creator := Creator.new()
+	var mock := FakeBridge.new()
+	creator.bridge = mock
+	creator.setup(0, library)
+	view.add_child(creator)
+	creator._canvas.set_image(drawing)
+	creator.generate_candidate()
+	var blocked_path := creator.job_path
+	var budget := {"total_limit_usd": 0.50, "total_reserved_usd": 0.35, "total_remaining_usd": 0.15, "job_limit_usd": 0.50, "job_reserved_usd": 0.0, "job_remaining_usd": 0.50, "required_usd": 0.20}
+	creator._handle_status({"state": "failed", "message": "Fixture shared allowance is too small", "code": "shared_budget_exceeded", "retry_allowed": true, "reserved_usd": 0.0, "budget": budget})
+	_check(creator._cost.text.contains("$0.35 / $0.50") and creator._cost.text.contains("$0.15 left") and creator._cost.text.contains("Need $0.20"), "budget UI distinguishes total reserved, remaining and required from character allowance")
+	_check(creator._retry.text == "Resume blocked job", "a safe budget failure offers explicit resume instead of discarding its draft")
+	creator._refresh_configuration()
+	_check(creator._cost.text.contains("$0.35 / $2.00") and creator._cost.text.contains("$1.65 left"), "setup refresh reads the new configured total without a request")
+	creator._retry_job()
+	_check(creator.job_path == blocked_path and mock.commands == ["generate", "generate"], "explicit budget resume reuses the approved draft without another analysis")
+	creator._handle_status({"state": "failed", "message": "The remaining shared or job budget cannot cover all missing image requests. No image request or new reservation was made.", "reserved_usd": 0.05})
+	_check(creator._retry.text == "Resume blocked job", "legacy image preflight failure remains resumable after paid analysis")
+	creator._retry_job()
+	_check(creator.job_path == blocked_path and mock.commands == ["generate", "generate", "generate"], "legacy budget resume keeps the analysed draft and does not repeat analysis")
+	creator._handle_status({"state": "failed", "message": "A prior paid attempt is uncertain", "reserved_usd": 0.1})
+	_check(creator._retry.text == "New attempt", "an uncertain paid failure never offers an automatic same-job retry")
 	creator.free()
 
 

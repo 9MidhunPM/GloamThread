@@ -7,6 +7,7 @@ func run() -> void:
 	InputRouter.assign(0,DeviceSource.keyboard_left())
 	InputRouter.set_test_input(0,0)
 	var world:Node2D=FIXTURE.new()
+	world.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(world)
 	world.floor_body()
 	var fighter:=ArenaFighter.new()
@@ -45,13 +46,20 @@ func run() -> void:
 	world.add_child(projectile)
 	await _steps(1)
 	var at:=projectile.position
-	world.phase="shop"
+	get_tree().paused = true
 	await _steps(15)
-	assert_true(is_instance_valid(projectile),"shop pause freezes projectile lifetime")
-	assert_eq(projectile.position,at,"shop pause freezes projectile travel")
-	world.phase="combat"
+	assert_true(is_instance_valid(projectile),"shared pause freezes projectile lifetime")
+	assert_eq(projectile.position,at,"shared pause freezes projectile travel")
+	get_tree().paused = false
 	await _steps(11)
 	assert_true(not is_instance_valid(projectile),"projectile lifetime remains bounded by combat ticks")
+	projectile = ArenaProjectile.new()
+	projectile.setup(world, Vector2(350, 80), Vector2.RIGHT, 10, 0, {"life": 12})
+	world.add_child(projectile)
+	world.phase = "shop"
+	await _steps(15)
+	assert_true(not is_instance_valid(projectile), "friendly shots keep a bounded lifetime during free intermission")
+	world.phase = "combat"
 	# Production callers cap earlier; the actor is also bounded defensively.
 	for index in 130:
 		var shot:=ArenaProjectile.new()

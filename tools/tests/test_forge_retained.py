@@ -63,6 +63,10 @@ class RetainedGenerationTests(unittest.TestCase):
         shutil.copy2(ROOT/'assets/arena/source/audio.json',self.root/'assets/arena/source/audio.json')
         (self.root/'assets/source/audio').mkdir(parents=True);shutil.copy2(ROOT/'assets/source/audio/instruments.json',self.root/'assets/source/audio/instruments.json')
         (self.root/'tools/gen').mkdir(parents=True);shutil.copy2(ROOT/'tools/gen/audio.py',self.root/'tools/gen/audio.py')
+        # Complete content validation now also consumes the independently authored world/scenery.
+        (self.root/'content/arena').mkdir(parents=True,exist_ok=True)
+        shutil.copy2(ROOT/'content/arena/world.json',self.root/'content/arena/world.json')
+        shutil.copytree(ROOT/'assets/arena/scenery',self.root/'assets/arena/scenery')
         result=rebuild_content(self.root);self.assertEqual(result['bundles'],3)
         index=json.loads((self.root/'assets/arena/builtin/index.json').read_text())
         self.assertEqual(index['bundles'],['cinderjack','thistlepaw','kiln-fox-ai'])

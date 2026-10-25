@@ -12,7 +12,7 @@ func _initialize() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
-	var options := {"players":1,"waves":20,"fighter":0,"output":"/tmp/gloamthread-arena-route.json","capture":""}
+	var options := {"players":1,"waves":20,"fighter":0,"seed":0,"output":"/tmp/gloamthread-arena-route.json","capture":""}
 	var args := OS.get_cmdline_user_args()
 	if args.size() % 2 != 0:
 		printerr("Usage: -- --players 1|2 --waves 1..25 --fighter 0|1 --output /tmp/report.json --capture /tmp/captures")
@@ -24,7 +24,7 @@ func _run() -> void:
 			printerr("Unknown route option: " + key)
 			quit(2)
 			return
-		options[key] = int(args[index+1]) if key in ["players","waves","fighter"] else args[index+1]
+		options[key] = int(args[index+1]) if key in ["players","waves","fighter","seed"] else args[index+1]
 	if int(options.players) not in [1,2] or int(options.waves) < 1 or int(options.waves) > 25 or int(options.fighter) not in [0,1]:
 		printerr("Route argument outside supported bounds.")
 		quit(2)
@@ -36,7 +36,7 @@ func _run() -> void:
 	var driver: Node = script.new()
 	root.add_child(driver)
 	var started := Time.get_ticks_msec()
-	var report: Dictionary = await driver.run(options.players,options.waves,options.capture,options.fighter)
+	var report: Dictionary = await driver.run(options.players,options.waves,options.capture,options.fighter,options.seed)
 	report.wall_seconds = (Time.get_ticks_msec()-started)/1000.0
 	report.engine = Engine.get_version_info().string
 	report.display = DisplayServer.get_name()

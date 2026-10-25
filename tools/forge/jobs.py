@@ -18,11 +18,12 @@ import uuid
 from PIL import Image, ImageOps
 
 from .provider import (ANALYSIS_PROMPT, ForgeError, OpenAIProvider, settings,
-                       validate_config, validate_proposal)
+                       total_budget_microusd, validate_config, validate_proposal)
 
 ROOT = Path(__file__).resolve().parents[2]
 VERSION = "arena-forge-1"
-SHARED_CAP = 500000  # Integer microdollars avoid cumulative float rounding.
+SHARED_CAP = 500000  # Conservative default when the user has not configured a limit.
+MAX_SHARED_CAP = 100000000
 RESERVATIONS = {"analyse": 50000, "parts": 100000, "theme": 100000}
 MAX_SOURCE_BYTES = 20 * 1024 * 1024
 MAX_RAW_BYTES = 25 * 1024 * 1024
@@ -124,7 +125,9 @@ def ledger(root: Path) -> dict:
         return {"schema_version": 1, "cap_microusd": SHARED_CAP, "reserved_usd": 0, "reservations": []}
     value = read_json(path)
     if (type(value.get("schema_version")) is not int or value["schema_version"] != 1
-            or value.get("cap_microusd") != SHARED_CAP or not isinstance(value.get("reservations"), list)):
+            or type(value.get("cap_microusd")) is not int
+            or not 0 <= value["cap_microusd"] <= MAX_SHARED_CAP
+            or not isinstance(value.get("reservations"), list)):
         raise ForgeError("The shared budget ledger is invalid; no requests were made.")
     seen = set()
     for record in value["reservations"]:
@@ -136,8 +139,10 @@ def ledger(root: Path) -> dict:
             raise ForgeError("The shared budget ledger is invalid; no requests were made.")
         seen.add((record["job"], record["kind"]))
     total = sum(r["microusd"] for r in value["reservations"])
-    if total > SHARED_CAP or value.get("reserved_usd") != total / 1000000:
-        raise ForgeError("The shared budget ledger exceeds its reviewed cap.")
+    # This stored cap describes the last accepted reservation. A lower current
+    # configuration blocks spending without rewriting that historical snapshot.
+    if total > value["cap_microusd"] or value.get("reserved_usd") != total / 1000000:
+        raise ForgeError("The shared budget ledger total is invalid.")
     return value
 
 
@@ -150,7 +155,45 @@ def reserved(root: Path, job: Path) -> float:
         return sum(r["microusd"] for r in ledger(root)["reservations"] if r["job"] == job_id(job)) / 1000000
 
 
-def reserve(root: Path, job: Path, kind: str, key: str, cap: int) -> None:
+def budget_status(root: Path, job: Path | None = None, *, total_cap: int | None = None,
+                  required: int = 0) -> dict:
+    """Safe local accounting only: no key/SDK/settings lookup or reservation."""
+    job_cap = SHARED_CAP
+    if job is not None and job.is_file():
+        try:
+            job_cap = read_job(job)[1]
+        except ForgeError:
+            pass  # Invalid jobs still receive a useful failure status.
+    with lock(budget_path(root).with_suffix(".lock")):
+        value = ledger(root)
+        cap = value["cap_microusd"] if total_cap is None else total_cap
+        total = sum(record["microusd"] for record in value["reservations"])
+        local = sum(record["microusd"] for record in value["reservations"]
+                    if job is not None and record["job"] == job_id(job))
+    return {"total_limit_usd": cap / 1000000, "total_reserved_usd": total / 1000000,
+            "total_remaining_usd": max(0, cap - total) / 1000000,
+            "job_limit_usd": job_cap / 1000000, "job_reserved_usd": local / 1000000,
+            "job_remaining_usd": max(0, job_cap - local) / 1000000,
+            "required_usd": required / 1000000}
+
+
+def _check_budget(total: int, local: int, amount: int, total_cap: int, job_cap: int) -> None:
+    if amount == 0:
+        return  # Verified cache conversion cannot increase earlier spending.
+    if total + amount > total_cap:
+        raise ForgeError("Shared allowance has $%.2f remaining; this operation needs $%.2f reserved. "
+                         "Update FORGE_TOTAL_BUDGET_USD to your chosen limit, then resume this draft. No request was made."
+                         % (max(0, total_cap - total) / 1000000, amount / 1000000),
+                         code="shared_budget_exceeded", retry_allowed=True, required_microusd=amount)
+    if local + amount > job_cap:
+        raise ForgeError("This character job has $%.2f remaining; this operation needs $%.2f reserved. "
+                         "The per-character maximum is $0.50. No request was made."
+                         % (max(0, job_cap - local) / 1000000, amount / 1000000),
+                         code="job_budget_exceeded", retry_allowed=True, required_microusd=amount)
+
+
+def reserve(root: Path, job: Path, kind: str, key: str, cap: int,
+            total_cap: int = SHARED_CAP) -> None:
     with lock(budget_path(root).with_suffix(".lock")):
         value = ledger(root)
         records = value["reservations"]
@@ -159,11 +202,11 @@ def reserve(root: Path, job: Path, kind: str, key: str, cap: int) -> None:
         total = sum(r["microusd"] for r in records)
         local = sum(r["microusd"] for r in records if r["job"] == job_id(job))
         amount = RESERVATIONS[kind]
-        if total + amount > SHARED_CAP or local + amount > cap:
-            raise ForgeError("The conservative request reservation exceeds the remaining shared or job budget. No request was made.")
+        _check_budget(total, local, amount, total_cap, cap)
         records.append({"job": job_id(job), "kind": kind, "cache_key": key, "microusd": amount,
                         "state": "reserved", "created_at": stamp()})
         value["reserved_usd"] = (total + amount) / 1000000
+        value["cap_microusd"] = total_cap
         write_json(budget_path(root), value)
 
 
@@ -176,9 +219,12 @@ def mark_reservation(root: Path, job: Path, kind: str, state: str) -> None:
         write_json(budget_path(root), value)
 
 
-def write_status(folder: Path, root: Path, state: str, message: str, **extra) -> dict:
-    amount = reserved(root, folder / "job.json")
-    value = {"state": state, "message": message, "estimated_usd": amount, "reserved_usd": amount, **extra}
+def write_status(folder: Path, root: Path, state: str, message: str, *,
+                 total_cap: int | None = None, required_microusd: int = 0, **extra) -> dict:
+    budget = budget_status(root, folder / "job.json", total_cap=total_cap, required=required_microusd)
+    amount = budget["job_reserved_usd"]
+    value = {"state": state, "message": message, "estimated_usd": amount,
+             "reserved_usd": amount, "budget": budget, **extra}
     write_json(folder / "status.json", value)
     return value
 
@@ -368,8 +414,7 @@ def preflight_images(folder: Path, root: Path, job: Path, cap: int,
             raise ForgeError("A missing image request was already attempted. Its reservation is retained; automatic retries are disabled.")
         total = sum(record["microusd"] for record in records)
         local = sum(record["microusd"] for record in local_records)
-        if total + amount > SHARED_CAP or local + amount > cap:
-            raise ForgeError("The remaining shared or job budget cannot cover all missing image requests. No image request or new reservation was made.")
+        _check_budget(total, local, amount, total_budget_microusd(config), cap)
 
 
 def request(kind: str, folder: Path, root: Path, job_path: Path, cap: int, source: bytes,
@@ -384,9 +429,10 @@ def request(kind: str, folder: Path, root: Path, job_path: Path, cap: int, sourc
     if provider is None:
         provider = OpenAIProvider(config)
         if not config.get("key"):
-            raise ForgeError("No OPENAI_API_KEY is configured. No request was made.")
+            raise ForgeError("No OPENAI_API_KEY is configured. Add it to %s. No request was made."
+                             % (root / ".env"), code="missing_key", retry_allowed=True)
     check_cancel(folder)
-    reserve(root, job_path, kind, key, cap)
+    reserve(root, job_path, kind, key, cap, total_budget_microusd(config))
     attempt = {"schema_version": 1, "worker_version": VERSION, "cache_key": key,
                "source_sha256": provenance["source"]["sha256"], "kind": kind, "model": model,
                "quality": config["quality"], "prompt": prompt,
@@ -523,7 +569,7 @@ def stage_raw_boards(parts: Path, theme: Path, provenance: dict, stage: Path) ->
 
 
 def publish_candidate(candidate: Path, folder: Path, root: Path, provenance: dict | None,
-                      editable: tuple[str, ...] = ()) -> dict:
+                      editable: tuple[str, ...] = (), *, total_cap: int | None = None) -> dict:
     """Keep the prior preview until candidate, provenance and status all commit."""
     target = folder / "candidate"
     backup = folder / (".candidate-previous-" + uuid.uuid4().hex)
@@ -548,7 +594,7 @@ def publish_candidate(candidate: Path, folder: Path, root: Path, provenance: dic
             write_json(folder / "provenance.json", provenance)
         result = write_status(folder, root, "complete",
                               "Candidate ready. Inspect silhouette, animation, masks and pivots before accepting.",
-                              candidate_path=str(target))
+                              total_cap=total_cap, candidate_path=str(target))
     except Exception:
         if installed:
             os.rename(target, candidate)
@@ -574,6 +620,7 @@ def run_job(command: str, job_path: Path, *, root: Path = ROOT, provider=None, c
     job_path, root = Path(job_path), Path(root).resolve()
     validate_job_path(job_path)
     folder = job_path.parent
+    total_cap = None
     with lock(folder / ".worker.lock", nonblocking=True):
         try:
             job, cap = read_job(job_path)
@@ -582,13 +629,15 @@ def run_job(command: str, job_path: Path, *, root: Path = ROOT, provider=None, c
                 return bake_local(job_path, root, baker, converter)
             config = settings(root) if config is None else dict(config)
             validate_config(config)
+            total_cap = total_budget_microusd(config)
             source = snapshot_source(job, folder)
             provenance = initial_provenance(folder, source)
             if command == "analyse":
                 proposal = request("analyse", folder, root, job_path, cap, source["bytes"], provenance,
                                    config, provider, description=job.get("description", ""))
                 write_json(folder / "proposal.json", proposal)
-                return write_status(folder, root, "awaiting_approval", "Review and correct this proposal before generating.", proposal=proposal)
+                return write_status(folder, root, "awaiting_approval", "Review and correct this proposal before generating.",
+                                    total_cap=total_cap, required_microusd=200000, proposal=proposal)
             if "proposal" not in job:
                 raise ForgeError("Review the proposal and store the approved proposal in job.json before generating.")
             proposal = validate_proposal(job["proposal"])
@@ -596,14 +645,15 @@ def run_job(command: str, job_path: Path, *, root: Path = ROOT, provider=None, c
                 validate_candidate(folder / "candidate")
                 if provenance.get("candidate_sha256") != digest((folder / "candidate/manifest.json").read_bytes()) or provenance.get("approved_proposal") != proposal:
                     raise ForgeError("Candidate already exists without matching approved-job provenance; it was preserved.")
-                return write_status(folder, root, "complete", "Verified cached candidate is ready for visual review.", candidate_path=str(folder / "candidate"))
+                return write_status(folder, root, "complete", "Verified cached candidate is ready for visual review.",
+                                    total_cap=total_cap, candidate_path=str(folder / "candidate"))
             preflight_images(folder, root, job_path, cap, provenance, config, proposal)
             provenance["approved_proposal"] = proposal
             write_json(folder / "provenance.json", provenance)
             parts = request("parts", folder, root, job_path, cap, source["bytes"], provenance, config, provider, proposal)
             theme = request("theme", folder, root, job_path, cap, source["bytes"], provenance, config, provider, proposal)
             check_cancel(folder)
-            write_status(folder, root, "converting", "Baking authored rig motions; candidate still needs visual review.")
+            write_status(folder, root, "converting", "Baking authored rig motions; candidate still needs visual review.", total_cap=total_cap)
             if converter is None:
                 from .rigs import convert_generated
                 converter = convert_generated
@@ -619,9 +669,9 @@ def run_job(command: str, job_path: Path, *, root: Path = ROOT, provider=None, c
                 check_cancel(folder)
                 if (folder / "candidate").exists():
                     raise ForgeError("Candidate appeared during conversion; it was preserved.")
-                return publish_candidate(candidate, folder, root, provenance, EDITABLE_FILES)
+                return publish_candidate(candidate, folder, root, provenance, EDITABLE_FILES, total_cap=total_cap)
         except Cancelled:
-            return write_status(folder, root, "cancelled", "Cancelled. Any in-flight request may still be billed; retained reservations and raw outputs are preserved.")
+            return write_status(folder, root, "cancelled", "Cancelled. Any in-flight request may still be billed; retained reservations and raw outputs are preserved.", total_cap=total_cap)
         except Exception as error:
             from .validation import BundleError
             if isinstance(error, ForgeError):
@@ -630,7 +680,12 @@ def run_job(command: str, job_path: Path, *, root: Path = ROOT, provider=None, c
                 message = "Conversion rejected: " + str(error)
             else:
                 message = "Local authoring failed. Existing fighters were preserved; inspect the retained job or start a new attempt."
-            write_status(folder, root, "failed", message)
+            details = {"code": getattr(error, "code", "authoring_error"),
+                       "retry_allowed": getattr(error, "retry_allowed", False)}
+            write_status(folder, root, "failed", message, total_cap=total_cap,
+                         required_microusd=getattr(error, "required_microusd", 0), **details)
+            if isinstance(error, ForgeError):
+                raise
             raise ForgeError(message) from None
 
 

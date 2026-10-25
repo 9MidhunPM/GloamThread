@@ -37,7 +37,7 @@ func _ready() -> void:
 	z_index = 12
 	add_to_group("arena_projectiles")
 	collision_layer = 128
-	collision_mask = 1
+	collision_mask = ArenaCombat.TERRAIN_MASK
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	var shape := CircleShape2D.new()
 	shape.radius = 3.0
@@ -53,7 +53,7 @@ func _ready() -> void:
 		queue_free()
 
 func _physics_process(delta: float) -> void:
-	if not ArenaCombat.playing(_world):
+	if not ArenaCombat.playing(_world) and (_hostile or not str(_world.get("phase")) in ["shop", "countdown", "clear"]):
 		return
 	_life -= 1
 	velocity.y += _gravity * delta
@@ -72,19 +72,22 @@ func _physics_process(delta: float) -> void:
 		for target: ArenaEnemy in ArenaCombat.actors(_world, "enemies"):
 			if is_instance_valid(target) and not target.dead and not _hits.has(target.get_instance_id()):
 				_insert_hit(target, _entry_fraction(before, after, target.get_hurt_rect().grow(3.0)))
+		for target: Node2D in ArenaCombat.actors(_world, "loot_nodes"):
+			if is_instance_valid(target) and not target.collected and target.record.kind == "cache" and not _hits.has(target.get_instance_id()):
+				_insert_hit(target, _entry_fraction(before, after, target.get_hurt_rect().grow(3.0)))
 	for index in _candidates.size():
 		var target: Node2D = _candidates[index]
 		_hits[target.get_instance_id()] = true
 		if _hostile:
 			(target as ArenaFighter).take_damage(_damage, before, -1)
 		else:
-			(target as ArenaEnemy).take_damage(_damage, _slot, _attack_id, _tags)
+			target.take_damage(_damage, _slot, _attack_id, _tags)
 		ArenaCombat.effect(_world, before.lerp(after, _entries[index]), _color, "impact")
 		if _pierce <= 0:
 			queue_free()
 			return
 		_pierce -= 1
-	if terrain != null or _life <= 0 or global_position.x < -48 or global_position.x > 688 or global_position.y < -96 or global_position.y > 400:
+	if terrain != null or _life <= 0 or not ArenaCombat.bounds(_world).grow(80).has_point(global_position):
 		queue_free()
 	# Node2D transforms move retained draw commands. Only gravity changes the
 	# tail's local direction; straight shots keep exactly the same drawing.
