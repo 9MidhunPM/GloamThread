@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "state": "complete",
+  "entered_combat_with_accepted_fighter": true,
+  "ledger_unchanged": true,
+  "new_requests": 0,
+  "network": "isolated user/network namespace",
+  "display": "Wayland",
+  "source_job_preserved": true,
+  "private_art_published": false,
+  "native_fixture_report_sha256": "4aca4fda7975ebb95321e486a0b2e850768ba2e320d69176f5bafb0c239c43b3",
+  "creator_assertions": 173,
+  "red_layout_failures_before_fix": 3,
+  "red_title_handoff_failures_before_fix": 2
+}

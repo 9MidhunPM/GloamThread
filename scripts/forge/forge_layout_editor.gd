@@ -236,6 +236,16 @@ func _apply() -> void:
 	if not error.is_empty():
 		notice.text = error
 		return
+	var issue := Bridge.new().source_layout_pixel_issue(layout, context)
+	if not issue.is_empty():
+		board_tabs.current_tab = 0
+		var index := _keys.find(issue["target"])
+		if index >= 0:
+			_target_changed(index)
+		notice.text = issue["error"]
+		notice.add_theme_color_override("font_color", Color("#ffd4a1"))
+		target.grab_focus()
+		return
 	apply_requested.emit(layout.duplicate(true))
 
 

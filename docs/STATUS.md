@@ -10,7 +10,7 @@ Nearby players share a 640×360 view; separated players receive 320×360 views a
 
 Spawns use reachable nearby anchors and 96 pixel player clearance. Unseen pursuit preserves enemy identity/HP/status/reward ownership and cancels on visibility/death. Ground foes navigate connected platforms; genuine flying enemies cross open planks while solid terrain still blocks them, using reachable anchors around cave ceilings. Generated character appearance never grants flight.
 
-## Verified source
+## Verified v0.3 baseline
 
 Godot 4.7.2 import, **19 arena scenarios**, **162 creator assertions**, **186 Python tests** and all world/content/scenery validators pass. These include real Fighter/Chaser/Flyer terrain traversal, multi-seed graph/identity checks, strict media admission, both-view state ownership, independent shops/shared pause, exact loot and pursuit lifecycle regressions.
 
@@ -18,11 +18,13 @@ Ordinary-input automated routes pass without actor/currency/progression override
 
 Actual native 1920×1080 captures cover merged landmark, split main/cave, final frontier, independent shopping and dense split combat. A ten-second controlled 32 enemy/77 projectile offscreen fixture measured median 10.976 ms and p95 24.522 ms frame intervals. It is not physical scanout FPS or a 60 FPS guarantee. [Commands, hashes and limits](../evidence/scrolling-world/README.md). The official QA export at `26c56b48abe4a7154e2546f86f4659f3d18b24aa` completes 25 waves offline outside the checkout (52,184 ticks, no errors), reaching all four regions/landmarks and 15 loot. The normal package boots offline and its actual native title was inspected. All 30 archive entries and payload hashes pass. [Published prerelease](https://github.com/9MidhunPM/GloamThread/releases/tag/v0.3.0-world).
 
-## Generation budget and recovered drawing
+## Creator recovery and accounting
 
-The selected `FORGE_TOTAL_BUDGET_USD=2.00` allowance retains the existing history, with $0.50 maximum per character. The UI reports distinct total/job/required amounts. A valid blocked draft resumes without another analysis; malformed caches remain rejected. Mock tests now use isolated temporary storage.
+The user removed local total/per-character dollar caps through the parallel Agent 2 session. Legacy settings no longer block generation. `budget.limits_enabled=false` distinguishes numeric request history/estimates from null limits and remaining amounts; provider billing is not inferred from these records. Explicit Analyse/Generate, cache validation, cancellation, uncertain attempt history and no automatic retries remain.
 
-The user's blocked draft produced two real mini images. Its nonconforming board was corrected locally, all 32 poses inspected and the recovered Wizard accepted into the private local fighter library. The real correction/preview/acceptance ran with networking disabled and unchanged ledger. User drawing/raw assets are absent from Git and packages. Current conservative reservation total: $0.55, with $1.45 remaining; this is not actual billing. No automatic retries, ledger resets or extra correction requests occurred. Models remain `gpt-6-luna` and `gpt-image-1-mini`.
+The Save/convert loop was reproduced: a click without dragging replaced a crop with an empty 4×4 rectangle, bounds-only validation admitted it, and the reopened editor obscured the worker error. Pixel/opacity preflight now prevents the doomed conversion, selects the invalid crop and preserves it in the editor; clicks preserve existing crops and failures remain visible. Successful conversion explains the separate acceptance action. Acceptance selects the installed fighter in the lobby rather than silently returning to the title.
+
+The creator suite passes 173 assertions. The real retained drawing completed native conversion, preview, acceptance, lobby selection and entry into combat with networking disabled and unchanged accounting. The recovered latest fighter is installed in the private local library, with a complete editable draft preserved; no additional image request was made. Its drawing/generated art is absent from Git and packages. [Recovery evidence](../evidence/creator-recovery/README.md).
 
 ## Remaining acceptance
 

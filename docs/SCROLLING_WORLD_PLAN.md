@@ -4,7 +4,7 @@ Approved 25 October 2026. Supersedes fixed-arena/camera and $0.50 lifetime exper
 
 ## Outcomes
 
-- Total local authoring allowance $2, per-job maximum $0.50; retain existing $0.35 reservations and uncertain attempt. Show separate total/job remaining/required amounts; resume the valid blocked job without another analysis. No automatic paid retries, ledger resets or credential disclosure.
+- The original $2 total / $0.50 character policy was superseded by the user's later instruction to remove local dollar caps. Keep durable request estimates/uncertain attempts, valid cached-draft resume, no automatic paid retries and no credential disclosure. Remaining/limit fields are null when `budget.limits_enabled=false`; estimates are not actual billing.
 - Four 640px-wide chunks initially; append four after waves5/10/15, retaining terrain, discoveries and player positions. Height720. Endless reuses the16chunks. Seeded authored templates provide connected main ground, raised paths and shallow caves.
 - Free intermissions: shops initially open, Explore closes an owned panel, E/M/Y reopens it; all active players Ready explicitly. Traversal continues during breaks/countdown, combat regeneration only in combat. Four3coin team caches and two20percent collector-heal plants per region, one landmark; loot is unique once per run. Attacks open caches.
 - One authoritative World2D; merged640x360 or two320x360 views at3x. P1left/P2right. Split dx>480 or dy>192 for8ticks; merge dx<360 and dy<128 for45ticks. Downed body retains own view. Shops force split while open; no tether or player teleport.
