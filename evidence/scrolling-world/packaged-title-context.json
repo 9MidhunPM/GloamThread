@@ -1,0 +1,18 @@
+{
+  "implementation_commit": "26c56b48abe4a7154e2546f86f4659f3d18b24aa",
+  "executable_sha256": "339b14877b9d9c9e2f4f51e81677020fd24b9e6db5b93ef1debc9aa78e1d4295",
+  "capture_sha256": "3a3d58332196d580d9f04957e07c35359471e4a92c0407ad93f61b90bbaa86c6",
+  "capture_resolution": [
+    2880,
+    1800
+  ],
+  "design_resolution": [
+    1920,
+    1080
+  ],
+  "compositor": "Hyprland/Wayland",
+  "workspace": 99,
+  "visible_to_user": false,
+  "observation": "Actual isolated package title capture inspected. Hidden-window capture may retain the most recent rendered frame. No interaction or human gameplay claim.",
+  "startup_warning": "Optional xdg-toplevel-icon protocol unavailable; no script/resource errors."
+}

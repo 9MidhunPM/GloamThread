@@ -6,7 +6,7 @@ The game uses fullscreen 1920×1080 presentation: a 640×360 pixel shared view, 
 
 ## Play
 
-[Download the Linux arena playtest](https://github.com/9MidhunPM/GloamThread/releases/tag/v0.2.0-arena), or run the source with Godot:
+[Download the Linux arena playtest](https://github.com/9MidhunPM/GloamThread/releases/tag/v0.3.0-world), or run the source with Godot:
 
 ```sh
 godot --headless --path . --editor --import --quit

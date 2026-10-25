@@ -1,0 +1,30 @@
+{
+  "interfaces": [
+    {
+      "ifindex": 1,
+      "ifname": "lo",
+      "flags": [
+        "LOOPBACK"
+      ],
+      "mtu": 65536,
+      "qdisc": "noop",
+      "operstate": "DOWN",
+      "group": "default",
+      "txqlen": 1000,
+      "link_type": "loopback",
+      "address": "00:00:00:00:00:00",
+      "broadcast": "00:00:00:00:00:00",
+      "addr_info": []
+    }
+  ],
+  "routes": [],
+  "cwd": "/tmp",
+  "command": [
+    "/tmp/gloamthread-world-package-check/Gloamthread-0.3.0-world-linux-x86_64/Gloamthread.x86_64",
+    "--headless",
+    "--quit-after",
+    "30"
+  ],
+  "exit_code": 0,
+  "log": "WARNING: 2 ObjectDB instances were leaked at exit (run with `--verbose` for details).\n   at: cleanup (core/object/object.cpp:2536)\nGodot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\n"
+}

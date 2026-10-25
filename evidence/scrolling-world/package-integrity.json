@@ -1,0 +1,11 @@
+{
+  "archive": "Gloamthread-0.3.0-world-linux-x86_64.zip",
+  "sha256": "03ec3298d053ca06032ebc4eb5d48427b2e4cc3b16f0706a5db23b6bc420b9f8",
+  "entries": 30,
+  "implementation_commit": "26c56b48abe4a7154e2546f86f4659f3d18b24aa",
+  "source_tree": "639aada3a4b2e57c3eb408897ae129719d8b5a4d",
+  "executable_sha256": "339b14877b9d9c9e2f4f51e81677020fd24b9e6db5b93ef1debc9aa78e1d4295",
+  "all_payload_hashes_match": true,
+  "credentials_included": false,
+  "extract_root": "/tmp/gloamthread-world-package-check/Gloamthread-0.3.0-world-linux-x86_64"
+}

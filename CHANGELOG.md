@@ -1,5 +1,10 @@
 # Change log
 
+### 2026-10-25T06:09:09+05:30 — Publish the scrolling-world playtest
+
+- Merged the reviewed budget/world checkpoints to main and exported the clean committed implementation `26c56b4`. Packaged 30 explicit files with complete payload hashes, empty credential template, world/scenery provenance and no private user art.
+- Official QA export clears 25 waves offline outside the checkout in 52,184 ticks without state overrides or engine errors. Normal package boots offline; its native title was inspected. Retained package/network/route evidence and updated setup, release and submission records. Physical input, listening and human balance remain unverified.
+
 ### 2026-10-25T06:00:11+05:30 — Build the expanding scrolling world and dynamic co-op views
 
 - Added append-only seeded 4→16 chunk terrain, connected raised/cave routes, original 24 prop/4 landmark/4 layer scenery, frontier cues and unique regional loot. Added shared World2D split/merge cameras, minimap/partner cues and independently closable intermission shops without player resets.

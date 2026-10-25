@@ -25,3 +25,14 @@ The existing blocked job made exactly two image calls after the approved $2 tota
 ## Limits
 
 Physical input hardware/hotplug/rollover, audio listening, fresh-human balance/clear time/fun and other hardware remain unverified. Export/package evidence must name its exact committed source separately from these source checks.
+
+
+## Published v0.3 package
+
+The [v0.3.0-world prerelease](https://github.com/9MidhunPM/GloamThread/releases/tag/v0.3.0-world) packages implementation `26c56b48abe4a7154e2546f86f4659f3d18b24aa`, source tree `639aada3a4b2e57c3eb408897ae129719d8b5a4d`. Later documentation records evidence without changing that executable. Archive SHA-256: `03ec3298d053ca06032ebc4eb5d48427b2e4cc3b16f0706a5db23b6bc420b9f8`; `package-integrity.json` records all 30 entries/payload hashes and the executable hash. The optional helper includes only its explicit source allowlist and an empty credential template.
+
+`exported-offline-duo.json` is the official Linux QA export's ordinary-input 25-wave run: 52,184 ticks, all four regions/landmarks, 15 loot and no route/engine errors. `exported-network.json` records `/tmp` execution, a down loopback with no addresses/routes, and the QA executable hash. Reproduce by exporting `Linux QA`, copying it to `/tmp/Gloamthread-World-QA.x86_64`, then running `unshare --user --map-root-user --net /tmp/Gloamthread-World-QA.x86_64 --headless --fixed-fps 60 -- --players 2 --waves 25 --seed 1791860771 --output /tmp/route.json`. The QA entry observes the same production game/content; the normal package uses the ordinary App entry. Random critical hits can change route timing.
+
+`normal-offline.json` records a separate normal-package boot outside the checkout with networking disabled and exit code zero. Forced `--quit-after 30` reports two audio ObjectDB exit warnings, without script/resource errors. `packaged-title.png` is the actual 2880×1800 Hyprland capture of the isolated package title, inspected on a hidden agent workspace; the context distinguishes it from physical scanout and human interaction. The configured source game remains the local authoring launch, so the existing root `.env` is used instead of an unconfigured extracted helper.
+
+`published-release.json` records GitHub’s published asset digest, which matches the local archive checksum.

@@ -1,0 +1,40 @@
+{
+  "interfaces": [
+    {
+      "ifindex": 1,
+      "ifname": "lo",
+      "flags": [
+        "LOOPBACK"
+      ],
+      "mtu": 65536,
+      "qdisc": "noop",
+      "operstate": "DOWN",
+      "group": "default",
+      "txqlen": 1000,
+      "link_type": "loopback",
+      "address": "00:00:00:00:00:00",
+      "broadcast": "00:00:00:00:00:00",
+      "addr_info": []
+    }
+  ],
+  "routes": [],
+  "cwd": "/tmp",
+  "command": [
+    "/tmp/Gloamthread-World-QA.x86_64",
+    "--headless",
+    "--fixed-fps",
+    "60",
+    "--",
+    "--players",
+    "2",
+    "--waves",
+    "25",
+    "--seed",
+    "1791860771",
+    "--output",
+    "/tmp/gloamthread-world-exported-duo.json"
+  ],
+  "exit_code": 0,
+  "qa_executable_sha256": "ac692e7d763a15394c6e352d8f07267ec3d420cc02aea9b2a038c20f41db3a37",
+  "implementation_commit": "26c56b48abe4a7154e2546f86f4659f3d18b24aa"
+}
