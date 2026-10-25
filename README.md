@@ -6,6 +6,8 @@ The game uses fullscreen 1920×1080 presentation: a 640×360 pixel shared view, 
 
 ## Play
 
+[Illustrated player guide: launch, modes, controls and fighter creation](docs/PLAYER_GUIDE.md). Use the source command below for the latest name/weapon and Story Mode changes.
+
 [Download the Linux arena playtest](https://github.com/9MidhunPM/GloamThread/releases/tag/v0.4.0-counterplay), or run the source with Godot:
 
 ```sh
