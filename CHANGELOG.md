@@ -1,5 +1,10 @@
 # Change log
 
+### 2026-10-25T06:46:40+05:30 — Reopen the original two-player story
+
+- Added Story Mode on the arena title, using the retained Tavi/Neri campaign scene. Added title/pause return-to-arena actions with existing save-failure protection, owned-input flushing and per-mode logical sizing. Save/settings paths remain intact.
+- Validation: dependency and diff review only; tests/import/build skipped at the user's request. Fresh full campaign acceptance is not claimed. Source restart required; the v0.4 executable predates this change.
+
 ### 2026-10-25T06:38:49+05:30 — Publish the counterplay/creator fixes
 
 - Packaged clean implementation `a65bf14` as v0.4.0-counterplay. All 30 entries/payload hashes match; no private art, jobs or credentials included. Updated download, exact submission/evidence records and stale Agent 2 cap guidance.
