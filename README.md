@@ -27,6 +27,8 @@ Choose Solo Run or Local Co-op, change fighters/inputs, then Start Run. F11 togg
 
 Down+Jump drops through a platform. Shops use each player's Up/Down and Attack/Jump independently. Choose Explore to close your panel and move while your partner shops; E/M/Y reopens your own shop during breaks. Every active player must Ready. Regions open after waves 5/10/15 without replacing terrain or moving players. Attack caches to open them; healing plants restore 20% to their collector. Mouse controls also work. Keyboard sharing depends on hardware rollover; physical controller and fresh human balance/listening checks are recorded only when performed.
 
+Chargers commit to a marked rush lane, heavies guard their front but expose counter windows, shooters lock a three-shot burst, and flyers mark their dives. Bait, flank, use cover and punish recovery. [Enemy mechanics](docs/ENEMY_MECHANICS.md).
+
 Run power and coins reset on defeat/restart. Saved fighters/settings/scores are local under Godot's `Gloamthread-Arena` user directory, separate from the old campaign.
 
 ## Draw and forge

@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-25T06:32:57+05:30 — Add committed enemy attacks and directional counterplay
+
+- Chargers announce a bounded lane and expose long miss/wall recovery; heavies guard their front with rear/control/late-windup counters; shooters fire locked three-shot bursts; flyers mark fixed dive targets and retreat. Authored amber/red/teal cues remain in the shared world. Existing health, wave counts/caps, boss patterns and reward ownership remain.
+- Added actual contact origins to melee/area/thorns/projectile/chain hits, preserving status/ownership packets. An independent review found flyer routing could rewrite a committed mark when targets crossed terrain; a real-wall regression reproduced it before limiting route decisions to pursuit.
+- Validation: 21 gameplay scenarios, 173 creator assertions and 187 Python tests pass; ordinary-input solo20/co-op25 pass without state overrides/errors. Four actual native 1080p mechanic captures inspected. Bumped source/package version to 0.4.0-counterplay; final export evidence follows its committed source. Human difficulty/listening/controllers and new hardware performance remain unverified.
+
 ### 2026-10-25T06:30:55+05:30 — Repair local conversion and accepted-fighter handoff
 
 - Reproduced Save/convert admitting empty crops and click-only selection overwriting a torso with 4×4 transparent pixels. Added pixel/opacity checks before draft creation, selected-target errors that stay in the editor, safe click handling and visible conversion failure messages. Successful conversion explains acceptance; accepted fighters are selected in the lobby with confirmation.
