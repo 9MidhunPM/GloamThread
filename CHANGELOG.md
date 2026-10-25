@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-25T06:47:19+05:30 — Make fighter identity drive art and attacks
+
+- Added explicit preferred_name to pre-analysis jobs and preserved it exactly. Fresh image prompts bind name plus description, prioritize declared weapon/class over ambiguous sketches, retain held weapons in front-arm/master artwork, and keep scenery free of characters. Legacy paid caches retain their original prompts/recovery.
+- Creator suggests a melee Stone kit for sword/knight archetypes instead of Nature shooting; explicit ability choices override suggestions. Identity changes use a fresh generation and leave old accepted fighters intact.
+- Validation: code/diff review only. Tests, imports, builds and API requests skipped at user request; no claim of verified new generated output. Source restart required.
+
 ### 2026-10-25T06:46:40+05:30 — Reopen the original two-player story
 
 - Added Story Mode on the arena title, using the retained Tavi/Neri campaign scene. Added title/pause return-to-arena actions with existing save-failure protection, owned-input flushing and per-mode logical sizing. Save/settings paths remain intact.

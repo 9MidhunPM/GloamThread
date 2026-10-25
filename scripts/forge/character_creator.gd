@@ -72,6 +72,8 @@ var _layout_context: Dictionary = {}
 var _layout_job_path: String = ""
 var _layout_focus: Dictionary = {}
 var _retry_allowed: bool = false
+var _kit_chosen_by_player: bool = false
+var _applying_proposal: bool = false
 
 
 func setup(player_slot: int, fighter_library: FighterLibrary) -> void:
@@ -167,7 +169,11 @@ func _build_ui() -> void:
 	for field: LineEdit in [_name, _theme_name, _palette, _motif]:
 		field.text_changed.connect(func(_text: String) -> void: _proposal_edited())
 	_rig.item_selected.connect(func(_index: int) -> void: _proposal_edited())
-	_kit.item_selected.connect(func(_index: int) -> void: _proposal_edited())
+	_kit.item_selected.connect(func(_index: int) -> void:
+		_kit_chosen_by_player = true
+		_proposal_edited())
+	_name.text_changed.connect(func(_text: String) -> void: _identity_edited())
+	_description.text_changed.connect(_identity_edited)
 	_update_controls()
 
 
@@ -228,7 +234,7 @@ func _build_proposal(parent: HBoxContainer) -> void:
 	_setup_check = _button("Check AI setup / budget", _refresh_configuration)
 	column.add_child(_setup_check)
 	column.add_child(_label("Review every suggestion before generating.", 17, Color("#a2b5bc")))
-	_name = _field(column, "Name", "My fighter", 40)
+	_name = _field(column, "Fighter name / weapon concept (guides artwork)", "My fighter", 40)
 	column.add_child(_label("Body shape", 18))
 	_rig = _options(Library.RIGS)
 	column.add_child(_rig)
@@ -399,6 +405,7 @@ func analyse_source() -> void:
 func generate_candidate() -> void:
 	if _busy:
 		return
+	_apply_identity_kit()
 	var proposal := _proposal()
 	if proposal.is_empty():
 		return
@@ -410,6 +417,7 @@ func generate_candidate() -> void:
 	if job_path.is_empty() and not _new_job():
 		return
 	var job := bridge.read_json(job_path)
+	job["preferred_name"] = proposal["name"]
 	job["proposal"] = proposal
 	if not bridge.write_json(job_path, job) or not bridge.write_json(job_path.get_base_dir().path_join("proposal.json"), proposal):
 		_notice("Could not save the approved proposal.")
@@ -444,7 +452,10 @@ func _proposal() -> Dictionary:
 func _new_job() -> bool:
 	if _busy:
 		return false
-	var created := bridge.create_job(_canvas.pixels, _description.text)
+	var preferred_name := _name.text.strip_edges()
+	if preferred_name == "My fighter":
+		preferred_name = ""
+	var created := bridge.create_job(_canvas.pixels, _description.text, preferred_name)
 	if not created["ok"]:
 		_notice(created["error"])
 		return false
@@ -514,7 +525,13 @@ func _handle_status(report: Dictionary) -> void:
 		var proposal: Dictionary = report.get("proposal", {}) if report.get("proposal", {}) is Dictionary else {}
 		if proposal.is_empty():
 			proposal = bridge.read_json(job_path.get_base_dir().path_join("proposal.json"))
+		var preferred_name: String = bridge.read_json(job_path).get("preferred_name", "")
+		if not preferred_name.is_empty():
+			proposal["name"] = preferred_name
+		if _kit_chosen_by_player:
+			proposal["kit_id"] = Library.KITS[_kit.selected]
 		_apply_proposal(proposal)
+		_apply_identity_kit()
 		_busy = false
 	elif state == "complete":
 		_busy = false
@@ -622,6 +639,7 @@ func _convert_layout(layout: Dictionary) -> void:
 
 
 func _apply_proposal(proposal: Dictionary) -> void:
+	_applying_proposal = true
 	_features.clear()
 	if proposal.get("features") is Array:
 		for feature: Variant in proposal["features"]:
@@ -640,6 +658,42 @@ func _apply_proposal(proposal: Dictionary) -> void:
 		_motif.text = str(theme.get("motif", _motif.text)).left(400)
 		if theme.get("palette") is Array:
 			_palette.text = ",".join(theme["palette"])
+	_applying_proposal = false
+
+
+func _identity_edited() -> void:
+	if _applying_proposal or _busy:
+		return
+	_apply_identity_kit()
+	_proposal_edited()
+
+
+func _apply_identity_kit() -> void:
+	if _kit_chosen_by_player:
+		return
+	# A named weapon is stronger evidence than an uncertain sketch or theme.
+	# The player can explicitly override this suggestion in the ability dropdown.
+	for text: String in [_name.text, _description.text]:
+		var intent := _identity_kit(text)
+		if not intent.is_empty():
+			_kit.select(Library.KITS.find(intent))
+			return
+
+
+func _identity_kit(text: String) -> String:
+	var rules := {
+		"stone": "sword|swordsman|swordswoman|swordsmen|knight|warrior|samurai|katana|blade|duelist|saber|sabre|greatsword|longsword|broadsword|axe|axeman|hammer|paladin|spear|spearman|lancer|shield",
+		"shadow": "dagger|rogue|assassin|ninja|scythe|reaper",
+		"storm": "brawler|boxer|monk|fist|punch",
+		"frost": "archer|bow|bowman|crossbow|gunner|gun|rifle|sniper|wizard|mage|sorcerer|witch",
+		"nature": "druid|thorn|thorns|plant|vine|vines|dryad|healer",
+	}
+	for kit: String in rules:
+		var words := RegEx.new()
+		words.compile("(?i)\\b(" + rules[kit] + ")\\b")
+		if words.search(text) != null:
+			return kit
+	return ""
 
 
 func _preview_candidate(reported_path: Variant = "") -> void:
