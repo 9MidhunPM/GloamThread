@@ -4,6 +4,14 @@ A scrolling side-view pixel fighter for **one or two local players**, with a sha
 
 The game uses fullscreen 1920×1080 presentation: a 640×360 pixel shared view, or two 320×360 views at the same 3× scale. The seeded world starts four screens wide and expands to sixteen, with raised routes, shallow caves, caches and landmarks. Godot 4.7.2 standard/Compatibility and Python 3 are the project tools. The approved [specification](docs/WAVE_FIGHTER_SPEC.md), [Agent 2 brief](docs/AGENT_2_WAVE_CONTENT.md), the [scrolling-world contract](docs/SCROLLING_WORLD_PLAN.md) and [current evidence](docs/STATUS.md) distinguish working code from acceptance still in progress.
 
+## Watch automated gameplay
+
+```sh
+./showcase.sh
+```
+
+Watch co-op combat, earned shop purchases, split-camera exploration, all four bosses, endless wave25 and a staged64-foe finale capped at32 live enemies. Highlights clearly label their wave jumps/preset upgrades. Use `./showcase.sh --full --speed 2` for the full25-wave input bot with normal progression. **Space** pauses, **1/2/4** changes speed, **N** skips highlight chapters and **Esc** quits. No API key needed. [Showcase options and evidence](docs/SHOWCASE.md).
+
 ## Play
 
 **[Final review: real game gallery and quick demo](docs/FINAL_REVIEW.md)**

@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-25T08:15:19+05:30 — Add a watchable gameplay tour
+
+- Added executable `showcase.sh`, visible `tools/arena_showcase.gd` controls/reporting and a route adapter for co-op basics, shops/exploration, four bosses, endless25 and a staged64-foe/32-live crowd finale. Full mode uses normal progression; stage presets are labeled onscreen and in reports. No API/install/export required.
+- Added no-op prepare/stop seams to the existing input driver, pause-safe viewing,1/2/4 speed, chapter skip/exit and temporary-save/audio cleanup. Documented launcher/options and honest evidence in README/status/SHOWCASE.
+- Seven smoke chapters pass with peak32/all six roles; native viewport boss/crowd captures inspected, real input-handler controls checked, and ordinary two-wave co-op route passes. Shell syntax/help/errors and documentation links checked. Full25 wrapper/human/hardware play and listening remain unverified; no new exported binary.
+
 ### 2026-10-25T08:07:35+05:30 — Fix wave-one stalls and accelerate reinforcements
 
 - Reproduced an invisible cave enemy434px away receiving no catch-up: spawn radius720px was below pursuit's960px minimum. Removed that minimum, narrowed visibility margin to16px and prioritized visible/same-elevation spawn anchors in `run_session.gd`.

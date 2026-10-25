@@ -1,0 +1,1601 @@
+{
+	"chapters": [
+		{
+			"bot": "State-aware bot reads target positions and attack phases, then uses normal move/jump/attack/special/dodge/revive commands. Random critical hits and shop rolls remain enabled.",
+			"captures": [],
+			"chapter": "1/7  TWO FIGHTERS, ONE WORLD",
+			"downs": [
+				0,
+				0
+			],
+			"errors": [],
+			"explorations": [],
+			"final_actors": [
+				{
+					"health": 99.0,
+					"max_health": 100.0,
+					"position": [
+						210.028244018555,
+						319.925262451172
+					],
+					"slot": 0,
+					"stats": {
+						"area": 1.0,
+						"attack_speed": 1.0,
+						"burn": 1.0,
+						"chain": 0.0,
+						"crit": 0.05,
+						"damage": 12.0,
+						"dodge_cooldown": 48.0,
+						"freeze": 0.0,
+						"lifesteal": 0.0,
+						"max_health": 100.0,
+						"move_speed": 145.0,
+						"pierce": 0.0,
+						"projectile_count": 1.0,
+						"regen": 0.0,
+						"special_cooldown": 300.0,
+						"stagger": 0.0,
+						"thorns": 0.0
+					}
+				},
+				{
+					"health": 100.0,
+					"max_health": 100.0,
+					"position": [
+						264.325622558594,
+						319.925262451172
+					],
+					"slot": 1,
+					"stats": {
+						"area": 1.0,
+						"attack_speed": 1.0,
+						"burn": 0.0,
+						"chain": 0.0,
+						"crit": 0.05,
+						"damage": 10.0,
+						"dodge_cooldown": 48.0,
+						"freeze": 0.0,
+						"lifesteal": 0.0,
+						"max_health": 100.0,
+						"move_speed": 145.0,
+						"pierce": 0.0,
+						"projectile_count": 1.0,
+						"regen": 0.5,
+						"special_cooldown": 300.0,
+						"stagger": 0.0,
+						"thorns": 0.0
+					}
+				}
+			],
+			"final_phase": "clear",
+			"final_summary": {
+				"best_combo": 12,
+				"chunks": 4,
+				"discoveries": 0,
+				"endless": false,
+				"loot": 1,
+				"players": [
+					{
+						"coins": 20,
+						"kills": 9,
+						"kit": "ember",
+						"spent": 0,
+						"upgrades": {}
+					},
+					{
+						"coins": 14,
+						"kills": 3,
+						"kit": "nature",
+						"spent": 0,
+						"upgrades": {}
+					}
+				],
+				"seconds": 10,
+				"seed": 18427,
+				"wave": 1,
+				"won": false
+			},
+			"furthest_x": [
+				301.554138183594,
+				397.430633544922
+			],
+			"human_playtest": false,
+			"input": "Synthetic owned keyboard combat after explicitly staged wave, legal upgrade presets and starting positions; no invulnerability or combat health refills.",
+			"kits": [
+				"ember",
+				"nature"
+			],
+			"landmarks_discovered": 0,
+			"loot_collected": 1,
+			"map_regions": 1,
+			"menu": "Production App title/lobby/start, actual shop offers and purchase/ready methods.",
+			"peak_live_enemies": 9,
+			"players": 2,
+			"purchases": [],
+			"seen_roles": [
+				"swarm",
+				"chaser"
+			],
+			"selected_fighters": [
+				{
+					"id": "kiln-fox-ai",
+					"manifest_sha256": "d00efc670eb8b885b3ba87ff3d20d70797158dda44d3aeb9a7553699c7fdc8a5"
+				},
+				{
+					"id": "thistlepaw",
+					"manifest_sha256": "39ac1fc34a16f39a24e6422c180c357485b7a40c2188b9097dfe1f7b718ec7bb"
+				}
+			],
+			"skipped": false,
+			"source_hashes": {
+				"res://content/arena/catalog.json": "0837d9a9bbae2688190b0b0bc62979a3f454b3e36078c379d05db87714ac8fab",
+				"res://content/arena/world.json": "d624d040b1a1b92b03a06e446bd7fb4999085684fac411221f13c928d4034251",
+				"res://scripts/arena/actors/arena_enemy.gd": "134207dc4c3f52a80bbaec9e7c466593aa5897a32c43b3e4c682031edf28b070",
+				"res://scripts/arena/actors/arena_fighter.gd": "8074c520be7b2697cd9ddce95a711614e2f1375b192f17003060fdf9d29197ca",
+				"res://scripts/arena/actors/arena_projectile.gd": "1943e25ea841957409e7139e7c902d6afd5670272af98840d8d31b6745de66f6",
+				"res://scripts/arena/arena_map.gd": "3f1206616aad23fe94a56121101ea1ca9eef0bbdd999eb22d47b5894f5cd6f26",
+				"res://scripts/arena/arena_player_state.gd": "ba5d4a3602f4367de0c261dc9b0876fa0eb4aaae8359a670054ff775c0f0cff0",
+				"res://scripts/arena/arena_presentation.gd": "aa5f86e00db6649475691f3eeafdbd6b558e639d64f20a8b0bbfd42e16e0c7de",
+				"res://scripts/arena/run_session.gd": "8fc1022ba75c502b3ea0ed28c156ba77df132f2c834e729c4d845ef6f00a9dd3",
+				"res://tests/arena/route_driver.gd": "eeb56da3b471d5cc2cc10c44ec9a95b09805585548e68dec99becef85b7fb7ee"
+			},
+			"split_changes": [],
+			"staging": {
+				"crowd_fixture": false,
+				"invulnerability": false,
+				"preset_upgrade_ranks": 0,
+				"wave_jump": 1
+			},
+			"success": true,
+			"target_waves": 1,
+			"ticks": 387,
+			"waves": [
+				{
+					"boss": "",
+					"health": [
+						99.0,
+						100.0
+					],
+					"observed_health_loss": [
+						9.0,
+						0.0
+					],
+					"summary": {
+						"best_combo": 12,
+						"chunks": 4,
+						"discoveries": 0,
+						"endless": false,
+						"loot": 1,
+						"players": [
+							{
+								"coins": 20,
+								"kills": 9,
+								"kit": "ember",
+								"spent": 0,
+								"upgrades": {}
+							},
+							{
+								"coins": 14,
+								"kills": 3,
+								"kit": "nature",
+								"spent": 0,
+								"upgrades": {}
+							}
+						],
+						"seconds": 10,
+						"seed": 18427,
+						"wave": 1,
+						"won": false
+					},
+					"ticks": 386,
+					"wave": 1
+				}
+			],
+			"world_seed": 18427
+		},
+		{
+			"bot": "State-aware bot reads target positions and attack phases, then uses normal move/jump/attack/special/dodge/revive commands. Random critical hits and shop rolls remain enabled.",
+			"captures": [],
+			"chapter": "2/7  BOSS I / WARDEN",
+			"downs": [
+				0,
+				0
+			],
+			"errors": [],
+			"explorations": [],
+			"final_actors": [
+				{
+					"health": 120.0,
+					"max_health": 120.0,
+					"position": [
+						182.254180908203,
+						319.924041748047
+					],
+					"slot": 0,
+					"stats": {
+						"area": 1.4,
+						"attack_speed": 1.12,
+						"burn": 2.0,
+						"chain": 0.0,
+						"crit": 0.11,
+						"damage": 15.0,
+						"dodge_cooldown": 42.0,
+						"freeze": 0.0,
+						"lifesteal": 0.025,
+						"max_health": 120.0,
+						"move_speed": 155.0,
+						"pierce": 0.0,
+						"projectile_count": 1.0,
+						"regen": 0.35,
+						"special_cooldown": 216.0,
+						"stagger": 0.0,
+						"thorns": 0.0
+					}
+				},
+				{
+					"health": 120.0,
+					"max_health": 120.0,
+					"position": [
+						394.787506103516,
+						319.925262451172
+					],
+					"slot": 1,
+					"stats": {
+						"area": 1.15,
+						"attack_speed": 1.12,
+						"burn": 0.0,
+						"chain": 0.0,
+						"crit": 0.11,
+						"damage": 13.0,
+						"dodge_cooldown": 42.0,
+						"freeze": 1.0,
+						"lifesteal": 0.025,
+						"max_health": 120.0,
+						"move_speed": 155.0,
+						"pierce": 1.0,
+						"projectile_count": 2.0,
+						"regen": 1.45,
+						"special_cooldown": 264.0,
+						"stagger": 0.0,
+						"thorns": 0.0
+					}
+				}
+			],
+			"final_phase": "combat",
+			"final_summary": {
+				"best_combo": 1,
+				"chunks": 4,
+				"discoveries": 0,
+				"endless": false,
+				"loot": 1,
+				"players": [
+					{
+						"coins": 3,
+						"kills": 0,
+						"kit": "ember",
+						"spent": 0,
+						"upgrades": {
+							"bellows": 1,
+							"blood_bloom": 1,
+							"field_stitch": 1,
+							"heartwood": 1,
+							"hot_coals": 1,
+							"keen_edge": 1,
+							"light_feet": 1,
+							"lucky_thread": 1,
+							"quick_hands": 1,
+							"second_wind": 1,
+							"slipstream": 1,
+							"wide_arc": 1,
+							"wildfire": 1
+						}
+					},
+					{
+						"coins": 4,
+						"kills": 1,
+						"kit": "nature",
+						"spent": 0,
+						"upgrades": {
+							"blood_bloom": 1,
+							"deep_roots": 1,
+							"field_stitch": 1,
+							"green_pulse": 1,
+							"heartwood": 1,
+							"keen_edge": 1,
+							"light_feet": 1,
+							"lucky_thread": 1,
+							"quick_hands": 1,
+							"second_wind": 1,
+							"slipstream": 1,
+							"thornline": 1,
+							"twin_stitch": 1,
+							"wide_arc": 1
+						}
+					}
+				],
+				"seconds": 2,
+				"seed": 18427,
+				"wave": 5,
+				"won": false
+			},
+			"furthest_x": [
+				303.362548828125,
+				394.787506103516
+			],
+			"human_playtest": false,
+			"input": "Synthetic owned keyboard combat after explicitly staged wave, legal upgrade presets and starting positions; no invulnerability or combat health refills.",
+			"interrupted": true,
+			"kits": [
+				"ember",
+				"nature"
+			],
+			"landmarks_discovered": 0,
+			"loot_collected": 1,
+			"map_regions": 1,
+			"menu": "Production App title/lobby/start, actual shop offers and purchase/ready methods.",
+			"peak_live_enemies": 6,
+			"players": 2,
+			"purchases": [],
+			"seen_roles": [
+				"chaser",
+				"swarm",
+				"heavy"
+			],
+			"selected_fighters": [
+				{
+					"id": "kiln-fox-ai",
+					"manifest_sha256": "d00efc670eb8b885b3ba87ff3d20d70797158dda44d3aeb9a7553699c7fdc8a5"
+				},
+				{
+					"id": "thistlepaw",
+					"manifest_sha256": "39ac1fc34a16f39a24e6422c180c357485b7a40c2188b9097dfe1f7b718ec7bb"
+				}
+			],
+			"skipped": true,
+			"source_hashes": {
+				"res://content/arena/catalog.json": "0837d9a9bbae2688190b0b0bc62979a3f454b3e36078c379d05db87714ac8fab",
+				"res://content/arena/world.json": "d624d040b1a1b92b03a06e446bd7fb4999085684fac411221f13c928d4034251",
+				"res://scripts/arena/actors/arena_enemy.gd": "134207dc4c3f52a80bbaec9e7c466593aa5897a32c43b3e4c682031edf28b070",
+				"res://scripts/arena/actors/arena_fighter.gd": "8074c520be7b2697cd9ddce95a711614e2f1375b192f17003060fdf9d29197ca",
+				"res://scripts/arena/actors/arena_projectile.gd": "1943e25ea841957409e7139e7c902d6afd5670272af98840d8d31b6745de66f6",
+				"res://scripts/arena/arena_map.gd": "3f1206616aad23fe94a56121101ea1ca9eef0bbdd999eb22d47b5894f5cd6f26",
+				"res://scripts/arena/arena_player_state.gd": "ba5d4a3602f4367de0c261dc9b0876fa0eb4aaae8359a670054ff775c0f0cff0",
+				"res://scripts/arena/arena_presentation.gd": "aa5f86e00db6649475691f3eeafdbd6b558e639d64f20a8b0bbfd42e16e0c7de",
+				"res://scripts/arena/run_session.gd": "8fc1022ba75c502b3ea0ed28c156ba77df132f2c834e729c4d845ef6f00a9dd3",
+				"res://tests/arena/route_driver.gd": "eeb56da3b471d5cc2cc10c44ec9a95b09805585548e68dec99becef85b7fb7ee"
+			},
+			"split_changes": [],
+			"staging": {
+				"crowd_fixture": false,
+				"invulnerability": false,
+				"preset_upgrade_ranks": 1,
+				"wave_jump": 5
+			},
+			"success": false,
+			"target_waves": 5,
+			"ticks": 74,
+			"waves": [],
+			"world_seed": 18427
+		},
+		{
+			"bot": "State-aware bot reads target positions and attack phases, then uses normal move/jump/attack/special/dodge/revive commands. Random critical hits and shop rolls remain enabled.",
+			"captures": [],
+			"chapter": "3/7  BOSS II / ARTILLERY",
+			"downs": [
+				0,
+				0
+			],
+			"errors": [],
+			"explorations": [],
+			"final_actors": [
+				{
+					"health": 140.0,
+					"max_health": 140.0,
+					"position": [
+						2925.63159179688,
+						267.946411132812
+					],
+					"slot": 0,
+					"stats": {
+						"area": 1.8,
+						"attack_speed": 1.24,
+						"burn": 3.0,
+						"chain": 0.0,
+						"crit": 0.17,
+						"damage": 18.0,
+						"dodge_cooldown": 36.0,
+						"freeze": 0.0,
+						"lifesteal": 0.05,
+						"max_health": 140.0,
+						"move_speed": 165.0,
+						"pierce": 0.0,
+						"projectile_count": 1.0,
+						"regen": 0.7,
+						"special_cooldown": 132.0,
+						"stagger": 0.0,
+						"thorns": 0.0
+					}
+				},
+				{
+					"health": 139.773333333334,
+					"max_health": 140.0,
+					"position": [
+						2855.482421875,
+						271.925262451172
+					],
+					"slot": 1,
+					"stats": {
+						"area": 1.3,
+						"attack_speed": 1.24,
+						"burn": 0.0,
+						"chain": 0.0,
+						"crit": 0.17,
+						"damage": 16.0,
+						"dodge_cooldown": 36.0,
+						"freeze": 2.0,
+						"lifesteal": 0.05,
+						"max_health": 140.0,
+						"move_speed": 165.0,
+						"pierce": 2.0,
+						"projectile_count": 3.0,
+						"regen": 2.4,
+						"special_cooldown": 228.0,
+						"stagger": 0.0,
+						"thorns": 0.0
+					}
+				}
+			],
+			"final_phase": "clear",
+			"final_summary": {
+				"best_combo": 11,
+				"chunks": 8,
+				"discoveries": 0,
+				"endless": false,
+				"loot": 3,
+				"players": [
+					{
+						"coins": 42,
+						"kills": 9,
+						"kit": "ember",
+						"spent": 0,
+						"upgrades": {
+							"bellows": 2,
+							"blood_bloom": 2,
+							"field_stitch": 2,
+							"heartwood": 2,
+							"hot_coals": 2,
+							"keen_edge": 2,
+							"light_feet": 2,
+							"lucky_thread": 2,
+							"quick_hands": 2,
+							"second_wind": 2,
+							"slipstream": 2,
+							"wide_arc": 2,
+							"wildfire": 2
+						}
+					},
+					{
+						"coins": 25,
+						"kills": 3,
+						"kit": "nature",
+						"spent": 0,
+						"upgrades": {
+							"blood_bloom": 2,
+							"deep_roots": 2,
+							"field_stitch": 2,
+							"green_pulse": 2,
+							"heartwood": 2,
+							"keen_edge": 2,
+							"light_feet": 2,
+							"lucky_thread": 2,
+							"quick_hands": 2,
+							"second_wind": 2,
+							"slipstream": 2,
+							"thornline": 2,
+							"twin_stitch": 2,
+							"wide_arc": 2
+						}
+					}
+				],
+				"seconds": 12,
+				"seed": 18427,
+				"wave": 10,
+				"won": false
+			},
+			"furthest_x": [
+				2942.26708984375,
+				2930.0
+			],
+			"human_playtest": false,
+			"input": "Synthetic owned keyboard combat after explicitly staged wave, legal upgrade presets and starting positions; no invulnerability or combat health refills.",
+			"kits": [
+				"ember",
+				"nature"
+			],
+			"landmarks_discovered": 0,
+			"loot_collected": 3,
+			"map_regions": 2,
+			"menu": "Production App title/lobby/start, actual shop offers and purchase/ready methods.",
+			"peak_live_enemies": 11,
+			"players": 2,
+			"purchases": [],
+			"seen_roles": [
+				"chaser",
+				"swarm",
+				"heavy",
+				"shooter",
+				"charger"
+			],
+			"selected_fighters": [
+				{
+					"id": "kiln-fox-ai",
+					"manifest_sha256": "d00efc670eb8b885b3ba87ff3d20d70797158dda44d3aeb9a7553699c7fdc8a5"
+				},
+				{
+					"id": "thistlepaw",
+					"manifest_sha256": "39ac1fc34a16f39a24e6422c180c357485b7a40c2188b9097dfe1f7b718ec7bb"
+				}
+			],
+			"skipped": false,
+			"source_hashes": {
+				"res://content/arena/catalog.json": "0837d9a9bbae2688190b0b0bc62979a3f454b3e36078c379d05db87714ac8fab",
+				"res://content/arena/world.json": "d624d040b1a1b92b03a06e446bd7fb4999085684fac411221f13c928d4034251",
+				"res://scripts/arena/actors/arena_enemy.gd": "134207dc4c3f52a80bbaec9e7c466593aa5897a32c43b3e4c682031edf28b070",
+				"res://scripts/arena/actors/arena_fighter.gd": "8074c520be7b2697cd9ddce95a711614e2f1375b192f17003060fdf9d29197ca",
+				"res://scripts/arena/actors/arena_projectile.gd": "1943e25ea841957409e7139e7c902d6afd5670272af98840d8d31b6745de66f6",
+				"res://scripts/arena/arena_map.gd": "3f1206616aad23fe94a56121101ea1ca9eef0bbdd999eb22d47b5894f5cd6f26",
+				"res://scripts/arena/arena_player_state.gd": "ba5d4a3602f4367de0c261dc9b0876fa0eb4aaae8359a670054ff775c0f0cff0",
+				"res://scripts/arena/arena_presentation.gd": "aa5f86e00db6649475691f3eeafdbd6b558e639d64f20a8b0bbfd42e16e0c7de",
+				"res://scripts/arena/run_session.gd": "8fc1022ba75c502b3ea0ed28c156ba77df132f2c834e729c4d845ef6f00a9dd3",
+				"res://tests/arena/route_driver.gd": "eeb56da3b471d5cc2cc10c44ec9a95b09805585548e68dec99becef85b7fb7ee"
+			},
+			"split_changes": [],
+			"staging": {
+				"crowd_fixture": false,
+				"invulnerability": false,
+				"preset_upgrade_ranks": 2,
+				"wave_jump": 10
+			},
+			"success": true,
+			"target_waves": 10,
+			"ticks": 340,
+			"waves": [
+				{
+					"boss": "artillery",
+					"health": [
+						140.0,
+						139.773333333334
+					],
+					"observed_health_loss": [
+						18.0,
+						17.9433333333333
+					],
+					"summary": {
+						"best_combo": 11,
+						"chunks": 8,
+						"discoveries": 0,
+						"endless": false,
+						"loot": 3,
+						"players": [
+							{
+								"coins": 42,
+								"kills": 9,
+								"kit": "ember",
+								"spent": 0,
+								"upgrades": {
+									"bellows": 2,
+									"blood_bloom": 2,
+									"field_stitch": 2,
+									"heartwood": 2,
+									"hot_coals": 2,
+									"keen_edge": 2,
+									"light_feet": 2,
+									"lucky_thread": 2,
+									"quick_hands": 2,
+									"second_wind": 2,
+									"slipstream": 2,
+									"wide_arc": 2,
+									"wildfire": 2
+								}
+							},
+							{
+								"coins": 25,
+								"kills": 3,
+								"kit": "nature",
+								"spent": 0,
+								"upgrades": {
+									"blood_bloom": 2,
+									"deep_roots": 2,
+									"field_stitch": 2,
+									"green_pulse": 2,
+									"heartwood": 2,
+									"keen_edge": 2,
+									"light_feet": 2,
+									"lucky_thread": 2,
+									"quick_hands": 2,
+									"second_wind": 2,
+									"slipstream": 2,
+									"thornline": 2,
+									"twin_stitch": 2,
+									"wide_arc": 2
+								}
+							}
+						],
+						"seconds": 12,
+						"seed": 18427,
+						"wave": 10,
+						"won": false
+					},
+					"ticks": 339,
+					"wave": 10
+				}
+			],
+			"world_seed": 18427
+		},
+		{
+			"bot": "State-aware bot reads target positions and attack phases, then uses normal move/jump/attack/special/dodge/revive commands. Random critical hits and shop rolls remain enabled.",
+			"captures": [],
+			"chapter": "4/7  BOSS III / TEMPEST",
+			"downs": [
+				0,
+				0
+			],
+			"errors": [],
+			"explorations": [],
+			"final_actors": [
+				{
+					"health": 160.0,
+					"max_health": 160.0,
+					"position": [
+						5457.87353515625,
+						271.925262451172
+					],
+					"slot": 0,
+					"stats": {
+						"area": 2.0,
+						"attack_speed": 1.36,
+						"burn": 4.0,
+						"chain": 0.0,
+						"crit": 0.23,
+						"damage": 21.0,
+						"dodge_cooldown": 30.0,
+						"freeze": 0.0,
+						"lifesteal": 0.075,
+						"max_health": 160.0,
+						"move_speed": 175.0,
+						"pierce": 0.0,
+						"projectile_count": 1.0,
+						"regen": 1.05,
+						"special_cooldown": 60.0,
+						"stagger": 0.0,
+						"thorns": 0.0
+					}
+				},
+				{
+					"health": 160.0,
+					"max_health": 160.0,
+					"position": [
+						5471.37841796875,
+						319.925262451172
+					],
+					"slot": 1,
+					"stats": {
+						"area": 1.45,
+						"attack_speed": 1.36,
+						"burn": 0.0,
+						"chain": 0.0,
+						"crit": 0.23,
+						"damage": 19.0,
+						"dodge_cooldown": 30.0,
+						"freeze": 3.0,
+						"lifesteal": 0.075,
+						"max_health": 160.0,
+						"move_speed": 175.0,
+						"pierce": 3.0,
+						"projectile_count": 4.0,
+						"regen": 3.35,
+						"special_cooldown": 192.0,
+						"stagger": 0.0,
+						"thorns": 0.0
+					}
+				}
+			],
+			"final_phase": "clear",
+			"final_summary": {
+				"best_combo": 16,
+				"chunks": 12,
+				"discoveries": 0,
+				"endless": false,
+				"loot": 2,
+				"players": [
+					{
+						"coins": 26,
+						"kills": 8,
+						"kit": "ember",
+						"spent": 0,
+						"upgrades": {
+							"bellows": 3,
+							"blood_bloom": 3,
+							"field_stitch": 3,
+							"heartwood": 3,
+							"hot_coals": 3,
+							"keen_edge": 3,
+							"light_feet": 3,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 3,
+							"wide_arc": 3,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 43,
+						"kills": 8,
+						"kit": "nature",
+						"spent": 0,
+						"upgrades": {
+							"blood_bloom": 3,
+							"deep_roots": 3,
+							"field_stitch": 3,
+							"green_pulse": 3,
+							"heartwood": 3,
+							"keen_edge": 3,
+							"light_feet": 3,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 3,
+							"thornline": 3,
+							"twin_stitch": 3,
+							"wide_arc": 3
+						}
+					}
+				],
+				"seconds": 9,
+				"seed": 18427,
+				"wave": 15,
+				"won": false
+			},
+			"furthest_x": [
+				5579.45458984375,
+				5540.28515625
+			],
+			"human_playtest": false,
+			"input": "Synthetic owned keyboard combat after explicitly staged wave, legal upgrade presets and starting positions; no invulnerability or combat health refills.",
+			"kits": [
+				"ember",
+				"nature"
+			],
+			"landmarks_discovered": 0,
+			"loot_collected": 2,
+			"map_regions": 3,
+			"menu": "Production App title/lobby/start, actual shop offers and purchase/ready methods.",
+			"peak_live_enemies": 13,
+			"players": 2,
+			"purchases": [],
+			"seen_roles": [
+				"charger",
+				"chaser",
+				"heavy",
+				"shooter",
+				"flyer"
+			],
+			"selected_fighters": [
+				{
+					"id": "kiln-fox-ai",
+					"manifest_sha256": "d00efc670eb8b885b3ba87ff3d20d70797158dda44d3aeb9a7553699c7fdc8a5"
+				},
+				{
+					"id": "thistlepaw",
+					"manifest_sha256": "39ac1fc34a16f39a24e6422c180c357485b7a40c2188b9097dfe1f7b718ec7bb"
+				}
+			],
+			"skipped": false,
+			"source_hashes": {
+				"res://content/arena/catalog.json": "0837d9a9bbae2688190b0b0bc62979a3f454b3e36078c379d05db87714ac8fab",
+				"res://content/arena/world.json": "d624d040b1a1b92b03a06e446bd7fb4999085684fac411221f13c928d4034251",
+				"res://scripts/arena/actors/arena_enemy.gd": "134207dc4c3f52a80bbaec9e7c466593aa5897a32c43b3e4c682031edf28b070",
+				"res://scripts/arena/actors/arena_fighter.gd": "8074c520be7b2697cd9ddce95a711614e2f1375b192f17003060fdf9d29197ca",
+				"res://scripts/arena/actors/arena_projectile.gd": "1943e25ea841957409e7139e7c902d6afd5670272af98840d8d31b6745de66f6",
+				"res://scripts/arena/arena_map.gd": "3f1206616aad23fe94a56121101ea1ca9eef0bbdd999eb22d47b5894f5cd6f26",
+				"res://scripts/arena/arena_player_state.gd": "ba5d4a3602f4367de0c261dc9b0876fa0eb4aaae8359a670054ff775c0f0cff0",
+				"res://scripts/arena/arena_presentation.gd": "aa5f86e00db6649475691f3eeafdbd6b558e639d64f20a8b0bbfd42e16e0c7de",
+				"res://scripts/arena/run_session.gd": "8fc1022ba75c502b3ea0ed28c156ba77df132f2c834e729c4d845ef6f00a9dd3",
+				"res://tests/arena/route_driver.gd": "eeb56da3b471d5cc2cc10c44ec9a95b09805585548e68dec99becef85b7fb7ee"
+			},
+			"split_changes": [],
+			"staging": {
+				"crowd_fixture": false,
+				"invulnerability": false,
+				"preset_upgrade_ranks": 3,
+				"wave_jump": 15
+			},
+			"success": true,
+			"target_waves": 15,
+			"ticks": 202,
+			"waves": [
+				{
+					"boss": "tempest",
+					"health": [
+						160.0,
+						160.0
+					],
+					"observed_health_loss": [
+						0.0,
+						33.70025
+					],
+					"summary": {
+						"best_combo": 16,
+						"chunks": 12,
+						"discoveries": 0,
+						"endless": false,
+						"loot": 2,
+						"players": [
+							{
+								"coins": 26,
+								"kills": 8,
+								"kit": "ember",
+								"spent": 0,
+								"upgrades": {
+									"bellows": 3,
+									"blood_bloom": 3,
+									"field_stitch": 3,
+									"heartwood": 3,
+									"hot_coals": 3,
+									"keen_edge": 3,
+									"light_feet": 3,
+									"lucky_thread": 3,
+									"quick_hands": 3,
+									"second_wind": 3,
+									"slipstream": 3,
+									"wide_arc": 3,
+									"wildfire": 3
+								}
+							},
+							{
+								"coins": 43,
+								"kills": 8,
+								"kit": "nature",
+								"spent": 0,
+								"upgrades": {
+									"blood_bloom": 3,
+									"deep_roots": 3,
+									"field_stitch": 3,
+									"green_pulse": 3,
+									"heartwood": 3,
+									"keen_edge": 3,
+									"light_feet": 3,
+									"lucky_thread": 3,
+									"quick_hands": 3,
+									"second_wind": 3,
+									"slipstream": 3,
+									"thornline": 3,
+									"twin_stitch": 3,
+									"wide_arc": 3
+								}
+							}
+						],
+						"seconds": 9,
+						"seed": 18427,
+						"wave": 15,
+						"won": false
+					},
+					"ticks": 201,
+					"wave": 15
+				}
+			],
+			"world_seed": 18427
+		},
+		{
+			"bot": "State-aware bot reads target positions and attack phases, then uses normal move/jump/attack/special/dodge/revive commands. Random critical hits and shop rolls remain enabled.",
+			"captures": [],
+			"chapter": "5/7  BOSS IV / THE LOOM",
+			"downs": [
+				0,
+				0
+			],
+			"errors": [],
+			"explorations": [],
+			"final_actors": [
+				{
+					"health": 157.006012500001,
+					"max_health": 160.0,
+					"position": [
+						7719.677734375,
+						319.925262451172
+					],
+					"slot": 0,
+					"stats": {
+						"area": 2.0,
+						"attack_speed": 1.36,
+						"burn": 4.0,
+						"chain": 0.0,
+						"crit": 0.23,
+						"damage": 21.0,
+						"dodge_cooldown": 30.0,
+						"freeze": 0.0,
+						"lifesteal": 0.075,
+						"max_health": 160.0,
+						"move_speed": 175.0,
+						"pierce": 0.0,
+						"projectile_count": 1.0,
+						"regen": 1.05,
+						"special_cooldown": 60.0,
+						"stagger": 0.0,
+						"thorns": 0.0
+					}
+				},
+				{
+					"health": 160.0,
+					"max_health": 160.0,
+					"position": [
+						7778.5986328125,
+						319.925262451172
+					],
+					"slot": 1,
+					"stats": {
+						"area": 1.45,
+						"attack_speed": 1.36,
+						"burn": 0.0,
+						"chain": 0.0,
+						"crit": 0.23,
+						"damage": 19.0,
+						"dodge_cooldown": 30.0,
+						"freeze": 3.0,
+						"lifesteal": 0.075,
+						"max_health": 160.0,
+						"move_speed": 175.0,
+						"pierce": 3.0,
+						"projectile_count": 4.0,
+						"regen": 3.35,
+						"special_cooldown": 192.0,
+						"stagger": 0.0,
+						"thorns": 0.0
+					}
+				}
+			],
+			"final_phase": "victory",
+			"final_summary": {
+				"best_combo": 20,
+				"chunks": 16,
+				"discoveries": 0,
+				"endless": false,
+				"loot": 2,
+				"players": [
+					{
+						"coins": 33,
+						"kills": 10,
+						"kit": "ember",
+						"spent": 0,
+						"upgrades": {
+							"bellows": 3,
+							"blood_bloom": 3,
+							"field_stitch": 3,
+							"heartwood": 3,
+							"hot_coals": 3,
+							"keen_edge": 3,
+							"light_feet": 3,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 3,
+							"wide_arc": 3,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 50,
+						"kills": 10,
+						"kit": "nature",
+						"spent": 0,
+						"upgrades": {
+							"blood_bloom": 3,
+							"deep_roots": 3,
+							"field_stitch": 3,
+							"green_pulse": 3,
+							"heartwood": 3,
+							"keen_edge": 3,
+							"light_feet": 3,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 3,
+							"thornline": 3,
+							"twin_stitch": 3,
+							"wide_arc": 3
+						}
+					}
+				],
+				"seconds": 14,
+				"seed": 18427,
+				"wave": 20,
+				"won": true
+			},
+			"furthest_x": [
+				8009.0947265625,
+				8050.0
+			],
+			"human_playtest": false,
+			"input": "Synthetic owned keyboard combat after explicitly staged wave, legal upgrade presets and starting positions; no invulnerability or combat health refills.",
+			"kits": [
+				"ember",
+				"nature"
+			],
+			"landmarks_discovered": 0,
+			"loot_collected": 2,
+			"map_regions": 4,
+			"menu": "Production App title/lobby/start, actual shop offers and purchase/ready methods.",
+			"peak_live_enemies": 13,
+			"players": 2,
+			"purchases": [],
+			"seen_roles": [
+				"charger",
+				"swarm",
+				"heavy",
+				"shooter",
+				"flyer"
+			],
+			"selected_fighters": [
+				{
+					"id": "kiln-fox-ai",
+					"manifest_sha256": "d00efc670eb8b885b3ba87ff3d20d70797158dda44d3aeb9a7553699c7fdc8a5"
+				},
+				{
+					"id": "thistlepaw",
+					"manifest_sha256": "39ac1fc34a16f39a24e6422c180c357485b7a40c2188b9097dfe1f7b718ec7bb"
+				}
+			],
+			"skipped": false,
+			"source_hashes": {
+				"res://content/arena/catalog.json": "0837d9a9bbae2688190b0b0bc62979a3f454b3e36078c379d05db87714ac8fab",
+				"res://content/arena/world.json": "d624d040b1a1b92b03a06e446bd7fb4999085684fac411221f13c928d4034251",
+				"res://scripts/arena/actors/arena_enemy.gd": "134207dc4c3f52a80bbaec9e7c466593aa5897a32c43b3e4c682031edf28b070",
+				"res://scripts/arena/actors/arena_fighter.gd": "8074c520be7b2697cd9ddce95a711614e2f1375b192f17003060fdf9d29197ca",
+				"res://scripts/arena/actors/arena_projectile.gd": "1943e25ea841957409e7139e7c902d6afd5670272af98840d8d31b6745de66f6",
+				"res://scripts/arena/arena_map.gd": "3f1206616aad23fe94a56121101ea1ca9eef0bbdd999eb22d47b5894f5cd6f26",
+				"res://scripts/arena/arena_player_state.gd": "ba5d4a3602f4367de0c261dc9b0876fa0eb4aaae8359a670054ff775c0f0cff0",
+				"res://scripts/arena/arena_presentation.gd": "aa5f86e00db6649475691f3eeafdbd6b558e639d64f20a8b0bbfd42e16e0c7de",
+				"res://scripts/arena/run_session.gd": "8fc1022ba75c502b3ea0ed28c156ba77df132f2c834e729c4d845ef6f00a9dd3",
+				"res://tests/arena/route_driver.gd": "eeb56da3b471d5cc2cc10c44ec9a95b09805585548e68dec99becef85b7fb7ee"
+			},
+			"split_changes": [],
+			"staging": {
+				"crowd_fixture": false,
+				"invulnerability": false,
+				"preset_upgrade_ranks": 3,
+				"wave_jump": 20
+			},
+			"success": true,
+			"target_waves": 20,
+			"ticks": 313,
+			"waves": [
+				{
+					"boss": "loom",
+					"health": [
+						157.006012500001,
+						160.0
+					],
+					"observed_health_loss": [
+						35.2675,
+						13.175
+					],
+					"summary": {
+						"best_combo": 20,
+						"chunks": 16,
+						"discoveries": 0,
+						"endless": false,
+						"loot": 2,
+						"players": [
+							{
+								"coins": 33,
+								"kills": 10,
+								"kit": "ember",
+								"spent": 0,
+								"upgrades": {
+									"bellows": 3,
+									"blood_bloom": 3,
+									"field_stitch": 3,
+									"heartwood": 3,
+									"hot_coals": 3,
+									"keen_edge": 3,
+									"light_feet": 3,
+									"lucky_thread": 3,
+									"quick_hands": 3,
+									"second_wind": 3,
+									"slipstream": 3,
+									"wide_arc": 3,
+									"wildfire": 3
+								}
+							},
+							{
+								"coins": 50,
+								"kills": 10,
+								"kit": "nature",
+								"spent": 0,
+								"upgrades": {
+									"blood_bloom": 3,
+									"deep_roots": 3,
+									"field_stitch": 3,
+									"green_pulse": 3,
+									"heartwood": 3,
+									"keen_edge": 3,
+									"light_feet": 3,
+									"lucky_thread": 3,
+									"quick_hands": 3,
+									"second_wind": 3,
+									"slipstream": 3,
+									"thornline": 3,
+									"twin_stitch": 3,
+									"wide_arc": 3
+								}
+							}
+						],
+						"seconds": 14,
+						"seed": 18427,
+						"wave": 20,
+						"won": false
+					},
+					"ticks": 305,
+					"wave": 20
+				}
+			],
+			"world_seed": 18427
+		},
+		{
+			"bot": "State-aware bot reads target positions and attack phases, then uses normal move/jump/attack/special/dodge/revive commands. Random critical hits and shop rolls remain enabled.",
+			"captures": [],
+			"chapter": "6/7  ENDLESS / NEXT CYCLE",
+			"downs": [
+				0,
+				0
+			],
+			"errors": [],
+			"explorations": [],
+			"final_actors": [
+				{
+					"health": 160.0,
+					"max_health": 160.0,
+					"position": [
+						8018.16357421875,
+						319.925262451172
+					],
+					"slot": 0,
+					"stats": {
+						"area": 2.0,
+						"attack_speed": 1.36,
+						"burn": 4.0,
+						"chain": 0.0,
+						"crit": 0.23,
+						"damage": 21.0,
+						"dodge_cooldown": 30.0,
+						"freeze": 0.0,
+						"lifesteal": 0.075,
+						"max_health": 160.0,
+						"move_speed": 175.0,
+						"pierce": 0.0,
+						"projectile_count": 1.0,
+						"regen": 1.05,
+						"special_cooldown": 60.0,
+						"stagger": 0.0,
+						"thorns": 0.0
+					}
+				},
+				{
+					"health": 160.0,
+					"max_health": 160.0,
+					"position": [
+						7929.26708984375,
+						319.925262451172
+					],
+					"slot": 1,
+					"stats": {
+						"area": 1.45,
+						"attack_speed": 1.36,
+						"burn": 0.0,
+						"chain": 0.0,
+						"crit": 0.23,
+						"damage": 19.0,
+						"dodge_cooldown": 30.0,
+						"freeze": 3.0,
+						"lifesteal": 0.075,
+						"max_health": 160.0,
+						"move_speed": 175.0,
+						"pierce": 3.0,
+						"projectile_count": 4.0,
+						"regen": 3.35,
+						"special_cooldown": 192.0,
+						"stagger": 0.0,
+						"thorns": 0.0
+					}
+				}
+			],
+			"final_phase": "clear",
+			"final_summary": {
+				"best_combo": 8,
+				"chunks": 16,
+				"discoveries": 0,
+				"endless": true,
+				"loot": 1,
+				"players": [
+					{
+						"coins": 21,
+						"kills": 2,
+						"kit": "ember",
+						"spent": 0,
+						"upgrades": {
+							"bellows": 3,
+							"blood_bloom": 3,
+							"field_stitch": 3,
+							"heartwood": 3,
+							"hot_coals": 3,
+							"keen_edge": 3,
+							"light_feet": 3,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 3,
+							"wide_arc": 3,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 40,
+						"kills": 7,
+						"kit": "nature",
+						"spent": 0,
+						"upgrades": {
+							"blood_bloom": 3,
+							"deep_roots": 3,
+							"field_stitch": 3,
+							"green_pulse": 3,
+							"heartwood": 3,
+							"keen_edge": 3,
+							"light_feet": 3,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 3,
+							"thornline": 3,
+							"twin_stitch": 3,
+							"wide_arc": 3
+						}
+					}
+				],
+				"seconds": 8,
+				"seed": 18427,
+				"wave": 25,
+				"won": false
+			},
+			"furthest_x": [
+				8046.72509765625,
+				8050.0
+			],
+			"human_playtest": false,
+			"input": "Synthetic owned keyboard combat after explicitly staged wave, legal upgrade presets and starting positions; no invulnerability or combat health refills.",
+			"kits": [
+				"ember",
+				"nature"
+			],
+			"landmarks_discovered": 0,
+			"loot_collected": 1,
+			"map_regions": 4,
+			"menu": "Production App title/lobby/start, actual shop offers and purchase/ready methods.",
+			"peak_live_enemies": 8,
+			"players": 2,
+			"purchases": [],
+			"seen_roles": [
+				"chaser",
+				"swarm",
+				"heavy"
+			],
+			"selected_fighters": [
+				{
+					"id": "kiln-fox-ai",
+					"manifest_sha256": "d00efc670eb8b885b3ba87ff3d20d70797158dda44d3aeb9a7553699c7fdc8a5"
+				},
+				{
+					"id": "thistlepaw",
+					"manifest_sha256": "39ac1fc34a16f39a24e6422c180c357485b7a40c2188b9097dfe1f7b718ec7bb"
+				}
+			],
+			"skipped": false,
+			"source_hashes": {
+				"res://content/arena/catalog.json": "0837d9a9bbae2688190b0b0bc62979a3f454b3e36078c379d05db87714ac8fab",
+				"res://content/arena/world.json": "d624d040b1a1b92b03a06e446bd7fb4999085684fac411221f13c928d4034251",
+				"res://scripts/arena/actors/arena_enemy.gd": "134207dc4c3f52a80bbaec9e7c466593aa5897a32c43b3e4c682031edf28b070",
+				"res://scripts/arena/actors/arena_fighter.gd": "8074c520be7b2697cd9ddce95a711614e2f1375b192f17003060fdf9d29197ca",
+				"res://scripts/arena/actors/arena_projectile.gd": "1943e25ea841957409e7139e7c902d6afd5670272af98840d8d31b6745de66f6",
+				"res://scripts/arena/arena_map.gd": "3f1206616aad23fe94a56121101ea1ca9eef0bbdd999eb22d47b5894f5cd6f26",
+				"res://scripts/arena/arena_player_state.gd": "ba5d4a3602f4367de0c261dc9b0876fa0eb4aaae8359a670054ff775c0f0cff0",
+				"res://scripts/arena/arena_presentation.gd": "aa5f86e00db6649475691f3eeafdbd6b558e639d64f20a8b0bbfd42e16e0c7de",
+				"res://scripts/arena/run_session.gd": "8fc1022ba75c502b3ea0ed28c156ba77df132f2c834e729c4d845ef6f00a9dd3",
+				"res://tests/arena/route_driver.gd": "eeb56da3b471d5cc2cc10c44ec9a95b09805585548e68dec99becef85b7fb7ee"
+			},
+			"split_changes": [],
+			"staging": {
+				"crowd_fixture": false,
+				"invulnerability": false,
+				"preset_upgrade_ranks": 3,
+				"wave_jump": 25
+			},
+			"success": true,
+			"target_waves": 25,
+			"ticks": 249,
+			"waves": [
+				{
+					"boss": "warden",
+					"health": [
+						160.0,
+						160.0
+					],
+					"observed_health_loss": [
+						0.0,
+						24.0
+					],
+					"summary": {
+						"best_combo": 8,
+						"chunks": 16,
+						"discoveries": 0,
+						"endless": true,
+						"loot": 1,
+						"players": [
+							{
+								"coins": 21,
+								"kills": 2,
+								"kit": "ember",
+								"spent": 0,
+								"upgrades": {
+									"bellows": 3,
+									"blood_bloom": 3,
+									"field_stitch": 3,
+									"heartwood": 3,
+									"hot_coals": 3,
+									"keen_edge": 3,
+									"light_feet": 3,
+									"lucky_thread": 3,
+									"quick_hands": 3,
+									"second_wind": 3,
+									"slipstream": 3,
+									"wide_arc": 3,
+									"wildfire": 3
+								}
+							},
+							{
+								"coins": 40,
+								"kills": 7,
+								"kit": "nature",
+								"spent": 0,
+								"upgrades": {
+									"blood_bloom": 3,
+									"deep_roots": 3,
+									"field_stitch": 3,
+									"green_pulse": 3,
+									"heartwood": 3,
+									"keen_edge": 3,
+									"light_feet": 3,
+									"lucky_thread": 3,
+									"quick_hands": 3,
+									"second_wind": 3,
+									"slipstream": 3,
+									"thornline": 3,
+									"twin_stitch": 3,
+									"wide_arc": 3
+								}
+							}
+						],
+						"seconds": 8,
+						"seed": 18427,
+						"wave": 25,
+						"won": false
+					},
+					"ticks": 248,
+					"wave": 25
+				}
+			],
+			"world_seed": 18427
+		},
+		{
+			"bot": "State-aware bot reads target positions and attack phases, then uses normal move/jump/attack/special/dodge/revive commands. Random critical hits and shop rolls remain enabled.",
+			"captures": [],
+			"chapter": "7/7  CROWD STRESS / ALL SIX ENEMY ROLES",
+			"downs": [
+				0,
+				0
+			],
+			"errors": [],
+			"explorations": [],
+			"final_actors": [
+				{
+					"health": 160.0,
+					"max_health": 160.0,
+					"position": [
+						7870.92138671875,
+						319.924041748047
+					],
+					"slot": 0,
+					"stats": {
+						"area": 2.0,
+						"attack_speed": 1.36,
+						"burn": 4.0,
+						"chain": 0.0,
+						"crit": 0.23,
+						"damage": 21.0,
+						"dodge_cooldown": 30.0,
+						"freeze": 0.0,
+						"lifesteal": 0.075,
+						"max_health": 160.0,
+						"move_speed": 175.0,
+						"pierce": 0.0,
+						"projectile_count": 1.0,
+						"regen": 1.05,
+						"special_cooldown": 60.0,
+						"stagger": 0.0,
+						"thorns": 0.0
+					}
+				},
+				{
+					"health": 160.0,
+					"max_health": 160.0,
+					"position": [
+						8038.001953125,
+						319.925262451172
+					],
+					"slot": 1,
+					"stats": {
+						"area": 1.45,
+						"attack_speed": 1.36,
+						"burn": 0.0,
+						"chain": 0.0,
+						"crit": 0.23,
+						"damage": 19.0,
+						"dodge_cooldown": 30.0,
+						"freeze": 3.0,
+						"lifesteal": 0.075,
+						"max_health": 160.0,
+						"move_speed": 175.0,
+						"pierce": 3.0,
+						"projectile_count": 4.0,
+						"regen": 3.35,
+						"special_cooldown": 192.0,
+						"stagger": 0.0,
+						"thorns": 0.0
+					}
+				}
+			],
+			"final_phase": "combat",
+			"final_summary": {
+				"best_combo": 0,
+				"chunks": 16,
+				"discoveries": 0,
+				"endless": true,
+				"loot": 0,
+				"players": [
+					{
+						"coins": 0,
+						"kills": 0,
+						"kit": "ember",
+						"spent": 0,
+						"upgrades": {
+							"bellows": 3,
+							"blood_bloom": 3,
+							"field_stitch": 3,
+							"heartwood": 3,
+							"hot_coals": 3,
+							"keen_edge": 3,
+							"light_feet": 3,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 3,
+							"wide_arc": 3,
+							"wildfire": 3
+						}
+					},
+					{
+						"coins": 0,
+						"kills": 0,
+						"kit": "nature",
+						"spent": 0,
+						"upgrades": {
+							"blood_bloom": 3,
+							"deep_roots": 3,
+							"field_stitch": 3,
+							"green_pulse": 3,
+							"heartwood": 3,
+							"keen_edge": 3,
+							"light_feet": 3,
+							"lucky_thread": 3,
+							"quick_hands": 3,
+							"second_wind": 3,
+							"slipstream": 3,
+							"thornline": 3,
+							"twin_stitch": 3,
+							"wide_arc": 3
+						}
+					}
+				],
+				"seconds": 1,
+				"seed": 18427,
+				"wave": 25,
+				"won": false
+			},
+			"furthest_x": [
+				7950.0,
+				8050.0
+			],
+			"human_playtest": false,
+			"input": "Synthetic owned keyboard combat after explicitly staged wave, legal upgrade presets and starting positions; no invulnerability or combat health refills.",
+			"interrupted": true,
+			"kits": [
+				"ember",
+				"nature"
+			],
+			"landmarks_discovered": 0,
+			"loot_collected": 0,
+			"map_regions": 4,
+			"menu": "Production App title/lobby/start, actual shop offers and purchase/ready methods.",
+			"peak_live_enemies": 31,
+			"players": 2,
+			"purchases": [],
+			"seen_roles": [
+				"heavy",
+				"flyer",
+				"shooter",
+				"charger",
+				"chaser",
+				"swarm"
+			],
+			"selected_fighters": [
+				{
+					"id": "kiln-fox-ai",
+					"manifest_sha256": "d00efc670eb8b885b3ba87ff3d20d70797158dda44d3aeb9a7553699c7fdc8a5"
+				},
+				{
+					"id": "thistlepaw",
+					"manifest_sha256": "39ac1fc34a16f39a24e6422c180c357485b7a40c2188b9097dfe1f7b718ec7bb"
+				}
+			],
+			"skipped": false,
+			"source_hashes": {
+				"res://content/arena/catalog.json": "0837d9a9bbae2688190b0b0bc62979a3f454b3e36078c379d05db87714ac8fab",
+				"res://content/arena/world.json": "d624d040b1a1b92b03a06e446bd7fb4999085684fac411221f13c928d4034251",
+				"res://scripts/arena/actors/arena_enemy.gd": "134207dc4c3f52a80bbaec9e7c466593aa5897a32c43b3e4c682031edf28b070",
+				"res://scripts/arena/actors/arena_fighter.gd": "8074c520be7b2697cd9ddce95a711614e2f1375b192f17003060fdf9d29197ca",
+				"res://scripts/arena/actors/arena_projectile.gd": "1943e25ea841957409e7139e7c902d6afd5670272af98840d8d31b6745de66f6",
+				"res://scripts/arena/arena_map.gd": "3f1206616aad23fe94a56121101ea1ca9eef0bbdd999eb22d47b5894f5cd6f26",
+				"res://scripts/arena/arena_player_state.gd": "ba5d4a3602f4367de0c261dc9b0876fa0eb4aaae8359a670054ff775c0f0cff0",
+				"res://scripts/arena/arena_presentation.gd": "aa5f86e00db6649475691f3eeafdbd6b558e639d64f20a8b0bbfd42e16e0c7de",
+				"res://scripts/arena/run_session.gd": "8fc1022ba75c502b3ea0ed28c156ba77df132f2c834e729c4d845ef6f00a9dd3",
+				"res://tests/arena/route_driver.gd": "eeb56da3b471d5cc2cc10c44ec9a95b09805585548e68dec99becef85b7fb7ee"
+			},
+			"split_changes": [],
+			"staging": {
+				"crowd_fixture": true,
+				"invulnerability": false,
+				"preset_upgrade_ranks": 3,
+				"wave_jump": 25
+			},
+			"success": false,
+			"target_waves": 25,
+			"ticks": 44,
+			"waves": [],
+			"world_seed": 18427
+		}
+	],
+	"completed": false,
+	"display": "Wayland",
+	"engine": "4.7.2-stable (arch_linux)",
+	"errors": [],
+	"human_playtest": false,
+	"mode": "smoke",
+	"quit_early": true,
+	"seed": 18427,
+	"source_hashes": {
+		"tests/arena/route_driver.gd": "eeb56da3b471d5cc2cc10c44ec9a95b09805585548e68dec99becef85b7fb7ee",
+		"tools/arena_showcase.gd": "9fe52c98f934fbf9e5b563becd8569de8d057a791b35d0ab7bcbd5748d03145d",
+		"tools/arena_showcase_driver.gd": "b92df23d66833e5e402480f74d5c818992cd5d4410fee6f40002e2c5cabee1a7"
+	},
+	"staged_highlights": true
+}

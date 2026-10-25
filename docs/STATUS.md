@@ -2,6 +2,12 @@
 
 Current product: solo/two-player scrolling wave fighter with dynamic split screen. The approved [world contract](SCROLLING_WORLD_PLAN.md) extends the [wave specification](WAVE_FIGHTER_SPEC.md). Earlier campaign and overhead work remains historical.
 
+## Watchable gameplay showcase
+
+`./showcase.sh` runs labeled co-op highlight chapters1/5/10/15/20/25 and a staged64-foe finale with the ordinary32-live cap. `--full` keeps the25-wave route's normal progression; preset setup only exists in the highlight adapter. Space pause/resume,1/2/4 viewing speed,N highlight skip,Esc exit; temporary settings/records are cleaned and personal saves are untouched.
+
+Seven headless chapters pass, peak32/all six roles, no engine errors. Actual native boss/crowd captures inspected; controlled real-overlay key handlers verify pause/frozen/resume/speed/skip/exit with honest interrupted-report state. The original two-wave co-op input route still passes. [Evidence and limitations](../evidence/showcase/README.md). No new full25 rerun, human/hardware QA, API request or exported release.
+
 ## Current wave-flow hotfix
 
 Fixed the reproduced nearby-cave catch-up gap: spawns prefer the visible fighting lane; unseen ordinary enemies catch up after180ticks regardless of distance, with42tick warning and original identity/HP. Camera visibility uses a16px edge margin. Normal arrivals warn24ticks, schedule at most18ticks apart, release their delay after kills and request up to three when empty. Pending warnings still consume caps and reserve space. Wave countdown45ticks; clear celebration24ticks; shops retain all-player Ready.

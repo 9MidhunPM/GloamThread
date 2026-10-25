@@ -52,6 +52,7 @@ func run(players: int = 1, waves: int = 20, capture_path: String = "", fighter_i
 	if not is_instance_valid(session):
 		report.errors.append("Actual lobby could not start a run.")
 		return report
+	_prepare_session()
 	report.kits = []
 	report.selected_fighters = []
 	for appearance: Dictionary in app.selected.slice(0, players):
@@ -60,6 +61,9 @@ func run(players: int = 1, waves: int = 20, capture_path: String = "", fighter_i
 		report.kits.append(fighter.kit_id)
 		_last_health[fighter.slot_index] = fighter.health
 	while _tick < 600_000:
+		if _should_stop():
+			report.interrupted = true
+			break
 		_tick += 1
 		var split_now: bool = app.presentation.split
 		if split_now != _split_before:
@@ -134,6 +138,12 @@ func run(players: int = 1, waves: int = 20, capture_path: String = "", fighter_i
 		report.final_actors.append({"slot":fighter.slot_index,"health":fighter.health,"max_health":fighter.max_health,"position":[fighter.position.x,fighter.position.y],"stats":fighter.stats.duplicate()})
 	for slot in 2: InputRouter.set_test_input(slot, 0)
 	return report
+
+func _prepare_session() -> void:
+	pass
+
+func _should_stop() -> bool:
+	return false
 
 func _commands(fighter: ArenaFighter) -> int:
 	var slot := fighter.slot_index

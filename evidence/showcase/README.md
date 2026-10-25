@@ -1,0 +1,8 @@
+# Gameplay showcase evidence
+
+Godot4.7.2 Compatibility, source checkout, seed18427. No API/model calls.
+
+- `./showcase.sh --smoke --report /tmp/gloamthread-showcase-smoke.json`: seven chapters complete without engine errors. All four bosses, endless25 and staged64-foe finale;32 peak live enemies, all six enemy roles. `smoke.json` records exact staging, outcomes and source hashes. These preset encounters are not normal-run evidence.
+- Actual native Wayland rendering: `boss.png` and `crowd.png` captured directly from the production1920×1080 viewport with `RenderingServer.force_draw(false)`. Native control fixture calls the real overlay input handler with key events, checks paused/frozen/resume and4x, then exercises N and Escape. It intentionally skips Warden and exits during the crowd: `native-controls.json` correctly records skipped/interrupted chapters and completed=false. This is controlled handler/render evidence, not physical keyboard/gamepad proof. The compositor's missing xdg-toplevel-icon warning is cosmetic; no script/engine errors or audio cleanup warnings in the final fixture.
+- Ordinary input-driver regression (no presets): `godot --headless --path . --fixed-fps 60 --script tools/arena_playthrough.gd -- --players 2 --waves 2 --seed 18427 --output /tmp/gloamthread-showcase-route-regression.json` passes with no route/engine errors. The new prepare/stop hooks do nothing in the existing test driver.
+- Launcher shell syntax, help from another directory and invalid arguments checked. Full25 viewing mode reuses the existing route; it has not received another full-length run in this change. No human balance/listening, scanout-FPS claim or new binary export.
