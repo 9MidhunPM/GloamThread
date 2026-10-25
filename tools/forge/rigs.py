@@ -52,14 +52,15 @@ def _read_part(path:Path)->Image.Image:
 def load_rig(job_dir:Path,rig_id:str)->tuple[dict,dict,dict]:
     require(not (job_dir/'rig.json').is_symlink(),'Rig metadata cannot be a symlink.')
     rig=json.loads((job_dir/'rig.json').read_text());require(rig.get('schema_version')==1 and rig.get('rig_id')==rig_id,'Rig type/version differs.')
-    records=rig.get('parts');require(isinstance(records,list) and {p.get('id') for p in records}==set(RIG_PARTS[rig_id]) and len(records)==len(RIG_PARTS[rig_id]),'Rig part IDs differ.')
+    ids=['master'] if rig.get('source_kind')=='illustrated-master' else RIG_PARTS[rig_id]
+    records=rig.get('parts');require(isinstance(records,list) and all(isinstance(p,dict) for p in records) and {p.get('id') for p in records}==set(ids) and len(records)==len(ids),'Rig part IDs differ.')
     parts={};masks={}
     edits_path=job_dir/'rig_edits.json'
     edits={}
     if edits_path.exists():
         require(not edits_path.is_symlink() and edits_path.stat().st_size<=65536,'Rig edits are unsafe.')
         edits_doc=json.loads(edits_path.read_text());require(edits_doc.get('schema_version')==1 and isinstance(edits_doc.get('parts'),dict),'Rig edit version is invalid.');edits=edits_doc['parts']
-        require(set(edits)<=set(RIG_PARTS[rig_id]),'Unknown edited part.')
+        require(set(edits)<=set(ids),'Unknown edited part.')
     for record in records:
         name=record['id'];require(record.get('file')==f'parts/{name}.png','Part paths must be fixed.')
         require(not (job_dir/'parts').is_symlink(),'Part directory cannot be a symlink.')
@@ -70,9 +71,10 @@ def load_rig(job_dir:Path,rig_id:str)->tuple[dict,dict,dict]:
         for field in ('pivot','anchor'):
             pair=record.get(field)
             require(isinstance(pair,list) and len(pair)==2 and all(type(n) in (float,int) and 0<=n<=63 for n in pair),'Pivot/anchor must be two bounded coordinates.')
-        if 'mask_file' in edit:
-            require(edit['mask_file']==f'masks/{name}.png','Mask paths must be fixed.')
-            mask_path=job_dir/edit['mask_file'];require(not (job_dir/'masks').is_symlink() and mask_path.is_file() and not mask_path.is_symlink() and mask_path.stat().st_size<=1024*1024,'Mask is unsafe.')
+        mask_file=edit.get('mask_file',record.get('mask_file'))
+        if mask_file is not None:
+            require(mask_file==f'masks/{name}.png','Mask paths must be fixed.')
+            mask_path=job_dir/mask_file;require(not (job_dir/'masks').is_symlink() and mask_path.is_file() and not mask_path.is_symlink() and mask_path.stat().st_size<=1024*1024,'Mask is unsafe.')
             with Image.open(mask_path) as im:
                 require(im.format=='PNG' and im.size==(64,64) and getattr(im,'n_frames',1)==1,'Mask must be64×64PNG.')
                 masks[name]=im.getchannel('A') if im.mode=='RGBA' else im.convert('L')
@@ -92,7 +94,8 @@ def _source_layout(job_dir:Path,rig_id:str,raw_hashes:dict)->dict|None:
     require(file.is_file() and not file.is_symlink() and file.stat().st_size<=128*1024,'Source layout is unsafe or oversized.')
     layout=json.loads(file.read_text())
     required={'schema_version','raw_parts_sha256','raw_theme_sha256','alpha_cutoff','parts','master_crop','background_crop'}
-    require(isinstance(layout,dict) and required<=set(layout)<=required|{'material_crops'},'Source layout fields are invalid.')
+    optional={'material_crops','master_file','illustrated_master_sha256'}
+    require(isinstance(layout,dict) and required<=set(layout)<=required|optional,'Source layout fields are invalid.')
     require(type(layout['schema_version']) is int and layout['schema_version']==1,'Source layout version is invalid.')
     for field in ('raw_parts_sha256','raw_theme_sha256'):
         require(isinstance(layout[field],str) and re.fullmatch(r'[0-9a-f]{64}',layout[field]) is not None and layout[field]==raw_hashes.get(field),'Source layout belongs to different raw images.')
@@ -109,7 +112,28 @@ def _source_layout(job_dir:Path,rig_id:str,raw_hashes:dict)->dict|None:
     if 'material_crops' in layout:
         require(isinstance(layout['material_crops'],list) and len(layout['material_crops'])==4,'Source material annotations need four crops.')
         for value in layout['material_crops']:crop(value)
+    if 'master_file' in layout or 'illustrated_master_sha256' in layout:
+        require(layout.get('master_file')=='illustrated_master.png','Illustrated master filename must be fixed.')
+        _read_illustrated_source(job_dir,'illustrated_master.png',layout.get('illustrated_master_sha256'),layout['alpha_cutoff'])
     return layout
+
+
+def _read_illustrated_source(job_dir:Path,file:str,digest:str,cutoff:int)->Image.Image:
+    require(file in ('illustrated_master.png','raw/parts.png'),'Illustrated source filename is not allowlisted.')
+    require(isinstance(digest,str) and re.fullmatch(r'[0-9a-f]{64}',digest) is not None,'Illustrated source hash is invalid.')
+    require(type(cutoff) is int and 1<=cutoff<=255,'Illustrated alpha cutoff must be1..255.')
+    path=job_dir/file
+    require(not path.parent.is_symlink() and path.is_file() and not path.is_symlink() and path.stat().st_size<=8*1024*1024,'Illustrated master is missing, unsafe or oversized.')
+    require(sha256(path)==digest,'Illustrated master hash differs from the approved source.')
+    with Image.open(path) as source:
+        require(source.format=='PNG' and source.mode=='RGBA' and all(32<=size<=2048 for size in source.size) and getattr(source,'n_frames',1)==1,'Illustrated master must be one RGBA PNG32..2048pixels per side.')
+        source.load();image=source.copy()
+    image.putalpha(image.getchannel('A').point(lambda value:255 if value>=cutoff else 0))
+    bounds=image.getchannel('A').getbbox()
+    require(bounds is not None and image.getchannel('A').getextrema()==(0,255),'Illustrated master needs nonblank content and real transparency; opaque painted backgrounds need an explicit cutout.')
+    require(bounds[0]>=1 and bounds[1]>=1 and bounds[2]<=image.width-1 and bounds[3]<=image.height-1,'Illustrated master needs meaningful transparent margins on every side.')
+    require(bounds[2]-bounds[0]>=8 and bounds[3]-bounds[1]>=8,'Illustrated master character is too small.')
+    return image
 
 
 def _crop_source(image:Image.Image,crop:list[int],alpha_cutoff:int|None=None)->Image.Image:
@@ -148,6 +172,15 @@ def _bake_provenance(job_dir:Path,proposal:dict,parts:dict,rig:dict,masks:dict,
     if theme_mode!='authored':
         inputs['theme'].update({'background_file_sha256':sha256(job_dir/'theme_background.png'),
                                 'materials_file_sha256':sha256(job_dir/'theme_materials.png')})
+    if rig.get('source_kind')=='illustrated-master':
+        from .illustrated import VERSION,POSES
+        source=parent.get('illustrated_master')
+        require(isinstance(source,dict),'Illustrated rebake requires retained source identity.')
+        master=_read_illustrated_source(job_dir,source.get('file'),source.get('sha256'),source.get('alpha_cutoff'))
+        inputs['illustrated_master']={**source,'size':list(master.size),
+            'applied_pixels_sha256':hashlib.sha256(master.tobytes()).hexdigest(),
+            'animation_version':VERSION,'poses':POSES,'canonical_fit':[48,50],
+            'animation_source_sha256':sha256(Path(__file__).with_name('illustrated.py'))}
     provenance=dict(parent)
     provenance.update({'rig_sha256':inputs['rig_file_sha256'],
                        'parent_generation_provenance_sha256':parent_digest,
@@ -169,7 +202,7 @@ def bake_job(job_json:Path)->Path:
         provenance=json.loads(source_provenance.read_text())
         require(isinstance(provenance,dict),'Generation provenance must be an object.')
         parent_digest=sha256(source_provenance)
-    generated=rig.get('source_kind')=='generated-parts' or 'raw_theme_sha256' in provenance or 'raw_parts_sha256' in provenance
+    generated=rig.get('source_kind') in ('generated-parts','illustrated-master') or 'raw_theme_sha256' in provenance or 'raw_parts_sha256' in provenance
     if generated:require(parent_digest is not None,'Generated rebake requires retained generation provenance.')
     theme_files=(job_dir/'theme_background.png',job_dir/'theme_materials.png')
     retained_theme=any(path.exists() for path in theme_files)
@@ -195,18 +228,8 @@ def bake_job(job_json:Path)->Path:
                        identifier=bundle_id(proposal,provenance['bake_sha256']))
 
 
-def convert_generated(raw_parts:Path,raw_theme:Path,proposal:dict,job_dir:Path,provenance:dict)->Path:
-    validate_proposal(proposal);require(not (job_dir/'parts').exists(),'Generated parts already exist; use bake to revise them.')
-    for path in (raw_parts,raw_theme):
-        require(path.is_file() and not path.is_symlink() and path.stat().st_size<=25*1024*1024,'Raw image is unsafe or oversized.')
-    with Image.open(raw_parts) as image:
-        require(image.format=='PNG' and image.size==(1024,1024) and getattr(image,'n_frames',1)==1,'Parts board must be a1024squarePNG.')
-        board=image.convert('RGBA');require(board.getchannel('A').getextrema()==(0,255),'Parts board must have real transparency.')
-    with Image.open(raw_theme) as image:
-        require(image.format=='PNG' and image.size==(1024,1024) and getattr(image,'n_frames',1)==1,'Theme board must be a1024squarePNG.')
-        theme=image.convert('RGBA');require(theme.getchannel('A').getextrema()==(255,255),'Theme board must be opaque.')
-    layout=_source_layout(job_dir,proposal['rig_id'],{'raw_parts_sha256':sha256(raw_parts),'raw_theme_sha256':sha256(raw_theme)})
-    # Target envelopes are authored by rig; the supplied artwork keeps its shapes/details.
+def _board_parts(board:Image.Image,proposal:dict,layout:dict|None)->tuple[dict,dict,Image.Image]:
+    """Legacy separated-parts conversion, kept for existing accepted jobs."""
     templates=authored_parts(proposal['rig_id'],proposal['theme']['palette']);parts={}
     for n,name in enumerate(RIG_PARTS[proposal['rig_id']]):
         if layout is None:
@@ -225,9 +248,51 @@ def convert_generated(raw_parts:Path,raw_theme:Path,proposal:dict,job_dir:Path,p
     master_box=raw_master.getchannel('A').getbbox()
     require(master_box is not None,'Generated master design in slot8 is blank.')
     if layout is None:require(master_box[0]>2 and master_box[1]>2 and master_box[2]<raw_master.width-2 and master_box[3]<raw_master.height-2,'Generated master design is clipped by its grid slot.')
-    master=raw_master.crop(master_box);master.thumbnail((116,116),Image.Resampling.NEAREST)
+    rig=make_rig(proposal['rig_id']);rig['source_kind']='generated-parts'
+    return parts,rig,raw_master
+
+
+def convert_generated(raw_parts:Path,raw_theme:Path,proposal:dict,job_dir:Path,provenance:dict)->Path:
+    from .illustrated import VERSION,prepare_master
+    validate_proposal(proposal);require(not (job_dir/'parts').exists(),'Generated parts already exist; use bake to revise them.')
+    for path in (raw_parts,raw_theme):
+        require(path.is_file() and not path.is_symlink() and path.stat().st_size<=25*1024*1024,'Raw image is unsafe or oversized.')
+    layout=_source_layout(job_dir,proposal['rig_id'],{'raw_parts_sha256':sha256(raw_parts),'raw_theme_sha256':sha256(raw_theme)})
+    source=None
+    if layout is not None and 'master_file' in layout:
+        source={'file':'illustrated_master.png','sha256':layout['illustrated_master_sha256'],
+                'alpha_cutoff':layout['alpha_cutoff'],'source_kind':'reviewed full-character cutout'}
+    elif provenance.get('art_mode')==VERSION:
+        # New requests explicitly produce one full character. The source path
+        # stays fixed and retained, including SDK-free rebakes after publication.
+        retained=job_dir/'raw/parts.png'
+        require(not retained.parent.is_symlink(),'Raw source directory cannot be a symlink.')
+        if retained.resolve()!=raw_parts.resolve():
+            require(not retained.exists(),'A different retained master already exists.')
+            retained.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(raw_parts,retained)
+        source={'file':'raw/parts.png','sha256':sha256(raw_parts),
+                'alpha_cutoff':layout['alpha_cutoff'] if layout else 192,'source_kind':'generated full-character request'}
+    with Image.open(raw_theme) as image:
+        require(image.format=='PNG' and image.size==(1024,1024) and getattr(image,'n_frames',1)==1,'Theme board must be a1024squarePNG.')
+        theme=image.convert('RGBA');require(theme.getchannel('A').getextrema()==(255,255),'Theme board must be opaque.')
+    if source is not None:
+        raw_master=_read_illustrated_source(job_dir,source['file'],source['sha256'],source['alpha_cutoff'])
+        parts={'master':prepare_master(raw_master)}
+        rig={'schema_version':1,'rig_id':proposal['rig_id'],'source_kind':'illustrated-master',
+             'animation_version':VERSION,'parts':[{'id':'master','file':'parts/master.png',
+             'pivot':[32,56],'anchor':[32,56],'mask_file':'masks/master.png'}]}
+        require(not (job_dir/'masks').is_symlink(),'Mask directory cannot be a symlink.')
+        (job_dir/'masks').mkdir(exist_ok=True)
+        mask=job_dir/'masks/master.png';require(not mask.exists(),'An illustrated master mask already exists; preserve it and rebake.')
+        Image.new('RGBA',(64,64),(255,255,255,255)).save(mask)
+    else:
+        with Image.open(raw_parts) as image:
+            require(image.format=='PNG' and image.size==(1024,1024) and getattr(image,'n_frames',1)==1,'Parts board must be a1024squarePNG.')
+            board=image.convert('RGBA');require(board.getchannel('A').getextrema()==(0,255),'Parts board must have real transparency.')
+        parts,rig,raw_master=_board_parts(board,proposal,layout)
+    master=raw_master.crop(raw_master.getchannel('A').getbbox());master.thumbnail((116,116),Image.Resampling.NEAREST)
     master_preview=Image.new('RGBA',(128,128));master_preview.alpha_composite(master,((128-master.width)//2,(128-master.height)//2));master_preview.save(job_dir/'master.png')
-    (job_dir/'parts').mkdir();rig=make_rig(proposal['rig_id']);rig['source_kind']='generated-parts'
+    (job_dir/'parts').mkdir()
     for name,image in parts.items():image.save(job_dir/f'parts/{name}.png')
     write_json(job_dir/'rig.json',rig);write_json(job_dir/'proposal.json',proposal)
     background_source=theme.crop((0,0,1024,576)) if layout is None else _crop_source(theme,layout['background_crop'])
@@ -238,7 +303,12 @@ def convert_generated(raw_parts:Path,raw_theme:Path,proposal:dict,job_dir:Path,p
         tile=tile_source.resize((128,128),Image.Resampling.NEAREST)
         mat.alpha_composite(tile,((col%2)*128,(col//2)*128))
     mat.save(job_dir/'theme_materials.png')
-    write_json(job_dir/'source_provenance.json',{'schema_version':1,**provenance,'raw_parts_sha256':sha256(raw_parts),'raw_theme_sha256':sha256(raw_theme),
+    retained_provenance={'schema_version':1,**provenance,'raw_parts_sha256':sha256(raw_parts),'raw_theme_sha256':sha256(raw_theme),
       'source_layout_sha256':sha256(job_dir/'source_layout.json') if layout is not None else None,'source_layout':layout,
-      'conversion':'explicit reviewed source-layout crops' if layout is not None else 'strict three-by-three parts grid','animation':'three-family authored envelopes, nearest sampling and deterministic animation'})
+      'conversion':'explicit reviewed source-layout crops' if layout is not None else 'strict three-by-three parts grid',
+      'animation':'three-family authored envelopes, nearest sampling and deterministic animation'}
+    if source is not None:
+        retained_provenance.update({'illustrated_master':source,'conversion':'validated full illustrated character; no limb-envelope substitution',
+            'animation':VERSION+':32 authored whole-body cutout poses; original proportions and details retained'})
+    write_json(job_dir/'source_provenance.json',retained_provenance)
     return bake_job(job_dir/'job.json')

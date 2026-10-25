@@ -10,11 +10,11 @@ Nearby players share a 640×360 view; separated players receive 320×360 views a
 
 Spawns use reachable nearby anchors and 96 pixel player clearance. Unseen pursuit preserves enemy identity/HP/status/reward ownership and cancels on visibility/death. Ground foes navigate connected platforms; genuine flying enemies cross open planks while solid terrain still blocks them, using reachable anchors around cave ceilings. Generated character appearance never grants flight.
 
-## Current counterplay verification
+## Previously verified v0.4 counterplay baseline
 
 Chargers now commit to a marked lane and expose miss/wall recovery; heavies use directional guards with rear/control/late-swing counters; shooters announce locked three-shot bursts; flyers mark committed dives and retreat. Contact direction follows actual melee/projectile/chain origins. A moving target crossing behind terrain cannot cancel/rewrite the flyer's announced attack. [Mechanics](ENEMY_MECHANICS.md).
 
-The current source passes **21 arena scenarios, 173 creator assertions and 187 Python tests**. Ordinary-input solo 20 (36,998 ticks) and co-op 25 (50,023 ticks) both pass with no route/engine errors. Four actual native 1080p snapshots were inspected with matching source hashes and no errors. [Current evidence](../evidence/enemy-counterplay/README.md). Physical/human balance and a new performance claim remain unverified. The [v0.4 prerelease](https://github.com/9MidhunPM/GloamThread/releases/tag/v0.4.0-counterplay) packages `a65bf14a2a2676a290aab7505bf2cca5fcf4fede`; its official 25-wave export passes offline in 50,487 ticks, and its normal package boots offline. All 30 archive entries/payload hashes match.
+The v0.4 source checkpoint passed **21 arena scenarios, 173 creator assertions and 187 Python tests**. Ordinary-input solo 20 (36,998 ticks) and co-op 25 (50,023 ticks) both pass with no route/engine errors. Four actual native 1080p snapshots were inspected with matching source hashes and no errors. [Current evidence](../evidence/enemy-counterplay/README.md). Physical/human balance and a new performance claim remain unverified. The [v0.4 prerelease](https://github.com/9MidhunPM/GloamThread/releases/tag/v0.4.0-counterplay) packages `a65bf14a2a2676a290aab7505bf2cca5fcf4fede`; its official 25-wave export passes offline in 50,487 ticks, and its normal package boots offline. All 30 archive entries/payload hashes match.
 
 ## Verified v0.3 baseline
 
@@ -42,4 +42,12 @@ The arena title now offers **STORY MODE (2 PLAYERS)** for the retained Tavi/Neri
 
 ## Latest source: name-led generation
 
-An explicit Name is now sent before analysis and preserved exactly. Names and weapon descriptions take priority in fresh image prompts, including a sword attached to the front hand and the complete master. Sword archetypes suggest Stone melee instead of Nature shooting, while manual ability selection wins. New identity context is cache-bound; old paid artwork remains recoverable and accepted fighters are preserved. Tests, import/build and live image calls were skipped as requested; new-output quality has not been verified. Restart the source game to use this change.
+An explicit Name is now sent before analysis and preserved exactly. Names and weapon descriptions take priority in fresh image prompts, including a sword attached to the front hand and the complete master. Sword archetypes suggest Stone melee instead of Nature shooting, while manual ability choices remain within the compatible attack category. New identity context is cache-bound; old paid artwork remains recoverable and accepted fighters are preserved. Tests, import/build and live image calls were skipped as requested; new-output quality has not been verified. Restart the source game to use this change.
+
+## Latest source: illustrated master and attack discipline
+
+New authoring jobs use art_mode=illustrated-master-v1: one full detailed transparent character, then its environment, using the same two image requests. Its complete design becomes the actual atlas/portrait with 32 authored whole-body cutout poses; original full-resolution input, masks, pivot and pose recipe are retained. Older limb-based jobs remain compatible. A fixed-name/hash-validated transparent PNG can replace a retained draft’s sprite through **Use detailed character cutout PNG**.
+
+The detailed wizard shown by the user was extracted through the built-in image tool, converted locally and accepted into the private library. Actual native preview, all atlas poses and in-game appearance were inspected. Lobby/session/fighter resolve its old Ember metadata to Frost; the request ledger remained unchanged and no user-API-key requests were sent. The built-in cutout edit is separate from those API-key records. Drawings, generated art and native captures remain private; only sanitized metadata is retained publicly.
+
+Shared identity rules now constrain creator/lobby/session/fighter consistently: magic identities use projectile kits, physical weapon identities use melee kits. Existing accepted files are not rewritten. Broad tests/builds were skipped as requested; new generation quality beyond the reviewed cutout and whole-game balance remain unverified.

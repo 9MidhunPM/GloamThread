@@ -22,11 +22,13 @@ var _preview: TextureRect
 var _cutoff_label: Label
 var _keys: Array[String] = []
 var _syncing: bool = false
+var _illustrated: bool = false
 
 
 func setup(raw_context: Dictionary, cost_text: String) -> void:
 	context = raw_context
 	layout = context["layout"].duplicate(true)
+	_illustrated = layout.has("master_file") or context.get("art_mode") == "illustrated-master-v1"
 	set_meta("cost_text", cost_text)
 
 
@@ -136,6 +138,10 @@ func _ready() -> void:
 	actions.add_child(save_button)
 	_board_changed(0)
 	_cutoff_changed(cutoff.value)
+	if _illustrated:
+		board_tabs.set_tab_disabled(0, true)
+		board_tabs.current_tab = 1
+		notice.text = "Your complete illustrated character is preserved. Adjust scenery here; edit its full-character mask and pivot on the preview page."
 
 
 func _board_changed(index: int) -> void:
@@ -238,10 +244,11 @@ func _apply() -> void:
 		return
 	var issue := Bridge.new().source_layout_pixel_issue(layout, context)
 	if not issue.is_empty():
-		board_tabs.current_tab = 0
-		var index := _keys.find(issue["target"])
-		if index >= 0:
-			_target_changed(index)
+		if not _illustrated:
+			board_tabs.current_tab = 0
+			var index := _keys.find(issue["target"])
+			if index >= 0:
+				_target_changed(index)
 		notice.text = issue["error"]
 		notice.add_theme_color_override("font_color", Color("#ffd4a1"))
 		target.grab_focus()

@@ -99,6 +99,9 @@ def pose(rig:str,state:str,index:int,count:int) -> dict:
 
 
 def render_frame(parts:dict,rig:dict,state:str,index:int,count:int,masks:dict|None=None) -> Image.Image:
+    if rig.get('source_kind')=='illustrated-master':
+      from .illustrated import render_frame as render_illustrated
+      return render_illustrated(parts,rig,state,index,count,masks)
     canvas=Image.new('RGBA',(64,64));p=pose(rig['rig_id'],state,index,count)
     order={'upright':['arm_back','leg_back','leg_front','torso','head','arm_front'],
       'quadruped':['tail','leg_back_left','leg_front_left','torso','leg_back_right','leg_front_right','head'],
