@@ -8,13 +8,13 @@ from pathlib import Path
 import sys
 
 from forge.jobs import ROOT, ForgeError, budget_status, run_job
-from forge.provider import public_settings, settings, total_budget_microusd
+from forge.provider import public_settings, settings
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
-    sub.add_parser("status", help="Print safe key presence, model names and local budget accounting")
+    sub.add_parser("status", help="Print safe key presence, model names and request accounting")
     for name in ("analyse", "generate", "bake"):
         command = sub.add_parser(name)
         command.add_argument("--job", type=Path, required=True)
@@ -23,7 +23,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "status":
             config = settings(ROOT)
             result = {**public_settings(config), "configuration_file": str(ROOT / ".env"),
-                      "budget": budget_status(ROOT, total_cap=total_budget_microusd(config), required=200000)}
+                      "budget": budget_status(ROOT, required=200000)}
         else:
             result = run_job(args.command, args.job)
         print(json.dumps(result, ensure_ascii=True))

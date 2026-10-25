@@ -7,7 +7,6 @@ import fcntl
 import hashlib
 import io
 import json
-import math
 import os
 from pathlib import Path
 import re
@@ -18,12 +17,10 @@ import uuid
 from PIL import Image, ImageOps
 
 from .provider import (ANALYSIS_PROMPT, ForgeError, OpenAIProvider, settings,
-                       total_budget_microusd, validate_config, validate_proposal)
+                       validate_config, validate_proposal)
 
 ROOT = Path(__file__).resolve().parents[2]
 VERSION = "arena-forge-1"
-SHARED_CAP = 500000  # Conservative default when the user has not configured a limit.
-MAX_SHARED_CAP = 100000000
 RESERVATIONS = {"analyse": 50000, "parts": 100000, "theme": 100000}
 MAX_SOURCE_BYTES = 20 * 1024 * 1024
 MAX_RAW_BYTES = 25 * 1024 * 1024
@@ -122,11 +119,9 @@ def budget_path(root: Path) -> Path:
 def ledger(root: Path) -> dict:
     path = budget_path(root)
     if not path.exists():
-        return {"schema_version": 1, "cap_microusd": SHARED_CAP, "reserved_usd": 0, "reservations": []}
+        return {"schema_version": 1, "cap_microusd": None, "reserved_usd": 0, "reservations": []}
     value = read_json(path)
     if (type(value.get("schema_version")) is not int or value["schema_version"] != 1
-            or type(value.get("cap_microusd")) is not int
-            or not 0 <= value["cap_microusd"] <= MAX_SHARED_CAP
             or not isinstance(value.get("reservations"), list)):
         raise ForgeError("The shared budget ledger is invalid; no requests were made.")
     seen = set()
@@ -139,9 +134,8 @@ def ledger(root: Path) -> dict:
             raise ForgeError("The shared budget ledger is invalid; no requests were made.")
         seen.add((record["job"], record["kind"]))
     total = sum(r["microusd"] for r in value["reservations"])
-    # This stored cap describes the last accepted reservation. A lower current
-    # configuration blocks spending without rewriting that historical snapshot.
-    if total > value["cap_microusd"] or value.get("reserved_usd") != total / 1000000:
+    # Legacy cap metadata is retained on reads, but never admits or blocks work.
+    if value.get("reserved_usd") != total / 1000000:
         raise ForgeError("The shared budget ledger total is invalid.")
     return value
 
@@ -157,56 +151,33 @@ def reserved(root: Path, job: Path) -> float:
 
 def budget_status(root: Path, job: Path | None = None, *, total_cap: int | None = None,
                   required: int = 0) -> dict:
-    """Safe local accounting only: no key/SDK/settings lookup or reservation."""
-    job_cap = SHARED_CAP
-    if job is not None and job.is_file():
-        try:
-            job_cap = read_job(job)[1]
-        except ForgeError:
-            pass  # Invalid jobs still receive a useful failure status.
+    """Accounting only; legacy total_cap is ignored and no settings are loaded."""
     with lock(budget_path(root).with_suffix(".lock")):
         value = ledger(root)
-        cap = value["cap_microusd"] if total_cap is None else total_cap
         total = sum(record["microusd"] for record in value["reservations"])
         local = sum(record["microusd"] for record in value["reservations"]
                     if job is not None and record["job"] == job_id(job))
-    return {"total_limit_usd": cap / 1000000, "total_reserved_usd": total / 1000000,
-            "total_remaining_usd": max(0, cap - total) / 1000000,
-            "job_limit_usd": job_cap / 1000000, "job_reserved_usd": local / 1000000,
-            "job_remaining_usd": max(0, job_cap - local) / 1000000,
+    return {"limits_enabled": False, "total_limit_usd": None, "total_reserved_usd": total / 1000000,
+            "total_remaining_usd": None,
+            "job_limit_usd": None, "job_reserved_usd": local / 1000000,
+            "job_remaining_usd": None,
             "required_usd": required / 1000000}
 
 
-def _check_budget(total: int, local: int, amount: int, total_cap: int, job_cap: int) -> None:
-    if amount == 0:
-        return  # Verified cache conversion cannot increase earlier spending.
-    if total + amount > total_cap:
-        raise ForgeError("Shared allowance has $%.2f remaining; this operation needs $%.2f reserved. "
-                         "Update FORGE_TOTAL_BUDGET_USD to your chosen limit, then resume this draft. No request was made."
-                         % (max(0, total_cap - total) / 1000000, amount / 1000000),
-                         code="shared_budget_exceeded", retry_allowed=True, required_microusd=amount)
-    if local + amount > job_cap:
-        raise ForgeError("This character job has $%.2f remaining; this operation needs $%.2f reserved. "
-                         "The per-character maximum is $0.50. No request was made."
-                         % (max(0, job_cap - local) / 1000000, amount / 1000000),
-                         code="job_budget_exceeded", retry_allowed=True, required_microusd=amount)
-
-
-def reserve(root: Path, job: Path, kind: str, key: str, cap: int,
-            total_cap: int = SHARED_CAP) -> None:
+def reserve(root: Path, job: Path, kind: str, key: str, cap: int | None = None,
+            total_cap: int | None = None) -> None:
+    """Record one request durably; legacy cap arguments no longer limit it."""
     with lock(budget_path(root).with_suffix(".lock")):
         value = ledger(root)
         records = value["reservations"]
         if any(r["job"] == job_id(job) and r["kind"] == kind for r in records):
             raise ForgeError("This request was already attempted. Its reservation is retained; automatic retries are disabled.")
         total = sum(r["microusd"] for r in records)
-        local = sum(r["microusd"] for r in records if r["job"] == job_id(job))
         amount = RESERVATIONS[kind]
-        _check_budget(total, local, amount, total_cap, cap)
         records.append({"job": job_id(job), "kind": kind, "cache_key": key, "microusd": amount,
                         "state": "reserved", "created_at": stamp()})
         value["reserved_usd"] = (total + amount) / 1000000
-        value["cap_microusd"] = total_cap
+        value["cap_microusd"] = None
         write_json(budget_path(root), value)
 
 
@@ -235,7 +206,7 @@ def validate_job_path(path: Path) -> None:
         raise ForgeError("Choose an absolute, local job.json in its own real directory.")
 
 
-def read_job(path: Path) -> tuple[dict, int]:
+def read_job(path: Path) -> tuple[dict, None]:
     validate_job_path(path)
     value = read_json(path, 32000)
     if (set(value) - {"schema_version", "source_image", "description", "proposal", "budget_usd"}
@@ -243,10 +214,8 @@ def read_job(path: Path) -> tuple[dict, int]:
             or not isinstance(value.get("description", ""), str) or len(value.get("description", "")) > 2000
             or not isinstance(value.get("source_image"), str)):
         raise ForgeError("The authoring job schema is invalid or its description exceeds 2,000 characters.")
-    money = value.get("budget_usd", .50)
-    if type(money) not in (float, int) or not math.isfinite(money) or not 0 <= money <= .50:
-        raise ForgeError("Job budget must be a finite value from 0 to 0.50 USD.")
-    return value, round(money * 1000000)
+    # Older drafts may retain budget_usd; it no longer limits a character job.
+    return value, None
 
 
 def snapshot_source(job: dict, folder: Path) -> dict:
@@ -397,27 +366,23 @@ def cached_request(kind: str, folder: Path, provenance: dict, key: str):
     return path
 
 
-def preflight_images(folder: Path, root: Path, job: Path, cap: int,
+def preflight_images(folder: Path, root: Path, job: Path, cap: int | None,
                      provenance: dict, config: dict, proposal: dict) -> None:
-    """Check the whole missing-image cost; each later reserve still owns its race."""
+    """Verify cached images and prevent duplicate attempts, without dollar caps."""
     missing = []
     for kind in ("parts", "theme"):
         key = request_key(kind, provenance["source"]["sha256"], config["model"],
                           config["quality"], image_prompt(kind, proposal))
         if cached_request(kind, folder, provenance, key) is None:
             missing.append(kind)
-    amount = sum(RESERVATIONS[kind] for kind in missing)
     with lock(budget_path(root).with_suffix(".lock")):
         records = ledger(root)["reservations"]
         local_records = [record for record in records if record["job"] == job_id(job)]
         if any(record["kind"] in missing for record in local_records):
             raise ForgeError("A missing image request was already attempted. Its reservation is retained; automatic retries are disabled.")
-        total = sum(record["microusd"] for record in records)
-        local = sum(record["microusd"] for record in local_records)
-        _check_budget(total, local, amount, total_budget_microusd(config), cap)
 
 
-def request(kind: str, folder: Path, root: Path, job_path: Path, cap: int, source: bytes,
+def request(kind: str, folder: Path, root: Path, job_path: Path, cap: int | None, source: bytes,
             provenance: dict, config: dict, provider, proposal: dict | None = None, description: str = ""):
     prompt = description if kind == "analyse" else image_prompt(kind, proposal)
     model = config["analysis_model"] if kind == "analyse" else config["model"]
@@ -432,7 +397,7 @@ def request(kind: str, folder: Path, root: Path, job_path: Path, cap: int, sourc
             raise ForgeError("No OPENAI_API_KEY is configured. Add it to %s. No request was made."
                              % (root / ".env"), code="missing_key", retry_allowed=True)
     check_cancel(folder)
-    reserve(root, job_path, kind, key, cap, total_budget_microusd(config))
+    reserve(root, job_path, kind, key, cap)
     attempt = {"schema_version": 1, "worker_version": VERSION, "cache_key": key,
                "source_sha256": provenance["source"]["sha256"], "kind": kind, "model": model,
                "quality": config["quality"], "prompt": prompt,
@@ -629,7 +594,6 @@ def run_job(command: str, job_path: Path, *, root: Path = ROOT, provider=None, c
                 return bake_local(job_path, root, baker, converter)
             config = settings(root) if config is None else dict(config)
             validate_config(config)
-            total_cap = total_budget_microusd(config)
             source = snapshot_source(job, folder)
             provenance = initial_provenance(folder, source)
             if command == "analyse":

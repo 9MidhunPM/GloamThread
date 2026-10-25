@@ -1,5 +1,12 @@
 # Agent 2 forge changelog
 
+## 2026-10-25T06:26:42+05:30 — Remove local generation dollar caps
+
+- Implemented the user's explicit instruction to remove dollar limits. Shared/per-character admission checks and obsolete configuration parsing are removed; legacy draft budget fields and ledger cap metadata no longer block work. Existing request/uncertain history stays intact.
+- Added the agreed status contract: `budget.limits_enabled` is false, limit/remaining values are null, and historical request estimates remain numeric accounting only. Updated the CLI and public template without reading or changing private credentials. Explicit Generate, no automatic retries, validated caches, cancellation, duplicate-job locks and atomic publication remain intact.
+- Validation: full Python suite 187/187 PASS; focused forge suites 65/65 PASS, including 14 revised migration/preflight cases. Tests prove continued generation beyond former caps, concurrent request recording, ignored legacy zero/invalid limits, old/uncertain history preservation, free cache conversion and unchanged retry/corruption guards. Independent review and a temporary ledger probe above the old $100 parser ceiling pass. Compilation and whitespace PASS; no live requests or actual job/ledger access occurred.
+- Limitations: numeric request estimates are not billing receipts; the user's reported $0.0012 was not independently verified. Root owns creator/UI messaging, live/cached end-to-end generation, game checks and final integration.
+
 ## 2026-10-25T04:05:02+05:30 — Check the complete missing-image allowance before dispatch
 
 - Added a non-mutating generation preflight that verifies both image caches, sums only missing reservations and checks remaining shared/job allowances under the ledger lock. It also refuses an already-attempted image lacking a valid cache; per-request reservations still enforce concurrency after the check.
