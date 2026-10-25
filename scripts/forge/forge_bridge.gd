@@ -20,7 +20,7 @@ func create_job(source: Image, description: String) -> Dictionary:
 	var source_path := folder.path_join("source.png")
 	if source.save_png(source_path) != OK:
 		return {"ok": false, "error": "Could not retain the source drawing."}
-	var job := {"schema_version": 1, "source_image": source_path, "description": description.strip_edges(), "budget_usd": 0.50}
+	var job := {"schema_version": 1, "source_image": source_path, "description": description.strip_edges()}
 	var job_path := folder.path_join("job.json")
 	if not write_json(job_path, job):
 		return {"ok": false, "error": "Could not save the authoring job."}
@@ -217,6 +217,30 @@ func _layout_integer(value: Variant, minimum: int, maximum: int) -> bool:
 	return typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value)) and float(value) == floor(float(value)) and value >= minimum and value <= maximum
 
 
+func source_layout_pixel_issue(layout: Dictionary, context: Dictionary) -> Dictionary:
+	# Match Python's alpha threshold before cloning a draft or starting a worker.
+	# A bounded rectangle alone says nothing about whether it contains artwork.
+	var board: Image = context.get("parts")
+	if board == null:
+		return {"target": "torso", "error": "The retained parts image is unavailable. Reopen the correction editor."}
+	var targets: Array = LAYOUT_PARTS[context["rig_id"]].duplicate()
+	targets.append("master")
+	for id: String in targets:
+		var crop: Array = layout["master_crop"] if id == "master" else layout["parts"][id]["crop"]
+		var pixels := board.get_region(Rect2i(crop[0], crop[1], crop[2], crop[3]))
+		pixels.convert(Image.FORMAT_RGBA8)
+		var bytes := pixels.get_data()
+		var maximum := 0
+		for index in range(3, bytes.size(), 4):
+			maximum = maxi(maximum, bytes[index])
+			if maximum >= int(layout["alpha_cutoff"]):
+				break
+		if maximum < int(layout["alpha_cutoff"]):
+			var advice := "Drag around the visible artwork for this part." if maximum == 0 else "Enlarge its crop or lower the opacity cutoff if the artwork is translucent."
+			return {"target": id, "error": "%s crop is empty at opacity %d. %s Nothing was converted or added yet." % [id.replace("_", " ").capitalize(), int(layout["alpha_cutoff"]), advice]}
+	return {}
+
+
 func _layout_crop(value: Variant) -> bool:
 	return value is Array and value.size() == 4 and _layout_integer(value[0], 0, 1020) and _layout_integer(value[1], 0, 1020) and _layout_integer(value[2], 4, 1024) and _layout_integer(value[3], 4, 1024) and value[0] + value[2] <= 1024 and value[1] + value[3] <= 1024
 
@@ -230,6 +254,9 @@ func save_source_layout(path: String, layout: Dictionary) -> Dictionary:
 	var error := source_layout_error(layout, context)
 	if not error.is_empty():
 		return {"ok": false, "error": error}
+	var issue := source_layout_pixel_issue(layout, context)
+	if not issue.is_empty():
+		return {"ok": false, "error": issue["error"]}
 	if not write_json(path.get_base_dir().path_join("source_layout.json"), layout):
 		return {"ok": false, "error": "Could not save layout corrections. No conversion was started."}
 	return {"ok": true, "error": ""}
@@ -242,6 +269,9 @@ func create_layout_job(path: String, layout: Dictionary) -> Dictionary:
 	var error := source_layout_error(layout, context)
 	if not error.is_empty():
 		return {"ok": false, "error": error}
+	var issue := source_layout_pixel_issue(layout, context)
+	if not issue.is_empty():
+		return {"ok": false, "error": issue["error"]}
 	var folder := path.get_base_dir()
 	var job := read_json(path)
 	var provenance := read_json(folder.path_join("provenance.json"))

@@ -217,6 +217,7 @@ func _run() -> void:
 	_check(mock.commands.size() == commands_before, "old preview parts cannot be baked into a newly created job")
 	_check_proposal_revisions(view, library, loaded["bundle"], drawing)
 	_check_budget_resume(view, library, drawing)
+	_check_layout_preflight(view)
 	await _check_layout_correction(view, library, loaded["bundle"], drawing)
 	var args := OS.get_cmdline_user_args()
 	if args.size() == 2 and args[0] == "--capture":
@@ -325,6 +326,47 @@ func _check_proposal_revisions(view: SubViewport, library: FighterLibrary, previ
 	creator.free()
 
 
+func _check_layout_preflight(view: SubViewport) -> void:
+	# Reproduce Save/convert sending an empty crop to Python, then reopening the
+	# same editor. The actual pixel/opacity boundary must stop that round trip.
+	var parts := Image.create(1024, 1024, false, Image.FORMAT_RGBA8)
+	parts.fill(Color.WHITE)
+	parts.fill_rect(Rect2i(341, 0, 341, 341), Color.TRANSPARENT)
+	var theme := Image.create(1024, 1024, false, Image.FORMAT_RGBA8)
+	theme.fill(Color("#203344"))
+	var context := {"ok": true, "rig_id": "upright", "parts": parts, "theme": theme, "raw_parts_sha256": "a".repeat(64), "raw_theme_sha256": "b".repeat(64)}
+	context["layout"] = Bridge.new().default_source_layout(context)
+	var editor := ForgeLayoutEditor.new()
+	editor.setup(context, "Local edits are free")
+	view.add_child(editor)
+	var observed := {"conversions": 0}
+	editor.apply_requested.connect(func(_layout: Dictionary) -> void: observed.conversions += 1)
+	editor.save_button.pressed.emit()
+	_check(observed.conversions == 0, "Save/convert keeps an empty generated head in the editor without starting conversion")
+	_check(editor.notice.text.to_lower().contains("head"), "empty-part validation names the crop to fix instead of hiding the worker error")
+	_check(editor.target.get_item_text(editor.target.selected) == "Head", "invalid part is selected so the next drag fixes the reported crop")
+	var before := editor.canvas.crop
+	var point := editor.canvas.image_rect().get_center()
+	for pressed: bool in [true, false]:
+		var click := InputEventMouseButton.new()
+		click.button_index = MOUSE_BUTTON_LEFT
+		click.pressed = pressed
+		click.position = point
+		editor.canvas._gui_input(click)
+	_check(editor.canvas.crop == before, "clicking without dragging never destroys an existing part crop")
+	parts.fill_rect(Rect2i(341, 0, 341, 341), Color(1, 1, 1, 0.5))
+	editor.save_button.pressed.emit()
+	_check(observed.conversions == 0 and editor.notice.text.contains("opacity"), "translucent art below the threshold is rejected with opacity advice")
+	editor.cutoff.value = 100
+	editor.save_button.pressed.emit()
+	_check(observed.conversions == 1, "lowering the cutoff for visible translucent art permits local conversion")
+	parts.fill_rect(Rect2i(682, 682, 342, 342), Color.TRANSPARENT)
+	editor.board_tabs.current_tab = 1
+	editor.save_button.pressed.emit()
+	_check(observed.conversions == 1 and editor.board_tabs.current_tab == 0 and editor.notice.text.contains("Master"), "an empty master crop blocks conversion and returns from the theme board to its target")
+	editor.free()
+
+
 func _check_layout_correction(view: SubViewport, library: FighterLibrary, previous: Dictionary, drawing: Image) -> void:
 	var creator := Creator.new()
 	creator.bridge = FakeBridge.new()
@@ -349,6 +391,8 @@ func _check_layout_correction(view: SubViewport, library: FighterLibrary, previo
 	var board := Image.create(1024, 1024, false, Image.FORMAT_RGBA8)
 	board.fill(Color(0.4, 0.5, 0.6, 0.3))
 	board.fill_rect(Rect2i(20, 30, 90, 150), Color("#e4a85b"))
+	for index in range(1, 9):
+		board.fill_rect(Rect2i(index % 3 * 341 + 20, index / 3 * 341 + 30, 90, 150), Color("#e4a85b"))
 	board.save_png(folder.path_join("raw/parts.png"))
 	board.fill(Color("#203344"))
 	board.save_png(folder.path_join("raw/theme.png"))
@@ -370,6 +414,11 @@ func _check_layout_correction(view: SubViewport, library: FighterLibrary, previo
 	var layout: Dictionary = raw["layout"].duplicate(true)
 	_check(layout["alpha_cutoff"] == 192 and layout["parts"]["torso"]["crop"] == [0, 0, 341, 341] and layout["master_crop"] == [682, 682, 342, 342], "correction defaults match strict grid slots and reviewed alpha cutoff")
 	_check(mock.source_layout_error(layout, raw).is_empty(), "default complete layout passes boundary validation")
+	var empty_crop := layout.duplicate(true)
+	empty_crop["parts"]["head"]["crop"] = [150, 200, 30, 30]
+	var draft_count := DirAccess.get_directories_at(mock.job_root).size()
+	_check(not mock.save_source_layout(path, empty_crop)["ok"], "blank crop is blocked at annotation save, not only the UI")
+	_check(not mock.create_layout_job(path, empty_crop)["ok"] and DirAccess.get_directories_at(mock.job_root).size() == draft_count, "blank crop cannot clone another doomed local draft")
 	for mutation: Array in [["alpha_cutoff", true], ["alpha_cutoff", 0], ["alpha_cutoff", 256], ["alpha_cutoff", 1.5], ["master_crop", [-1, 0, 32, 32]], ["master_crop", [1000, 0, 25, 30]], ["background_crop", [0, 0, 0, 1]], ["background_crop", [0, 0, 24.5, 30]], ["material_crops", []], ["raw_parts_sha256", "wrong"], ["raw_theme_sha256", "wrong"], ["path", "../outside.png"]]:
 		var bad := layout.duplicate(true)
 		bad[mutation[0]] = mutation[1]
@@ -389,6 +438,7 @@ func _check_layout_correction(view: SubViewport, library: FighterLibrary, previo
 	await process_frame
 	var editor: ForgeLayoutEditor = creator._layout_editor
 	_check(is_instance_valid(editor) and creator._repair.visible, "retained conversion failure opens a recoverable local correction modal")
+	_check(editor.notice.text.contains("Fixture conversion rejected its grid"), "conversion failure remains visible inside the reopened correction editor")
 	_check(creator._generate.focus_mode == Control.FOCUS_NONE and creator._name.focus_mode == Control.FOCUS_NONE, "correction modal removes underlying creator controls from keyboard focus")
 	var confined := true
 	for reverse: bool in [false, true]:
@@ -479,6 +529,9 @@ func _check_budget_resume(view: SubViewport, library: FighterLibrary, drawing: I
 	_check(creator._retry.text == "Resume blocked job", "a safe budget failure offers explicit resume instead of discarding its draft")
 	creator._refresh_configuration()
 	_check(creator._cost.text.contains("$0.35 / $2.00") and creator._cost.text.contains("$1.65 left"), "setup refresh reads the new configured total without a request")
+	var no_cap := {"limits_enabled": false, "total_limit_usd": null, "total_remaining_usd": null, "job_limit_usd": null, "job_remaining_usd": null, "total_reserved_usd": 0.55, "required_usd": 0.20}
+	creator._update_budget({"budget": no_cap})
+	_check(creator._cost.text.contains("No local dollar cap") and creator._cost.text.contains("$0.55") and not creator._cost.text.contains("left"), "uncapped status displays recorded estimates without casting null caps or claiming billing")
 	creator._retry_job()
 	_check(creator.job_path == blocked_path and mock.commands == ["generate", "generate"], "explicit budget resume reuses the approved draft without another analysis")
 	creator._handle_status({"state": "failed", "message": "The remaining shared or job budget cannot cover all missing image requests. No image request or new reservation was made.", "reserved_usd": 0.05})

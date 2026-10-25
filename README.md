@@ -41,7 +41,9 @@ python3 -m venv --system-site-packages .venv
 
 Keep `OPENAI_API_KEY` in the ignored root `.env` (settings in `.env.example`); never paste it into chat or commit it. Godot launches Python without reading the key. Analysis uses `gpt-6-luna`; image edits use `gpt-image-1-mini`, low quality. Generating requires explicit creator actions, retains source/prompts/provenance and validates the complete result before acceptance. No provider calls occur during combat.
 
-Set `FORGE_TOTAL_BUDGET_USD=2.00` in the private `.env` for the approved local allowance. Each character still has a $0.50 maximum; existing reservations are preserved. The creator shows total/job remaining amounts and the next operation’s required reservation. There are no automatic retries or model fallback. Reservations are conservative allowances, not billing receipts. The mini image model retires 1 December 2026; changing models requires a fresh cost review. See [worker details](evidence/arena-content/forge/README.md). The live drawing-analysis and image requests succeeded; the resulting fox and forest ship with retained source/provenance. Nonconforming image layouts can be corrected locally from cached output. See [status](docs/STATUS.md).
+The user removed the local total/per-character dollar caps. Old `FORGE_TOTAL_BUDGET_USD` and job limits no longer block generation; the worker retains request estimates and uncertain outcomes as history, not billing receipts. Analyse/Generate remain explicit actions, with no automatic retries or model fallback. Provider account limits still apply. See [worker details](evidence/arena-content/forge/README.md).
+
+If a returned image board needs correction, each part and the complete-character crop must contain visible pixels at the chosen opacity cutoff. Save checks this locally, selects the crop needing attention and keeps the editor open. A click without dragging preserves the old crop. Conversion creates the animation preview; **Accept fighter & play** saves the validated fighter and takes you to the lobby with it selected. Cached corrections make no model request. See [recovery evidence](evidence/creator-recovery/README.md).
 
 ## Verify
 

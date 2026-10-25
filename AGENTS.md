@@ -12,7 +12,7 @@ Twenty waves, four stages/bosses, optional endless, personal last-hit wallets an
 - Godot60Hzphysics owns combat/timers. Pause/focus/device loss freezes shared combat without wall-clock catch-up. One owned input source per player; flush held actions at mode transitions, preserve simultaneous shop confirmations.
 - No friendly fire/body blocking. Gameplay-owned colliders, timing, stats and finite ability IDs remain independent of images/body rigs. Generated content never supplies scripts, paths or executable behaviour.
 - Session alone owns wave clear/wipe, rewards, revival, shops and results. Reward each accepted death once to lethal source; DOT/chain/projectiles retain ownership. Resolve final clear before same-tick wipe. Both shop panels must ready before advancing.
-- Network/model calls are optional pregame authoring through a separate local Python worker. Credentials stay in ignored.env, outside Godot/exports/logs. The configured local model allowance is2USD with0.50USDper job; no automatic retries, fallback or ledger resets. Cached crop/mask/pivot corrections use SDK-free local conversion.
+- Network/model calls are optional pregame authoring through a separate local Python worker. Credentials stay in ignored.env, outside Godot/exports/logs. The user removed local total and per-character dollar caps. Keep durable request estimates/history, explicit Analyse/Generate actions and no automatic retries, fallback or ledger resets. Cached crop/mask/pivot corrections use SDK-free local conversion.
 - A candidate is accepted only after full bundle admission. Preserve previous accepted art/jobs on failure, retain source/provenance and display genuine errors. Save settings/scores/creation libraries separately from run power.
 
 ## Content and ownership
