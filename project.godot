@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="Gloamthread: Two Ends"
-config/description="Draw a fighter. Build a ridiculous run. Solo or local co-op wave combat on one shared arena."
-config/version="0.2.0-arena"
+config/description="Draw a fighter. Build a ridiculous run. Solo or local co-op wave combat across an expanding shared world."
+config/version="0.3.0-world"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="Gloamthread-Arena"
 run/main_scene="res://scenes/arena/boot.tscn"
@@ -66,6 +66,7 @@ window/vsync/vsync_mode=1
 2d_physics/layer_6="interactables"
 2d_physics/layer_7="hazards"
 2d_physics/layer_8="projectiles"
+2d_physics/layer_9="one_way"
 
 [physics]
 

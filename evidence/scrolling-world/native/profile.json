@@ -1,0 +1,17 @@
+{
+	"duration_seconds": 10.120856,
+	"final_phase": "combat",
+	"fixture_note": "32 manually replenished wave-one actors with normal starter stats; not production wave-one concurrency or human balance. Replacement anchors precomputed outside timing.",
+	"fixture_wave": 1,
+	"frames": 767,
+	"maximum_frame_ms": 47.679,
+	"median_frame_ms": 10.976,
+	"observed_max_enemies": 32,
+	"observed_max_projectiles": 77,
+	"offscreen_rendering_only": true,
+	"p95_frame_ms": 24.522,
+	"p95_physics_ms": 13.439,
+	"p95_process_ms": 134.852,
+	"p99_frame_ms": 35.961,
+	"split": true
+}

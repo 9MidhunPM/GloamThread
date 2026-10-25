@@ -1,31 +1,29 @@
 # Implementation status
 
-Current work: implementing the approved [expanding-world and budget extension](SCROLLING_WORLD_PLAN.md). The records below describe the preceding released arena; they do not establish acceptance of the new scrolling/split map. Baseline12arena scenarios passed before this work.
-
-Active product: **solo/two-player shared-screen wave fighter**, approved 25 October 2026. [Contract](WAVE_FIGHTER_SPEC.md), [Agent 2 brief](AGENT_2_WAVE_CONTENT.md), [play guide](ARENA_DEMO.md). The earlier campaign and overhead implementations remain historical.
+Current product: solo/two-player scrolling wave fighter with dynamic split screen. The approved [world contract](SCROLLING_WORLD_PLAN.md) extends the [wave specification](WAVE_FIGHTER_SPEC.md). Earlier campaign and overhead work remains historical.
 
 ## Implemented
 
-Fullscreen 1920×1080 UI with a shared 640×360 pixel arena; owned solo/duo inputs; held attacks, jump, dodge and six distinct ability families; six enemy roles and four bosses; twenty waves, four stages and optional endless. Personal last-hit coins, both-player clear bonuses, concurrent shops, ready/reset, hold-to-revive, wave-clear revival and team wipe are session-owned. Saved creations/settings/scores are separate from run power.
+The seeded world begins four screens wide and expands after waves 5/10/15 to sixteen screens (10,240×720 logical pixels). Existing terrain, loot IDs and player positions remain intact. Connected raised routes and shallow caves use the same shared physics world. Four parallax layers, twenty-four authored props, four landmark families, cave texture/support details and visible frontier signs ship with editable sources.
 
-The character forge supports drawing/import, editable model proposals, three body rigs, animation previews, mask/pivot edits, cached raw-board crop correction and atomic acceptance. Local corrections preserve earlier drafts/previews and make no model calls. Built-in and accepted fighters cross the same validated bundle boundary and remain playable offline. Generated textures provide scenery, floors, platforms and decorations without changing collision or abilities.
+Nearby players share a 640×360 view; separated or downed partners receive 320×360 views at the same 3× pixel scale. There is one simulation and audio mix. Personal shops can close independently for free exploration and reopen with owned interact; all active players Ready. Unique caches pay both active players; plants heal their collector. Existing twenty waves, bosses, six builds, run resets and endless remain.
 
-Three built-ins ship: Cinderjack, Thistlepaw and the reviewed generated **Kiln Fox**, now default P1. Its real source drawing, raw image pair, sanitized receipts, crop recipe, editable rig and provenance are retained and rebuild offline. All thirty-two animation poses were inspected. Generation quality across arbitrary drawings and all three body families is not established by this one reviewed pair.
+Spawns use reachable nearby anchors and 96 pixel player clearance. Unseen pursuit preserves enemy identity/HP/status/reward ownership and cancels on visibility/death. Ground foes navigate connected platforms; genuine flying enemies cross open planks while solid terrain still blocks them, using reachable anchors around cave ceilings. Generated character appearance never grants flight.
 
-## Verified
+## Verified source
 
-Godot 4.7.2 standard import and active suites pass: **12 arena scenarios, 154 creator assertions, 173 Python tests**, plus content/retained-source validators (20 waves, 4 arenas, 6 kits, 30 upgrades, 3 fighter bundles). These include same-tick independent shop input, actual-App defaults, revival/wipe, strict malformed bundle/layout rejection, real Godot-to-Python job serialization and local cached recovery.
+Godot 4.7.2 import, **19 arena scenarios**, **162 creator assertions**, **186 Python tests** and all world/content/scenery validators pass. These include real Fighter/Chaser/Flyer terrain traversal, multi-seed graph/identity checks, strict media admission, both-view state ownership, independent shops/shared pause, exact loot and pursuit lifecycle regressions.
 
-Ordinary-input automated routes clear solo twenty waves and co-op twenty-five including the victory/endless transition, without health/position/damage/currency/progression overrides or engine errors. Native Wayland/OpenGL captures cover title, lobby, creator, combat and shops at 1920×1080; the final controlled 32-enemy/67-projectile fixture measured median 6.891 ms, p95 11.779 ms and p99 14.486 ms over ten seconds. This is explicit offscreen native rendering, not scanout FPS or a human playtest. [Evidence and commands](../evidence/arena-runtime/README.md).
+Ordinary-input automated routes pass without actor/currency/progression overrides: solo 20 waves in 37,872 ticks and co-op 25 including endless in 49,092 ticks. Both reach all four regions/landmarks, collect 15 loot items and complete every planned exploration leg. Furthest observed x exceeds 10,000; co-op records 98 split/merge changes with no engine errors. These are bots, not human playtests.
 
-The final official Linux QA export from `4e6fd56` cleared twenty-five waves in 34,142 physics ticks outside the checkout in a network namespace (loopback down, no routes), selecting Kiln Fox and Thistlepaw. It reports no downs or engine errors. The normal package separately booted offline and its actual fullscreen title was inspected. The published ZIP digest matches the local archive and all 28 entries passed integrity checks. [Exact package identity](../SUBMISSION.md).
+Actual native 1920×1080 captures cover merged landmark, split main/cave, final frontier, independent shopping and dense split combat. A ten-second controlled 32 enemy/77 projectile offscreen fixture measured median 10.976 ms and p95 24.522 ms frame intervals. It is not physical scanout FPS or a 60 FPS guarantee. [Commands, hashes and limits](../evidence/scrolling-world/README.md). Final exported revision checks are recorded separately when packaged.
 
-## Live generation and budget
+## Generation budget and recovered drawing
 
-`gpt-6-luna` analysed the original fox drawing successfully. The first `gpt-image-1-mini` edit returned HTTP 403; after project model access was enabled, both real image edits succeeded. Strict conversion rejected the provider's nonconforming layout. Explicit local crops then produced the reviewed fighter and scenery without another request. The actual native correction UI → Python conversion → preview → acceptance also passed under network isolation, with an unchanged budget ledger.
+The selected `FORGE_TOTAL_BUDGET_USD=2.00` allowance retains the existing history, with $0.50 maximum per character. The UI reports distinct total/job/required amounts. A valid blocked draft resumes without another analysis; malformed caches remain rejected. Mock tests now use isolated temporary storage.
 
-The shared initial $0.50 experiment retains **$0.35 in conservative reservations**: one analysis, one denied/uncertain image attempt and two successful image calls. This is not an actual-billing claim. No automatic retry, model fallback, ledger reset or further paid experiment occurred. The remaining allowance cannot cover another complete two-image job; preflight rejects it before either request.
+The user's blocked draft produced two real mini images. Its nonconforming board was corrected locally, all 32 poses inspected and the recovered Wizard accepted into the private local fighter library. The real correction/preview/acceptance ran with networking disabled and unchanged ledger. User drawing/raw assets are absent from Git and packages. Current conservative reservation total: $0.55, with $1.45 remaining; this is not actual billing. No automatic retries, ledger resets or extra correction requests occurred. Models remain `gpt-6-luna` and `gpt-image-1-mini`.
 
 ## Remaining acceptance
 
-Physical controllers/hotplug, keyboard rollover, audio listening, fresh human balance/enjoyment, a measured human 10–15 minute clear and other hardware/distributions remain unverified. No organizer submission has been made. Current event guidance is **Devin Hack Kochi** in [RULES.md](../RULES.md).
+Physical controllers/hotplug, keyboard rollover, audio listening, fresh-human balance/enjoyment/clear time and other hardware/distributions remain unverified. No organizer submission has been made. See [submission record](../SUBMISSION.md) and **Devin Hack Kochi** [event guidance](../RULES.md).

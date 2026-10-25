@@ -1,0 +1,291 @@
+{
+	"cases": [
+		{
+			"capture_sha256": "22893e33392b059c6f26e58c3dac804f89ebb254d63aefd134d50460dd69614a",
+			"chunks": 4,
+			"fighters": 2,
+			"name": "merged_landmark",
+			"note": "Initial four-chunk region, first original landmark; explicit grounded placements and frozen encounter/actors.",
+			"phase": "combat",
+			"player_positions": [
+				[
+					1540.0,
+					320.0
+				],
+				[
+					1660.0,
+					320.0
+				]
+			],
+			"same_world": true,
+			"shop_open": [
+				false,
+				false
+			],
+			"split": false,
+			"view_sizes": [
+				[
+					640,
+					360
+				],
+				[
+					320,
+					360
+				]
+			],
+			"visible_world_rects": [
+				[
+					1280.0,
+					40.0,
+					640.0,
+					360.0
+				]
+			]
+		},
+		{
+			"capture_sha256": "2e2dc942461321f32fb2763360dff2fa871cb4066ee4bef81d734c3cbb1983af",
+			"chunks": 4,
+			"fighters": 2,
+			"name": "split_main_cave",
+			"note": "Vertical separation selects dynamic split: P1 on main ground, P2 in the connected shallow cave.",
+			"phase": "combat",
+			"player_positions": [
+				[
+					1600.0,
+					320.0
+				],
+				[
+					1870.0,
+					624.0
+				]
+			],
+			"same_world": true,
+			"shop_open": [
+				false,
+				false
+			],
+			"split": true,
+			"view_sizes": [
+				[
+					320,
+					360
+				],
+				[
+					320,
+					360
+				]
+			],
+			"visible_world_rects": [
+				[
+					1440.0,
+					40.0,
+					320.0,
+					360.0
+				],
+				[
+					1710.0,
+					344.0,
+					320.0,
+					360.0
+				]
+			]
+		},
+		{
+			"capture_sha256": "24b2c711c9fb86139778323886ed03e5230528a6cd347445e8eaf3a5437a66d3",
+			"chunks": 16,
+			"fighters": 2,
+			"name": "expanded_frontier",
+			"note": "Sixteen-chunk region after the three stage expansions; right frontier clamp and alternate owner theme.",
+			"phase": "combat",
+			"player_positions": [
+				[
+					10020.0,
+					320.0
+				],
+				[
+					10133.0,
+					320.0
+				]
+			],
+			"same_world": true,
+			"shop_open": [
+				false,
+				false
+			],
+			"split": false,
+			"view_sizes": [
+				[
+					640,
+					360
+				],
+				[
+					320,
+					360
+				]
+			],
+			"visible_world_rects": [
+				[
+					9600.0,
+					40.0,
+					640.0,
+					360.0
+				]
+			]
+		},
+		{
+			"capture_sha256": "ed976d0ee44bb405e04cbe8d81807cbe1fd527f37c71e1e927813b0eacb649a4",
+			"chunks": 16,
+			"fighters": 2,
+			"name": "personal_shop_exploration",
+			"note": "P1 traverses through ordinary owned right input for sixty physics ticks while P2's actual personal shop remains open. Initial positions and wallets are controlled fixture values.",
+			"phase": "shop",
+			"player_positions": [
+				[
+					1985.00341796875,
+					319.925262451172
+				],
+				[
+					2200.0,
+					320.0
+				]
+			],
+			"same_world": true,
+			"shop_open": [
+				false,
+				true
+			],
+			"split": true,
+			"view_sizes": [
+				[
+					320,
+					360
+				],
+				[
+					320,
+					360
+				]
+			],
+			"visible_world_rects": [
+				[
+					1812.0,
+					40.0,
+					320.0,
+					360.0
+				],
+				[
+					2040.0,
+					40.0,
+					320.0,
+					360.0
+				]
+			]
+		},
+		{
+			"capture_sha256": "4677f987698ed933b7e7c4ca3193a44b401c1664c8bf5e91b0e52b41594ce686",
+			"chunks": 16,
+			"fighters": 2,
+			"name": "split_crowd_fixture",
+			"note": "Optional bounded split-view load: manually replenished thirty-two ordinary enemies and nearby projectiles around both players, with ordinary owned attacks and normal health/immunity.",
+			"phase": "combat",
+			"player_positions": [
+				[
+					2522.8603515625,
+					319.925262451172
+				],
+				[
+					3919.30590820312,
+					319.999908447266
+				]
+			],
+			"same_world": true,
+			"shop_open": [
+				false,
+				false
+			],
+			"split": true,
+			"view_sizes": [
+				[
+					320,
+					360
+				],
+				[
+					320,
+					360
+				]
+			],
+			"visible_world_rects": [
+				[
+					2363.0,
+					40.0,
+					320.0,
+					360.0
+				],
+				[
+					3759.0,
+					40.0,
+					320.0,
+					360.0
+				]
+			]
+		}
+	],
+	"display": "Wayland",
+	"engine": "4.7.2-stable (arch_linux)",
+	"errors": [],
+	"fixture": "Actual production App with explicit controlled placements/state. Shared world/audio instantiated once. Native hidden-workspace offscreen force_draw captures; not a normal route, scanout-FPS measure or human playtest.",
+	"human_playtest": false,
+	"passed": true,
+	"personal_shop_input": {
+		"end": [
+			1985.00341796875,
+			319.925262451172
+		],
+		"moved": true,
+		"p1_movement_allowed": true,
+		"p2_movement_allowed": false,
+		"shop_open": [
+			false,
+			true
+		],
+		"start": [
+			1850.0,
+			320.0
+		]
+	},
+	"profile": {
+		"duration_seconds": 10.120856,
+		"final_phase": "combat",
+		"fixture_note": "32 manually replenished wave-one actors with normal starter stats; not production wave-one concurrency or human balance. Replacement anchors precomputed outside timing.",
+		"fixture_wave": 1,
+		"frames": 767,
+		"maximum_frame_ms": 47.679,
+		"median_frame_ms": 10.976,
+		"observed_max_enemies": 32,
+		"observed_max_projectiles": 77,
+		"offscreen_rendering_only": true,
+		"p95_frame_ms": 24.522,
+		"p95_physics_ms": 13.439,
+		"p95_process_ms": 134.852,
+		"p99_frame_ms": 35.961,
+		"split": true
+	},
+	"renderer": "Mesa Intel(R) Graphics (ARL)",
+	"root_size": [
+		1920,
+		1080
+	],
+	"source_changed_during_fixture": false,
+	"source_sha256": {
+		"assets/arena/scenery/index.json": "321e3df62b9f780d62efc60ada68f3d64d336ad76ceab821e45293fbd3d145c6",
+		"content/arena/world.json": "d624d040b1a1b92b03a06e446bd7fb4999085684fac411221f13c928d4034251",
+		"scripts/arena/actors/arena_enemy.gd": "3fbe84e142a44275ddcd2757acbfca86635d1b43fea7d148c178a1d14a84c759",
+		"scripts/arena/actors/arena_fighter.gd": "cc0e7d06e2cfdb41f2a87cb947266e56a2dca83f11db26e7a0585cf9a6d7a489",
+		"scripts/arena/arena_app.gd": "f1ebb6f67328719a3054067b9f8c8752df54a22f733e85ed7d6baf2b1c2100fa",
+		"scripts/arena/arena_chunk.gd": "21b2dca4d3e53728e74065f0036f2f9abbc6ae6b631f31dc4fac4e1e2da343d9",
+		"scripts/arena/arena_map.gd": "3f1206616aad23fe94a56121101ea1ca9eef0bbdd999eb22d47b5894f5cd6f26",
+		"scripts/arena/arena_parallax.gd": "e2f37f227ea1f3bd8c8f1da57e47fc4d6843cdf1015a9e937a3f2480305eba1e",
+		"scripts/arena/arena_presentation.gd": "aa5f86e00db6649475691f3eeafdbd6b558e639d64f20a8b0bbfd42e16e0c7de",
+		"scripts/arena/run_session.gd": "bacbcb7a0b4b203e324aeb0832b115aa69662f31671d53fd927db8e8d4446203",
+		"tools/scrolling_native_qa.gd": "1128139570849a9927b8d28306a648e00cb433e8d1ede289f3e859712cd3b503"
+	}
+}

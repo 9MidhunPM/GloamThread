@@ -1,8 +1,8 @@
 # Gloamthread — wave arena
 
-A side-view pixel fighter for **one or two local players** on a shared screen. Survive 20 waves, buy your own upgrades between rounds, fight four bosses, then choose endless. Draw/import a fighter to propose themed abilities and generate original artwork through an optional local OpenAI authoring worker.
+A scrolling side-view pixel fighter for **one or two local players**, with a shared view that splits when you explore apart. Survive 20 waves, buy your own upgrades between rounds, fight four bosses, then choose endless. Draw/import a fighter to propose themed abilities and generate original artwork through an optional local OpenAI authoring worker.
 
-The new game uses fullscreen 1920×1080 presentation with a 640×360 pixel arena scaled 3×. Godot 4.7.2 standard/Compatibility and Python 3 are the project tools. The approved [specification](docs/WAVE_FIGHTER_SPEC.md), [Agent 2 brief](docs/AGENT_2_WAVE_CONTENT.md) and [current evidence](docs/STATUS.md) distinguish working code from acceptance still in progress.
+The game uses fullscreen 1920×1080 presentation: a 640×360 pixel shared view, or two 320×360 views at the same 3× scale. The seeded world starts four screens wide and expands to sixteen, with raised routes, shallow caves, caches and landmarks. Godot 4.7.2 standard/Compatibility and Python 3 are the project tools. The approved [specification](docs/WAVE_FIGHTER_SPEC.md), [Agent 2 brief](docs/AGENT_2_WAVE_CONTENT.md), the [scrolling-world contract](docs/SCROLLING_WORLD_PLAN.md) and [current evidence](docs/STATUS.md) distinguish working code from acceptance still in progress.
 
 ## Play
 
@@ -25,7 +25,7 @@ Choose Solo Run or Local Co-op, change fighters/inputs, then Start Run. F11 togg
 | Revive (hold near partner) | E | M | Y |
 | Pause | Escape | Enter | Start |
 
-Down+Jump drops through a platform. Shops use each player's Up/Down and Attack/Jump to select/confirm independently; every active player must Ready. Mouse controls also work. Keyboard sharing depends on hardware rollover; physical controller and fresh human balance/listening checks are recorded only when performed.
+Down+Jump drops through a platform. Shops use each player's Up/Down and Attack/Jump independently. Choose Explore to close your panel and move while your partner shops; E/M/Y reopens your own shop during breaks. Every active player must Ready. Regions open after waves 5/10/15 without replacing terrain or moving players. Attack caches to open them; healing plants restore 20% to their collector. Mouse controls also work. Keyboard sharing depends on hardware rollover; physical controller and fresh human balance/listening checks are recorded only when performed.
 
 Run power and coins reset on defeat/restart. Saved fighters/settings/scores are local under Godot's `Gloamthread-Arena` user directory, separate from the old campaign.
 
@@ -48,6 +48,8 @@ Set `FORGE_TOTAL_BUDGET_USD=2.00` in the private `.env` for the approved local a
 ```sh
 python3 -m unittest discover -s tools/tests -p 'test_*.py'
 python3 -m tools.forge.content --validate
+python3 -m tools.forge.world --validate
+python3 -m tools.forge.scenery --validate
 godot --headless --fixed-fps 60 --path . --script tests/arena/run_tests.gd
 godot --headless --fixed-fps 60 --path . --script tests/forge/run_tests.gd
 python3 tools/check_pack.py

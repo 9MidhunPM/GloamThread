@@ -1,6 +1,6 @@
 # Gloamthread — arena playtest candidate
 
-A solo or two-player local side-view wave fighter. Clear 20 waves across four five-wave stages, with a boss at each stage's end, then optionally continue into endless. Coins and upgrades belong to each player and reset with the run. Saved characters, settings and scores persist.
+A solo or two-player local scrolling side-view wave fighter. Views merge nearby and split vertically when partners explore apart, with P1 always left and P2 right. Clear 20 waves across four five-wave stages, with a boss at each stage's end, then optionally continue into endless. Coins and upgrades belong to each player and reset with the run. Saved characters, settings and scores persist.
 
 ## Play the Linux package
 
@@ -11,7 +11,7 @@ chmod +x Gloamthread.x86_64
 ./Gloamthread.x86_64
 ```
 
-On Hyprland/Wayland you may use `./Gloamthread.x86_64 --display-driver wayland`; on X11 use `--display-driver x11`. The target is Linux x86_64 with OpenGL Compatibility rendering. The packaged game needs no installed Godot, Python, key, account or network connection to play its built-in and accepted fighters. F11 toggles fullscreen; the game uses a 640×360 shared arena, integer scaling and a 1920×1080 UI.
+On Hyprland/Wayland you may use `./Gloamthread.x86_64 --display-driver wayland`; on X11 use `--display-driver x11`. The target is Linux x86_64 with OpenGL Compatibility rendering. The packaged game needs no installed Godot, Python, key, account or network connection to play its built-in and accepted fighters. F11 toggles fullscreen; the game uses a 640×360 shared view or two 320×360 views, integer 3× scaling and a 1920×1080 UI. The world starts four screens wide and expands to sixteen after waves 5/10/15. Raised paths, shallow caves and earlier discoveries remain connected; wave transitions preserve player positions. The pause screen displays the world seed.
 
 Choose **Solo Run** or **Local Co-op**, select fighters and distinct input sources, then **Start Run**. Player 1 controls shared title/lobby menus; mouse selection is available. The roster stays fixed during a run.
 
@@ -27,7 +27,7 @@ Choose **Solo Run** or **Local Co-op**, select fighters and distinct input sourc
 
 Use Down + Jump to drop through platforms. Combat powers come from the selected ember, frost, storm, stone, nature or shadow family; upright, four-legged and floating bodies change appearance and animation. Floating art does not grant flight.
 
-Last hits award personal coins, including damage-over-time and projectile kills. Every active player gets the wave-clear bonus. Between waves, each player operates their own shop: Up/Down selects, Attack/Jump confirms, one reroll is free per wave, and every active player must become ready to continue. Confirm Ready again to resume shopping while the other player is not ready. Nearby partners hold revive for 1.5 seconds; downed players also return on wave completion. Solo death or a team wipe ends the run.
+Last hits award personal coins, including damage-over-time and projectile kills. Every active player gets the wave-clear bonus. Between waves, each player operates their own shop: Up/Down selects, Attack/Jump confirms, one reroll is free per wave, and every active player must become ready to continue. Choose Explore to close your panel, move and discover loot while your partner keeps shopping. E/M/Y reopens your own shop and clears your Ready status; every active player must explicitly Ready before continuing. Nearby views merge; separated or downed partners retain independent scrolling views. Four caches per region pay three coins to each active player exactly once; attacks open them. Two healing plants per region restore 20% health to the collector when needed. Passive regeneration is combat-only. Nearby partners hold revive for 1.5 seconds; downed players also return on wave completion. Solo death or a team wipe ends the run.
 
 ## Draw or import a fighter
 
@@ -63,7 +63,7 @@ python3 tools/package_arena.py --dry-run
 python3 tools/package_arena.py
 ```
 
-Packaging requires a clean committed checkout, including untracked source outside `build/`. It derives the version from `project.godot`; version `0.2.0-arena` produces `build/packages/Gloamthread-0.2.0-arena-linux-x86_64.zip` and its `.sha256` checksum. The archive includes an explicit helper-file allowlist, provenance inventories and engine notices. It excludes actual `.env` files, environments, raw model jobs, saves and local test keys. `BUILD.json` records the exact source commit/tree, engine version, executable hash and every payload-file hash.
+Packaging requires a clean committed checkout, including untracked source outside `build/`. It derives the version from `project.godot`; version `0.3.0-world` produces `build/packages/Gloamthread-0.3.0-world-linux-x86_64.zip` and its `.sha256` checksum. The archive includes an explicit helper-file allowlist, provenance inventories and engine notices. It excludes actual `.env` files, environments, raw model jobs, saves and local test keys. `BUILD.json` records the exact source commit/tree, engine version, executable hash and every payload-file hash.
 
 This is a playtest candidate. Automated checks do not prove physical gamepad behavior, keyboard rollover, listening quality, human balance, a 10–15 minute clear or performance on other hardware. Native/export evidence must be recorded for the packaged revision separately from source checks. Fullscreen UI layout and model-generated artwork require visual inspection; structural validation alone does not establish art quality.
 

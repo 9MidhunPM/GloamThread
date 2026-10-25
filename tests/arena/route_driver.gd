@@ -17,12 +17,19 @@ var _combat_capture_seen := 0
 var _damage := [0.0, 0.0]
 var _downs := [0, 0]
 var _purchases: Array[Dictionary] = []
+var _intermission_wave := -1
+var _explore_ticks := 0
+var _goals: Array[Vector2] = []
+var _split_before := false
+var _split_changes: Array[Dictionary] = []
+var _explorations: Array[Dictionary] = []
+var _furthest := [0.0, 0.0]
 
-func run(players: int = 1, waves: int = 20, capture_path: String = "", fighter_index: int = 0) -> Dictionary:
+func run(players: int = 1, waves: int = 20, capture_path: String = "", fighter_index: int = 0, seed: int = 0) -> Dictionary:
 	report = {"input":"Synthetic owned keyboard snapshots; no actor position, health, damage, currency, timer, or progression writes.","menu":"Production App title/lobby/start, actual shop offers and purchase/ready methods.","human_playtest":false,"players":players,"target_waves":waves,"waves":[],"captures":captures,"errors":[],"success":false}
 	report.bot = "State-aware bot reads target positions and attack phases, then uses normal move/jump/attack/special/dodge/revive commands. Random critical hits and shop rolls remain enabled."
 	report.source_hashes = {}
-	for path: String in ["res://scripts/arena/actors/arena_fighter.gd","res://scripts/arena/actors/arena_enemy.gd","res://scripts/arena/actors/arena_projectile.gd","res://scripts/arena/run_session.gd","res://scripts/arena/arena_player_state.gd","res://content/arena/catalog.json","res://tests/arena/route_driver.gd"]:
+	for path: String in ["res://scripts/arena/actors/arena_fighter.gd","res://scripts/arena/actors/arena_enemy.gd","res://scripts/arena/actors/arena_projectile.gd","res://scripts/arena/run_session.gd","res://scripts/arena/arena_player_state.gd","res://content/arena/catalog.json","res://tests/arena/route_driver.gd","res://scripts/arena/arena_map.gd","res://scripts/arena/arena_presentation.gd","res://content/arena/world.json"]:
 		report.source_hashes[path] = FileAccess.get_sha256(path)
 	app = ArenaApp.new()
 	var stamp := str(Time.get_ticks_usec())
@@ -40,7 +47,7 @@ func run(players: int = 1, waves: int = 20, capture_path: String = "", fighter_i
 	app._show_lobby(players)
 	for index in fighter_index:
 		app._cycle_character(0)
-	app._begin_run()
+	app._begin_run(seed)
 	session = app.session
 	if not is_instance_valid(session):
 		report.errors.append("Actual lobby could not start a run.")
@@ -54,6 +61,10 @@ func run(players: int = 1, waves: int = 20, capture_path: String = "", fighter_i
 		_last_health[fighter.slot_index] = fighter.health
 	while _tick < 600_000:
 		_tick += 1
+		var split_now: bool = app.presentation.split
+		if split_now != _split_before:
+			_split_changes.append({"tick": _tick, "wave": session.wave, "split": split_now})
+			_split_before = split_now
 		if session.wave != _wave_seen:
 			_wave_seen = session.wave
 			_wave_start = _tick
@@ -61,6 +72,7 @@ func run(players: int = 1, waves: int = 20, capture_path: String = "", fighter_i
 			print("ARENA_ROUTE_WAVE ", session.wave, " kits=", report.kits)
 		for fighter: ArenaFighter in session.fighters:
 			var slot := fighter.slot_index
+			_furthest[slot] = maxf(_furthest[slot], fighter.position.x)
 			if fighter.health < _last_health[slot]: _damage[slot] += _last_health[slot] - fighter.health
 			if fighter.downed and not _was_downed[slot]: _downs[slot] += 1
 			_last_health[slot] = fighter.health
@@ -96,6 +108,11 @@ func run(players: int = 1, waves: int = 20, capture_path: String = "", fighter_i
 			break
 		if _tick - _wave_start > 18_000:
 			report.errors.append("Bot exceeded 300 simulated seconds in wave %d." % session.wave)
+			report.stalled_enemies = []
+			for enemy: ArenaEnemy in session.enemies:
+				if not enemy.dead:
+					var target: Node2D = enemy._target()
+					report.stalled_enemies.append({"id":enemy.spawn_id,"role":enemy.role,"boss":enemy.boss_id,"health":enemy.health,"at":[enemy.position.x,enemy.position.y],"state":enemy._state,"target":[target.position.x,target.position.y] if target != null else [],"nav":str(session.navigation_step(enemy.position,target.position)) if target != null else ""})
 			break
 		await _step()
 	if _tick >= 600_000: report.errors.append("Route exceeded its total simulation tick bound.")
@@ -104,6 +121,14 @@ func run(players: int = 1, waves: int = 20, capture_path: String = "", fighter_i
 	report.final_summary = session.summary()
 	report.downs = _downs
 	report.purchases = _purchases
+	report.explorations = _explorations
+	report.split_changes = _split_changes
+	report.furthest_x = _furthest
+	report.world_seed = session.seed_value
+	report.map_regions = session.map.regions
+	report.loot_collected = session.collected.size()
+	report.landmarks_discovered = session.discovered_landmarks.size()
+	if not report.errors.is_empty(): report.success = false
 	report.final_actors = []
 	for fighter: ArenaFighter in session.fighters:
 		report.final_actors.append({"slot":fighter.slot_index,"health":fighter.health,"max_health":fighter.max_health,"position":[fighter.position.x,fighter.position.y],"stats":fighter.stats.duplicate()})
@@ -135,7 +160,7 @@ func _commands(fighter: ArenaFighter) -> int:
 	if absf(gap.x) > desired: movement = direction
 	elif ranged and absf(gap.x) < 80 and revive_target == null:
 		movement = -direction
-		if (fighter.position.x < 55 and movement < 0) or (fighter.position.x > 585 and movement > 0): movement = direction
+		if (fighter.position.x < session.world_bounds().position.x + 45 and movement < 0) or (fighter.position.x > session.world_bounds().end.x - 45 and movement > 0): movement = direction
 	var mask := Action.LEFT if movement < 0 else (Action.RIGHT if movement > 0 else 0)
 	# Face a changed target through normal movement before beginning another swing.
 	if direction != fighter.facing:
@@ -146,9 +171,13 @@ func _commands(fighter: ArenaFighter) -> int:
 			mask |= Action.SPECIAL
 	if revive_target != null and gap.length() < 45:
 		mask = Action.INTERACT | Action.ATTACK
+	# Navigation supplies only movement/jump/drop commands, never actor transforms.
+	if absf(gap.y) > 24 or fighter.is_on_wall():
+		var travel := _travel(fighter, target.position)
+		mask = (mask & (Action.ATTACK | Action.SPECIAL | Action.INTERACT)) | travel
 	# Reach platforms by jumping; step off a current one-way with owned down+jump.
 	if fighter.is_on_floor() and _jump_holds[slot] == 0:
-		if gap.y > 26 and fighter.position.y < 319 and absf(gap.x) < 60:
+		if gap.y > 26 and absf(gap.x) < 60:
 			mask |= Action.DOWN | Action.JUMP
 		elif gap.y < -24 and absf(gap.x) < 95:
 			_jump_holds[slot] = 16
@@ -169,18 +198,68 @@ func _near_attack(fighter: ArenaFighter) -> bool:
 		if state == "active" or (state == "windup" and int(enemy.get("_state_ticks")) <= 7): return true
 	return false
 
+func _travel(fighter: ArenaFighter, target: Vector2) -> int:
+	var step: Dictionary = session.navigation_step(fighter.position, target)
+	var point: Vector2 = step.point
+	var gap := point.x - fighter.position.x
+	var mask := Action.LEFT if gap < -5 else (Action.RIGHT if gap > 5 else 0)
+	if fighter.is_on_floor():
+		if bool(step.drop): mask |= Action.DOWN | Action.JUMP
+		elif bool(step.jump) or fighter.is_on_wall(): _jump_holds[fighter.slot_index] = 18
+	if _jump_holds[fighter.slot_index] > 0:
+		mask |= Action.JUMP
+		_jump_holds[fighter.slot_index] -= 1
+	return mask
+
 func _shop() -> void:
-	for slot in session.fighters.size():
-		var fighter: ArenaFighter = session.fighters[slot]
-		while fighter.health < fighter.max_health * 0.82 and session.player_states[slot].coins >= 5:
-			if not bool(session.try_purchase(slot, "heal").ok): break
-			_purchases.append({"after_wave":session.wave,"slot":slot,"id":"heal"})
-		var offers: Array = session.shop_offers[slot].duplicate(true)
-		offers.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return _upgrade_score(a) > _upgrade_score(b))
-		for offer: Dictionary in offers:
-			if int(offer.price) <= session.player_states[slot].coins and bool(session.try_purchase(slot, offer.id).ok):
-				_purchases.append({"after_wave":session.wave,"slot":slot,"id":offer.id})
-	for slot in session.fighters.size(): session.toggle_ready(slot)
+	if _intermission_wave != session.wave:
+		_intermission_wave = session.wave
+		_explore_ticks = 0
+		_goals.clear()
+		for slot in session.fighters.size():
+			var fighter: ArenaFighter = session.fighters[slot]
+			while fighter.health < fighter.max_health * 0.82 and session.player_states[slot].coins >= 5:
+				if not bool(session.try_purchase(slot, "heal").ok): break
+				_purchases.append({"after_wave":session.wave,"slot":slot,"id":"heal"})
+			var offers: Array = session.shop_offers[slot].duplicate(true)
+			offers.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return _upgrade_score(a) > _upgrade_score(b))
+			for offer: Dictionary in offers:
+				if int(offer.price) <= session.player_states[slot].coins and bool(session.try_purchase(slot, offer.id).ok):
+					_purchases.append({"after_wave":session.wave,"slot":slot,"id":offer.id})
+		var explore := session.wave in [1, 2, 3, 5, 10, 15]
+		if explore:
+			for fighter: ArenaFighter in session.fighters:
+				var slot := fighter.slot_index
+				var goal := Vector2(600 if slot == 0 else 1800, 320)
+				if session.wave == 2: goal = Vector2(960 if slot == 0 else 1500, 624 if slot == 0 else 320)
+				elif session.wave == 3: goal = Vector2(960 + slot * 24, 320)
+				elif session.wave >= 5: goal = Vector2(session.world_bounds().end.x - 400 - slot * 800, 320)
+				_goals.append(session.safe_position(goal))
+				session.set_shop_open(slot, false)
+		else:
+			for slot in session.fighters.size(): session.toggle_ready(slot)
+			return
+	_explore_ticks += 1
+	var reached := true
+	for fighter: ArenaFighter in session.fighters:
+		var slot := fighter.slot_index
+		var goal := _goals[slot]
+		var arrived := absf(goal.x - fighter.position.x) < 32 and absf(goal.y - fighter.position.y) < 26
+		reached = reached and arrived
+		var command := 0 if arrived else _travel(fighter, goal)
+		for loot: Node2D in session.loot_nodes:
+			if not loot.collected and loot.record.kind == "cache" and absf(loot.position.x - fighter.position.x) < 46 and absf(loot.position.y - fighter.position.y) < 24:
+				command |= Action.ATTACK
+		InputRouter.set_test_input(slot, command)
+	if reached or _explore_ticks >= 2400:
+		var positions: Array = []
+		for fighter: ArenaFighter in session.fighters: positions.append([fighter.position.x, fighter.position.y])
+		_explorations.append({"after_wave": session.wave, "ticks": _explore_ticks, "reached": reached, "positions": positions, "regions": session.map.regions})
+		if not reached: report.errors.append("Exploration route failed after wave%d." % session.wave)
+		for slot in session.fighters.size():
+			InputRouter.set_test_input(slot, 0)
+			session.set_shop_open(slot, true)
+			session.toggle_ready(slot)
 
 func _upgrade_score(offer: Dictionary) -> float:
 	return float({"damage":10,"lifesteal":9,"regen":8,"attack_speed":7,"area":6,"freeze":6,"burn":5,"projectile_count":5,"max_health":4,"chain":4,"special_cooldown":3,"pierce":3,"crit":2}.get(offer.stat, 1)) / float(offer.price)

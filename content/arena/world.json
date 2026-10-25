@@ -1,0 +1,1150 @@
+{
+  "schema_version": 1,
+  "content_version": "scrolling-world-v1",
+  "chunk_width": 640,
+  "height": 720,
+  "chunks_per_region": 4,
+  "max_regions": 4,
+  "main_y": 320,
+  "cave_y": 624,
+  "templates": [
+    {
+      "id": "orchard_steps",
+      "name": "Orchard Steps",
+      "solids": [
+        [
+          0,
+          320,
+          96,
+          32
+        ],
+        [
+          176,
+          320,
+          272,
+          32
+        ],
+        [
+          528,
+          320,
+          112,
+          32
+        ],
+        [
+          0,
+          624,
+          640,
+          96
+        ]
+      ],
+      "platforms": [
+        [
+          96,
+          320,
+          80
+        ],
+        [
+          448,
+          320,
+          80
+        ],
+        [
+          112,
+          368,
+          48
+        ],
+        [
+          112,
+          416,
+          48
+        ],
+        [
+          112,
+          464,
+          48
+        ],
+        [
+          112,
+          512,
+          48
+        ],
+        [
+          112,
+          560,
+          48
+        ],
+        [
+          112,
+          608,
+          48
+        ],
+        [
+          464,
+          368,
+          48
+        ],
+        [
+          464,
+          416,
+          48
+        ],
+        [
+          464,
+          464,
+          48
+        ],
+        [
+          464,
+          512,
+          48
+        ],
+        [
+          464,
+          560,
+          48
+        ],
+        [
+          464,
+          608,
+          48
+        ],
+        [
+          224,
+          272,
+          96
+        ],
+        [
+          288,
+          224,
+          96
+        ],
+        [
+          352,
+          272,
+          96
+        ]
+      ],
+      "anchors": [
+        [
+          48,
+          320
+        ],
+        [
+          240,
+          320
+        ],
+        [
+          400,
+          320
+        ],
+        [
+          592,
+          320
+        ],
+        [
+          304,
+          224
+        ],
+        [
+          64,
+          624
+        ],
+        [
+          288,
+          624
+        ],
+        [
+          400,
+          624
+        ],
+        [
+          576,
+          624
+        ],
+        [
+          136,
+          416
+        ],
+        [
+          488,
+          512
+        ]
+      ],
+      "decorations": [
+        {
+          "prop": "lantern_pole",
+          "position": [
+            48,
+            320
+          ],
+          "flip": false
+        },
+        {
+          "prop": "thread_spool",
+          "position": [
+            220,
+            320
+          ],
+          "flip": false
+        },
+        {
+          "prop": "hollow_log",
+          "position": [
+            568,
+            320
+          ],
+          "flip": false
+        },
+        {
+          "prop": "cave_lantern",
+          "position": [
+            64,
+            624
+          ],
+          "flip": false
+        },
+        {
+          "prop": "blue_mushrooms",
+          "position": [
+            344,
+            624
+          ],
+          "flip": false
+        },
+        {
+          "prop": "root_arch",
+          "position": [
+            390,
+            624
+          ],
+          "flip": false
+        },
+        {
+          "prop": "hanging_bell",
+          "position": [
+            320,
+            224
+          ],
+          "flip": false
+        },
+        {
+          "prop": "wind_chimes",
+          "position": [
+            600,
+            320
+          ],
+          "flip": false
+        }
+      ]
+    },
+    {
+      "id": "glassroot_walk",
+      "name": "Glassroot Walk",
+      "solids": [
+        [
+          0,
+          320,
+          96,
+          32
+        ],
+        [
+          176,
+          320,
+          272,
+          32
+        ],
+        [
+          528,
+          320,
+          112,
+          32
+        ],
+        [
+          0,
+          624,
+          640,
+          96
+        ]
+      ],
+      "platforms": [
+        [
+          96,
+          320,
+          80
+        ],
+        [
+          448,
+          320,
+          80
+        ],
+        [
+          112,
+          368,
+          48
+        ],
+        [
+          112,
+          416,
+          48
+        ],
+        [
+          112,
+          464,
+          48
+        ],
+        [
+          112,
+          512,
+          48
+        ],
+        [
+          112,
+          560,
+          48
+        ],
+        [
+          112,
+          608,
+          48
+        ],
+        [
+          464,
+          368,
+          48
+        ],
+        [
+          464,
+          416,
+          48
+        ],
+        [
+          464,
+          464,
+          48
+        ],
+        [
+          464,
+          512,
+          48
+        ],
+        [
+          464,
+          560,
+          48
+        ],
+        [
+          464,
+          608,
+          48
+        ],
+        [
+          208,
+          272,
+          96
+        ],
+        [
+          272,
+          224,
+          96
+        ],
+        [
+          336,
+          272,
+          96
+        ]
+      ],
+      "anchors": [
+        [
+          48,
+          320
+        ],
+        [
+          240,
+          320
+        ],
+        [
+          400,
+          320
+        ],
+        [
+          592,
+          320
+        ],
+        [
+          304,
+          224
+        ],
+        [
+          64,
+          624
+        ],
+        [
+          288,
+          624
+        ],
+        [
+          400,
+          624
+        ],
+        [
+          576,
+          624
+        ],
+        [
+          136,
+          416
+        ],
+        [
+          488,
+          512
+        ]
+      ],
+      "decorations": [
+        {
+          "prop": "lantern_pole",
+          "position": [
+            48,
+            320
+          ],
+          "flip": false
+        },
+        {
+          "prop": "glass_fern",
+          "position": [
+            220,
+            320
+          ],
+          "flip": false
+        },
+        {
+          "prop": "stone_stack",
+          "position": [
+            568,
+            320
+          ],
+          "flip": true
+        },
+        {
+          "prop": "cave_lantern",
+          "position": [
+            64,
+            624
+          ],
+          "flip": false
+        },
+        {
+          "prop": "seed_pod",
+          "position": [
+            344,
+            624
+          ],
+          "flip": false
+        },
+        {
+          "prop": "broken_column",
+          "position": [
+            390,
+            624
+          ],
+          "flip": false
+        },
+        {
+          "prop": "little_shrine",
+          "position": [
+            320,
+            224
+          ],
+          "flip": false
+        },
+        {
+          "prop": "wind_chimes",
+          "position": [
+            600,
+            320
+          ],
+          "flip": false
+        }
+      ]
+    },
+    {
+      "id": "kilnside_hollow",
+      "name": "Kilnside Hollow",
+      "solids": [
+        [
+          0,
+          320,
+          96,
+          32
+        ],
+        [
+          176,
+          320,
+          272,
+          32
+        ],
+        [
+          528,
+          320,
+          112,
+          32
+        ],
+        [
+          0,
+          624,
+          640,
+          96
+        ]
+      ],
+      "platforms": [
+        [
+          96,
+          320,
+          80
+        ],
+        [
+          448,
+          320,
+          80
+        ],
+        [
+          112,
+          368,
+          48
+        ],
+        [
+          112,
+          416,
+          48
+        ],
+        [
+          112,
+          464,
+          48
+        ],
+        [
+          112,
+          512,
+          48
+        ],
+        [
+          112,
+          560,
+          48
+        ],
+        [
+          112,
+          608,
+          48
+        ],
+        [
+          464,
+          368,
+          48
+        ],
+        [
+          464,
+          416,
+          48
+        ],
+        [
+          464,
+          464,
+          48
+        ],
+        [
+          464,
+          512,
+          48
+        ],
+        [
+          464,
+          560,
+          48
+        ],
+        [
+          464,
+          608,
+          48
+        ],
+        [
+          240,
+          272,
+          96
+        ],
+        [
+          288,
+          224,
+          96
+        ],
+        [
+          336,
+          272,
+          96
+        ]
+      ],
+      "anchors": [
+        [
+          48,
+          320
+        ],
+        [
+          240,
+          320
+        ],
+        [
+          400,
+          320
+        ],
+        [
+          592,
+          320
+        ],
+        [
+          304,
+          224
+        ],
+        [
+          64,
+          624
+        ],
+        [
+          288,
+          624
+        ],
+        [
+          400,
+          624
+        ],
+        [
+          576,
+          624
+        ],
+        [
+          136,
+          416
+        ],
+        [
+          488,
+          512
+        ]
+      ],
+      "decorations": [
+        {
+          "prop": "lantern_pole",
+          "position": [
+            48,
+            320
+          ],
+          "flip": false
+        },
+        {
+          "prop": "copper_cogs",
+          "position": [
+            220,
+            320
+          ],
+          "flip": false
+        },
+        {
+          "prop": "thorn_bush",
+          "position": [
+            568,
+            320
+          ],
+          "flip": false
+        },
+        {
+          "prop": "cave_lantern",
+          "position": [
+            64,
+            624
+          ],
+          "flip": false
+        },
+        {
+          "prop": "crystal_cluster",
+          "position": [
+            344,
+            624
+          ],
+          "flip": false
+        },
+        {
+          "prop": "ivy_pillar",
+          "position": [
+            390,
+            624
+          ],
+          "flip": false
+        },
+        {
+          "prop": "water_pipe",
+          "position": [
+            320,
+            224
+          ],
+          "flip": false
+        },
+        {
+          "prop": "wind_chimes",
+          "position": [
+            600,
+            320
+          ],
+          "flip": false
+        }
+      ]
+    },
+    {
+      "id": "crown_terrace",
+      "name": "Crown Terrace",
+      "solids": [
+        [
+          0,
+          320,
+          96,
+          32
+        ],
+        [
+          176,
+          320,
+          272,
+          32
+        ],
+        [
+          528,
+          320,
+          112,
+          32
+        ],
+        [
+          0,
+          624,
+          640,
+          96
+        ]
+      ],
+      "platforms": [
+        [
+          96,
+          320,
+          80
+        ],
+        [
+          448,
+          320,
+          80
+        ],
+        [
+          112,
+          368,
+          48
+        ],
+        [
+          112,
+          416,
+          48
+        ],
+        [
+          112,
+          464,
+          48
+        ],
+        [
+          112,
+          512,
+          48
+        ],
+        [
+          112,
+          560,
+          48
+        ],
+        [
+          112,
+          608,
+          48
+        ],
+        [
+          464,
+          368,
+          48
+        ],
+        [
+          464,
+          416,
+          48
+        ],
+        [
+          464,
+          464,
+          48
+        ],
+        [
+          464,
+          512,
+          48
+        ],
+        [
+          464,
+          560,
+          48
+        ],
+        [
+          464,
+          608,
+          48
+        ],
+        [
+          192,
+          272,
+          128
+        ],
+        [
+          288,
+          224,
+          96
+        ],
+        [
+          352,
+          272,
+          128
+        ]
+      ],
+      "anchors": [
+        [
+          48,
+          320
+        ],
+        [
+          240,
+          320
+        ],
+        [
+          400,
+          320
+        ],
+        [
+          592,
+          320
+        ],
+        [
+          304,
+          224
+        ],
+        [
+          64,
+          624
+        ],
+        [
+          288,
+          624
+        ],
+        [
+          400,
+          624
+        ],
+        [
+          576,
+          624
+        ],
+        [
+          136,
+          416
+        ],
+        [
+          488,
+          512
+        ]
+      ],
+      "decorations": [
+        {
+          "prop": "lantern_pole",
+          "position": [
+            48,
+            320
+          ],
+          "flip": false
+        },
+        {
+          "prop": "woven_banner",
+          "position": [
+            220,
+            320
+          ],
+          "flip": false
+        },
+        {
+          "prop": "old_crate",
+          "position": [
+            568,
+            320
+          ],
+          "flip": true
+        },
+        {
+          "prop": "cave_lantern",
+          "position": [
+            64,
+            624
+          ],
+          "flip": false
+        },
+        {
+          "prop": "rope_coil",
+          "position": [
+            344,
+            624
+          ],
+          "flip": false
+        },
+        {
+          "prop": "iron_gate",
+          "position": [
+            390,
+            624
+          ],
+          "flip": false
+        },
+        {
+          "prop": "tomb_marker",
+          "position": [
+            320,
+            224
+          ],
+          "flip": false
+        },
+        {
+          "prop": "wind_chimes",
+          "position": [
+            600,
+            320
+          ],
+          "flip": false
+        }
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "id": 0,
+      "name": "Copper Orchard",
+      "landmark": "bell_oak",
+      "loot": [
+        {
+          "kind": "cache",
+          "chunk": 0,
+          "position": [
+            80,
+            320
+          ]
+        },
+        {
+          "kind": "cache",
+          "chunk": 1,
+          "position": [
+            304,
+            224
+          ]
+        },
+        {
+          "kind": "cache",
+          "chunk": 2,
+          "position": [
+            320,
+            624
+          ]
+        },
+        {
+          "kind": "cache",
+          "chunk": 3,
+          "position": [
+            560,
+            320
+          ]
+        },
+        {
+          "kind": "plant",
+          "chunk": 1,
+          "position": [
+            544,
+            320
+          ]
+        },
+        {
+          "kind": "plant",
+          "chunk": 3,
+          "position": [
+            176,
+            624
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "Moonroot Glasshouse",
+      "landmark": "glass_gate",
+      "loot": [
+        {
+          "kind": "cache",
+          "chunk": 0,
+          "position": [
+            80,
+            320
+          ]
+        },
+        {
+          "kind": "cache",
+          "chunk": 1,
+          "position": [
+            304,
+            224
+          ]
+        },
+        {
+          "kind": "cache",
+          "chunk": 2,
+          "position": [
+            320,
+            624
+          ]
+        },
+        {
+          "kind": "cache",
+          "chunk": 3,
+          "position": [
+            560,
+            320
+          ]
+        },
+        {
+          "kind": "plant",
+          "chunk": 1,
+          "position": [
+            544,
+            320
+          ]
+        },
+        {
+          "kind": "plant",
+          "chunk": 3,
+          "position": [
+            176,
+            624
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "The Buried Works",
+      "landmark": "spool_tower",
+      "loot": [
+        {
+          "kind": "cache",
+          "chunk": 0,
+          "position": [
+            80,
+            320
+          ]
+        },
+        {
+          "kind": "cache",
+          "chunk": 1,
+          "position": [
+            304,
+            224
+          ]
+        },
+        {
+          "kind": "cache",
+          "chunk": 2,
+          "position": [
+            320,
+            624
+          ]
+        },
+        {
+          "kind": "cache",
+          "chunk": 3,
+          "position": [
+            560,
+            320
+          ]
+        },
+        {
+          "kind": "plant",
+          "chunk": 1,
+          "position": [
+            544,
+            320
+          ]
+        },
+        {
+          "kind": "plant",
+          "chunk": 3,
+          "position": [
+            176,
+            624
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Crown of Threads",
+      "landmark": "crown_loom",
+      "loot": [
+        {
+          "kind": "cache",
+          "chunk": 0,
+          "position": [
+            80,
+            320
+          ]
+        },
+        {
+          "kind": "cache",
+          "chunk": 1,
+          "position": [
+            304,
+            224
+          ]
+        },
+        {
+          "kind": "cache",
+          "chunk": 2,
+          "position": [
+            320,
+            624
+          ]
+        },
+        {
+          "kind": "cache",
+          "chunk": 3,
+          "position": [
+            560,
+            320
+          ]
+        },
+        {
+          "kind": "plant",
+          "chunk": 1,
+          "position": [
+            544,
+            320
+          ]
+        },
+        {
+          "kind": "plant",
+          "chunk": 3,
+          "position": [
+            176,
+            624
+          ]
+        }
+      ]
+    }
+  ]
+}

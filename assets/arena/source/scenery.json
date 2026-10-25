@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "authorship": "Original project-authored pixel recipes; no resource packs or provider calls.",
+  "palette": {
+    "outline": "#101a26",
+    "deep": "#1d3540",
+    "stone": "#3d5963",
+    "edge": "#6f9290",
+    "wood": "#62554b",
+    "wood_light": "#a18361",
+    "copper": "#bc8857",
+    "gold": "#e9c58c",
+    "glow": "#f9e7af",
+    "leaf": "#548a76",
+    "leaf_light": "#91b996",
+    "blue": "#8ec9cc",
+    "violet": "#8d7a98"
+  },
+  "props": [
+    "lantern_pole",
+    "kiln_brazier",
+    "thread_spool",
+    "root_arch",
+    "glass_fern",
+    "hanging_bell",
+    "broken_column",
+    "ivy_pillar",
+    "iron_gate",
+    "seed_pod",
+    "crystal_cluster",
+    "woven_banner",
+    "stone_stack",
+    "hollow_log",
+    "little_shrine",
+    "water_pipe",
+    "copper_cogs",
+    "thorn_bush",
+    "blue_mushrooms",
+    "tomb_marker",
+    "rope_coil",
+    "wind_chimes",
+    "cave_lantern",
+    "old_crate"
+  ],
+  "landmarks": [
+    "bell_oak",
+    "glass_gate",
+    "spool_tower",
+    "crown_loom"
+  ],
+  "layers": [
+    {
+      "id": "sky",
+      "file": "sky.png",
+      "sha256": "893096d3b714f2bac073ba0e586c64cc0f35c991f9ebc28f13068301eb5d0635",
+      "size": [
+        640,
+        360
+      ],
+      "factor": 0.08,
+      "y_factor": 0.03
+    },
+    {
+      "id": "far",
+      "file": "far.png",
+      "sha256": "7c31ae3c47e853b08d8bed0838777bcd09db1380181e23a316effac37c134390",
+      "size": [
+        640,
+        360
+      ],
+      "factor": 0.22,
+      "y_factor": 0.1
+    },
+    {
+      "id": "canopy",
+      "file": "canopy.png",
+      "sha256": "1d252538f7e7f603743b85a702092b8f25b3426e339c90276f840c77202ae413",
+      "size": [
+        640,
+        360
+      ],
+      "factor": 0.42,
+      "y_factor": 0.25
+    },
+    {
+      "id": "foreground",
+      "file": "foreground.png",
+      "sha256": "0b5b666d4ada5c8c2a91e4ebb7c86766e02305e90067f1b96dbbaa1d56f4d848",
+      "size": [
+        640,
+        360
+      ],
+      "factor": 0.68,
+      "y_factor": 0.5
+    }
+  ]
+}

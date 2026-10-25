@@ -49,6 +49,8 @@ var _last_source := -1
 var _boss_meter := 0
 var _target_point := Vector2.ZERO
 var _visual_key := -1
+var _flight_routing := false
+var _flight_waypoint := Vector2.ZERO
 
 func setup(enemy_role: String, world: Node, identity: int, wave: int, elite: bool = false, boss: String = "") -> void:
 	role = enemy_role if ROLE_DATA.has(enemy_role) else "chaser"
@@ -75,10 +77,10 @@ func setup(enemy_role: String, world: Node, identity: int, wave: int, elite: boo
 
 func _ready() -> void:
 	collision_layer = 4
-	collision_mask = 1
+	# Flying foes pass open planks, while solid ground/ceilings still block them.
+	collision_mask = ArenaCombat.SOLID_MASK if role == "flyer" and boss_id.is_empty() else ArenaCombat.TERRAIN_MASK
 	if role == "flyer" and boss_id.is_empty():
 		motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
-		position.y = minf(position.y, 238.0)
 	var shape := RectangleShape2D.new()
 	shape.size = _size
 	var collision := CollisionShape2D.new()
@@ -198,10 +200,11 @@ func _physics_process(delta: float) -> void:
 		_active_hits()
 		if get_slide_collision_count() > 0 and ((role == "charger" and boss_id.is_empty()) or (not boss_id.is_empty() and _pattern == 2)) and is_on_wall():
 			_enter("recover", 36)
-	global_position.x = clampf(global_position.x, 16 + _size.x * 0.5, 624 - _size.x * 0.5)
-	if global_position.y > 360:
-		global_position.y = 320
-		velocity.y = 0
+	var bounds := ArenaCombat.bounds(_world)
+	global_position.x = clampf(global_position.x, bounds.position.x + _size.x * 0.5, bounds.end.x - _size.x * 0.5)
+	if global_position.y > bounds.end.y + 48:
+		global_position = ArenaCombat.safe_position(_world, global_position)
+		velocity = Vector2.ZERO
 	_update_visual()
 
 func _tick_status() -> void:
@@ -232,7 +235,20 @@ func _target() -> Node2D:
 		if is_instance_valid(fighter) and not fighter.downed:
 			if first == null: first = fighter
 			else: second = fighter
-	return second if second != null and _target_slot % 2 == 1 else first
+	var chosen := second if second != null and _target_slot % 2 == 1 else first
+	var other := first if chosen == second else second
+	if chosen != null and other != null and global_position.distance_squared_to(chosen.global_position) > 640.0 * 640.0 and global_position.distance_squared_to(other.global_position) < global_position.distance_squared_to(chosen.global_position):
+		chosen = other
+	return chosen
+
+func relocate_to(at: Vector2) -> void:
+	# Pursuit moves the same enemy; health, source attribution and status clocks stay.
+	_end_drop()
+	global_position = at
+	velocity = Vector2.ZERO
+	_flight_routing = false
+	_flight_waypoint = at
+	_enter("recover", 24)
 
 func _ground_tick(target: Node2D, delta: float) -> void:
 	var gap := target.global_position.x - global_position.x
@@ -244,7 +260,7 @@ func _ground_tick(target: Node2D, delta: float) -> void:
 		if role == "shooter" and absf(gap) < 130.0: movement = -signf(gap)
 		movement = _platform_approach(target, movement)
 		velocity.x = move_toward(velocity.x, movement * _speed * slow_scale + _separation(), 900 * delta)
-		if absf(gap) < reach and absf(target.global_position.y - global_position.y) < (160 if role == "shooter" else 55) and (role != "shooter" or absf(gap) >= 110.0) and _reserve():
+		if absf(gap) < reach and absf(target.global_position.y - global_position.y) < (160 if role == "shooter" else 55) and (role != "shooter" or absf(gap) >= 110.0) and ArenaCombat.clear_line(self, get_hurt_rect().get_center(), target.get_hurt_rect().get_center()) and _reserve():
 			_aim = (target.get_hurt_rect().get_center() - get_hurt_rect().get_center()).normalized()
 			_target_point = target.global_position
 			_pattern = (_pattern + 1) % 3
@@ -272,10 +288,24 @@ func _ground_tick(target: Node2D, delta: float) -> void:
 			_enter("approach", 0)
 
 func _fly_tick(target: Node2D) -> void:
+	var clear := ArenaCombat.clear_line(self, get_hurt_rect().get_center(), target.get_hurt_rect().get_center(), ArenaCombat.SOLID_MASK)
+	if not clear and _world.has_method("flight_anchor"):
+		if not _flight_routing:
+			_flight_waypoint = _world.call("flight_anchor", global_position)
+			_flight_routing = true
+			_enter("approach", 0)
+		if global_position.distance_to(_flight_waypoint) < 12:
+			var step: Dictionary = _world.call("navigation_step", global_position, target.global_position)
+			_flight_waypoint = step.get("point", global_position)
+		velocity = (_flight_waypoint - global_position).normalized() * _speed
+		return
+	if _flight_routing:
+		_flight_routing = false
+		_enter("approach", 0)
 	if _state == "approach":
 		var hover := target.global_position + Vector2(-100 if spawn_id % 2 == 0 else 100, -95)
 		velocity = (hover - global_position).limit_length(_speed)
-		if global_position.distance_to(target.global_position) < 200 and _reserve():
+		if clear and global_position.distance_to(target.global_position) < 200 and _reserve():
 			_aim = (target.get_hurt_rect().get_center() - get_hurt_rect().get_center()).normalized()
 			_enter("windup", 30)
 	elif _state == "windup":
@@ -290,7 +320,7 @@ func _fly_tick(target: Node2D) -> void:
 		_state_ticks -= 1
 		if _state_ticks <= 0 or is_on_wall(): _enter("recover", 42)
 	else:
-		velocity = Vector2(0,-65) if global_position.y > 215 else Vector2.ZERO
+		velocity = Vector2(0,-65) if global_position.y > target.global_position.y - 95 else Vector2.ZERO
 		_state_ticks -= 1
 		if _state_ticks <= 0:
 			_target_slot += 1
@@ -312,6 +342,9 @@ func _charge_speed() -> float:
 
 func _emit_ranged() -> void:
 	var origin := get_hurt_rect().get_center()
+	var encounter := Rect2(0, 0, 640, 360)
+	if _world.has_method("encounter_rect"):
+		encounter = _world.call("encounter_rect", _target_point)
 	if boss_id.is_empty():
 		if role == "shooter": _shot(origin, _aim, _damage, 190)
 		return
@@ -324,7 +357,7 @@ func _emit_ranged() -> void:
 			if _pattern == 0:
 				for index in 3: _shot(origin, _aim.rotated((index-1)*0.16), _damage, 185)
 			elif _pattern == 1:
-				for index in 5: _shot(Vector2(clampf(_target_point.x+(index-2)*52,40,600),40), Vector2.DOWN, _damage, 165)
+				for index in 5: _shot(Vector2(clampf(_target_point.x+(index-2)*52,encounter.position.x+24,encounter.end.x-24),encounter.position.y+32), Vector2.DOWN, _damage, 165)
 			else:
 				for index in 3: _shot(origin, Vector2(_facing*0.7, -1).normalized().rotated((index-1)*0.12), _damage, 230, {"gravity":600})
 		"tempest":
@@ -333,10 +366,10 @@ func _emit_ranged() -> void:
 		"loom":
 			if _pattern == 0:
 				for index in 6:
-					if index != spawn_id % 6: _shot(Vector2(70+index*100,64),Vector2.DOWN,_damage,145)
+					if index != spawn_id % 6: _shot(Vector2(encounter.position.x+(index+1)*encounter.size.x/7.0,encounter.position.y+48),Vector2.DOWN,_damage,145)
 			elif _pattern == 1:
-				_shot(Vector2(30,290),Vector2.RIGHT,_damage,165)
-				_shot(Vector2(610,250),Vector2.LEFT,_damage,165)
+				_shot(Vector2(encounter.position.x+14,_target_point.y-30),Vector2.RIGHT,_damage,165)
+				_shot(Vector2(encounter.end.x-14,_target_point.y-70),Vector2.LEFT,_damage,165)
 			else:
 				for index in 8: _shot(origin,Vector2.from_angle(index*TAU/8),_damage*0.75,140)
 
@@ -364,6 +397,18 @@ func _active_hits() -> void:
 
 func _platform_approach(target: Node2D, movement: float) -> float:
 	if not is_on_floor(): return movement
+	if _world.has_method("navigation_step"):
+		var step: Dictionary = _world.call("navigation_step", global_position, target.global_position)
+		var point: Vector2 = step.get("point", target.global_position)
+		var gap := point.x - global_position.x
+		if bool(step.get("drop", false)):
+			_try_drop()
+		if (bool(step.get("jump", false)) or is_on_wall()) and absf(gap) < 80 and _jump_cooldown == 0:
+			velocity.y = -420
+			_jump_cooldown = 36
+		if absf(point.y - target.global_position.y) > 16 or bool(step.get("jump", false)) or bool(step.get("drop", false)):
+			return signf(gap) if absf(gap) > 6 else 0.0
+		return movement
 	if target.global_position.y > global_position.y + 25:
 		_try_drop()
 	if target.global_position.y < global_position.y - 24:

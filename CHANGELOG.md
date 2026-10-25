@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-25T06:00:11+05:30 — Build the expanding scrolling world and dynamic co-op views
+
+- Added append-only seeded 4→16 chunk terrain, connected raised/cave routes, original 24 prop/4 landmark/4 layer scenery, frontier cues and unique regional loot. Added shared World2D split/merge cameras, minimap/partner cues and independently closable intermission shops without player resets.
+- Adapted actor bounds, spawn anchors, boss patterns/projectiles and pursuit to world coordinates. Fixed pursuit weak-target/visibility cancellation, held Ready leakage, strict media admission, enemy 48 pixel step reach and flyer routing around solid ceilings/open planks. Export now includes required world/scenery data and provenance.
+- Validation: 19 arena scenarios, 162 creator assertions, 186 Python tests/import/validators pass. Ordinary-input solo 20/co-op 25 complete all exploration/expansion legs without overrides/errors. Actual native captures inspected; controlled 32 enemy/77 projectile split fixture median 10.976 ms, p95 24.522ms offscreen intervals. Physical/human gates remain unverified; this is not a 60 FPS certification. Final export checks follow the committed checkpoint.
+
 ### 2026-10-25T05:13:53+05:30 — Configure lifetime generation allowance and recover blocked drafts
 
 - Added explicit FORGE_TOTAL_BUDGET_USD policy, separate shared/job/required accounting in status and creator UI, exact budget errors and same-draft resume. Existing/uncertain records remain intact; paid cache/provenance admission stays strict. Isolated mock Godot jobs under/tmp so tests stop polluting the real creation library.
@@ -27,7 +33,7 @@
 ### 2026-10-25T03:39:54+05:30 — Reduce crowd overhead and verify the exported wave route
 
 - Retained projectile/enemy draw commands between visual changes, removed avoidable sweep/target allocations, and throttled HUD text updates while using cached fighter stats. Preserved terrain-first swept hit order and combat rules. Added the dedicated arena QA export entry point; fixed shop clipping/contrast and added a shared boss bar.
-- Validation:7actor scenarios,30,000sweep-equivalence cases and post-change normal-input solo20/co-op25 routes pass.11arena scenarios,107forge assertions,147Python tests pass. Official Linux QA export also reaches25waves in a network namespace; ordinary package boots outside source. Native offscreen1080p32enemy/67projectile profile:p9513.253ms versus17.442ms before this combined pass; not a physical-display/human performance claim.
+- Validation:7actor scenarios,30,000sweep-equivalence cases and post-change normal-input solo 20/co-op 25 routes pass.11arena scenarios,107forge assertions,147Python tests pass. Official Linux QA export also reaches25waves in a network namespace; ordinary package boots outside source. Native offscreen1080p32enemy/67projectile profile:p9513.253ms versus17.442ms before this combined pass; not a physical-display/human performance claim.
 - Both real image requests now succeed after project access changed; strict conversion correctly rejected the returned layout. Local cached crop correction is in progress; no additional request or accepted generated-art claim.
 
 ### 2026-10-25T03:10:36+05:30 — Build the shared-screen wave game and character forge
