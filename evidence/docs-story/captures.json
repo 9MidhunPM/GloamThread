@@ -1,0 +1,135 @@
+{
+  "recorded_at": "2026-10-25T06:49:14+05:30",
+  "documentation_source_checkout_commit": "7cdc83e1e4666da1bb0c5f82ac55ae96670b113e",
+  "story_runtime_commit": "27889b1",
+  "creator_runtime_commit": "fffd26d",
+  "engine": "Godot 4.7.2.stable.arch_linux.ed1daf0bf",
+  "renderer": "Compatibility OpenGL / Mesa Intel Graphics (ARL), native Wayland",
+  "capture_method": "Hypruse agent background workspace99, Godot viewport force_draw; UI methods select states, no normal-input/human playthrough claim",
+  "story_entry_observation": "actual Story button -> title -> New journey -> join -> Begin journey -> playing r00 -> save and return -> rendered arena title",
+  "no_provider_calls": true,
+  "private_XDG_DATA_HOME": true,
+  "broad_tests": "skipped at user request",
+  "capture_logs": {
+    "story_entry": "Only expected missing Wayland icon warning; no script/resource errors; STORY_GUIDE_STATE playing room=r00",
+    "creator_only": "Expected missing Wayland icon warning; two ObjectDB instances reported on forced diagnostic teardown, no script/resource errors"
+  },
+  "current_source_sha256": {
+    "tools/capture_player_guide.gd": "94182ba583f4d4bb1b55b047545c831a02ce18fc0973974951ac53f4f0ff2ee2",
+    "scripts/arena/arena_app.gd": "11035f45a669913af4f4cd5b9fa22fa2a4f385f6914ac7cfe1689dbc3bc0beac",
+    "scripts/app/app_controller.gd": "8281036f3ba6050259e5563de376a1f7b4f12d7da39d282200e8db50586a12d9",
+    "scripts/forge/character_creator.gd": "d030aa274ce1d6f5a6800bad3f6970d6961ced5473690e6f32cc2c57113cf223"
+  },
+  "images": [
+    {
+      "file": "docs/screenshots/arena-lobby.png",
+      "sha256": "66c92d7d8573b130f69bc572730322392e092bf6f87dff753267a117d6d35750",
+      "size": [
+        1920,
+        1080
+      ],
+      "source": "/tmp/gloamthread-player-guide-entry/arena-lobby.png",
+      "kind": "fresh native production menu/Story entry at story commit 27889b1"
+    },
+    {
+      "file": "docs/screenshots/arena-shop.png",
+      "sha256": "ed976d0ee44bb405e04cbe8d81807cbe1fd527f37c71e1e927813b0eacb649a4",
+      "size": [
+        1920,
+        1080
+      ],
+      "source": "evidence/scrolling-world/native/personal_shop_exploration.png",
+      "kind": "retained controlled native scrolling-world scene"
+    },
+    {
+      "file": "docs/screenshots/arena-split.png",
+      "sha256": "2e2dc942461321f32fb2763360dff2fa871cb4066ee4bef81d734c3cbb1983af",
+      "size": [
+        1920,
+        1080
+      ],
+      "source": "evidence/scrolling-world/native/split_main_cave.png",
+      "kind": "retained controlled native scrolling-world scene"
+    },
+    {
+      "file": "docs/screenshots/character-forge.png",
+      "sha256": "2862c41d081a6ec6bc439803cc15caae7e65de5b409643a3f8bb1800adcb871d",
+      "size": [
+        1920,
+        1080
+      ],
+      "source": "/tmp/gloamthread-player-guide-name/character-forge.png",
+      "kind": "fresh native production creator at fighter-identity commit fffd26d"
+    },
+    {
+      "file": "docs/screenshots/layout-correction.png",
+      "sha256": "65b5cbd8991379d7f7d82f7e5e78b2149fe547a83bf5be64f2c5f101698ee7be",
+      "size": [
+        1920,
+        1080
+      ],
+      "source": "/tmp/gloamthread-player-guide-entry/layout-correction.png",
+      "kind": "fresh native production menu/Story entry at story commit 27889b1"
+    },
+    {
+      "file": "docs/screenshots/returned-arena.png",
+      "sha256": "6d04cffcffb001193fd986db54e76a81584ad83bcc51481055a1127cde7b6c3d",
+      "size": [
+        1920,
+        1080
+      ],
+      "source": "/tmp/gloamthread-player-guide-entry/returned-arena.png",
+      "kind": "fresh native production menu/Story entry at story commit 27889b1"
+    },
+    {
+      "file": "docs/screenshots/story-bridge.png",
+      "sha256": "49773742305df0260580dfe4175d1e83fbc410e6c50893a6fb611e02549c891f",
+      "size": [
+        960,
+        360
+      ],
+      "source": "evidence/release/captures/bridge_spindle.png",
+      "kind": "retained actual original campaign route"
+    },
+    {
+      "file": "docs/screenshots/story-join.png",
+      "sha256": "aae6eb47f852eae0d656ba40fa9b65c8da08214b6b40321e0cdc24cb7c44d94f",
+      "size": [
+        960,
+        360
+      ],
+      "source": "/tmp/gloamthread-player-guide-entry/story-join.png",
+      "kind": "fresh native production menu/Story entry at story commit 27889b1"
+    },
+    {
+      "file": "docs/screenshots/story-play.png",
+      "sha256": "744679b0a8b85ad2a5547aa7f16c09ffdd65a0924c9633c5c0d72f9061b53c1c",
+      "size": [
+        960,
+        360
+      ],
+      "source": "/tmp/gloamthread-player-guide-entry/story-play.png",
+      "kind": "fresh native production menu/Story entry at story commit 27889b1"
+    },
+    {
+      "file": "docs/screenshots/story-title.png",
+      "sha256": "c0100c2cf9b6fbc01a1ac12c696f2fba1f98648887ff35236ef47ad7619c23a1",
+      "size": [
+        960,
+        360
+      ],
+      "source": "/tmp/gloamthread-player-guide-entry/story-title.png",
+      "kind": "fresh native production menu/Story entry at story commit 27889b1"
+    },
+    {
+      "file": "docs/screenshots/title.png",
+      "sha256": "6d04cffcffb001193fd986db54e76a81584ad83bcc51481055a1127cde7b6c3d",
+      "size": [
+        1920,
+        1080
+      ],
+      "source": "/tmp/gloamthread-player-guide-entry/title.png",
+      "kind": "fresh native production menu/Story entry at story commit 27889b1"
+    }
+  ]
+}
