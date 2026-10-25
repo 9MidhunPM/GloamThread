@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Gloamthread: Two Ends"
 config/description="Draw a fighter. Build a ridiculous run. Solo or local co-op wave combat across an expanding shared world."
-config/version="0.3.0-world"
+config/version="0.4.0-counterplay"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="Gloamthread-Arena"
 run/main_scene="res://scenes/arena/boot.tscn"

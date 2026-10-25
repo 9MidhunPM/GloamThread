@@ -201,6 +201,7 @@ func _emit_attack(special: bool) -> void:
 	var area := maxf(0.5, float(stats.area))
 	var tags := _attack_tags.duplicate(true)
 	var centre := get_hurt_rect().get_center()
+	tags["hit_from"] = centre
 	if not special:
 		match kit_id:
 			"frost", "nature":
@@ -271,7 +272,7 @@ func take_damage(amount: float, from: Vector2, owner_slot: int = -1) -> void:
 	_world.call("on_fighter_hit", slot_index)
 	ArenaCombat.effect(_world, get_hurt_rect().get_center(), Color.WHITE, "hurt")
 	if float(stats.thorns) > 0.0:
-		_world.call("hit_enemies", get_hurt_rect().grow(28), actual * float(stats.thorns), slot_index, ArenaCombat.next_id(), {"reflected":true})
+		_world.call("hit_enemies", get_hurt_rect().grow(28), actual * float(stats.thorns), slot_index, ArenaCombat.next_id(), {"reflected":true,"hit_from":get_hurt_rect().get_center()})
 	if health <= 0.0:
 		downed = true
 		revive_progress_ticks = 0

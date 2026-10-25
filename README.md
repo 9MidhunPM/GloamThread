@@ -6,7 +6,7 @@ The game uses fullscreen 1920×1080 presentation: a 640×360 pixel shared view, 
 
 ## Play
 
-[Download the Linux arena playtest](https://github.com/9MidhunPM/GloamThread/releases/tag/v0.3.0-world), or run the source with Godot:
+[Download the Linux arena playtest](https://github.com/9MidhunPM/GloamThread/releases/tag/v0.4.0-counterplay), or run the source with Godot:
 
 ```sh
 godot --headless --path . --editor --import --quit
@@ -26,6 +26,8 @@ Choose Solo Run or Local Co-op, change fighters/inputs, then Start Run. F11 togg
 | Pause | Escape | Enter | Start |
 
 Down+Jump drops through a platform. Shops use each player's Up/Down and Attack/Jump independently. Choose Explore to close your panel and move while your partner shops; E/M/Y reopens your own shop during breaks. Every active player must Ready. Regions open after waves 5/10/15 without replacing terrain or moving players. Attack caches to open them; healing plants restore 20% to their collector. Mouse controls also work. Keyboard sharing depends on hardware rollover; physical controller and fresh human balance/listening checks are recorded only when performed.
+
+Chargers commit to a marked rush lane, heavies guard their front but expose counter windows, shooters lock a three-shot burst, and flyers mark their dives. Bait, flank, use cover and punish recovery. [Enemy mechanics](docs/ENEMY_MECHANICS.md).
 
 Run power and coins reset on defeat/restart. Saved fighters/settings/scores are local under Godot's `Gloamthread-Arena` user directory, separate from the old campaign.
 

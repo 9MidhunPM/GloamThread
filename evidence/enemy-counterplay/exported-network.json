@@ -1,0 +1,40 @@
+{
+  "interfaces": [
+    {
+      "ifindex": 1,
+      "ifname": "lo",
+      "flags": [
+        "LOOPBACK"
+      ],
+      "mtu": 65536,
+      "qdisc": "noop",
+      "operstate": "DOWN",
+      "group": "default",
+      "txqlen": 1000,
+      "link_type": "loopback",
+      "address": "00:00:00:00:00:00",
+      "broadcast": "00:00:00:00:00:00",
+      "addr_info": []
+    }
+  ],
+  "routes": [],
+  "cwd": "/tmp",
+  "implementation_commit": "a65bf14a2a2676a290aab7505bf2cca5fcf4fede",
+  "qa_executable_sha256": "a0f4f2f31f4e31e0ba835f8d4de2631c5f513ed4527bdd75dce9047a3d951510",
+  "command": [
+    "/tmp/Gloamthread-Counterplay-QA.x86_64",
+    "--headless",
+    "--fixed-fps",
+    "60",
+    "--",
+    "--players",
+    "2",
+    "--waves",
+    "25",
+    "--seed",
+    "1791860771",
+    "--output",
+    "/tmp/gloamthread-counterplay-exported-duo.json"
+  ],
+  "exit_code": 0
+}
