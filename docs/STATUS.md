@@ -39,3 +39,7 @@ Physical controllers/hotplug, keyboard rollover, audio listening, fresh-human ba
 ## Latest source: Story Mode
 
 The arena title now offers **STORY MODE (2 PLAYERS)** for the retained Tavi/Neri eight-room campaign. Story title offers **Back to arena**; story pause offers **Save and return to arena**. Each mode restores its logical resolution; shared inputs/audio persist while scene replacement frees the previous world. Existing save/settings paths are preserved. Tests/import/build were skipped at user request; current source must be restarted, and the v0.4 package predates this wiring.
+
+## Latest source: name-led generation
+
+An explicit Name is now sent before analysis and preserved exactly. Names and weapon descriptions take priority in fresh image prompts, including a sword attached to the front hand and the complete master. Sword archetypes suggest Stone melee instead of Nature shooting, while manual ability selection wins. New identity context is cache-bound; old paid artwork remains recoverable and accepted fighters are preserved. Tests, import/build and live image calls were skipped as requested; new-output quality has not been verified. Restart the source game to use this change.

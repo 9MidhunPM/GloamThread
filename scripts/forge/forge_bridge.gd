@@ -11,7 +11,7 @@ var pid: int = -1
 var job_root: String = JOB_ROOT
 
 
-func create_job(source: Image, description: String) -> Dictionary:
+func create_job(source: Image, description: String, preferred_name: String = "") -> Dictionary:
 	if source == null or source.is_invisible() or description.length() > 2000:
 		return {"ok": false, "error": "Draw or import a character first; descriptions are limited to 2,000 characters."}
 	var folder := ProjectSettings.globalize_path(job_root).path_join("job-%d-%d" % [Time.get_unix_time_from_system(), Time.get_ticks_usec()])
@@ -21,6 +21,8 @@ func create_job(source: Image, description: String) -> Dictionary:
 	if source.save_png(source_path) != OK:
 		return {"ok": false, "error": "Could not retain the source drawing."}
 	var job := {"schema_version": 1, "source_image": source_path, "description": description.strip_edges()}
+	if not preferred_name.strip_edges().is_empty():
+		job["preferred_name"] = preferred_name.strip_edges().left(40)
 	var job_path := folder.path_join("job.json")
 	if not write_json(job_path, job):
 		return {"ok": false, "error": "Could not save the authoring job."}
