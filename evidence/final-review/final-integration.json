@@ -1,0 +1,184 @@
+{
+  "recorded_at": "2026-10-25T07:19:34+05:30",
+  "integrated_head": "81c12a0ba0d4b118293299b693b3d70141171aba",
+  "all_refs_integrated": true,
+  "refs": [
+    {
+      "ref": "refs/heads/feat/arena-content",
+      "tip": "3d2970f5e5e70de45f30f467e3ebff4db74af0cd",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/heads/feat/arena-fighter",
+      "tip": "e565260493f0f985f55686ed30b5d4bcf2f4ba19",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/heads/feat/enemy-counterplay",
+      "tip": "edcf8a4dba0969b4e7e0f877c36b862488b83030",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/heads/feat/illustrated-fighters",
+      "tip": "19cfa9bc2099c20158742576c21f252f898249ab",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/heads/feat/overhead-actors",
+      "tip": "9f35c8305de1f303540d9cdc81f8507c0b7da8e9",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/heads/feat/overhead-core",
+      "tip": "4aac2629bbd8a53f463d82841b5634d91d1259f9",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/heads/feat/overhead-input",
+      "tip": "5162c3422a2915b5c719844946341b8d78902984",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/heads/feat/overhead-world",
+      "tip": "9f35c8305de1f303540d9cdc81f8507c0b7da8e9",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/heads/feat/phase1-runtime",
+      "tip": "aa8b1d0266644b03ca9077b939695db31fb94557",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/heads/feat/scrolling-world",
+      "tip": "52ac4b19c6bcec247f74b90ef5d5c8c984e6b220",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/heads/feat/sideview-image-workflow",
+      "tip": "a9a0f01c79d24e0e4cd001205ff300bfee9339f8",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/heads/fix/fighter-identity",
+      "tip": "fffd26d24416a3ec92975d1930ee8a388cda4403",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/heads/main",
+      "tip": "81c12a0ba0d4b118293299b693b3d70141171aba",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/docs/final-review",
+      "tip": "449ad95e0a6ae08e446abf6dd4d7e811f260ec5d",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/feat/arena-content",
+      "tip": "3d2970f5e5e70de45f30f467e3ebff4db74af0cd",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/feat/arena-fighter",
+      "tip": "e565260493f0f985f55686ed30b5d4bcf2f4ba19",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/feat/arena-forge",
+      "tip": "19eb57ac3221107cb4a4e77ff9ccedcb2dc8a2b2",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/feat/drawing-preparation",
+      "tip": "9d49df24f45be2250a74c5c75e7591341b507999",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/feat/enemy-counterplay",
+      "tip": "edcf8a4dba0969b4e7e0f877c36b862488b83030",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/feat/forge-no-dollar-cap",
+      "tip": "0304a5bbfdd75de31685b77eaffb83fe7c1b3fe9",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/feat/illustrated-fighters",
+      "tip": "19cfa9bc2099c20158742576c21f252f898249ab",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/feat/overhead-actors",
+      "tip": "6af82bdb54c1ed31adf224289037544bc442a90f",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/feat/overhead-core",
+      "tip": "4aac2629bbd8a53f463d82841b5634d91d1259f9",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/feat/overhead-input",
+      "tip": "bd7f7122ead2b451ad32e6caf73fd37de05abb94",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/feat/overhead-world",
+      "tip": "be091ed845f0f72ba834cec31687c010063c46d2",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/feat/phase1-content",
+      "tip": "af2cb4c9cd1ed25eb34a40e96d056f29cd2c245d",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/feat/phase1-polish",
+      "tip": "b0c2f774909b3ddd7582f1711742b26466c6286b",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/feat/phase1-runtime",
+      "tip": "aa8b1d0266644b03ca9077b939695db31fb94557",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/feat/phase1-ui",
+      "tip": "75cba5800c3a8bd12ec0f69f43f2df964278b25f",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/feat/scrolling-world",
+      "tip": "52ac4b19c6bcec247f74b90ef5d5c8c984e6b220",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/feat/sideview-candidate-conversion",
+      "tip": "1cf70c872325c491c5d0e117f54aeeaa520e96e1",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/feat/sideview-image-workflow",
+      "tip": "a9a0f01c79d24e0e4cd001205ff300bfee9339f8",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/feat/story-player-guide",
+      "tip": "7d20e3889bfb29de1d7b8a2da00507d177e879d6",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/fix/fighter-identity",
+      "tip": "fffd26d24416a3ec92975d1930ee8a388cda4403",
+      "ancestor_of_integrated_head": true
+    },
+    {
+      "ref": "refs/remotes/origin/main",
+      "tip": "27eee9eea9111b39744fa3cf0cd2703e84fa1ddb",
+      "ancestor_of_integrated_head": true
+    }
+  ],
+  "history_policy": "No force push, deletion or rewrite. Superseded overhead history merged with current tree retained; original 2D Story remains active.",
+  "test_suites_run": false
+}

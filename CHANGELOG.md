@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-25T07:19:34+05:30 — Integrate all branch histories and prepare final review
+
+- Normally merged final-review/player-guide/no-cap histories and the retained sideview prompt packet. Integrated superseded overhead ancestry with the current 2D tree retained because its old HUD/session APIs conflict; no branches deleted or histories rewritten.
+- Added a prominent final-review link and real public gameplay gallery, source/package distinction and current illustrated/attack-role review notes. Expanded physical-role keywords for rogue/ninja/brawler classes so they cannot keep incompatible ranged kits.
+- Validation: read-only ancestry/diff review; all fetched branch tips are ancestors. No test sweep or build repeated. Actual private illustrated wizard preview/atlas/combat and runtime Frost were inspected earlier in this change; private art excluded from publication.
+
 ### 2026-10-25T07:16:10+05:30 — Preserve detailed fighter illustrations and correct attack roles
 
 - New generation mode requests one complete illustrated character and uses it for the actual atlas/portrait, bypassing starter limb envelopes. Added fixed/hash-bound transparent cutout import, editable Master masks/pivots, 32 authored whole-body poses, staged provenance and packaged helper closure; old jobs remain compatible.

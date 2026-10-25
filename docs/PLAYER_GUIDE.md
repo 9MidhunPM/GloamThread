@@ -241,7 +241,7 @@ There is **no local total or per-character dollar cap**. Earlier allowance setti
 
 Conversion and acceptance are separate. A successful conversion creates a preview; it does not by itself install the fighter. Cancelling or rejecting a candidate preserves accepted fighters.
 
-A swordsman concept can suggest **Stone**; you can override that suggestion before generating. Choose the ability family for the attacks you want, rather than assuming a drawn weapon creates a seventh combat family.
+A swordsman/spearman concept uses melee kits such as **Stone**; a wizard uses projectile kits such as **Frost**. You can select a compatible family before generating. These remain the six game-owned combat families.
 
 ### Recover a returned image layout locally
 

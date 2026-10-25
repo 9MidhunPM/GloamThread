@@ -6,6 +6,8 @@ The game uses fullscreen 1920×1080 presentation: a 640×360 pixel shared view, 
 
 ## Play
 
+**[Final review: real game gallery and quick demo](docs/FINAL_REVIEW.md)**
+
 [Illustrated player guide: launch, modes, controls and fighter creation](docs/PLAYER_GUIDE.md). Use the source command below for the latest name/weapon and Story Mode changes.
 
 [Download the Linux arena playtest](https://github.com/9MidhunPM/GloamThread/releases/tag/v0.4.0-counterplay), or run the source with Godot:
@@ -68,3 +70,13 @@ Rebuild original arena media with `python3 -m tools.forge.content --build --vali
 Package a clean checkout with `python3 tools/package_arena.py`; the [Linux play guide](docs/ARENA_DEMO.md) covers the optional authoring helper.
 
 The previous eight-room game and its v0.1 release remain preserved in Git/history and [release evidence](evidence/release/README.md); its tests/performance do not prove the new wave game. Event guidance: **Devin Hack Kochi** in [RULES.md](RULES.md).
+
+## Real gameplay gallery
+
+![Actual home menu with Arena, Story and Forge.](docs/screenshots/title.png)
+
+![Actual scrolling co-op split view.](docs/screenshots/arena-split.png)
+
+![Actual restored two-player Story entry.](docs/screenshots/story-play.png)
+
+Capture versions and controlled states are recorded in the [final review gallery](docs/FINAL_REVIEW.md); private player artwork is excluded.

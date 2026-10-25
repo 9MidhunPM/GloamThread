@@ -7,7 +7,7 @@ Start here for a quick look at the playable modes, a short demo route and real s
 Run this from any terminal directory with **Godot 4.7.2 standard**:
 
 ```sh
-godot --path "/home/midhun/Coading/Gloamthread"
+godot --path "/home/midhun/Coading/Gloamthread" --display-driver wayland
 ```
 
 After a fresh checkout, import once if resources are missing:
@@ -24,7 +24,7 @@ godot --headless --path "/home/midhun/Coading/Gloamthread" --editor --import --q
 | --- | --- |
 | **SOLO RUN / LOCAL CO-OP** | A scrolling wave fighter with personal coins/upgrades, four bosses, exploration, caches, dynamic shared/split views and optional endless. |
 | **STORY MODE (2 PLAYERS)** | The original Tavi/Neri adventure: eight rooms, paired-anchor bridges, the Spoolwarden, shared Threadstep and a checkpoint-based journey home. |
-| **CHARACTER FORGE** | Draw/import, review a name/body/ability/theme proposal, generate, correct cached crops, preview animation and accept an Arena fighter. |
+| **CHARACTER FORGE** | Draw/import, review name/body/compatible ability/theme, generate a full illustrated character, correct/import a retained cutout, preview and accept. |
 
 Built-in and accepted fighters play offline. Forge has **no local total or per-character dollar cap**; explicit model actions still use your API account. Request estimates, uncertain outcomes, cache checks, cancellation and protection against automatic retries remain. Local crop/mask/pivot rebakes make no new model request.
 
@@ -107,3 +107,13 @@ Controlled real-engine counterplay capture. Leave the committed lane and punish 
 - [Creator recovery evidence](../evidence/creator-recovery/README.md): local conversion/acceptance recovery, with private artwork excluded from publication.
 
 Documentation captures select production UI states to make them readable. Existing automated routes and historical campaign results keep their original version/scope. Physical controllers, keyboard hardware rollover, fresh-human balance, listening quality and other hardware remain separate acceptance questions. Confirm the final integration/package identity in the status and release records before treating a downloaded build as this exact source.
+
+## Latest illustrated fighter changes
+
+New generations use one complete detailed transparent character as the actual playable atlas and portrait. Thirty-two whole-body cutout poses preserve the design; older limb rigs remain compatible. **Use detailed character cutout PNG** imports an approved transparent design into a fresh local correction draft. The user-preferred wizard was recovered from its retained background, baked/accepted locally and inspected in the actual creator and combat; its native session/fighter both resolve to Frost. The one built-in cutout edit is separate from user-API accounting, which was unchanged. Private wizard art is intentionally excluded from this public gallery. [Sanitized recovery record](../evidence/illustrated-fighters/README.md).
+
+Magic identities use projectile kits, and physical melee weapon identities use melee kits. Compatible manual selections remain available; legacy named fighters are corrected at runtime without rewriting their accepted files. Broad tests/builds and fresh image-model generation were skipped under the user's time constraint.
+
+## Final branch integration
+
+All fetched local/origin branch tips are now included in main ancestry. The final-review merge incorporated original no-cap and player-guide histories; the sideview candidate branch retained its unique original prompt document. The superseded overhead branch was merged explicitly with the current tree retained: its incompatible HUD/session APIs were not reactivated, and its complete history remains available in Git. The current playable product stays the 2D Arena and restored original Story modes. No branch deletion, force push or history rewrite occurred. [Final ancestry snapshot](../evidence/final-review/final-integration.json).
