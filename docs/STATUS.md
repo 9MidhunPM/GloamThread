@@ -35,3 +35,7 @@ The creator suite passes 173 assertions. The real retained drawing completed nat
 ## Remaining acceptance
 
 Physical controllers/hotplug, keyboard rollover, audio listening, fresh-human balance/enjoyment/clear time and other hardware/distributions remain unverified. No organizer submission has been made. See [submission record](../SUBMISSION.md) and **Devin Hack Kochi** [event guidance](../RULES.md).
+
+## Latest source: Story Mode
+
+The arena title now offers **STORY MODE (2 PLAYERS)** for the retained Tavi/Neri eight-room campaign. Story title offers **Back to arena**; story pause offers **Save and return to arena**. Each mode restores its logical resolution; shared inputs/audio persist while scene replacement frees the previous world. Existing save/settings paths are preserved. Tests/import/build were skipped at user request; current source must be restarted, and the v0.4 package predates this wiring.

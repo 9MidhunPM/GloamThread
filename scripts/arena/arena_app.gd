@@ -49,6 +49,7 @@ var _result_recorded: bool = false
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	process_physics_priority = 200
+	get_window().content_scale_size = Vector2i(1920, 1080)
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	get_tree().auto_accept_quit = false
 	DisplayServer.window_set_title("Gloamthread - Wave Arena")
@@ -138,17 +139,27 @@ func _show_title() -> void:
 	_label("GLOAMTHREAD", Vector2(96, 149), Vector2(1600, 110), 80, INK)
 	_label("WEAVE. FIGHT. REPEAT.", Vector2(106, 277), Vector2(900, 52), 30, GOLD)
 	_label("Draw your fighter. Explore a changing world.\nTwenty waves. Hidden trails. Bring a friend.", Vector2(108, 355), Vector2(900, 100), 24, MUTED)
-	_button("SOLO RUN", Rect2(108, 502, 650, 80), func() -> void: _show_lobby(1), true)
-	_button("LOCAL CO-OP", Rect2(108, 596, 650, 80), func() -> void: _show_lobby(2))
-	_button("CHARACTER FORGE", Rect2(108, 690, 650, 80), func() -> void: _open_creator(0))
-	_button("SETTINGS & CONTROLS", Rect2(108, 784, 650, 72), _show_settings)
-	_button("QUIT", Rect2(108, 870, 650, 64), func() -> void: get_tree().quit())
+	_button("SOLO RUN", Rect2(108, 502, 650, 64), func() -> void: _show_lobby(1), true)
+	_button("LOCAL CO-OP", Rect2(108, 578, 650, 64), func() -> void: _show_lobby(2))
+	_button("STORY MODE (2 PLAYERS)", Rect2(108, 654, 650, 64), _open_story)
+	_button("CHARACTER FORGE", Rect2(108, 730, 650, 64), func() -> void: _open_creator(0))
+	_button("SETTINGS & CONTROLS", Rect2(108, 806, 650, 64), _show_settings)
+	_button("QUIT", Rect2(108, 882, 650, 56), func() -> void: get_tree().quit())
 	_preview(selected[0], Rect2(1000, 330, 480, 480), false)
 	_preview(selected[1], Rect2(1390, 410, 390, 390), true)
 	_label("PERSONAL BUILDS\nSHARED MAYHEM", Vector2(1080, 820), Vector2(680, 110), 36, INK)
 	_label("20 WAVES + ENDLESS  |  MADE FROM YOUR DRAWINGS", Vector2(106, 994), Vector2(1690, 40), 20, MUTED)
 	AudioDirector.play_music("arena")
 	_focus_menu()
+
+
+func _open_story() -> void:
+	get_tree().paused = false
+	InputRouter.flush()
+	AudioDirector.stop_cues()
+	var error := get_tree().change_scene_to_file("res://scenes/app/boot.tscn")
+	if error != OK:
+		_toast("Story Mode could not open. Please install the complete game. (%s)" % error_string(error))
 
 
 func _show_lobby(count: int = 0) -> void:

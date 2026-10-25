@@ -26,6 +26,10 @@ var _reconnect_return: String = "title"
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	# The original campaign owns two480x360 views; the arena restores its own
+	# logical size on entry. Window/fullscreen preferences and saves stay intact.
+	get_window().content_scale_size = Vector2i(960, 360)
+	DisplayServer.window_set_title("Gloamthread - Story Mode")
 	get_tree().auto_accept_quit = false
 	process_physics_priority = 200
 	var loaded := settings_store.load_settings()
@@ -130,9 +134,9 @@ func _show_title(discard_unsaved: bool = false) -> void:
 	get_tree().paused = false
 	var saved := saves.load_campaign()
 	var can_continue: bool = saved.status == "ok" or saved.status == "backup_available"
-	_show("title", "Gloamthread: Two Ends", "Two couriers. Two views. One road home.\nA local adventure for two players.", [
+	_show("title", "Gloamthread: Story Mode", "Two couriers. Two views. One road home.\nA local adventure for two players.", [
 		_row("new", "New journey"), _row("continue", "Continue", str(saved.message), can_continue),
-		_row("settings", "Settings and controls"), _row("quit", "Quit")])
+		_row("settings", "Settings and controls"), _row("arena", "Back to arena"), _row("quit", "Quit")])
 	AudioDirector.play_music("exploration")
 
 
@@ -228,7 +232,7 @@ func _session_mode(mode: String, owner: int) -> void:
 
 
 func _show_pause() -> void:
-	_show("pause", "The thread is held", session.objective() + ("\nUnsaved: " + session.last_save_error if not session.last_save_error.is_empty() else ""), [_row("resume", "Resume"), _row("map", "Map"), _row("settings", "Settings and controls"), _row("save", "Save checkpoint progress"), _row("checkpoint", "Return together to checkpoint"), _row("title", "Return to title")])
+	_show("pause", "The thread is held", session.objective() + ("\nUnsaved: " + session.last_save_error if not session.last_save_error.is_empty() else ""), [_row("resume", "Resume"), _row("map", "Map"), _row("settings", "Settings and controls"), _row("save", "Save checkpoint progress"), _row("checkpoint", "Return together to checkpoint"), _row("title", "Return to title"), _row("arena", "Save and return to arena")])
 
 
 func _show_map() -> void:
@@ -330,6 +334,7 @@ func _on_action(action: String, payload: Variant = null) -> void:
 		_show_settings()
 		return
 	match action:
+		"arena": _return_to_arena()
 		"quit", "retry_quit": _quit_requested()
 		"discard_quit": get_tree().quit()
 		"retry_title": _show_title()
@@ -390,6 +395,20 @@ func _on_action(action: String, payload: Variant = null) -> void:
 			AudioDirector.stop_cues()
 			_show_title()
 		"back", "cancel": _back()
+
+
+func _return_to_arena() -> void:
+	if is_instance_valid(session):
+		# Reuse the campaign's existing save/error/discard flow before leaving.
+		_show_title()
+		if is_instance_valid(session):
+			return
+	get_tree().paused = false
+	InputRouter.flush()
+	AudioDirector.stop_cues()
+	var error := get_tree().change_scene_to_file("res://scenes/arena/boot.tscn")
+	if error != OK:
+		_notify("Arena mode could not open. (%s)" % error_string(error))
 
 
 func _back() -> void:
