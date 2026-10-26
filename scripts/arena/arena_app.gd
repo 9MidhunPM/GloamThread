@@ -8,6 +8,9 @@ const INK := Color("eee9d9")
 const MUTED := Color("9caeb3")
 const GOLD := Color("f1bc68")
 const PANEL := Color("14242e")
+## Actions a player may remap. Pause stays fixed so a menu is always reachable.
+const REMAP_ACTIONS: Array[int] = [Action.LEFT, Action.RIGHT, Action.UP, Action.DOWN, Action.JUMP, Action.ATTACK, Action.SPECIAL, Action.DASH, Action.INTERACT]
+const ACTION_NAMES := {Action.LEFT: "MOVE LEFT", Action.RIGHT: "MOVE RIGHT", Action.UP: "UP / MENU UP", Action.DOWN: "DOWN / DROP", Action.JUMP: "JUMP", Action.ATTACK: "ATTACK", Action.SPECIAL: "SPECIAL", Action.DASH: "DODGE", Action.INTERACT: "REVIVE / SHOP", Action.PAUSE: "PAUSE"}
 
 var catalog: ArenaCatalog
 var library := FighterLibrary.new()
@@ -45,6 +48,14 @@ var _toast_ticks: int = 0
 var _ticks: int = 0
 var _creation_return: String = "title"
 var _result_recorded: bool = false
+var _speed_applied: bool = false
+var _remap_slot: int = -1
+var _remap_action: int = 0
+var _announcement: String = ""
+var _fresh_screen: bool = true
+var _hint_label: Label
+var _voice: String = ""
+var _downed_spoken: Array[bool] = [false, false]
 
 
 func _ready() -> void:
@@ -111,15 +122,45 @@ func _apply_settings() -> void:
 	if is_instance_valid(session):
 		session.reduced_flash = settings.reduced_flash
 		session.reduced_shake = settings.reduced_shake
+		session.damage_taken_scale = settings.damage_taken
+		session.game_speed = settings.game_speed
+		session.attack_toggle = settings.attack_toggle.duplicate()
+		session.apply_assists()
+	_apply_game_speed()
+
+
+## Slow-motion assist scales Engine time only while a run exists, so fixed
+## 60 Hz ticks keep their meaning. Untouched at 100% so showcase tools keep
+## control of their own viewing speed.
+func _apply_game_speed() -> void:
+	var wanted := float(settings.game_speed) if is_instance_valid(session) else 1.0
+	if wanted < 1.0:
+		Engine.time_scale = wanted
+		_speed_applied = true
+	elif _speed_applied:
+		Engine.time_scale = 1.0
+		_speed_applied = false
+
+
+func _exit_tree() -> void:
+	if _speed_applied:
+		Engine.time_scale = 1.0
+		_speed_applied = false
 
 
 func _clear_menu(kind: String, flush_inputs: bool = true) -> void:
 	for node in overlay.get_children():
 		overlay.remove_child(node)
 		node.queue_free()
+	# Rebuilding the same screen (a changed setting) keeps the cursor and skips
+	# the screen announcement, so keyboard and narration users keep their place.
+	_fresh_screen = kind != screen
+	if _fresh_screen:
+		menu_cursor = 0
+		_announcement = ""
 	screen = kind
 	menu_buttons.clear()
-	menu_cursor = 0
+	_hint_label = null
 	if flush_inputs:
 		InputRouter.flush()
 
@@ -132,9 +173,11 @@ func _show_title() -> void:
 		world_view = null
 		world_container = null
 		presentation = null
+	_apply_game_speed()
 	if is_instance_valid(hud):
 		hud.free()
 	_clear_menu("title")
+	_announce("Gloamthread main menu")
 	_background(selected[0])
 	_label("LOCAL ARCADE  /  1-2 PLAYERS", Vector2(106, 91), Vector2(900, 36), 22, GOLD)
 	_label("GLOAMTHREAD", Vector2(96, 149), Vector2(1600, 110), 80, INK)
@@ -181,10 +224,18 @@ func _show_lobby(count: int = 0) -> void:
 		_button("CHANGE FIGHTER", Rect2(x + 34, 600, 350, 64), _cycle_character.bind(slot))
 		_button("DRAW / IMPORT", Rect2(x + 412, 600, 350, 64), _open_creator.bind(slot))
 		var source := InputRouter.source_of(slot)
-		_button("P%d INPUT: %s" % [slot + 1, source.short_label() if source != null else "NONE"], Rect2(x + 34, 690, 728, 64), _cycle_source.bind(slot))
-	_label("P1  WASD / Space jump / F attack / G special / Shift dodge / E revive\nP2  Arrows / . jump / , attack / / special / ' dodge / M revive\nGamepad  Left stick / A jump / X attack / B special / RB dodge / Y revive", Vector2(135, 852), Vector2(1270, 115), 19, MUTED)
+		_option("P%d INPUT: %s" % [slot + 1, source.short_label() if source != null else "NONE"], Rect2(x + 34, 690, 728, 64), _cycle_source.bind(slot), "Cycles keyboard left, keyboard right and connected gamepads for player %d." % (slot + 1))
+	var lines: PackedStringArray = []
+	for slot in roster_size:
+		lines.append(_controls_line(slot))
+	lines.append("Remap keys, toggle-attack and assists: Settings & Controls.")
+	_label("\n".join(lines), Vector2(135, 852), Vector2(1270, 115), 19, MUTED)
 	_button("START RUN", Rect2(1420, 855, 365, 84), _begin_run, true)
 	_button("BACK", Rect2(1420, 955, 365, 60), _show_title)
+	var names: PackedStringArray = []
+	for slot in roster_size:
+		names.append("Player %d: %s" % [slot + 1, selected[slot].name])
+	_announce("Choose your fighters. " + ". ".join(names))
 	_focus_menu()
 
 
@@ -198,6 +249,13 @@ func _cycle_character(slot: int) -> void:
 
 
 func _cycle_source(slot: int) -> void:
+	# Solo: the idle P2 slot must not stop P1 choosing the right-hand
+	# (arrow) keyboard side. P2 temporarily releases its source and takes
+	# whichever keyboard side remains afterwards.
+	var idle_source: DeviceSource = InputRouter.source_of(1) if roster_size == 1 and slot == 0 else null
+	var idle_bindings: Bindings = InputRouter.bindings_of(1) if idle_source != null else null
+	if idle_source != null:
+		InputRouter.clear(1)
 	var choices := InputRouter.available_sources(slot)
 	var current := InputRouter.source_of(slot)
 	var index := -1
@@ -206,6 +264,14 @@ func _cycle_source(slot: int) -> void:
 			index = i
 	if not choices.is_empty():
 		InputRouter.assign(slot, choices[(index + 1) % choices.size()])
+	if idle_source != null:
+		var free := InputRouter.available_sources(1)
+		var restore: DeviceSource = idle_source if free.any(func(item: DeviceSource) -> bool: return item.conflicts_with(idle_source)) else null
+		for candidate in free:
+			if restore == null and candidate.is_keyboard():
+				restore = candidate
+		if restore != null:
+			InputRouter.assign(1, restore, idle_bindings if idle_bindings != null and idle_bindings.kind == restore.kind else null)
 	_persist_settings()
 	if screen == "reconnect":
 		_show_reconnect()
@@ -243,8 +309,8 @@ func _begin_run(seed: int = 0) -> void:
 	session = ArenaRunSession.new()
 	session.configure(catalog, bundles_for_run, seed)
 	session.font = font
-	session.reduced_flash = settings.reduced_flash
-	session.reduced_shake = settings.reduced_shake
+	_apply_settings()
+	_downed_spoken = [false, false]
 	session.phase_changed.connect(_phase_changed)
 	session.changed.connect(_run_changed)
 	session.notice.connect(_toast)
@@ -299,6 +365,10 @@ func _phase_changed(value: String) -> void:
 		_show_results()
 	elif value in ["countdown", "combat", "clear"]:
 		_clear_menu("playing")
+		if value == "countdown":
+			_speak("Wave %d%s" % [session.wave, " endless" if session.endless else ""])
+		elif value == "clear":
+			_speak("Wave cleared")
 	_update_hud()
 
 
@@ -340,6 +410,7 @@ func _show_shop(reset: bool = true) -> void:
 			var description := _label(str(offer.description), Vector2(18, 43), Vector2(716, 35), 18, MUTED, button)
 			description.max_lines_visible = 2
 			button.disabled = state.coins < int(offer.price)
+			button.accessibility_name = "%s rank %d. %d coins. %s" % [offer.name, int(offer.rank), int(offer.price), offer.description]
 			buttons.append(button)
 			row += 1
 		var heal := _button("HEAL +35% / 5C", Rect2(x + 28, 730, 370, 54), _shop_purchase.bind(slot, "heal"), false, false)
@@ -355,6 +426,11 @@ func _show_shop(reset: bool = true) -> void:
 		_label("Own Up/Down selects; Attack/Jump confirms.
 Explore freely. Everyone must Ready.", Vector2(x + 6, 980), Vector2(810, 62), 19, MUTED)
 	_focus_shop()
+	if reset:
+		var wallets: PackedStringArray = []
+		for slot in roster_size:
+			wallets.append("Player %d has %d coins" % [slot + 1, session.player_states[slot].coins])
+		_speak("Wave %d cleared. Shop open. %s. Up and down choose, attack buys." % [session.wave, ". ".join(wallets)])
 
 
 func _shop_purchase(slot: int, id: String) -> void:
@@ -373,6 +449,7 @@ func _shop_ready(slot: int) -> void:
 func _show_pause() -> void:
 	get_tree().paused = true
 	_clear_menu("pause")
+	_announce("Paused")
 	_shade()
 	_panel(Rect2(555, 245, 810, 615))
 	_label("THREAD HELD", Vector2(615, 302), Vector2(690, 80), 48, INK)
@@ -385,6 +462,7 @@ func _show_pause() -> void:
 
 func _confirm_end_run() -> void:
 	_clear_menu("abandon")
+	_announce("End this run? Run power resets. Your saved fighters stay in the library.")
 	_shade()
 	_panel(Rect2(555, 300, 810, 470))
 	_label("END THIS RUN?", Vector2(615, 350), Vector2(700, 80), 40, INK)
@@ -410,18 +488,40 @@ func _resume() -> void:
 
 func _show_settings() -> void:
 	_clear_menu("settings")
+	_announce("Settings and controls. Up and down move. Left and right change values.")
 	if not is_instance_valid(session):
 		_background(selected[0])
 	_shade()
-	_panel(Rect2(320, 150, 1280, 780))
-	_label("SETTINGS & CONTROLS", Vector2(380, 195), Vector2(1160, 75), 42, INK)
-	_button("FULLSCREEN: %s  /  F11" % ("ON" if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN else "OFF"), Rect2(380, 310, 1160, 70), _toggle_fullscreen)
-	_button("MASTER VOLUME: %d%%" % roundi(settings.master_volume * 100), Rect2(380, 400, 1160, 70), _cycle_volume)
-	_button("REDUCED FLASH: " + ("ON" if settings.reduced_flash else "OFF"), Rect2(380, 490, 1160, 70), _toggle_setting.bind("reduced_flash"))
-	_button("REDUCED SHAKE: " + ("ON" if settings.reduced_shake else "OFF"), Rect2(380, 580, 1160, 70), _toggle_setting.bind("reduced_shake"))
-	_label("P1  WASD / Space / F / G / Shift / E\nP2  Arrows / . / , / / / ' / M\nGamepad  Stick / A / X / B / RB / Y\nMove / Jump / Attack / Special / Dodge / Revive", Vector2(384, 680), Vector2(1120, 150), 22, MUTED)
-	_button("BACK", Rect2(1160, 820, 380, 65), func() -> void: _show_pause() if is_instance_valid(session) else _show_title(), true)
+	_panel(Rect2(250, 100, 1420, 880))
+	_label("SETTINGS & CONTROLS", Vector2(300, 128), Vector2(1320, 70), 42, INK)
+	_label("SIGHT & SOUND", Vector2(300, 214), Vector2(640, 36), 22, GOLD)
+	_label("ASSIST & CONTROLS", Vector2(980, 214), Vector2(640, 36), 22, GOLD)
+	var left := func(row: int) -> Rect2: return Rect2(300, 260 + row * 72, 640, 60)
+	var right := func(row: int) -> Rect2: return Rect2(980, 260 + row * 72, 640, 60)
+	var fullscreen := DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
+	_option("FULLSCREEN: %s" % _on_off(fullscreen), left.call(0), _toggle_fullscreen, "Switch between fullscreen and a window. F11 also works anywhere.")
+	var volumes := [["master_volume", "MASTER VOLUME", "Overall loudness."], ["music_volume", "MUSIC VOLUME", "Background music only."], ["sfx_volume", "EFFECTS VOLUME", "Hits, warnings and menu sounds."]]
+	for index in volumes.size():
+		var row: Array = volumes[index]
+		_option("%s: %d%%" % [row[1], roundi(float(settings[row[0]]) * 100)], left.call(1 + index), _adjust_volume.bind(1, row[0], true), str(row[2]) + " Left and right change it in 10% steps.", _adjust_volume.bind(row[0], false))
+	_option("REDUCED FLASH: %s" % _on_off(settings.reduced_flash), left.call(4), _toggle_setting.bind("reduced_flash"), "Softer, fewer hit sparks and no blinking invulnerability.")
+	_option("REDUCED SHAKE: %s" % _on_off(settings.reduced_shake), left.call(5), _toggle_setting.bind("reduced_shake"), "Removes camera shake from hits and boss slams.")
+	_option("HIGH CONTRAST: %s" % _on_off(settings.high_contrast), left.call(6), _toggle_setting.bind("high_contrast"), "Brighter text, solid backdrops and thick borders on menus and the HUD.")
+	_option("READ MENUS ALOUD: %s" % _on_off(settings.narration), right.call(0), _toggle_narration, "Speaks menus, shop items, waves and notices with your system text-to-speech voice.")
+	_option("DAMAGE TAKEN: %d%%" % roundi(float(settings.damage_taken) * 100), right.call(1), _step_setting.bind(1, "damage_taken", SettingsRepository.DAMAGE_TAKEN_STEPS), "Assist: enemies deal less damage to every player. Runs are marked as assisted.", _step_setting.bind("damage_taken", SettingsRepository.DAMAGE_TAKEN_STEPS))
+	_option("GAME SPEED: %d%%" % roundi(float(settings.game_speed) * 100), right.call(2), _step_setting.bind(1, "game_speed", SettingsRepository.GAME_SPEED_STEPS), "Assist: slows the whole fight so there is more time to react. Runs are marked as assisted.", _step_setting.bind("game_speed", SettingsRepository.GAME_SPEED_STEPS))
+	for slot in 2:
+		var toggle: bool = settings.attack_toggle[slot]
+		_option("P%d ATTACK: %s" % [slot + 1, "PRESS TO TOGGLE" if toggle else "HOLD"], right.call(3 + slot), _toggle_attack_mode.bind(slot), "Toggle: press Attack once to keep attacking, press again to stop. No holding needed.")
+	for slot in 2:
+		_option("P%d CONTROLS: REMAP KEYS" % (slot + 1), right.call(5 + slot), _show_remap.bind(slot), "Choose new keys or buttons for player %d. %s" % [slot + 1, _controls_line(slot)])
+	_hint_label = _label("", Vector2(300, 776), Vector2(1320, 90), 22, INK)
+	_button("BACK", Rect2(1290, 890, 330, 64), func() -> void: _show_pause() if is_instance_valid(session) else _show_title(), true)
 	_focus_menu()
+
+
+func _on_off(value: bool) -> String:
+	return "ON" if value else "OFF"
 
 
 func _toggle_fullscreen() -> void:
@@ -430,18 +530,186 @@ func _toggle_fullscreen() -> void:
 		_show_settings()
 
 
-func _cycle_volume() -> void:
-	settings.master_volume = fmod(float(settings.master_volume) + 0.1, 1.1)
-	_apply_settings()
-	_persist_settings()
-	_show_settings()
+## Confirm/click raises the level and wraps to 0%; Left/Right clamp.
+func _adjust_volume(direction: int, key: String, wrap: bool = false) -> void:
+	var value := snappedf(float(settings[key]) + 0.1 * direction, 0.1)
+	settings[key] = 0.0 if wrap and value > 1.0 else clampf(value, 0.0, 1.0)
+	_settings_changed()
+
+
+func _step_setting(direction: int, key: String, steps: Array) -> void:
+	var index := maxi(0, steps.find(float(settings[key])))
+	settings[key] = steps[posmod(index + direction, steps.size())]
+	_settings_changed()
 
 
 func _toggle_setting(id: String) -> void:
 	settings[id] = not settings[id]
+	if id == "high_contrast" and is_instance_valid(session):
+		_build_hud()
+	_settings_changed()
+
+
+func _toggle_attack_mode(slot: int) -> void:
+	settings.attack_toggle[slot] = not settings.attack_toggle[slot]
+	_settings_changed()
+
+
+func _toggle_narration() -> void:
+	if not settings.narration and not _tts_ready():
+		_toast("No text-to-speech voice found. Install speech-dispatcher with a voice such as espeak-ng, then restart.")
+		return
+	settings.narration = not settings.narration
+	_settings_changed()
+
+
+func _settings_changed() -> void:
 	_apply_settings()
 	_persist_settings()
 	_show_settings()
+
+
+func _show_remap(slot: int) -> void:
+	var source := InputRouter.source_of(slot)
+	if source == null or InputRouter.bindings_of(slot) == null:
+		_toast("Assign an input to P%d in the lobby before remapping." % (slot + 1))
+		return
+	_clear_menu("remap_%d" % slot)
+	_announce("Player %d controls, %s. Choose an action, then press its new key or button." % [slot + 1, source.display_name()])
+	if not is_instance_valid(session):
+		_background(selected[0])
+	_shade()
+	_panel(Rect2(250, 100, 1420, 880))
+	_label("P%d CONTROLS  /  %s" % [slot + 1, source.display_name().to_upper()], Vector2(300, 128), Vector2(1320, 70), 36, INK)
+	var bindings := InputRouter.bindings_of(slot)
+	for index in REMAP_ACTIONS.size():
+		var action := REMAP_ACTIONS[index]
+		var column := 0 if index < 5 else 1
+		var rect := Rect2(300 + column * 680, 230 + (index - column * 5) * 72, 640, 60)
+		_option("%s: %s" % [ACTION_NAMES[action], _labels_for(bindings, action)], rect, _begin_capture.bind(slot, action), "Select, then press the new %s control on this player's input." % str(ACTION_NAMES[action]).to_lower())
+	if bindings.kind == DeviceSource.Kind.GAMEPAD:
+		_option("STICK DEADZONE: %d%%" % roundi(bindings.deadzone * 100), Rect2(980, 518, 640, 60), _adjust_deadzone.bind(1, slot), "How far the stick moves before it counts. Raise it for drifting sticks or unsteady hands.", _adjust_deadzone.bind(slot))
+	_option("RESET P%d TO DEFAULTS" % (slot + 1), Rect2(980, 590, 640, 60), _reset_bindings.bind(slot), "Restore the original layout for this input.")
+	_label("Pause stays on %s. Keys used by another action, or by the other keyboard player, are refused so nobody loses a control." % _labels_for(bindings, Action.PAUSE), Vector2(300, 676), Vector2(1320, 80), 20, MUTED)
+	_hint_label = _label("", Vector2(300, 776), Vector2(1320, 90), 22, INK)
+	_button("BACK", Rect2(1290, 890, 330, 64), _show_settings, true)
+	_focus_menu()
+
+
+func _labels_for(bindings: Bindings, action: int) -> String:
+	var labels: PackedStringArray = []
+	for control: Variant in bindings.controls.get(action, []):
+		var single := Bindings.new()
+		single.kind = bindings.kind
+		single.controls = {action: [control]}
+		labels.append(single.prompt_label(action))
+	return " / ".join(labels) if not labels.is_empty() else "UNBOUND"
+
+
+func _begin_capture(slot: int, action: int) -> void:
+	_remap_slot = slot
+	_remap_action = action
+	var cursor := menu_cursor
+	_clear_menu("remap_wait")
+	menu_cursor = cursor
+	var gamepad := InputRouter.source_of(slot).is_gamepad()
+	var prompt := "Press the new %s %s for player %d.\n%s cancels." % [str(ACTION_NAMES[action]).to_lower(), "button" if gamepad else "key", slot + 1, "Start or Escape" if gamepad else "Escape"]
+	_shade()
+	_panel(Rect2(450, 330, 1020, 380))
+	_label("CHOOSE A CONTROL", Vector2(510, 370), Vector2(900, 70), 40, GOLD)
+	_label(prompt.to_upper(), Vector2(510, 460), Vector2(900, 120), 26, INK)
+	_button("CANCEL", Rect2(510, 600, 400, 70), _end_capture, false, false)
+	_speak("Choose a control. " + prompt)
+
+
+func _end_capture() -> void:
+	var slot := _remap_slot
+	_remap_slot = -1
+	# Treat the return as a rebuild of the same screen: cursor stays on the
+	# remapped action and narration speaks it without repeating the title.
+	screen = "remap_%d" % slot
+	_show_remap(slot)
+
+
+func _input(event: InputEvent) -> void:
+	if screen != "remap_wait" or _remap_slot < 0:
+		return
+	var source := InputRouter.source_of(_remap_slot)
+	var cancel: bool = event is InputEventKey and event.pressed and event.physical_keycode == KEY_ESCAPE
+	cancel = cancel or (source.is_gamepad() and event is InputEventJoypadButton and event.pressed and event.device == source.joy_id and event.button_index == JOY_BUTTON_START)
+	if cancel:
+		get_viewport().set_input_as_handled()
+		_end_capture()
+		return
+	var control: Variant = null
+	if source.is_keyboard() and event is InputEventKey and event.pressed and not event.echo and event.physical_keycode != KEY_F11:
+		control = int(event.physical_keycode)
+	elif source.is_gamepad() and event.device == source.joy_id:
+		if event is InputEventJoypadButton and event.pressed:
+			control = {"button": int(event.button_index)}
+		elif event is InputEventJoypadMotion and absf(event.axis_value) > 0.65:
+			control = {"axis": int(event.axis), "sign": 1 if event.axis_value > 0 else -1}
+	if control == null:
+		return
+	get_viewport().set_input_as_handled()
+	var message := assign_control(_remap_slot, _remap_action, control)
+	if not message.is_empty():
+		_toast(message)
+		return
+	_toast("%s set to %s for P%d." % [ACTION_NAMES[_remap_action], _labels_for(InputRouter.bindings_of(_remap_slot), _remap_action), _remap_slot + 1])
+	_end_capture()
+
+
+## Installs one control for an action using the same refusal rules as Story
+## Mode. Returns an empty string on success or a player-facing reason.
+func assign_control(slot: int, action: int, control: Variant) -> String:
+	var bindings := InputRouter.bindings_of(slot)
+	if bindings == null:
+		return "Assign an input before remapping."
+	for other: int in bindings.controls:
+		if other != action and control in bindings.controls[other]:
+			return "That control already does %s. Choose another." % str(ACTION_NAMES.get(other, "another action")).to_lower()
+	var partner := InputRouter.bindings_of(1 - slot)
+	if bindings.kind != DeviceSource.Kind.GAMEPAD and partner != null and partner.kind != DeviceSource.Kind.GAMEPAD:
+		for controls: Array in partner.controls.values():
+			if control in controls:
+				return "The other player already uses that key."
+	var next: Array = [control]
+	# A movement button keeps the analogue stick working alongside it.
+	if control is Dictionary and control.has("button") and action in [Action.LEFT, Action.RIGHT, Action.UP, Action.DOWN]:
+		for existing: Variant in bindings.controls.get(action, []):
+			if existing is Dictionary and existing.has("axis"):
+				next.append(existing)
+	bindings.controls[action] = next
+	InputRouter.set_bindings(slot, bindings)
+	_persist_settings()
+	return ""
+
+
+func _adjust_deadzone(direction: int, slot: int) -> void:
+	var bindings := InputRouter.bindings_of(slot)
+	bindings.deadzone = clampf(snappedf(bindings.deadzone + 0.05 * direction, 0.05), 0.05, 0.9)
+	InputRouter.set_bindings(slot, bindings)
+	_persist_settings()
+	_show_remap(slot)
+
+
+func _reset_bindings(slot: int) -> void:
+	InputRouter.set_bindings(slot, Bindings.defaults_for(InputRouter.source_of(slot).kind))
+	_persist_settings()
+	_toast("P%d controls restored to defaults." % (slot + 1))
+	_show_remap(slot)
+
+
+func _controls_line(slot: int) -> String:
+	var source := InputRouter.source_of(slot)
+	var bindings := InputRouter.bindings_of(slot)
+	if source == null or bindings == null:
+		return "P%d  no input assigned" % (slot + 1)
+	var move := "/".join([bindings.prompt_label(Action.LEFT), bindings.prompt_label(Action.RIGHT), bindings.prompt_label(Action.UP), bindings.prompt_label(Action.DOWN)])
+	if source.is_gamepad():
+		move += " or stick"
+	return "P%d %s  Move %s  Jump %s  Attack %s  Special %s  Dodge %s  Revive %s  Pause %s" % [slot + 1, source.short_label(), move, bindings.prompt_label(Action.JUMP), bindings.prompt_label(Action.ATTACK), bindings.prompt_label(Action.SPECIAL), bindings.prompt_label(Action.DASH), bindings.prompt_label(Action.INTERACT), bindings.prompt_label(Action.PAUSE)]
 
 
 func _persist_settings() -> void:
@@ -463,6 +731,7 @@ func _device_lost(slot: int, _source: DeviceSource) -> void:
 
 func _show_reconnect() -> void:
 	_clear_menu("reconnect")
+	_announce("Reconnect to continue. A controller disconnected.")
 	_shade()
 	_panel(Rect2(450, 230, 1020, 650))
 	_label("RECONNECT TO CONTINUE", Vector2(510, 280), Vector2(900, 80), 40, INK)
@@ -485,11 +754,13 @@ func _show_results() -> void:
 	_panel(Rect2(390, 180, 1140, 735))
 	_label("THE LOOM IS YOURS" if won else "ONE MORE THREAD?", Vector2(455, 245), Vector2(1010, 100), 52, GOLD)
 	var summary := session.summary()
-	var body := "WAVE %02d   /   BEST COMBO %d   /   %d:%02d\n\n" % [session.wave, session.best_combo, int(summary.seconds) / 60, int(summary.seconds) % 60]
+	var body := "WAVE %02d   /   BEST COMBO %d   /   %d:%02d\n" % [session.wave, session.best_combo, int(summary.seconds) / 60, int(summary.seconds) % 60]
+	body += ("ASSISTED RUN: %d%% DAMAGE TAKEN / %d%% SPEED\n\n" % [roundi(session.damage_taken_scale * 100), roundi(session.game_speed * 100)]) if session.assisted() else "\n"
 	for i in session.player_states.size():
 		var state := session.player_states[i]
 		body += "P%d  %s  |  %d KILLS  |  %d COINS SPENT\n\n" % [i + 1, selected[i].name, state.kills, state.spent]
 	_label(body, Vector2(460, 380), Vector2(1000, 250), 26, INK)
+	_announce(("Victory. The loom is yours. " if won else "Defeat. One more thread? ") + body.replace("|", ","))
 	if won:
 		_button("CONTINUE INTO ENDLESS", Rect2(460, 650, 1000, 80), _continue_endless, true)
 		_button("BANK THE WIN & RETURN", Rect2(460, 750, 1000, 70), _show_title)
@@ -537,7 +808,10 @@ func _physics_process(_delta: float) -> void:
 			_update_hud()
 	elif not menu_buttons.is_empty():
 		var command := InputRouter.snapshot(0)
-		if command.just_pressed(Action.DOWN) or command.just_pressed(Action.RIGHT):
+		var adjust: Callable = menu_buttons[menu_cursor].get_meta("adjust", Callable())
+		if adjust.is_valid() and (command.just_pressed(Action.LEFT) or command.just_pressed(Action.RIGHT)):
+			adjust.call(1 if command.just_pressed(Action.RIGHT) else -1)
+		elif command.just_pressed(Action.DOWN) or command.just_pressed(Action.RIGHT):
 			menu_cursor = (menu_cursor + 1) % menu_buttons.size()
 			_focus_menu()
 		elif command.just_pressed(Action.UP) or command.just_pressed(Action.LEFT):
@@ -561,9 +835,11 @@ func _poll_shop() -> void:
 		if command.just_pressed(Action.DOWN) or command.just_pressed(Action.RIGHT):
 			shop_cursor[slot] = (shop_cursor[slot] + 1) % shop_buttons[slot].size()
 			_focus_shop()
+			_speak_shop(slot)
 		elif command.just_pressed(Action.UP) or command.just_pressed(Action.LEFT):
 			shop_cursor[slot] = posmod(shop_cursor[slot] - 1, shop_buttons[slot].size())
 			_focus_shop()
+			_speak_shop(slot)
 		elif command.just_pressed(Action.JUMP) or command.just_pressed(Action.ATTACK) or command.just_pressed(Action.INTERACT):
 			var button: Button = shop_buttons[slot][shop_cursor[slot]]
 			if not button.disabled:
@@ -573,12 +849,53 @@ func _poll_shop() -> void:
 
 
 func _focus_menu() -> void:
+	menu_cursor = clampi(menu_cursor, 0, maxi(0, menu_buttons.size() - 1))
 	for i in menu_buttons.size():
 		var button := menu_buttons[i]
 		var active := i == menu_cursor
 		var primary: bool = button.get_meta("primary", false)
 		button.add_theme_stylebox_override("normal", _style(Color("efcf8d") if active else (GOLD if primary else PANEL), INK if active else (GOLD if primary else Color("39535a"))))
 		button.add_theme_color_override("font_color", Color("17212a") if active or primary else INK)
+	if menu_buttons.is_empty():
+		return
+	var focused := menu_buttons[menu_cursor]
+	var hint := str(focused.get_meta("hint", ""))
+	if is_instance_valid(_hint_label):
+		_hint_label.text = hint
+	var speech := "%s. %s" % [focused.text, hint] if not hint.is_empty() else focused.text
+	_speak(speech if _announcement.is_empty() else _announcement + ". " + speech)
+	_announcement = ""
+
+
+func _speak_shop(slot: int) -> void:
+	if slot < shop_buttons.size() and not shop_buttons[slot].is_empty():
+		var button: Button = shop_buttons[slot][shop_cursor[slot]]
+		_speak("Player %d. %s%s" % [slot + 1, button.accessibility_name, ". Not available" if button.disabled else ""])
+
+
+## Narration queues a screen title until the first focused item is spoken.
+func _announce(text: String) -> void:
+	if _fresh_screen:
+		_announcement = text
+
+
+func _tts_ready() -> bool:
+	if not DisplayServer.has_feature(DisplayServer.FEATURE_TEXT_TO_SPEECH):
+		return false
+	if _voice.is_empty():
+		var voices := DisplayServer.tts_get_voices_for_language(OS.get_locale_language())
+		if voices.is_empty():
+			for voice: Dictionary in DisplayServer.tts_get_voices():
+				voices.append(str(voice.get("id", "")))
+		_voice = voices[0] if not voices.is_empty() else ""
+	return not _voice.is_empty()
+
+
+## Optional OS text-to-speech for menus and notices; silent when disabled.
+func _speak(text: String) -> void:
+	if not settings.get("narration", false) or text.strip_edges().is_empty() or not _tts_ready():
+		return
+	DisplayServer.tts_speak(text.replace("\n", ". "), _voice, clampi(roundi(float(settings.master_volume) * 100), 10, 100), 1.0, 1.0, 0, true)
 
 
 func _focus_shop() -> void:
@@ -596,7 +913,11 @@ func _update_hud() -> void:
 	for slot in mini(_hud_labels.size(), session.fighters.size()):
 		var fighter: Node = session.fighters[slot]
 		var state := session.player_states[slot]
-		_hud_labels[slot].text = "P%d  %s   %d COINS\n%s" % [slot + 1, selected[slot].name, state.coins, "DOWNED - HOLD REVIVE NEARBY" if fighter.downed else "%d / %d HP" % [ceili(fighter.health), ceili(fighter.max_health)]]
+		_hud_labels[slot].text = "P%d  %s   %d COINS\n%s%s" % [slot + 1, selected[slot].name, state.coins, "DOWNED - HOLD REVIVE NEARBY" if fighter.downed else "%d / %d HP" % [ceili(fighter.health), ceili(fighter.max_health)], "   AUTO-ATTACK" if fighter.attack_toggle and fighter.auto_attacking and not fighter.downed else ""]
+		if fighter.downed != _downed_spoken[slot]:
+			_downed_spoken[slot] = fighter.downed
+			if fighter.downed:
+				_speak("Player %d is down. Partner, hold revive nearby." % (slot + 1))
 		_health_bars[slot].value = 100.0 * fighter.health / maxf(1, fighter.max_health)
 		_special_bars[slot].value = 100.0 * (1.0 - float(fighter.special_ticks) / maxf(1, float(fighter.stats.special_cooldown)))
 	_wave_label.text = "WAVE %02d%s\n%s" % [session.wave, "  /  ENDLESS" if session.endless else " / 20", str(catalog.arenas[session.stage].name).to_upper()]
@@ -640,6 +961,7 @@ func _toast(message: String) -> void:
 	if is_instance_valid(_message):
 		_message.text = message
 		_toast_ticks = 180
+		_speak(message)
 
 
 func _show_error(message: String) -> void:
@@ -664,7 +986,7 @@ func _background(bundle: Dictionary) -> void:
 
 func _shade(alpha: float = 0.86) -> void:
 	var shade := ColorRect.new()
-	shade.color = Color(0.025, 0.045, 0.065, alpha)
+	shade.color = Color(0.025, 0.045, 0.065, maxf(alpha, 0.95) if _high_contrast() else alpha)
 	shade.size = Vector2(1920, 1080)
 	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	overlay.add_child(shade)
@@ -673,8 +995,9 @@ func _shade(alpha: float = 0.86) -> void:
 func _style(fill: Color, border: Color) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color = fill
-	style.border_color = border
-	style.set_border_width_all(2)
+	# High contrast lifts dim borders to ink and thickens every outline.
+	style.border_color = INK if _high_contrast() and border.v < 0.5 else border
+	style.set_border_width_all(4 if _high_contrast() else 2)
 	style.set_corner_radius_all(3)
 	style.content_margin_left = 24
 	style.content_margin_right = 24
@@ -697,7 +1020,7 @@ func _label(text: String, at: Vector2, dimensions: Vector2, pixels: int, color: 
 	label.position = at
 	label.size = dimensions
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.add_theme_color_override("font_color", color)
+	label.add_theme_color_override("font_color", INK if _high_contrast() and color == MUTED else color)
 	label.add_theme_font_size_override("font_size", pixels)
 	if font != null:
 		label.add_theme_font_override("font", font)
@@ -721,7 +1044,8 @@ func _button(text: String, rect: Rect2, action: Callable, primary: bool = false,
 	button.add_theme_color_override("font_color", Color("17212a") if primary else INK)
 	button.add_theme_color_override("font_hover_color", Color("17212a"))
 	button.add_theme_color_override("font_focus_color", Color("17212a"))
-	button.add_theme_color_override("font_disabled_color", Color("74858c"))
+	button.add_theme_color_override("font_disabled_color", Color("b4c0c4") if _high_contrast() else Color("74858c"))
+	button.accessibility_name = text
 	button.add_theme_stylebox_override("normal", _style(GOLD if primary else PANEL, GOLD if primary else Color("39535a")))
 	button.add_theme_stylebox_override("hover", _style(Color("efcf8d"), GOLD))
 	button.add_theme_stylebox_override("focus", _style(Color("efcf8d"), INK))
@@ -732,6 +1056,21 @@ func _button(text: String, rect: Rect2, action: Callable, primary: bool = false,
 	if navigable:
 		menu_buttons.append(button)
 	return button
+
+
+## A navigable button with a spoken/visible hint and optional Left/Right adjust.
+func _option(text: String, rect: Rect2, action: Callable, hint: String, adjust: Callable = Callable()) -> Button:
+	var button := _button(text, rect, action)
+	button.set_meta("hint", hint)
+	button.tooltip_text = hint
+	button.accessibility_description = hint
+	if adjust.is_valid():
+		button.set_meta("adjust", adjust)
+	return button
+
+
+func _high_contrast() -> bool:
+	return bool(settings.get("high_contrast", false))
 
 
 func _preview(bundle: Dictionary, rect: Rect2, flip: bool) -> void:

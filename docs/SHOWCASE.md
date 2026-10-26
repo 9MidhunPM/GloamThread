@@ -24,6 +24,17 @@ For the full ordinary-input 25-wave route:
 
 Full mode uses the existing automated gameplay driver and normal progression instead of jumping to boss chapters or applying highlight presets. It is automated input, not a human playtest. Chapter skipping is disabled in this mode.
 
+## Record a video
+
+Add `--record FILE` to save what the showcase shows as a 1920×1080, 30 FPS video with sound, using Godot's Movie Maker:
+
+```sh
+./showcase.sh --record arena-highlights.ogv
+./showcase.sh --full --speed 4 --record arena-full25.ogv
+```
+
+Movie Maker renders every frame at a fixed rate, so the video is smooth even if your computer cannot keep up in real time; recording simply takes longer. `.ogv` (Theora/Vorbis) is compact; `.avi` (MJPEG/PCM) is larger. Convert for sharing with, for example, `ffmpeg -i arena-highlights.ogv -c:v libx264 -crf 24 -pix_fmt yuv420p -c:a aac -movflags +faststart arena-highlights.mp4`. Recording needs a display, so it cannot be combined with `--smoke`. The published videos and their exact commands are listed in [Videos](VIDEOS.md).
+
 For a fast headless check of the highlight chapters and crowd finale:
 
 ```sh

@@ -4,17 +4,16 @@ Start here for a quick look at the playable modes, a short demo route and real s
 
 ## Launch the current source
 
-Run this from any terminal directory with **Godot 4.7.2 standard**:
+With **Godot 4.7.2 standard** installed, run these from inside your `GloamThread` checkout (or pass its full path to `--path`):
 
 ```sh
-godot --path "/home/midhun/Coading/Gloamthread" --display-driver wayland
+godot --headless --path . --editor --import --quit
+godot --path .
 ```
 
-After a fresh checkout, import once if resources are missing:
+The import step is needed once after a fresh download. Add `--display-driver wayland` or `--display-driver x11` if the window does not appear.
 
-```sh
-godot --headless --path "/home/midhun/Coading/Gloamthread" --editor --import --quit
-```
+**Short on time?** Watch the [videos](VIDEOS.md): a 48-second captioned intro, 2:23 of arena highlights, the full 25-wave run, the entire Story and a one-minute accessibility tour.
 
 **Package version matters:** the previously published **v0.4.0-counterplay** package is an older arena-only build. Use the source above, or a later package whose home screen includes **STORY MODE (2 PLAYERS)**, to review the restored campaign. Check the package's `BUILD.json` for its exact source identity. From a newly extracted complete package, run `chmod +x ./Gloamthread.x86_64` and `./Gloamthread.x86_64`.
 
@@ -37,6 +36,8 @@ This is a review route, not a measured human completion time. Story requires two
 3. **First intermission:** after the wave clears, show a personal purchase or free reroll. Choose **EXPLORE** to close one panel; Interact reopens it. Every active player must become Ready to continue. If the first fight takes longer, use the gallery below to explain the shop without forcing a wave clear.
 4. **Return home:** end the Arena run through its pause flow, then choose **STORY MODE (2 PLAYERS)**.
 5. **Story title → New journey → join → Begin journey:** select distinct inputs, enter Lantern Rest and demonstrate both couriers. Use **Save and return to arena** from Story pause to show the return flow. **Return to title** instead opens the Story menu, whose **Back to arena** action returns home.
+
+Show **SETTINGS & CONTROLS** too: remapping, press-to-toggle attack, game speed/damage assists, high contrast and narration ([Accessibility guide](ACCESSIBILITY.md)).
 
 Arena defaults: P1 **A/D, Space, F, G, Shift, E**; P2 **arrows, Period, Comma, Slash, Apostrophe, M**. These mean move, jump, basic attack, special, dodge and interact/revive. Story uses the same basic layout, but Shift/Apostrophe is the **Threadstep unlock after the boss**. Its map is Tab/Semicolon. Full tables are in the [Player Guide](PLAYER_GUIDE.md#3-inputs-menus-and-joining).
 

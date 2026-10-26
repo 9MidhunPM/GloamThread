@@ -6,25 +6,26 @@ This guide targets the build with **STORY MODE (2 PLAYERS)** on its home screen.
 
 ## 1. Launch the game
 
-### Run this source checkout from any directory
+### Run the source
 
-Use Godot **4.7.2 standard**. The absolute project path prevents Godot from opening an unrelated project when your terminal is elsewhere:
+Install Godot **4.7.2 standard** (not the .NET build) from [godotengine.org](https://godotengine.org/download) or your package manager, then get the game:
 
 ```sh
-godot --path "/home/midhun/Coading/Gloamthread"
+git clone https://github.com/9MidhunPM/GloamThread.git
+cd GloamThread
 ```
 
-After a fresh checkout, import its resources once before launching:
+Import its resources once after a fresh download, then launch. Run these from inside the `GloamThread` folder:
 
 ```sh
-godot --headless --path "/home/midhun/Coading/Gloamthread" --editor --import --quit
-godot --path "/home/midhun/Coading/Gloamthread"
+godot --headless --path . --editor --import --quit
+godot --path .
 ```
 
-For an Arena window instead of fullscreen:
+From any other folder, replace `.` with the full path to your copy, for example `godot --path ~/Games/GloamThread`. For an Arena window instead of fullscreen:
 
 ```sh
-godot --path "/home/midhun/Coading/Gloamthread" --windowed --resolution 1920x1080
+godot --path . --windowed --resolution 1920x1080
 ```
 
 ### Run an extracted Linux package
@@ -69,7 +70,7 @@ Story's **New journey** or **Continue** opens its join screen. Choose the inputs
 
 ![Story join screen for distinct inputs and courier assignment.](screenshots/story-join.png)
 
-The tables below show defaults. Remapped controls shown in-game take precedence. Gamepad names use Xbox-style labels; your controller may print different symbols. If simultaneous keyboard actions fail, try another binding or a gamepad: some keyboards cannot report every key combination.
+The tables below show defaults. Remapped controls shown in-game take precedence: Arena **SETTINGS & CONTROLS → P1/P2 CONTROLS** and Story **Settings → Player N controls** let each player move any action except Pause to another key or button. In Solo Run, the lobby's **P1 INPUT** button also offers the right-hand (arrow) keyboard side. See the [Accessibility guide](ACCESSIBILITY.md). Gamepad names use Xbox-style labels; your controller may print different symbols. If simultaneous keyboard actions fail, try another binding or a gamepad: some keyboards cannot report every key combination.
 
 ### Arena controls
 
@@ -78,7 +79,7 @@ The tables below show defaults. Remapped controls shown in-game take precedence.
 | Move | A / D | Left / Right arrows | Left stick / D-pad |
 | Jump | Space | Period `.` | A |
 | Drop through a plank | S + Space | Down + Period | Down + A |
-| Basic attack: hold to repeat | F | Comma `,` | X |
+| Basic attack: hold to repeat (or press-to-toggle in settings) | F | Comma `,` | X |
 | Special ability | G | Slash `/` | B |
 | Dodge | Left Shift | Apostrophe `'` | RB / right trigger |
 | Hold to revive; reopen your shop during a break | E | M | Y |
@@ -98,6 +99,10 @@ The tables below show defaults. Remapped controls shown in-game take precedence.
 | Map and current objective | Tab | Semicolon `;` | Select / Back |
 
 **Shift means different things in the two modes:** Arena dodge is available during a run; Story Threadstep unlocks after defeating the Spoolwarden. Pressing it before that story unlock does not open the gated route.
+
+### Accessibility and comfort
+
+Arena settings include remapping, press-to-toggle attack, game speed (100/80/60%) and damage taken (100/75/50/25%) assists, high contrast, menu narration through system text-to-speech, reduced flash/shake and separate master/music/effects volume. Left/Right changes a value in place; the focused option explains itself on screen. Story shares volume, reduced flash/shake and remapped controls. Full details and limits: [Accessibility guide](ACCESSIBILITY.md).
 
 ## 4. Arena: your first run
 
@@ -219,7 +224,7 @@ authoring/.venv/bin/python authoring/tools/fighter_forge.py status
 Add your own `OPENAI_API_KEY` locally in `authoring/.env`. Setup preserves an existing file and never prints its key. For this source checkout:
 
 ```sh
-cd "/home/midhun/Coading/Gloamthread"
+cd GloamThread
 python3 -m venv --system-site-packages .venv
 .venv/bin/python -m pip install -r requirements-authoring.txt
 .venv/bin/python tools/fighter_forge.py status
@@ -275,7 +280,9 @@ Story saves keep a validated previous-save backup. If the game offers backup rec
 
 | Problem | What to check |
 | --- | --- |
-| Godot opens another project or says no project exists | Use the absolute `--path "/home/midhun/Coading/Gloamthread"` command above. |
+| Godot opens another project or says no project exists | Pass the folder that contains `project.godot`: `--path .` from inside it, or the full path from elsewhere. |
+| A fight is too fast or too punishing | Use the Game speed, Damage taken or press-to-toggle attack options in Arena settings. See the [Accessibility guide](ACCESSIBILITY.md). |
+| Read menus aloud stays off | Install a system text-to-speech voice (Linux: speech-dispatcher plus espeak-ng) and restart the game. |
 | Story Mode is missing | You may be running an older arena-only package. Use the build whose home has **STORY MODE (2 PLAYERS)**. |
 | One player cannot move or confirm | Check that player's assigned input. Shared menus have an owner; personal shops use each player's own controls. |
 | Two keyboard players lose simultaneous actions | Test different bindings or use a controller; keyboard rollover varies by hardware. |

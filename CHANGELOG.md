@@ -1,5 +1,14 @@
 # Change log
 
+### 2026-10-27T00:25:15+05:30 — Accessibility options, newcomer documentation and published videos
+
+- **Why:** make the game playable and understandable for more people (one hand, slower reactions, low vision, photosensitivity, first-time Godot users) and let anyone see the whole game without installing it.
+- **Accessibility (Arena):** two-column `SETTINGS & CONTROLS` in `scripts/arena/arena_app.gd` with per-player remapping (Story's clash rules, stick axes kept for gamepad movement buttons, deadzone, reset), per-player press-to-toggle attack, game speed 100/80/60% (time scale only during a run; restored on exit), damage taken 100/75/50/25%, high contrast, optional OS text-to-speech narration of menus/shop/waves/downed/notices, separate music/effects volume, Left/Right value adjust, visible hints and tooltips, cursor-preserving rebuilds, live control text and AccessKit names. Solo P1 can pick the right-hand keyboard side. `arena_fighter.gd`/`run_session.gd` apply assists; results and saved summaries mark assisted runs. `settings_repository.gd` adds validated stepped keys within schema 1; `project.godot` enables `audio/general/text_to_speech`.
+- **Tests/tools:** new `tests/arena/accessibility.gd`; `tools/accessibility_tour.gd` visible tour; `showcase.sh`/`story_showcase.sh` gain `--record FILE` (Godot Movie Maker). `tools/story_showcase.gd` uses a 16:9 canvas under Movie Maker (which otherwise cropped both views) and times its ending hold with frame time.
+- **Docs/media:** rewrote `README.md` as a newcomer front door (videos, three-step setup, controls, accessibility, docs map); added `docs/ACCESSIBILITY.md`, `docs/VIDEOS.md` (intro transcript), `docs/media/` (owner-supplied intro, stills, `.gdignore`) and `evidence/recordings/README.md`; removed machine-specific paths from the Player Guide, Final Review and Submission; documented recording in the showcase guides; updated STATUS.
+- **Validation:** accessibility scenario passes; full arena suite 21 of 23 pass and forge 6 failures, identical to a clean `96ae418` worktree (pre-existing, not fixed); 187 Python tests, content/retained/world/scenery validators and `check_pack.py` pass; 25-wave co-op route passes before and after. Five videos recorded/inspected as real engine captures with clean run reports (see recording evidence).
+- **Limitations:** audible narration and screen readers untested (no system voice installed); Story lacks the Arena-only assists/contrast/narration; no disabled-player, physical-controller or Windows/macOS testing; no new binary package.
+
 ### 2026-10-25T08:27:56+05:30 — Add the entire Story campaign showcase
 
 - Added executable `story_showcase.sh`, story viewer/driver and guide for the original eight-room RPG. Reuses owned-input movement/combat/menu boundaries, adds safe Gallery survivor cleanup and the normal-input hidden-charm detour, preserves both split views and temporary-save isolation.

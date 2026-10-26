@@ -24,6 +24,10 @@ run/main_loop_type.arena_qa="ArenaPlaythrough"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 run/low_processor_mode=false
 
+[audio]
+
+general/text_to_speech=true
+
 [autoload]
 
 InputRouter="*res://scripts/input/input_router.gd"

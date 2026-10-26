@@ -20,6 +20,11 @@ var immunity_ticks := 0
 var dodge_ticks := 0
 var dodge_cooldown := 0
 var revive_progress_ticks := 0
+## Accessibility assists owned by settings: incoming-damage multiplier and
+## press-once attack (Attack starts/stops repeating instead of being held).
+var damage_taken_scale := 1.0
+var attack_toggle := false
+var auto_attacking := false
 var _world: Node
 var _appearance: Dictionary
 var _avatar: ArenaAvatar
@@ -104,6 +109,9 @@ func _physics_process(delta: float) -> void:
 			grounded = false
 		else:
 			_jump_buffer = 6
+	if attack_toggle and input.just_pressed(Action.ATTACK):
+		auto_attacking = not auto_attacking
+	var attack_held := auto_attacking if attack_toggle else input.is_held(Action.ATTACK)
 	if _hurt == 0 and dodge_ticks == 0:
 		if _attack.is_empty() and absf(input.move_x) > 0.01:
 			facing = -1 if input.move_x < 0 else 1
@@ -117,7 +125,7 @@ func _physics_process(delta: float) -> void:
 		elif _attack.is_empty():
 			if input.just_pressed(Action.SPECIAL) and special_ticks == 0 and ArenaCombat.playing(_world):
 				_start_attack(true)
-			elif input.is_held(Action.ATTACK):
+			elif attack_held:
 				_start_attack(false)
 	_avatar.flip_h = facing < 0
 	if dodge_ticks > 0:
@@ -264,7 +272,7 @@ func take_damage(amount: float, from: Vector2, owner_slot: int = -1) -> void:
 	var reduction := 0.8 if kit_id == "stone" else 1.0
 	if _armour > 0:
 		reduction *= 0.5
-	var actual := minf(health, amount * reduction)
+	var actual := minf(health, amount * reduction * clampf(damage_taken_scale, 0.25, 1.0))
 	health = maxf(0.0, health - actual)
 	immunity_ticks = 36
 	_hurt = 12

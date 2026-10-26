@@ -94,9 +94,12 @@ func _run() -> void:
 	root.add_child(driver)
 	await driver.run()
 	if not quit_requested and options.mode != "smoke" and driver._route_complete:
-		var until := Time.get_ticks_msec() + 7000
-		while Time.get_ticks_msec() < until and not quit_requested:
+		# Hold the ending card for seven viewing seconds. Frame time (not the
+		# wall clock) keeps this right when Movie Maker renders slower than real time.
+		var remaining := 7.0
+		while remaining > 0.0 and not quit_requested:
 			await process_frame
+			remaining -= root.get_process_delta_time() / maxf(Engine.time_scale, 0.001)
 	await _finish()
 
 func _process(delta: float) -> bool:
@@ -105,7 +108,9 @@ func _process(delta: float) -> bool:
 	if not attached:
 		attached = true
 		# Two original480x360 views remain intact; the viewing banner lives below.
-		root.content_scale_size = Vector2i(960, 420)
+		# Movie Maker scales the root texture to cover 16:9, so recordings use a
+		# 16:9 canvas (blank band below the banner) instead of cropping the views.
+		root.content_scale_size = Vector2i(960, 540) if OS.has_feature("movie") else Vector2i(960, 420)
 		if DisplayServer.get_name() != "headless": root.mode = Window.MODE_FULLSCREEN
 		session.room_changed.connect(_room_changed)
 		_room_changed(session.current_room_id)

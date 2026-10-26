@@ -32,6 +32,9 @@ var best_combo: int = 0
 var shake_ticks: int = 0
 var reduced_flash: bool = false
 var reduced_shake: bool = false
+var damage_taken_scale: float = 1.0
+var game_speed: float = 1.0
+var attack_toggle: Array = [false, false]
 var endless: bool = false
 var shop_offers: Array[Array] = []
 var shop_ready: Array[bool] = []
@@ -124,6 +127,7 @@ func _ready() -> void:
 		fighters.append(fighter)
 		fighter.apply_stats(player_states[slot].stats())
 		fighter.health = fighter.max_health
+	apply_assists()
 	_load_enemy_art()
 	_next_wave()
 
@@ -746,11 +750,24 @@ func continue_endless() -> void:
 		_open_shop()
 
 
+## Pushes accessibility assists to live fighters; safe before or after _ready.
+func apply_assists() -> void:
+	for fighter: ArenaFighter in fighters:
+		fighter.damage_taken_scale = damage_taken_scale
+		fighter.attack_toggle = bool(attack_toggle[fighter.slot_index]) if fighter.slot_index < attack_toggle.size() else false
+		if not fighter.attack_toggle:
+			fighter.auto_attacking = false
+
+
+func assisted() -> bool:
+	return damage_taken_scale < 1.0 or game_speed < 1.0
+
+
 func summary() -> Dictionary:
 	var records: Array = []
 	for state in player_states:
 		records.append({"kit": state.kit_id, "kills": state.kills, "coins": state.coins, "spent": state.spent, "upgrades": state.levels.duplicate()})
-	return {"wave": wave, "won": phase == "victory", "endless": endless, "seconds": roundi(elapsed_ticks / 60.0), "best_combo": best_combo, "players": records, "seed": seed_value, "chunks": _built_chunks.size(), "discoveries": discovered_landmarks.size(), "loot": collected.size()}
+	return {"wave": wave, "won": phase == "victory", "endless": endless, "seconds": roundi(elapsed_ticks / 60.0), "best_combo": best_combo, "players": records, "seed": seed_value, "chunks": _built_chunks.size(), "discoveries": discovered_landmarks.size(), "loot": collected.size(), "assist": {"damage_taken": damage_taken_scale, "game_speed": game_speed}, "assisted": assisted()}
 
 
 func _load_enemy_art() -> void:

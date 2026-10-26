@@ -3,12 +3,14 @@ set -euo pipefail
 
 usage() {
     cat <<'HELP'
-Usage: ./story_showcase.sh [--smoke] [--speed 1|2|4] [--report PATH]
+Usage: ./story_showcase.sh [--smoke] [--speed 1|2|4] [--report PATH] [--record FILE]
 
 Default: watch the complete eight-room Tavi/Neri Story campaign from a new game.
   --smoke        Run the sequential route headlessly at fixed 60 Hz.
   --speed N      Initial simulation speed: 1, 2 or 4 (default: 1).
   --report PATH  JSON report (default: /tmp/gloamthread-story-showcase.json).
+  --record FILE  Also write a 1920x1080 30 FPS video with audio via Godot Movie
+                 Maker (.ogv recommended, .avi also works). Not with --smoke.
   --help         Show this help without launching Godot.
 
 Native controls: Space pause/resume; 1/2/4 speed; Escape quit. No chapter skip.
@@ -25,15 +27,17 @@ fail() {
 mode=full
 speed=1
 report=/tmp/gloamthread-story-showcase.json
+record=
 while (($#)); do
     case "$1" in
         --help|-h) usage; exit 0 ;;
         --smoke) mode=smoke; shift ;;
-        --speed|--report)
+        --speed|--report|--record)
             (($# >= 2)) && [[ -n "$2" && "$2" != --* ]] || fail "$1 needs a value. Use --help for options."
             case "$1" in
                 --speed) speed="$2" ;;
                 --report) report="$2" ;;
+                --record) record="$2" ;;
             esac
             shift 2
             ;;
@@ -52,5 +56,10 @@ if [[ "$mode" == smoke ]]; then
     engine_args+=(--headless --fixed-fps 60)
 elif [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
     engine_args+=(--display-driver wayland)
+fi
+if [[ -n "$record" ]]; then
+    [[ "$mode" != smoke ]] || fail '--record needs a display; it cannot be combined with --smoke.'
+    [[ "$record" == /* ]] || record="$PWD/$record"
+    engine_args+=(--write-movie "$record" --fixed-fps 30 --disable-vsync --windowed --resolution 1920x1080)
 fi
 exec "$engine" "${engine_args[@]}" --script "$repo_dir/tools/story_showcase.gd" -- --mode "$mode" --speed "$speed" --report "$report"

@@ -35,6 +35,8 @@ godot --headless --fixed-fps 60 --path . --script tests/arena/run_tests.gd
 godot --headless --fixed-fps 60 --path . --script tests/forge/run_tests.gd
 ```
 
+Videos: `./showcase.sh --record FILE.ogv` / `./story_showcase.sh --record FILE.ogv` use Godot Movie Maker (1920×1080, 30 FPS). Movie Maker scales the root viewport texture to cover 16:9, so non-16:9 canvases need a 16:9 movie canvas. Publish MP4 transcodes as release assets; keep only small stills and the intro in `docs/media/` (which has `.gdignore`). Arena accessibility settings are covered by `tests/arena/accessibility.gd`; see [docs/ACCESSIBILITY.md](docs/ACCESSIBILITY.md).
+
 Only explicit authoring rebuilds should run `python3 -m tools.forge.content --build --validate` because it replaces deterministic output. `tools/package_arena.py` requires a clean committed checkout and matching Linux templates. Record exact source/command/engine/display/input and limitations. Ordinary-input routes, controlled recovery fixtures, native render profiles, exported offline checks, physical devices and human playtests are distinct evidence. Never fabricate captures, billing, performance, listening or enjoyment.
 
 Finish the requested milestone and authorized scope, keep STATUS current, and report remaining material gates precisely. Preserve the earlier released demo and honest Git history. Do not expand to networking, arbitrary generated behaviour or the obsolete96room plan.

@@ -3,7 +3,7 @@ set -euo pipefail
 
 usage() {
     cat <<'HELP'
-Usage: ./showcase.sh [--full | --smoke] [--seed INT] [--speed 1|2|4] [--report PATH]
+Usage: ./showcase.sh [--full | --smoke] [--seed INT] [--speed 1|2|4] [--report PATH] [--record FILE]
 
 Default: watch wave 1 / boss 5,10,15,20,25 highlights and a staged crowd finale.
 Finale: 64-foe budget, normal 32-enemy live cap.
@@ -12,6 +12,8 @@ Finale: 64-foe budget, normal 32-enemy live cap.
   --seed INT     Deterministic seed (default: 18427).
   --speed N      Initial simulation speed: 1, 2 or 4 (default: 1).
   --report PATH  JSON report (default: /tmp/gloamthread-showcase.json).
+  --record FILE  Also write a 1920x1080 30 FPS video with audio via Godot Movie
+                 Maker (.ogv recommended, .avi also works). Not with --smoke.
   --help         Show this help without launching Godot.
 
 Native controls: Space pause/resume (including focus loss); 1/2/4 speed;
@@ -30,6 +32,7 @@ mode=highlights
 seed=18427
 speed=1
 report=
+record=
 while (($#)); do
     case "$1" in
         --help|-h) usage; exit 0 ;;
@@ -39,12 +42,13 @@ while (($#)); do
             mode="$next_mode"
             shift
             ;;
-        --seed|--speed|--report)
+        --seed|--speed|--report|--record)
             (($# >= 2)) && [[ -n "$2" ]] || fail "$1 needs a value. Use --help for options."
             case "$1" in
                 --seed) seed="$2" ;;
                 --speed) speed="$2" ;;
                 --report) report="$2" ;;
+                --record) record="$2" ;;
             esac
             shift 2
             ;;
@@ -64,6 +68,11 @@ if [[ "$mode" == smoke ]]; then
     engine_args+=(--headless --fixed-fps 60)
 elif [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
     engine_args+=(--display-driver wayland)
+fi
+if [[ -n "$record" ]]; then
+    [[ "$mode" != smoke ]] || fail '--record needs a display; it cannot be combined with --smoke.'
+    [[ "$record" == /* ]] || record="$PWD/$record"
+    engine_args+=(--write-movie "$record" --fixed-fps 30 --disable-vsync --windowed --resolution 1920x1080)
 fi
 script_args=(--mode "$mode" --seed "$seed" --speed "$speed")
 if [[ -n "$report" ]]; then

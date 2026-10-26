@@ -3,10 +3,17 @@ extends RefCounted
 
 var path: String = "user://settings.json"
 
+## Accessibility/assist choices are fixed steps so saved files cannot request
+## arbitrary simulation rates or invulnerability.
+const DAMAGE_TAKEN_STEPS := [1.0, 0.75, 0.5, 0.25]
+const GAME_SPEED_STEPS := [1.0, 0.8, 0.6]
+
 
 func defaults() -> Dictionary:
 	return {"schema_version": 1, "master_volume": 0.7, "music_volume": 0.55,
 		"sfx_volume": 0.7, "reduced_flash": false, "reduced_shake": false,
+		"high_contrast": false, "narration": false, "damage_taken": 1.0,
+		"game_speed": 1.0, "attack_toggle": [false, false],
 		"player_bindings": [Bindings.defaults_for(DeviceSource.Kind.KEYBOARD_LEFT).to_dict(),
 			Bindings.defaults_for(DeviceSource.Kind.KEYBOARD_RIGHT).to_dict()],
 		"sources": [DeviceSource.keyboard_left().identity(), DeviceSource.keyboard_right().identity()]}
@@ -51,9 +58,16 @@ func _normalise(data: Dictionary) -> Dictionary:
 		var value: Variant = data.get(key)
 		if (value is int or value is float) and is_finite(float(value)):
 			result[key] = clampf(float(value), 0.0, 1.0)
-	for key: String in ["reduced_flash", "reduced_shake"]:
+	for key: String in ["reduced_flash", "reduced_shake", "high_contrast", "narration"]:
 		if data.get(key) is bool:
 			result[key] = data[key]
+	for pair: Array in [["damage_taken", DAMAGE_TAKEN_STEPS], ["game_speed", GAME_SPEED_STEPS]]:
+		var value: Variant = data.get(pair[0])
+		if (value is int or value is float) and float(value) in pair[1]:
+			result[pair[0]] = float(value)
+	var toggles: Variant = data.get("attack_toggle")
+	if toggles is Array and toggles.size() == 2 and toggles.all(func(item: Variant) -> bool: return item is bool):
+		result.attack_toggle = [toggles[0], toggles[1]]
 	var bindings: Variant = data.get("player_bindings")
 	if bindings is Array and bindings.size() == 2:
 		for index in 2:

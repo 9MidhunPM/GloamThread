@@ -17,6 +17,16 @@ The route starts a new temporary campaign and covers all eight rooms: shared-wor
 
 The full campaign plays sequentially. N has no chapter-skip action.
 
+## Record a video
+
+Add `--record FILE` to save what the showcase shows as a 1920×1080, 30 FPS video with sound, using Godot's Movie Maker:
+
+```sh
+./story_showcase.sh --record story-full.ogv
+```
+
+Movie Maker renders every frame at a fixed rate, so the video is smooth even if your computer cannot keep up in real time; recording simply takes longer. `.ogv` (Theora/Vorbis) is compact; `.avi` (MJPEG/PCM) is larger. Convert for sharing with, for example, `ffmpeg -i story-full.ogv -c:v libx264 -crf 24 -pix_fmt yuv420p -c:a aac -movflags +faststart story-full.mp4`. Recording needs a display, so it cannot be combined with `--smoke`. The published videos and their exact commands are listed in [Videos](VIDEOS.md).
+
 For the headless route check:
 
 ```sh
