@@ -8,6 +8,8 @@ signal cancelled
 const Library = preload("res://scripts/forge/fighter_library.gd")
 const Canvas = preload("res://scripts/forge/forge_canvas.gd")
 const Bridge = preload("res://scripts/forge/forge_bridge.gd")
+const WebBridge = preload("res://scripts/forge/web_forge_bridge.gd")
+const BrowserPicker = preload("res://scripts/web/browser_files.gd")
 const LayoutEditor = preload("res://scripts/forge/forge_layout_editor.gd")
 const Identity = preload("res://scripts/forge/fighter_identity.gd")
 const CLIPS := {"idle": [0, 4], "run": [4, 6], "rise": [10, 2], "fall": [12, 2], "land": [14, 2], "slash": [16, 4], "special": [20, 4], "hurt": [24, 2], "dash": [26, 2], "downed": [28, 2], "revive": [30, 2]}
@@ -77,6 +79,12 @@ var _layout_focus: Dictionary = {}
 var _retry_allowed: bool = false
 var _kit_chosen_by_player: bool = false
 var _applying_proposal: bool = false
+var _browser_files := BrowserPicker.new()
+var _invite: LineEdit
+var _invite_status: Label
+var _invite_unlock: Button
+var _invite_lock: Button
+var _hosted_authenticated: bool = false
 
 
 func setup(player_slot: int, fighter_library: FighterLibrary) -> void:
@@ -91,6 +99,14 @@ func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	if library == null:
 		library = Library.new()
+	if OS.has_feature("web") and bridge.get_script() == Bridge:
+		bridge = WebBridge.new()
+	bridge.attach(self)
+	if bridge is WebForgeBridge:
+		bridge.configuration_updated.connect(_hosted_configuration)
+		bridge.report_updated.connect(func(path: String, report: Dictionary) -> void:
+			if path == job_path:
+				_handle_status(report))
 	_build_ui()
 	_refresh_library()
 	_refresh_configuration(false)
@@ -116,8 +132,27 @@ func _build_ui() -> void:
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(title)
 	header.add_child(_label("PLAYER %d" % (slot + 1), 22))
+	if OS.has_feature("web"):
+		header.add_child(_button("Import fighter ZIP", _choose_bundle))
 	header.add_child(_button("Back", _leave))
 	page.add_child(_label("Your drawing. Your fighter. Choose a saved character or forge a new one.", 20, Color("#a2b5bc")))
+	if bridge is WebForgeBridge:
+		var invite_bar := HBoxContainer.new()
+		invite_bar.add_theme_constant_override("separation", 12)
+		page.add_child(invite_bar)
+		_invite = LineEdit.new()
+		_invite.placeholder_text = "Personal creator invite code"
+		_invite.secret = true
+		_invite.max_length = 160
+		_invite.custom_minimum_size.x = 460
+		_invite.text_submitted.connect(func(_text: String) -> void: _unlock_forge())
+		invite_bar.add_child(_invite)
+		_invite_unlock = _button("Unlock Forge", _unlock_forge)
+		invite_bar.add_child(_invite_unlock)
+		_invite_lock = _button("Lock Forge", func() -> void: (bridge as WebForgeBridge).sign_out())
+		invite_bar.add_child(_invite_lock)
+		_invite_status = _label("Anyone can play. A personal invite unlocks creation.", 18, Color("#a2b5bc"))
+		invite_bar.add_child(_invite_status)
 	_tabs = TabContainer.new()
 	_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_tabs.add_theme_font_size_override("font_size", 22)
@@ -171,7 +206,7 @@ func _build_ui() -> void:
 	_master_dialog.title = "Choose the complete detailed character cutout"
 	_master_dialog.file_selected.connect(import_illustrated_master)
 	add_child(_master_dialog)
-	_message = _label("Saved fighters work offline. New AI artwork uses your configured local authoring service.", 20)
+	_message = _label("Saved fighters stay in this browser. Download a fighter ZIP to keep a backup. Creation uses the hosted Forge." if bridge is WebForgeBridge else "Saved fighters work offline. New AI artwork uses your configured local authoring service.", 20)
 	_message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_message.custom_minimum_size.y = 54
 	page.add_child(_message)
@@ -215,7 +250,7 @@ func _build_source(parent: HBoxContainer) -> void:
 	tools_row.add_child(_button("Pen", func() -> void: _canvas.eraser = false))
 	tools_row.add_child(_button("Eraser", func() -> void: _canvas.eraser = true))
 	tools_row.add_child(_button("Clear", _canvas.clear_canvas))
-	tools_row.add_child(_button("Import image", func() -> void: _dialog.popup_centered_ratio(0.75)))
+	tools_row.add_child(_button("Import image", _choose_source))
 	for child: Node in tools_row.get_children():
 		_source_controls.append(child as BaseButton)
 	var brush := HSlider.new()
@@ -243,6 +278,8 @@ func _build_proposal(parent: HBoxContainer) -> void:
 	_analyse = _button("Analyse drawing", analyse_source)
 	column.add_child(_analyse)
 	_setup_check = _button("Check AI setup / budget", _refresh_configuration)
+	if bridge is WebForgeBridge:
+		_setup_check.text = "Refresh Forge status"
 	column.add_child(_setup_check)
 	column.add_child(_label("Review every suggestion before generating.", 17, Color("#a2b5bc")))
 	_name = _field(column, "Fighter name / weapon concept (guides artwork)", "My fighter", 40)
@@ -261,6 +298,8 @@ func _build_proposal(parent: HBoxContainer) -> void:
 	_generate = _button("Generate artwork", generate_candidate)
 	column.add_child(_generate)
 	_cost = _label("No local dollar cap. Model requests use your API account.\nLocal edits and accepted fighters work offline.", 17, Color("#a2b5bc"))
+	if bridge is WebForgeBridge:
+		_cost.text = "An invite unlocks server-funded creation.\nSaved artwork conversion makes no model request."
 	_cost.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	column.add_child(_cost)
 	var actions := HBoxContainer.new()
@@ -298,7 +337,7 @@ func _build_preview(parent: HBoxContainer) -> void:
 	_clip = _options(CLIPS.keys())
 	_clip.item_selected.connect(func(_index: int) -> void: _animation_tick = 0)
 	column.add_child(_clip)
-	_use_master = _button("Use detailed character cutout PNG", func() -> void: _master_dialog.popup_centered_ratio(0.8))
+	_use_master = _button("Use detailed character cutout PNG", _choose_master)
 	column.add_child(_use_master)
 	var corrections := HBoxContainer.new()
 	corrections.add_theme_constant_override("separation", 14)
@@ -337,6 +376,8 @@ func _build_preview(parent: HBoxContainer) -> void:
 		else:
 			_pivot_y = spinner
 	_bake = _button("Apply edits · local bake", bake_edits)
+	if bridge is WebForgeBridge:
+		_bake.text = "Convert saved artwork"
 	edits.add_child(_bake)
 	var detail := _label("Erase unwanted pixels or move a joint, then rebake and inspect every animation.", 16, Color("#a2b5bc"))
 	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -360,6 +401,8 @@ func _refresh_library() -> void:
 		card.add_child(_label(bundle["name"], 26))
 		card.add_child(_label("%s / %s" % [bundle["rig_id"].capitalize(), bundle["kit_id"].capitalize()], 18, Color("#a2b5bc")))
 		card.add_child(_button("Choose fighter", func() -> void: completed.emit(bundle)))
+		if OS.has_feature("web"):
+			card.add_child(_button("Download fighter ZIP", func() -> void: _download_bundle(bundle)))
 	if bundles.is_empty():
 		var empty := _label("No validated fighters found. Create a fighter or check the built-in asset installation.", 22)
 		empty.custom_minimum_size.x = 700
@@ -375,7 +418,7 @@ func _refresh_library() -> void:
 		if not bridge.trusted_job(path):
 			continue
 		var status := bridge.status(path)
-		if status.get("state") in ["complete", "awaiting_approval", "failed", "cancelled"]:
+		if status.get("state") in ["complete", "awaiting_approval", "failed", "cancelled"] or bridge is WebForgeBridge and FileAccess.file_exists(path.get_base_dir().path_join("_remote.json")):
 			var button := _button("Resume draft\n%s\n%s" % [folder, status.get("state", "")], func() -> void: resume_job(path))
 			button.custom_minimum_size = Vector2(370, 130)
 			_library_grid.add_child(button)
@@ -407,6 +450,108 @@ func import_source(path: String) -> void:
 		image.resize(maxi(1, roundi(dimensions.x * fit)), maxi(1, roundi(dimensions.y * fit)), Image.INTERPOLATE_LANCZOS)
 	_canvas.set_image(image)
 	_notice("Source imported. Review its silhouette, then analyse or choose your own settings.")
+
+
+func _choose_source() -> void:
+	if OS.has_feature("web"):
+		_browser_files.pick("image/png,image/jpeg", 16 * 1024 * 1024, _picked_source)
+	else:
+		_dialog.popup_centered_ratio(0.75)
+
+
+func _choose_master() -> void:
+	if OS.has_feature("web"):
+		_browser_files.pick("image/png", 8 * 1024 * 1024, _picked_master)
+	else:
+		_master_dialog.popup_centered_ratio(0.8)
+
+
+func _picked_source(result: Dictionary) -> void:
+	var path := _retain_upload(result, "source")
+	if not path.is_empty():
+		import_source(path)
+		DirAccess.remove_absolute(path)
+
+
+func _picked_master(result: Dictionary) -> void:
+	var path := _retain_upload(result, "master")
+	if not path.is_empty():
+		import_illustrated_master(path)
+		DirAccess.remove_absolute(path)
+
+
+func _retain_upload(result: Dictionary, kind: String) -> String:
+	if result.get("cancelled", false):
+		return ""
+	if result.has("error") or not result.get("data") is String or result["data"].length() > 24 * 1024 * 1024:
+		_notice(str(result.get("error", "The selected file could not be imported.")))
+		return ""
+	var bytes := Marshalls.base64_to_raw(result["data"])
+	if bytes.is_empty() or bytes.size() > 16 * 1024 * 1024:
+		_notice("The selected image is empty or too large.")
+		return ""
+	var path := "user://browser-%s-%d.png" % [kind, Time.get_ticks_usec()]
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if file == null:
+		_notice("Browser storage is unavailable. The previous drawing is preserved.")
+		return ""
+	file.store_buffer(bytes)
+	file.close()
+	return path
+
+
+func _choose_bundle() -> void:
+	if not _busy:
+		_browser_files.pick(".zip,application/zip", Library.MAX_ARCHIVE_BYTES, _picked_bundle)
+
+
+func _picked_bundle(result: Dictionary) -> void:
+	if result.get("cancelled", false):
+		return
+	if result.has("error") or not result.get("data") is String or result["data"].length() > 44 * 1024 * 1024:
+		_notice(str(result.get("error", "The selected fighter ZIP is invalid or too large.")))
+		return
+	var imported := library.import_archive(Marshalls.base64_to_raw(result["data"]))
+	if not imported.get("ok", false):
+		_notice(str(imported.get("error", "The fighter ZIP was rejected. Previous fighters are preserved.")))
+		return
+	_refresh_library()
+	_tabs.current_tab = 0
+	_notice("Fighter imported and fully validated. Choose it from Your fighters.")
+
+
+func _download_bundle(bundle: Dictionary) -> void:
+	var exported := library.export_bundle(str(bundle.get("manifest_path", "")))
+	if not exported.get("ok", false):
+		_notice(str(exported.get("error", "The fighter backup could not be created.")))
+		return
+	_browser_files.download(exported["bytes"], exported["filename"], "application/zip")
+	_notice("Fighter ZIP downloaded. Keep it to restore this fighter in another browser.")
+
+
+func _unlock_forge() -> void:
+	if not bridge is WebForgeBridge or _busy or _invite.text.strip_edges().is_empty():
+		return
+	_invite_unlock.disabled = true
+	_invite_status.text = "Checking your invite…"
+	(bridge as WebForgeBridge).redeem_invite(_invite.text)
+	_invite.text = ""
+
+
+func _hosted_configuration(report: Dictionary) -> void:
+	_hosted_authenticated = bool(report.get("authenticated", false)) and bool(report.get("ok", false))
+	if _invite_status == null:
+		return
+	if not report.get("ok", false):
+		_invite_status.text = str(report.get("error", "The hosted Forge is unavailable."))
+	elif not _hosted_authenticated:
+		_invite_status.text = "Anyone can play. A personal invite unlocks creation."
+	elif not report.get("key_present", false):
+		_invite_status.text = "Invite unlocked. The operator must configure the creation service."
+	else:
+		_invite_status.text = "Forge unlocked. Analyse and Generate send requests only when you choose them."
+	_update_budget(report)
+	_update_controls()
 
 
 func analyse_source() -> void:
@@ -514,7 +659,7 @@ func _process(delta: float) -> void:
 	var report := bridge.status(job_path)
 	if not report.is_empty():
 		_handle_status(report)
-	if _busy and Time.get_ticks_msec() - _started_msec > 1500 and not OS.is_process_running(bridge.pid):
+	if _busy and Time.get_ticks_msec() - _started_msec > 1500 and not bridge.is_running():
 		_busy = false
 		state = "failed"
 		_notice("The authoring worker stopped without a finished result. Your drawing and accepted fighters are preserved.")
@@ -551,6 +696,8 @@ func _handle_status(report: Dictionary) -> void:
 		_preview_candidate(report.get("candidate_path", ""))
 	elif state in ["failed", "cancelled"]:
 		_busy = false
+	elif bridge is WebForgeBridge:
+		_busy = true
 	if state == "failed":
 		_offer_layout_correction()
 	_update_controls()
@@ -571,7 +718,10 @@ func _refresh_configuration(show_notice: bool = true) -> void:
 				report["budget"][field] = current["budget"][field]
 	_update_budget(report)
 	if show_notice:
-		_notice("AI setup ready. No request was made." if report.get("key_present", false) else "Add OPENAI_API_KEY to " + str(report.get("configuration_file", "the local authoring .env")) + ". No request was made.")
+		if bridge is WebForgeBridge:
+			_notice("Refreshing the hosted Forge. No model request was made.")
+		else:
+			_notice("AI setup ready. No request was made." if report.get("key_present", false) else "Add OPENAI_API_KEY to " + str(report.get("configuration_file", "the local authoring .env")) + ". No request was made.")
 
 
 func _update_budget(report: Dictionary) -> void:
@@ -579,7 +729,10 @@ func _update_budget(report: Dictionary) -> void:
 	if not budget is Dictionary or not budget.has("total_limit_usd"):
 		return
 	if budget.get("limits_enabled", true) == false:
-		_cost.text = "No local dollar cap | recorded estimates $%.2f\nNext request estimate $%.2f; local edits free" % [float(budget.get("total_reserved_usd", 0)), float(budget.get("required_usd", 0))]
+		if bridge is WebForgeBridge:
+			_cost.text = "Your invite's recorded estimates $%.2f\nNext request estimate $%.2f; saved artwork conversion makes no model request" % [float(budget.get("total_reserved_usd", 0)), float(budget.get("required_usd", 0))]
+		else:
+			_cost.text = "No local dollar cap | recorded estimates $%.2f\nNext request estimate $%.2f; local edits free" % [float(budget.get("total_reserved_usd", 0)), float(budget.get("required_usd", 0))]
 		return
 	_cost.text = "Total $%.2f / $%.2f reserved | $%.2f left\nJob $%.2f / $%.2f left | Need $%.2f; local edits free" % [float(budget.get("total_reserved_usd", 0)), float(budget.get("total_limit_usd", 0)), float(budget.get("total_remaining_usd", 0)), float(budget.get("job_remaining_usd", 0)), float(budget.get("job_limit_usd", 0.5)), float(budget.get("required_usd", 0))]
 
@@ -606,12 +759,13 @@ func _open_layout_editor(error_message: String = "") -> void:
 		_layout_focus[control] = control.focus_mode
 		control.focus_mode = Control.FOCUS_NONE
 	_layout_editor = LayoutEditor.new()
+	_layout_editor.hosted_conversion = bridge is WebForgeBridge
 	_layout_editor.setup(_layout_context, _cost.text)
 	_layout_editor.dismissed.connect(_close_layout_editor)
 	_layout_editor.apply_requested.connect(_convert_layout)
 	add_child(_layout_editor)
 	if not error_message.is_empty():
-		_layout_editor.notice.text = error_message + " Review the highlighted crops, then convert locally. No new image request is needed."
+		_layout_editor.notice.text = error_message + (" Review the highlighted crops, then convert saved artwork. No model request is needed." if bridge is WebForgeBridge else " Review the highlighted crops, then convert locally. No new image request is needed.")
 	_layout_editor.save_button.grab_focus()
 
 
@@ -645,7 +799,7 @@ func _convert_layout(layout: Dictionary) -> void:
 	_start("bake")
 	if _busy:
 		_close_layout_editor()
-		_notice("Converting cached crops locally in a new draft. Earlier masks/pivots remain in the old draft; the new candidate starts with fresh joints and masks.")
+		_notice("Converting saved artwork on the server in a new draft. Earlier edits are preserved; no model request is made." if bridge is WebForgeBridge else "Converting cached crops locally in a new draft. Earlier masks/pivots remain in the old draft; the new candidate starts with fresh joints and masks.")
 	else:
 		_layout_job_path = job_path
 		_layout_editor.notice.text = _message.text
@@ -681,10 +835,10 @@ func _identity_edited() -> void:
 	_proposal_edited()
 
 
-func _apply_identity_kit() -> void:
+func _apply_identity_kit(suggest: bool = true) -> void:
 	var requested: String = Library.KITS[_kit.selected]
 	var suggestion: String = Identity.suggested_kit(_name.text, _description.text)
-	if not _kit_chosen_by_player and not suggestion.is_empty():
+	if suggest and not _kit_chosen_by_player and not suggestion.is_empty():
 		requested = suggestion
 	var effective: String = Identity.effective_kit(_name.text, requested, _description.text)
 	_kit.select(Library.KITS.find(effective))
@@ -722,7 +876,7 @@ func import_illustrated_master(path: String) -> void:
 	job_path = created["path"]
 	_job_source_hash = FileAccess.get_sha256(job_path.get_base_dir().path_join("source.png"))
 	_start("bake")
-	_notice("Baking the complete illustrated character locally. Its design and proportions are preserved; no image request is made.")
+	_notice("Converting the complete character on the server. Its design and proportions are preserved; no image request is made." if bridge is WebForgeBridge else "Baking the complete illustrated character locally. Its design and proportions are preserved; no image request is made.")
 
 
 func _preview_candidate(reported_path: Variant = "") -> void:
@@ -747,7 +901,7 @@ func _preview_candidate(reported_path: Variant = "") -> void:
 	_load_parts()
 	# Candidate metadata is the accepted truth, including after reopening a draft.
 	_apply_proposal({"name": candidate["name"], "rig_id": candidate["rig_id"], "kit_id": candidate["kit_id"], "theme": candidate["theme"], "features": _features.duplicate()})
-	_apply_identity_kit()
+	_apply_identity_kit(false)
 	_notice("Conversion complete. Review every animation, then Accept fighter & play to save it in Your fighters.")
 
 
@@ -766,6 +920,10 @@ func resume_job(path: String) -> void:
 	_tabs.current_tab = 1
 	_last_status = ""
 	_handle_status(bridge.status(path))
+	if bridge is WebForgeBridge:
+		(bridge as WebForgeBridge).resume_tracking(path)
+		_busy = true
+		_update_controls()
 
 
 func _load_parts() -> void:
@@ -937,6 +1095,13 @@ func _update_controls() -> void:
 	_analyse.disabled = _busy
 	_setup_check.disabled = _busy
 	_generate.disabled = _busy
+	if bridge is WebForgeBridge:
+		_analyse.disabled = _busy or not _hosted_authenticated
+		_generate.disabled = _busy or not _hosted_authenticated
+		if _invite_unlock != null:
+			_invite_unlock.disabled = _busy or _hosted_authenticated
+			_invite_lock.disabled = _busy or not _hosted_authenticated
+			_invite.editable = not _busy and not _hosted_authenticated
 	_use_master.disabled = _busy or job_path.is_empty()
 	_cancel_job.disabled = not _busy
 	_retry.disabled = _busy or state not in ["failed", "cancelled"]

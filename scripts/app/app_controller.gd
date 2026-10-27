@@ -29,6 +29,7 @@ func _ready() -> void:
 	# The original campaign owns two480x360 views; the arena restores its own
 	# logical size on entry. Window/fullscreen preferences and saves stay intact.
 	get_window().content_scale_size = Vector2i(960, 360)
+	BrowserRuntime.set_mode("story")
 	DisplayServer.window_set_title("Gloamthread - Story Mode")
 	get_tree().auto_accept_quit = false
 	process_physics_priority = 200
@@ -136,7 +137,7 @@ func _show_title(discard_unsaved: bool = false) -> void:
 	var can_continue: bool = saved.status == "ok" or saved.status == "backup_available"
 	_show("title", "Gloamthread: Story Mode", "Two couriers. Two views. One road home.\nA local adventure for two players.", [
 		_row("new", "New journey"), _row("continue", "Continue", str(saved.message), can_continue),
-		_row("settings", "Settings and controls"), _row("arena", "Back to arena"), _row("quit", "Quit")])
+		_row("settings", "Settings and controls"), _row("arena", "Back to arena"), _row("quit", "Browser home" if OS.has_feature("web") else "Quit")])
 	AudioDirector.play_music("exploration")
 
 
@@ -336,7 +337,7 @@ func _on_action(action: String, payload: Variant = null) -> void:
 	match action:
 		"arena": _return_to_arena()
 		"quit", "retry_quit": _quit_requested()
-		"discard_quit": get_tree().quit()
+		"discard_quit": _finish_quit()
 		"retry_title": _show_title()
 		"discard_title": _show_title(true)
 		"finish_reconnect":
@@ -592,4 +593,22 @@ func _quit_requested() -> void:
 			session.request_mode("pause", menu_owner)
 			_show("unsaved_quit", "This thread has not been saved", session.last_save_error + "\nRetry or explicitly discard the unsaved progress before quitting.", [_row("retry_quit", "Retry save and quit"), _row("discard_quit", "Discard unsaved progress and quit"), _row("cancel", "Keep this journey open")])
 			return
-	get_tree().quit()
+	_finish_quit()
+
+
+func _finish_quit() -> void:
+	if OS.has_feature("web"):
+		BrowserRuntime.home()
+	else:
+		get_tree().quit()
+
+
+func browser_focus_lost() -> void:
+	if is_instance_valid(session):
+		session.save_now()
+		if not session.last_save_error.is_empty():
+			_notify(session.last_save_error)
+		if session.mode == "playing":
+			session.request_mode("pause", menu_owner)
+			_show_pause()
+	InputRouter.flush()

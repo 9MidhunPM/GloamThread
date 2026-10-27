@@ -171,8 +171,12 @@ func _run() -> void:
 	creator._canvas.set_image(drawing)
 	creator.analyse_source()
 	_check(mock.commands == ["analyse"], "analyse launches exactly the explicit local-worker command")
+	var requested_name: String = mock.read_json(creator.job_path).get("preferred_name", "")
 	creator._handle_status({"state": "awaiting_approval", "message": "Review the proposal", "proposal": {"name": "Original fox", "rig_id": "quadruped", "kit_id": "storm", "theme": {"name": "Storm grove", "palette": ["#112233", "#445566", "#778899", "#aabbcc"], "motif": "Copper leaves"}, "features": ["copper scarf"]}})
-	_check(creator._name.text == "Original fox" and creator._rig.selected == 1 and creator._kit.selected == 2, "analyse suggestions remain editable in the form")
+	_check(creator._name.text == requested_name and creator._rig.selected == 1 and creator._kit.selected == 3, "analysis preserves the explicit name and applies its physical identity to the suggested kit")
+	creator._kit.select(2)
+	creator._kit.item_selected.emit(2)
+	_check(creator._proposal().get("kit_id") == "storm" and not creator._kit.disabled, "the suggested kit remains editable within its compatible attack category")
 	_check(mock.commands.size() == 1, "analyse completion never automatically spends on generation")
 	creator.generate_candidate()
 	_check(mock.commands == ["analyse", "generate"], "generation requires its own explicit action")
@@ -216,6 +220,7 @@ func _run() -> void:
 	creator.bake_edits()
 	_check(mock.commands.size() == commands_before, "old preview parts cannot be baked into a newly created job")
 	_check_proposal_revisions(view, library, loaded["bundle"], drawing)
+	_check_preview_identity(view, library, drawing)
 	_check_budget_resume(view, library, drawing)
 	_check_layout_preflight(view)
 	await _check_layout_correction(view, library, loaded["bundle"], drawing)
@@ -226,6 +231,25 @@ func _run() -> void:
 	view.free()
 	await process_frame
 	_finish()
+
+
+func _check_preview_identity(view: SubViewport, library: FighterLibrary, drawing: Image) -> void:
+	var creator := Creator.new()
+	var mock := FakeBridge.new()
+	creator.bridge = mock
+	creator.setup(0, library)
+	view.add_child(creator)
+	for identity: Array in [["Fixture fighter", "ember"], ["Old wizard", "frost"]]:
+		var job := mock.create_job(drawing, "Synthetic preview identity fixture; no provider calls.")
+		creator.job_path = job["path"]
+		var folder := creator.job_path.get_base_dir()
+		_make_bundle(folder.path_join("candidate"))
+		var manifest := mock.read_json(folder.path_join("candidate/manifest.json"))
+		manifest["name"] = identity[0]
+		mock.write_json(folder.path_join("candidate/manifest.json"), manifest)
+		creator._handle_status({"state": "complete", "message": "Preview " + identity[0], "candidate_path": folder.path_join("candidate")})
+		_check(Creator.Library.KITS[creator._kit.selected] == identity[1] and not creator._accept.disabled, "preview preserves a compatible saved kit and admits legacy identity correction for " + identity[0])
+	creator.free()
 
 
 func _make_bundle(folder: String) -> void:
@@ -382,6 +406,9 @@ func _check_layout_correction(view: SubViewport, library: FighterLibrary, previo
 	var path: String = job["path"]
 	var folder := path.get_base_dir()
 	var original_job := mock.read_json(path)
+	# This regression exercises retained limb-grid jobs. New create_job defaults
+	# to the whole illustrated character, which deliberately ignores limb crops.
+	original_job["art_mode"] = ""
 	original_job["proposal"] = creator._proposal()
 	mock.write_json(path, original_job)
 	creator.job_path = path

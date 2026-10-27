@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-27T08:15:33+05:30 — Connect browser authoring, backups and mode lifecycle
+
+- **Changed:** browser Forge adapter with individual invite UI, asynchronous private jobs, browser file pickers, six-file fighter ZIP backup/import, retained draft recovery and SDK-free correction uploads. Browser focus/pause, Home/fullscreen and per-mode sizing hooks preserve Arena and Story. Native authoring remains available.
+- **Recovery:** validate downloaded bundles before installation, swap candidates with rollback on failed writes, distinguish an unconfirmed submission without retrying it, stop completed polling and keep cancellation transport alive after closing the creator. Saved fighters retain compatible manual kits during preview.
+- **Validation:** Godot 4.7.2 arena 23/23, native Forge 176 assertions and browser boundary 31 assertions pass. Chromium local export visibly boots, enters solo combat, pauses and returns Home/Resume with no browser errors. Story and browser Forge display inspected; complete browser routes/public deployment remain pending at this checkpoint. No model requests.
+
 ### 2026-10-27T08:13:49+05:30 — Add invitation-protected hosted Forge
 
 - **Why:** let invited browser players use the existing authoring pipeline without exposing a provider key or changing offline combat.

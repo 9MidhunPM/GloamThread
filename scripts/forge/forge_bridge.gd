@@ -11,6 +11,14 @@ var pid: int = -1
 var job_root: String = JOB_ROOT
 
 
+func attach(_owner: Node) -> void:
+	pass
+
+
+func is_running() -> bool:
+	return pid > 0 and OS.is_process_running(pid)
+
+
 func create_job(source: Image, description: String, preferred_name: String = "") -> Dictionary:
 	if source == null or source.is_invisible() or description.length() > 2000:
 		return {"ok": false, "error": "Draw or import a character first; descriptions are limited to 2,000 characters."}

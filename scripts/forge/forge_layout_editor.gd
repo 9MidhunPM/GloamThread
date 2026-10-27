@@ -9,6 +9,7 @@ const LayoutCanvas = preload("res://scripts/forge/forge_layout_canvas.gd")
 const Bridge = preload("res://scripts/forge/forge_bridge.gd")
 
 var context: Dictionary
+var hosted_conversion: bool = false
 var layout: Dictionary
 var canvas: ForgeLayoutCanvas
 var board_tabs: TabBar
@@ -116,10 +117,10 @@ func _ready() -> void:
 	_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_preview.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	panel.add_child(_preview)
-	var cost := _label(str(get_meta("cost_text", "")) + "\nThis correction uses cached images and local conversion only.", 17)
+	var cost := _label(str(get_meta("cost_text", "")) + ("\nThis correction converts saved images on the server without a model request." if hosted_conversion else "\nThis correction uses cached images and local conversion only."), 17)
 	cost.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	panel.add_child(cost)
-	notice = _label("Review every target; conversion cannot invent missing limbs. This creates a new local draft with fresh masks/pivots. Your previous draft and preview stay intact.", 18)
+	notice = _label("Review every target; conversion cannot invent missing limbs. This creates a new draft with fresh masks/pivots. Your previous draft and preview stay intact.", 18)
 	notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	notice.custom_minimum_size.y = 44
 	page.add_child(notice)
@@ -132,7 +133,7 @@ func _ready() -> void:
 	back.pressed.connect(func() -> void: dismissed.emit())
 	actions.add_child(back)
 	save_button = Button.new()
-	save_button.text = "Save corrections & convert locally"
+	save_button.text = "Save corrections & convert" if hosted_conversion else "Save corrections & convert locally"
 	save_button.custom_minimum_size.y = 48
 	save_button.pressed.connect(_apply)
 	actions.add_child(save_button)

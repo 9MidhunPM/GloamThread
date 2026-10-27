@@ -62,6 +62,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	process_physics_priority = 200
 	get_window().content_scale_size = Vector2i(1920, 1080)
+	BrowserRuntime.set_mode("arena")
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	get_tree().auto_accept_quit = false
 	DisplayServer.window_set_title("Gloamthread - Wave Arena")
@@ -188,7 +189,7 @@ func _show_title() -> void:
 	_button("STORY MODE (2 PLAYERS)", Rect2(108, 654, 650, 64), _open_story)
 	_button("CHARACTER FORGE", Rect2(108, 730, 650, 64), func() -> void: _open_creator(0))
 	_button("SETTINGS & CONTROLS", Rect2(108, 806, 650, 64), _show_settings)
-	_button("QUIT", Rect2(108, 882, 650, 56), func() -> void: get_tree().quit())
+	_button("BROWSER HOME" if OS.has_feature("web") else "QUIT", Rect2(108, 882, 650, 56), _quit_game)
 	_preview(selected[0], Rect2(1000, 330, 480, 480), false)
 	_preview(selected[1], Rect2(1390, 410, 390, 390), true)
 	_label("PERSONAL BUILDS\nSHARED MAYHEM", Vector2(1080, 820), Vector2(680, 110), 36, INK)
@@ -525,6 +526,9 @@ func _on_off(value: bool) -> String:
 
 
 func _toggle_fullscreen() -> void:
+	if OS.has_feature("web"):
+		BrowserRuntime.fullscreen()
+		return
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN else DisplayServer.WINDOW_MODE_FULLSCREEN)
 	if screen == "settings":
 		_show_settings()
@@ -954,7 +958,20 @@ func _notification(what: int) -> void:
 		if is_instance_valid(session):
 			_show_pause()
 		else:
-			get_tree().quit()
+			_quit_game()
+
+
+func browser_focus_lost() -> void:
+	if is_instance_valid(session) and screen in ["playing", "shop"]:
+		_show_pause()
+	InputRouter.flush()
+
+
+func _quit_game() -> void:
+	if OS.has_feature("web"):
+		BrowserRuntime.home()
+	else:
+		get_tree().quit()
 
 
 func _toast(message: String) -> void:
@@ -969,7 +986,7 @@ func _show_error(message: String) -> void:
 	_shade()
 	_label("GLOAMTHREAD NEEDS A COMPLETE BUILD", Vector2(150, 180), Vector2(1600, 100), 40, INK)
 	_label(message, Vector2(150, 330), Vector2(1600, 500), 24, INK)
-	_button("QUIT", Rect2(150, 880, 450, 80), func() -> void: get_tree().quit())
+	_button("BROWSER HOME" if OS.has_feature("web") else "QUIT", Rect2(150, 880, 450, 80), _quit_game)
 
 
 func _background(bundle: Dictionary) -> void:

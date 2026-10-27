@@ -10,6 +10,8 @@ A pixel-art side-view fighter for **one or two players on one computer**. Surviv
 
 The optional [hosted Forge service](server/README.md) supports private creation jobs unlocked with individual invitation codes. It runs a separate Python worker with server-held credentials and durable request history; gameplay and saved fighters do not require this service. Browser release integration is in progress.
 
+The browser version supports local fighter ZIP backup/import and uses the same Arena and Story modes. Creation requires a personal invite; play remains open. Browser saves belong to that browser and can be removed by clearing site data. Desktop Python authoring keeps its existing setup below.
+
 ## Watch the game
 
 Every gameplay video is a real engine capture of the game's own automated demo scripts (no human players, no editing). Download or stream them from the [videos release](https://github.com/9MidhunPM/GloamThread/releases/tag/videos-2026-10-26).

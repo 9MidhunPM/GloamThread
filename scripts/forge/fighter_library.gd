@@ -8,6 +8,7 @@ const SIZES := {"character.png": Vector2i(544, 272), "portrait.png": Vector2i(12
 const RIGS := ["upright", "quadruped", "floating"]
 const KITS := ["ember", "frost", "storm", "stone", "nature", "shadow"]
 const MAX_FILE_BYTES := 16 * 1024 * 1024
+const MAX_ARCHIVE_BYTES := 32 * 1024 * 1024
 
 var storage_root: String = "user://fighters"
 var errors: Array[String] = []
@@ -133,6 +134,126 @@ func accept_candidate(path: String) -> Dictionary:
 		_remove_staging(staging)
 		return _failure("Could not install the candidate; the previous fighter was preserved.")
 	return load_bundle(destination.path_join("manifest.json"))
+
+
+func export_bundle(manifest_path: String) -> Dictionary:
+	var checked := load_bundle(manifest_path)
+	if not checked["ok"]:
+		return checked
+	var temporary := "user://fighter-export-%d.zip" % Time.get_ticks_usec()
+	var writer := ZIPPacker.new()
+	if writer.open(temporary) != OK:
+		return _failure("Could not create a fighter backup.")
+	var okay := true
+	for name: String in ["manifest.json"] + FILENAMES:
+		var file := FileAccess.open(manifest_path.get_base_dir().path_join(name), FileAccess.READ)
+		if file == null or writer.start_file(name) != OK:
+			okay = false
+			break
+		okay = writer.write_file(file.get_buffer(file.get_length())) == OK and writer.close_file() == OK
+		if not okay:
+			break
+	okay = writer.close() == OK and okay
+	var bytes := FileAccess.get_file_as_bytes(temporary) if okay else PackedByteArray()
+	DirAccess.remove_absolute(temporary)
+	if bytes.is_empty():
+		return _failure("Could not finish the fighter backup.")
+	return {"ok": true, "bytes": bytes, "filename": str(checked["bundle"]["id"]) + ".zip"}
+
+
+func import_archive(bytes: PackedByteArray) -> Dictionary:
+	# Inspect the central directory before ZIPReader allocates decompressed files.
+	# Archives contain exactly six fixed regular files, never paths or code.
+	var archive_error := _archive_error(bytes)
+	if not archive_error.is_empty():
+		return _failure(archive_error)
+	var folder := "user://fighter-import-%d" % Time.get_ticks_usec()
+	if DirAccess.make_dir_recursive_absolute(folder) != OK:
+		return _failure("Could not stage the fighter backup.")
+	var archive_path := folder.path_join("backup.zip")
+	var archive := FileAccess.open(archive_path, FileAccess.WRITE)
+	if archive == null:
+		return _failure("Could not retain the fighter backup.")
+	archive.store_buffer(bytes)
+	archive.close()
+	var reader := ZIPReader.new()
+	if reader.open(archive_path) != OK:
+		_cleanup_archive(folder)
+		return _failure("The fighter ZIP could not be opened.")
+	var names := reader.get_files()
+	var okay := names.size() == 6
+	for name: String in ["manifest.json"] + FILENAMES:
+		if names.count(name) != 1:
+			okay = false
+			break
+		var data := reader.read_file(name)
+		if data.is_empty() or data.size() > MAX_FILE_BYTES:
+			okay = false
+			break
+		var file := FileAccess.open(folder.path_join(name), FileAccess.WRITE)
+		if file == null:
+			okay = false
+			break
+		file.store_buffer(data)
+		file.close()
+	reader.close()
+	var result := accept_candidate(folder.path_join("manifest.json")) if okay else _failure("The fighter ZIP has missing, duplicate or unreadable files.")
+	_cleanup_archive(folder)
+	return result
+
+
+func _archive_error(bytes: PackedByteArray) -> String:
+	if bytes.size() < 22 or bytes.size() > MAX_ARCHIVE_BYTES:
+		return "Choose a fighter ZIP smaller than 32 MB."
+	var end := -1
+	for offset in range(bytes.size() - 22, maxi(-1, bytes.size() - 65558), -1):
+		if bytes.decode_u32(offset) == 0x06054b50 and offset + 22 + bytes.decode_u16(offset + 20) == bytes.size():
+			end = offset
+			break
+	if end < 0 or bytes.decode_u16(end + 4) != 0 or bytes.decode_u16(end + 6) != 0 or bytes.decode_u16(end + 8) != 6 or bytes.decode_u16(end + 10) != 6:
+		return "A fighter ZIP must contain exactly six files on one disk."
+	var cursor := int(bytes.decode_u32(end + 16))
+	if cursor < 0 or cursor + int(bytes.decode_u32(end + 12)) != end:
+		return "The fighter ZIP directory is invalid."
+	var seen: Array[String] = []
+	var total := 0
+	for entry in 6:
+		if cursor + 46 > end or bytes.decode_u32(cursor) != 0x02014b50:
+			return "The fighter ZIP directory is invalid."
+		var flags := bytes.decode_u16(cursor + 8)
+		var method := bytes.decode_u16(cursor + 10)
+		var compressed := int(bytes.decode_u32(cursor + 20))
+		var size := int(bytes.decode_u32(cursor + 24))
+		var length := int(bytes.decode_u16(cursor + 28))
+		var next := cursor + 46 + length + int(bytes.decode_u16(cursor + 30)) + int(bytes.decode_u16(cursor + 32))
+		if next > end or flags & 1 or method not in [0, 8] or compressed > MAX_ARCHIVE_BYTES or size <= 0 or size > MAX_FILE_BYTES:
+			return "The fighter ZIP has unsafe compression or oversized files."
+		var name := bytes.slice(cursor + 46, cursor + 46 + length).get_string_from_utf8()
+		if name not in ["manifest.json"] + FILENAMES or name in seen or bytes.decode_u16(cursor + 34) != 0:
+			return "The fighter ZIP has unexpected paths or duplicate files."
+		var mode := int(bytes.decode_u32(cursor + 38)) >> 16
+		if mode & 0xf000 not in [0, 0x8000]:
+			return "The fighter ZIP must contain regular files."
+		var local := int(bytes.decode_u32(cursor + 42))
+		if local < 0 or local + 30 > cursor or bytes.decode_u32(local) != 0x04034b50:
+			return "The fighter ZIP file header is invalid."
+		var local_length := int(bytes.decode_u16(local + 26))
+		var data_start := local + 30 + local_length + int(bytes.decode_u16(local + 28))
+		if data_start + compressed > int(bytes.decode_u32(end + 16)) or bytes.slice(local + 30, local + 30 + local_length).get_string_from_utf8() != name:
+			return "The fighter ZIP file header is invalid."
+		if name == "manifest.json" and size > 65536 or name == "provenance.json" and size > 1024 * 1024:
+			return "The fighter ZIP metadata exceeds its size limit."
+		seen.append(name)
+		total += size
+		if total > MAX_ARCHIVE_BYTES:
+			return "The expanded fighter ZIP exceeds 32 MB."
+		cursor = next
+	return "" if cursor == end else "The fighter ZIP has an invalid directory length."
+
+
+func _cleanup_archive(folder: String) -> void:
+	DirAccess.remove_absolute(folder.path_join("backup.zip"))
+	_remove_staging(folder)
 
 
 func _append_bundle(result: Array[Dictionary], path: String) -> void:
