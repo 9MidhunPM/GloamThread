@@ -1,5 +1,10 @@
 # Change log
 
+### 2026-10-27T08:42:20+05:30 — Give hosted Forge a private unambiguous upstream
+
+- Public static gameplay was healthy, but Nginx's generic `api` hostname resolved another project's alias on the shared Dokploy network and returned 502. Added the unique private alias `gloamthread-forge-api` and dynamic Docker DNS resolution so API recreation also refreshes its address.
+- Validation: actual healthy API/container/network inspected; Nginx configuration and Compose checks pass on the ARM64 server. No DNS or global Cloudflare settings changed. Public API verification follows deployment of this fix.
+
 ### 2026-10-27T08:41:52+05:30 — Keep browser fullscreen controls and save warnings usable
 
 - Fullscreen now toggles the document so the toolbar stays visible, exposes an Exit fullscreen action, and synchronizes the in-game settings label with the browser's actual state. A storage warning now reduces the remaining stage height instead of overflowing the window.
