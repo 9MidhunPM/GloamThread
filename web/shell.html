@@ -40,6 +40,9 @@
   const canvas=document.querySelector('#canvas'), stage=document.querySelector('#stage');
   const status=document.querySelector('#status'), play=document.querySelector('#play'), progress=document.querySelector('#progress');
   let engine, booted=false, started=false, mode='arena', focusListener=null, fullscreenListener=null;
+  let loadWatchdog=null, lastProgressAt=0, lastProgress=-1;
+  const stopLoadWatchdog=()=>{clearInterval(loadWatchdog);loadWatchdog=null;};
+  const watchLoad=()=>{stopLoadWatchdog();lastProgress=-1;lastProgressAt=performance.now();loadWatchdog=setInterval(()=>{if(performance.now()-lastProgressAt>=30000){status.textContent='Loading is taking longer than usual. You can wait, or Retry loading.';document.querySelector('#retry').hidden=false;}},1000);};
   const resize=()=>{if(!started)return;const unit=mode==='story'?[960,360]:[640,360];const ratio=window.devicePixelRatio||1;const factor=Math.max(1,Math.floor(Math.min(stage.clientWidth*ratio/unit[0],stage.clientHeight*ratio/unit[1])));canvas.width=unit[0]*factor;canvas.height=unit[1]*factor;canvas.style.width=(canvas.width/ratio)+'px';canvas.style.height=(canvas.height/ratio)+'px';};
   window.GloamWeb={setMode(value){mode=value;document.body.dataset.mode=value;resize();},onFocusLoss(callback){focusListener=callback;},onFullscreenChange(callback){fullscreenListener=callback;},storageWarning(message){const node=document.querySelector('#storage');node.textContent=message;node.style.display=message?'block':'none';resize();},home(){document.body.classList.remove('playing');started=false;status.textContent='Your game is still open. Press Resume to return.';play.textContent='Resume game';play.disabled=false;},async fullscreen(){try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();canvas.focus();}catch{status.textContent='Fullscreen is unavailable. You can keep playing in the browser.';}}};
   const loseFocus=()=>{if(focusListener)focusListener();};document.addEventListener('visibilitychange',()=>{if(document.hidden)loseFocus();});window.addEventListener('blur',loseFocus);
@@ -49,10 +52,11 @@
   document.querySelector('#retry').onclick=()=>location.reload();
   play.onclick=async()=>{
     if(engine&&booted){started=true;document.body.classList.add('playing');resize();canvas.focus();return;}
+    if(typeof Engine==='undefined'){status.textContent='The game loader could not download. Retry loading to try again.';document.querySelector('#retry').hidden=false;return;}
     if(!window.WebAssembly||!Engine.isWebGLAvailable(2)){status.textContent='This browser needs WebAssembly and WebGL 2 to play. Try a current Chrome, Edge or Firefox browser.';return;}
-    play.disabled=true;progress.hidden=false;status.textContent='Loading the world…';
-    try{engine=new Engine($GODOT_CONFIG);started=true;document.body.classList.add('playing','loading');resize();await engine.startGame({canvas,canvasResizePolicy:0,focusCanvas:true,onProgress(current,total){if(total){progress.value=current/total*100;status.textContent='Loading the world… '+Math.round(progress.value)+'%';}else status.textContent='Loading the world…';},onPrintError(message){console.error(message);}});booted=true;document.body.classList.remove('loading');canvas.focus();}
-    catch(error){started=false;document.body.classList.remove('playing','loading');status.textContent='The game could not start. '+(error?.message||String(error));document.querySelector('#retry').hidden=false;play.disabled=false;progress.hidden=true;}
+    play.disabled=true;progress.hidden=false;document.querySelector('#retry').hidden=true;status.textContent='Loading the world…';watchLoad();
+    try{engine=new Engine($GODOT_CONFIG);started=true;document.body.classList.add('playing','loading');resize();await engine.startGame({canvas,canvasResizePolicy:0,focusCanvas:true,onProgress(current,total){const changed=current!==lastProgress;if(changed){lastProgress=current;lastProgressAt=performance.now();document.querySelector('#retry').hidden=true;}if(total){progress.value=current/total*100;if(changed)status.textContent='Loading the world… '+Math.round(progress.value)+'%';}else if(changed)status.textContent='Loading the world…';},onPrintError(message){console.error(message);}});booted=true;stopLoadWatchdog();document.querySelector('#retry').hidden=true;document.body.classList.remove('loading');canvas.focus();}
+    catch(error){stopLoadWatchdog();started=false;document.body.classList.remove('playing','loading');status.textContent='The game could not start. '+(error?.message||String(error));document.querySelector('#retry').hidden=false;play.disabled=false;progress.hidden=true;}
   };
 })();
 </script>

@@ -1,5 +1,10 @@
 # Change log
 
+### 2026-10-27T09:48:32+05:30 — Give stalled browser loads an explicit recovery action
+
+- A long-lived software-rendered QA context hit a transient public 502 during rollout and remained on the loading screen. The shell now reveals Retry loading after 30 seconds without changed byte progress, while allowing a slow load to continue. Missing engine scripts show a clear loader error instead of an uncaught Engine reference.
+- Validation: actual Chromium normal boot passes without errors; deliberately aborted engine script shows the loader message/Retry. Holding the real pack request and advancing 31 seconds shows the persistent delay message; no automatic navigation or duplicate pack request, and explicit Retry reloads once. No provider request or automatic paid retry.
+
 ### 2026-10-27T09:38:38+05:30 — Preserve exported bytes through the CDN
 
 - Public payload verification found Cloudflare injecting its analytics script into the shell and obscuring license email addresses, changing both HTML hashes from the release manifest. Added `no-transform` to origin cache directives so the CDN preserves the exported payload; normal immutable caching/revalidation remains.
