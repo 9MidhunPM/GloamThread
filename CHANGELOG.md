@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-27T08:24:48+05:30 — Stabilize bitmap-font metadata for clean exports
+
+- A fresh release clone correctly reclassified the bitmap-font atlas PNG as an embedded font page with `importer="skip"`; its stale tracked texture-import metadata caused the clean-source export guard to reject the build.
+- Committed the canonical engine-produced import metadata without changing the original font pixels or glyph data. The earlier dirty-cache browser checks did not expose this clean-import difference; release verification continues from a fresh clone.
+- Validation: inspected the clean Godot 4.7.2 import diff and font-loading path. No content rebuild or provider call; fresh clean export and final rendering remain the next gates.
+
 ### 2026-10-27T08:19:49+05:30 — Package the desktop-browser release and deployment
 
 - **Changed:** separate single-threaded Web preset, original-game loading shell, integer-fit pixel canvas, responsive landing page, gesture-based Play/fullscreen and useful failure copy. Export tooling pins official 4.7.2 Web template hashes, checks clean source, records build hashes, compresses payloads and publishes versioned assets atomically with rollback.
