@@ -1,16 +1,18 @@
 # Gloamthread — Two Ends
 
-A pixel-art side-view fighter for **one or two players on one computer**. Survive twenty waves and four bosses in a world that grows as you play, buy your own upgrades between rounds, and keep going in endless mode. Draw your own fighter, or play the original two-player **Story Mode** with the couriers Tavi and Neri. Everything runs offline; no account or API key is needed to play.
+A pixel-art side-view fighter for **one or two players on one computer**. Survive twenty waves and four bosses in a world that grows as you play, buy your own upgrades between rounds, and keep going in endless mode. Draw your own fighter, or play the original two-player **Story Mode** with the couriers Tavi and Neri. No account or API key is needed to play. Combat runs locally; the browser version downloads the game when you open it.
 
 [![Gloamthread intro: two couriers at opposite ends of a glowing thread. Click to watch the 48-second captioned intro.](docs/media/intro-poster.jpg)](https://github.com/9MidhunPM/GloamThread/releases/download/videos-2026-10-26/gloamthread-intro.mp4)
 
 *Click the image to watch the 48-second intro (captioned). [All videos, transcripts and details](docs/VIDEOS.md).*
 
-**Jump to:** [Watch](#watch-the-game) · [Play in three steps](#play-in-three-steps) · [Controls](#controls) · [Accessibility](#accessibility) · [Modes](#what-you-can-play) · [Make a fighter](#draw-and-forge-a-fighter) · [Developers](#for-developers) · [Docs map](#documentation-map)
+**[Play now at gloamthread.midhunpm.in](https://gloamthread.midhunpm.in)** — open in desktop Chrome/Chromium or Firefox, click **Play Gloamthread**, then choose Solo Run, Local Co-op or Story Mode. No installation. Use **Esc** to pause and the toolbar for fullscreen.
 
-The optional [hosted Forge service](server/README.md) supports private creation jobs unlocked with individual invitation codes. It runs a separate Python worker with server-held credentials and durable request history; gameplay and saved fighters do not require this service. See the [browser build and deployment guide](docs/WEB_RELEASE.md). Production deployment is being verified.
+**Jump to:** [Watch](#watch-the-game) · [Run from source](#play-in-three-steps) · [Controls](#controls) · [Accessibility](#accessibility) · [Modes](#what-you-can-play) · [Make a fighter](#draw-and-forge-a-fighter) · [Developers](#for-developers) · [Docs map](#documentation-map)
 
-The browser version supports local fighter ZIP backup/import and uses the same Arena and Story modes. Creation requires a personal invite; play remains open. Browser saves belong to that browser and can be removed by clearing site data. Desktop Python authoring keeps its existing setup below.
+The optional [hosted Forge service](server/README.md) supports private creation jobs unlocked with individual invitation codes. It runs a separate Python worker with server-held credentials and durable request history; gameplay and saved fighters do not require this service. See the [browser build and deployment guide](docs/WEB_RELEASE.md) and [release evidence](evidence/web-release/README.md).
+
+The browser version supports fighter ZIP backup/import and uses the same Arena and Story modes. Creation requires a personal invite; play is open. Saves stay in that browser; clearing site data removes them, so download a ZIP to keep your fighters. Refresh ends the current run. Mobile touch controls and online multiplayer are outside this release. Desktop Python authoring keeps its existing setup below.
 
 ## Watch the game
 
@@ -88,13 +90,15 @@ Details, one-handed layouts, narration setup and known limits: **[Accessibility 
 | **STORY MODE (2 PLAYERS)** | 2 | The original eight-room adventure: restore paired bridges, beat the Spoolwarden, unlock the shared dash and bring the Lantern Loom home. Its title and pause menus return to the arena. |
 | **CHARACTER FORGE** | — | Draw or import a fighter, choose one of three body types and six ability families, preview its animation and accept it into your library. |
 
-Enemies telegraph their attacks: chargers mark a rush lane, heavies guard their front, shooters lock a three-shot burst and flyers mark their dive. [Enemy guide](docs/ENEMY_MECHANICS.md). Saved fighters, settings and scores live in Godot's per-user data folder under `Gloamthread-Arena`.
+Enemies telegraph their attacks: chargers mark a rush lane, heavies guard their front, shooters lock a three-shot burst and flyers mark their dive. [Enemy guide](docs/ENEMY_MECHANICS.md). Saved fighters, settings and scores live in browser storage on the website, or in Godot's per-user data folder under `Gloamthread-Arena` for native play.
 
 ## Draw and forge a fighter
 
 Three built-in fighters (including the AI-generated Kiln Fox) and any fighter you have accepted work offline. Character Forge offers a drawing canvas, PNG/JPEG import, editable body/ability/theme proposals, an animation preview and local correction tools. Name your fighter before analysing: names and weapon descriptions guide the artwork, and magic identities get projectile kits while sword/spear fighters get melee kits.
 
-Generating new artwork is optional and uses **your own OpenAI API key** through a local Python helper:
+On the website, enter your personal creator invite in **Character Forge**, then draw or upload original art. Review the proposal, generate, preview and accept. Download the fighter ZIP to keep a backup. The server holds the provider key; your browser never receives it. Cached crop/mask/pivot corrections send no model request.
+
+For **native desktop authoring**, generating new artwork is optional and uses **your own OpenAI API key** through a local Python helper:
 
 ```sh
 python3 -m venv --system-site-packages .venv
@@ -123,14 +127,16 @@ godot --path . --script tools/accessibility_tour.gd   # one-minute settings tour
 python3 tools/check_pack.py
 python3 -m unittest discover -s tools/tests -p 'test_*.py'
 python3 -m tools.forge.content --validate
+python3 -m tools.forge.retained --validate
 python3 -m tools.forge.world --validate
 python3 -m tools.forge.scenery --validate
 godot --headless --path . --editor --import --quit
 godot --headless --fixed-fps 60 --path . --script tests/arena/run_tests.gd
 godot --headless --fixed-fps 60 --path . --script tests/forge/run_tests.gd
+godot --headless --fixed-fps 60 --path . --script tests/forge/browser_tests.gd
 ```
 
-Current results and the known pre-existing failures are recorded in [STATUS](docs/STATUS.md). Rebuild original arena media only deliberately with `python3 -m tools.forge.content --build --validate`. Package a clean committed checkout with `python3 tools/package_arena.py` ([packaging guide](docs/ARENA_DEMO.md)). Automated checks and bot routes do not prove rendered quality, physical controllers or enjoyable human play.
+Current results, resolved historical failures and remaining verification limits are recorded in [STATUS](docs/STATUS.md). Rebuild original arena media only deliberately with `python3 -m tools.forge.content --build --validate`. Package a clean committed checkout with `python3 tools/package_arena.py` ([packaging guide](docs/ARENA_DEMO.md)). Automated checks and bot routes do not prove rendered quality, physical controllers or enjoyable human play.
 
 ## Documentation map
 
@@ -140,6 +146,7 @@ Current results and the known pre-existing failures are recorded in [STATUS](doc
 | [Accessibility guide](docs/ACCESSIBILITY.md) | Every accessibility option and its limits |
 | [Videos](docs/VIDEOS.md) | All videos, the intro transcript and how each was made |
 | [Final review desk](docs/FINAL_REVIEW.md) | A three-minute demo route and the real screenshot gallery |
+| [Web release and operations](docs/WEB_RELEASE.md) | Browser builds, invited creation, deployment and private backups |
 | [Status](docs/STATUS.md) | What is implemented and verified, and what is not |
 | [Wave fighter spec](docs/WAVE_FIGHTER_SPEC.md) · [Scrolling world plan](docs/SCROLLING_WORLD_PLAN.md) | Approved design contracts |
 | [Enemy mechanics](docs/ENEMY_MECHANICS.md) | How each enemy telegraphs and how to counter it |

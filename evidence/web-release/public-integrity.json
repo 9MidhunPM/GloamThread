@@ -1,0 +1,51 @@
+{
+  "implementation_commit": "1dac45b3816ca5174e5cf123100bd7f690f246b4",
+  "files": {
+    "game-1dac45b3816ca517.audio.worklet.js": {
+      "bytes": 7298,
+      "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
+      "cache_control": "public, max-age=31536000, immutable, no-transform"
+    },
+    "notices.html": {
+      "bytes": 104673,
+      "sha256": "b8bf0d20badf9747ef35bbb4bbc2fdff6b2dd9377c75ab450ca4f808a6625a93",
+      "cache_control": "public, no-cache, no-transform"
+    },
+    "index.html": {
+      "bytes": 11480,
+      "sha256": "62231ceb2e569b0c610a1818dff3fb288ad7f2976103dc95c644b1f7b8b9de2a",
+      "cache_control": "public, no-cache, no-transform"
+    },
+    "game-1dac45b3816ca517.pck": {
+      "bytes": 18266880,
+      "sha256": "4d94240f8cdc1ca5ba7f3632cd631cfa342345b02c539bd98e9e8b3dd6668ea8",
+      "cache_control": "public, max-age=31536000, immutable, no-transform"
+    },
+    "game-1dac45b3816ca517.png": {
+      "bytes": 21443,
+      "sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e",
+      "cache_control": "public, max-age=31536000, immutable, no-transform"
+    },
+    "game-1dac45b3816ca517.js": {
+      "bytes": 279815,
+      "sha256": "33c94cb3175f3333b82e2a3be5e8e86f77986f0aa2042b1631f6367a4e5bb6ba",
+      "cache_control": "public, max-age=31536000, immutable, no-transform"
+    },
+    "preview.png": {
+      "bytes": 128698,
+      "sha256": "2e2dc942461321f32fb2763360dff2fa871cb4066ee4bef81d734c3cbb1983af",
+      "cache_control": "public, max-age=14400, must-revalidate, no-transform"
+    },
+    "game-1dac45b3816ca517.wasm": {
+      "bytes": 39514754,
+      "sha256": "fc74679e3b97f76878947fcd4fbe1268cbfa6188182a2e33bbc3f5dc9bfa57d0",
+      "cache_control": "public, max-age=31536000, immutable, no-transform"
+    },
+    "game-1dac45b3816ca517.audio.position.worklet.js": {
+      "bytes": 2973,
+      "sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
+      "cache_control": "public, max-age=31536000, immutable, no-transform"
+    }
+  },
+  "known_private_values_absent": true
+}

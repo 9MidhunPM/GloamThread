@@ -1,5 +1,13 @@
 # Change log
 
+### 2026-10-27T09:52:52+05:30 — Record the deployed browser release and recovery evidence
+
+- Published `web-v0.5.0-r9` / `1dac45b3816ca5174e5cf123100bd7f690f246b4` at https://gloamthread.midhunpm.in with open gameplay, browser-local saves/ZIP backups and invited hosted creation. Updated README, STATUS, submission record and Web operations guide; preserved the older Linux release and intermediate history.
+- Validation: actual Chromium153/Firefox155 title, Story-title return, solo combat, pause/Home/Resume have zero browser errors. Co-op shops/readiness, save reload, fullscreen, denied-storage and controlled startup-recovery routes are recorded separately. All nine public payload sizes/hashes match BUILD and exclude known private values; health/configuration/Nginx pass.
+- Source evidence: 239 Python tests, arena23/23, nativeForge178/178, browser50/50, import/content/retained/world/scenery pass. Exact Godot-code checkpoint's ordinary-input solo20 (24994ticks), duo25 (34196ticks) and fullStory (12305ticks) pass; all 25 recorded source-file hashes still match. Small JSON reports are retained in evidence/web-release.
+- Live hosted drawing completed analysis/two image requests, full admission, free cached crop correction, browser acceptance, ZIP download and rendered combat. Durable history remains three received reservations/$0.25 estimated, not provider billing. Real production backup and isolated no-network restore pass without replacing live data. Private raw art and invitations stay excluded.
+- Limits: desktop scope; no full20-wave browser, physical-controller/audio/human enjoyment or physicalFPS claim. Saves are browser-local; local host backups have no off-server copy or recurring schedule. Exact revisions/commands and limitations are in the release evidence.
+
 ### 2026-10-27T09:48:32+05:30 — Give stalled browser loads an explicit recovery action
 
 - A long-lived software-rendered QA context hit a transient public 502 during rollout and remained on the loading screen. The shell now reveals Retry loading after 30 seconds without changed byte progress, while allowing a slow load to continue. Missing engine scripts show a clear loader error instead of an uncaught Engine reference.

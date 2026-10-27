@@ -1,5 +1,8 @@
 # Browser release and operations
 
+**[Play the public release](https://gloamthread.midhunpm.in).** Its exact deployed
+source and verification are recorded in [release evidence](../evidence/web-release/README.md).
+
 The browser version targets desktop Chromium and Firefox with WebAssembly and
 WebGL 2. Keyboard and gamepad play share one computer. Arena solo/co-op and the
 original two-player Story use the same game code as desktop. Mobile controls,
@@ -24,6 +27,10 @@ licenses, writes `BUILD.json`, precompresses large files and publishes the whole
 directory with rollback. It refuses changed source, unexpected files and an
 unsupported engine. `--allow-dirty` is for local QA and explicitly labels the
 manifest; production packaging requires committed source.
+
+If startup makes no download progress for 30 seconds, the shell offers Retry
+loading while allowing the original download to continue. A missing engine
+script also has a recovery message. Retry reloads only when clicked.
 
 Play unlocks browser audio. Fullscreen is optional. The shell fits complete
 integer world pixels in the available physical canvas and letterboxes spare
@@ -81,6 +88,8 @@ path `deploy/web/compose.yaml`, and route `gloamthread.midhunpm.in` to service
 The root health route checks Nginx; the API's internal `/healthz` checks SQLite.
 Safe `/api/forge/configuration` reports worker readiness. Compressed versioned
 engine/pack files use immutable caching; HTML and build metadata revalidate.
+Origin no-transform directives preserve exported bytes through the CDN, including
+license text and the game shell.
 
 Issue/revoke invites from the API container's Dokploy terminal:
 
@@ -120,8 +129,12 @@ recurring schedule require separate operational configuration.
 
 Required source checks include the existing arena/Forge/Python suites and
 validators, plus `tests/forge/browser_tests.gd` and the hosted API/package tests.
-Actual Chromium testing has separately exercised title/lobby/solo combat,
-pause/Home/Resume, Story new/save/return/reload and invite unlock plus fighter ZIP
-download/import. Record later exported/deployed checks against their own source
-SHA. Safari, physical controllers, audio listening and human enjoyment remain
-unverified until separately recorded.
+Actual public Chromium and Firefox testing separately exercises title/solo
+combat, pause/Home/Resume and Story entry/return. Chromium also covers co-op
+split/merge, independent shops, both-player Ready, invite unlock and fighter ZIP
+download/import; local Story new/save/return/reload passes. A real hosted drawing
+completed analysis, artwork, cached free crop correction, acceptance, ZIP download
+and rendered combat. An actual production backup was restored in a separate
+no-network container and checked without replacing live data. See the release
+evidence for exact revisions, commands and limits. Safari, physical controllers,
+audio listening and human enjoyment remain unverified.
