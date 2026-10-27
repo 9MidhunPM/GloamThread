@@ -1,0 +1,49 @@
+services:
+  web:
+    build:
+      context: ../..
+      dockerfile: deploy/web/Dockerfile
+      target: web
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "127.0.0.1:8088:8080"
+  api:
+    build:
+      context: ../..
+      dockerfile: deploy/web/Dockerfile
+      target: forge
+    restart: unless-stopped
+    environment:
+      FORGE_DATA_ROOT: /data/forge
+      FORGE_PUBLIC_ORIGIN: ${FORGE_PUBLIC_ORIGIN:-https://gloamthread.midhunpm.in}
+    volumes:
+      - forge-data:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+  worker:
+    build:
+      context: ../..
+      dockerfile: deploy/web/Dockerfile
+      target: forge
+    command: ["python", "-m", "server.worker"]
+    restart: unless-stopped
+    environment:
+      FORGE_DATA_ROOT: /data/forge
+      FORGE_SECRET_FILE: /run/forge-secrets/provider.env
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_IMAGE_MODEL: ${OPENAI_IMAGE_MODEL:-gpt-image-1-mini}
+      OPENAI_IMAGE_QUALITY: ${OPENAI_IMAGE_QUALITY:-low}
+    volumes:
+      - forge-data:/data
+      - forge-secrets:/run/forge-secrets:ro
+volumes:
+  forge-data:
+    name: gloamthread-web-forge-data
+  forge-secrets:
+    external: true
+    name: gloamthread-web-forge-secrets

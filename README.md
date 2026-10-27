@@ -8,7 +8,7 @@ A pixel-art side-view fighter for **one or two players on one computer**. Surviv
 
 **Jump to:** [Watch](#watch-the-game) · [Play in three steps](#play-in-three-steps) · [Controls](#controls) · [Accessibility](#accessibility) · [Modes](#what-you-can-play) · [Make a fighter](#draw-and-forge-a-fighter) · [Developers](#for-developers) · [Docs map](#documentation-map)
 
-The optional [hosted Forge service](server/README.md) supports private creation jobs unlocked with individual invitation codes. It runs a separate Python worker with server-held credentials and durable request history; gameplay and saved fighters do not require this service. Browser release integration is in progress.
+The optional [hosted Forge service](server/README.md) supports private creation jobs unlocked with individual invitation codes. It runs a separate Python worker with server-held credentials and durable request history; gameplay and saved fighters do not require this service. See the [browser build and deployment guide](docs/WEB_RELEASE.md). Production deployment is being verified.
 
 The browser version supports local fighter ZIP backup/import and uses the same Arena and Story modes. Creation requires a personal invite; play remains open. Browser saves belong to that browser and can be removed by clearing site data. Desktop Python authoring keeps its existing setup below.
 

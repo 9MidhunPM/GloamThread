@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-27T08:19:49+05:30 — Package the desktop-browser release and deployment
+
+- **Changed:** separate single-threaded Web preset, original-game loading shell, integer-fit pixel canvas, responsive landing page, gesture-based Play/fullscreen and useful failure copy. Export tooling pins official 4.7.2 Web template hashes, checks clean source, records build hashes, compresses payloads and publishes versioned assets atomically with rollback.
+- **Deployment:** ARM64/amd64 Docker targets, Nginx same-origin API routing, Compose services and persistent named volumes. Added a direct SSH stdin helper for the existing authorized key into worker-only storage; API/public export do not receive it. Added `docs/WEB_RELEASE.md`.
+- **Validation:** local Chromium solo combat/pause/Home, Story new/save/return/reload, co-op split/merge and invite unlock plus fighter ZIP backup/import are verified separately from headless tests. Ten packaging failure/rollback tests, Compose configuration and actual ARM64 Nginx configuration checks pass. Approximately 22 MiB compressed game payload. Production rollout, live generation and Firefox remain pending; no physical device/listening claim.
+
 ### 2026-10-27T08:15:33+05:30 — Connect browser authoring, backups and mode lifecycle
 
 - **Changed:** browser Forge adapter with individual invite UI, asynchronous private jobs, browser file pickers, six-file fighter ZIP backup/import, retained draft recovery and SDK-free correction uploads. Browser focus/pause, Home/fullscreen and per-mode sizing hooks preserve Arena and Story. Native authoring remains available.
