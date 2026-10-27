@@ -41,9 +41,23 @@ services:
     volumes:
       - forge-data:/data
       - forge-secrets:/run/forge-secrets:ro
+  backup:
+    profiles: [ops]
+    build:
+      context: ../..
+      dockerfile: deploy/web/Dockerfile
+      target: forge
+    command: ["python", "-m", "server.backup", "--data-root", "/data/forge", "--output", "/backups"]
+    environment:
+      FORGE_DATA_ROOT: /data/forge
+    volumes:
+      - forge-data:/data
+      - forge-backups:/backups
 volumes:
   forge-data:
     name: gloamthread-web-forge-data
   forge-secrets:
     external: true
     name: gloamthread-web-forge-secrets
+  forge-backups:
+    name: gloamthread-web-forge-backups

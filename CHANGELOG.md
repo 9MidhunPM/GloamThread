@@ -1,5 +1,10 @@
 # Change log
 
+### 2026-10-27T08:25:31+05:30 — Add consistent private Forge backups
+
+- Added an operator backup CLI and optional Compose `ops` service. With idle authoring stopped, it snapshots SQLite including committed WAL data, retains private owner artifacts without following symlinks, atomically publishes a hash manifest/archive and keeps seven completed backups. Provider credentials remain on their separate worker-only volume.
+- Added restore/failure/retention tests and deployment instructions. All 11 backup tests pass; no model request. These are local host backups; off-server storage and automatic scheduling are not configured.
+
 ### 2026-10-27T08:24:48+05:30 — Stabilize bitmap-font metadata for clean exports
 
 - A fresh release clone correctly reclassified the bitmap-font atlas PNG as an embedded font page with `importer="skip"`; its stale tracked texture-import metadata caused the clean-source export guard to reject the build.

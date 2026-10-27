@@ -91,6 +91,26 @@ redeploying a previously tested immutable source tag while preserving both
 volumes. A deployment or health response alone does not establish browser
 gameplay, successful generation, audible sound or physical controller support.
 
+## Private local backups
+
+When no generation is queued or running, stop the API and worker, make a
+consistent snapshot, then start those authoring services again. Static gameplay
+can stay online:
+
+```sh
+docker compose -f deploy/web/compose.yaml stop api worker
+docker compose -f deploy/web/compose.yaml --profile ops run --rm backup
+docker compose -f deploy/web/compose.yaml start api worker
+```
+
+The backup command refuses active/queued work, uses SQLite's backup API, copies
+private job artifacts without following symlinks, and publishes an atomic
+archive plus file hashes in `gloamthread-web-forge-backups`. It keeps the seven
+most recent completed archives and preserves live request history. Restore the
+archive to the same `/data/forge` path while both authoring processes are
+stopped. Backups share the deployment host; off-server backup storage and a
+recurring schedule require separate operational configuration.
+
 ## Verification boundaries
 
 Required source checks include the existing arena/Forge/Python suites and

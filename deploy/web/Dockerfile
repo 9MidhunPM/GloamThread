@@ -23,7 +23,7 @@ RUN pip install --no-cache-dir -r requirements-authoring.txt -r requirements-web
 COPY tools/forge/ tools/forge/
 COPY tools/ai_assets.py tools/ai_assets.py
 COPY server/ server/
-RUN useradd --uid 10001 --create-home forge && mkdir -p /data/forge && chown -R forge:forge /data
+RUN useradd --uid 10001 --create-home forge && mkdir -p /data/forge /backups && chown -R forge:forge /data /backups
 USER forge
 ENV FORGE_DATA_ROOT=/data/forge PYTHONUNBUFFERED=1
 EXPOSE 8000

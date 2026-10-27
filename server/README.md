@@ -62,6 +62,20 @@ SQLite-aware backup plus a consistent artifact snapshot. Never clear the ledger
 or replace the volume to recover a failed request. Retained jobs are private;
 this service does not synchronize accepted browser libraries or publish art.
 
+For an operator-run local backup, first wait until the queue is idle, then stop
+both authoring processes without interrupting a generation. Run
+`python -m server.backup --data-root /data/forge --output /backups` in a one-shot
+container mounting the data and a separate private backup volume; restart the
+API and worker afterward. The command refuses an active worker or non-idle
+queue, snapshots SQLite through its backup API, rejects symlinks and publishes
+an atomic archive containing the database and owner artifacts. It retains the
+seven newest completed archives without changing request history. Provider
+secret files and worker readiness metadata are excluded. For restore, stop both
+authoring processes and extract a verified archive into an empty data volume at
+the **same absolute `FORGE_DATA_ROOT`** so job paths/request identities remain
+valid; retain the existing volume separately until verification succeeds. Local
+archives are private disaster-recovery copies, not an offsite backup or schedule.
+
 Checks (mock providers and temporary data, no paid requests):
 
 ```sh
