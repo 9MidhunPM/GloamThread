@@ -1,5 +1,10 @@
 # Change log
 
+### 2026-10-27T08:41:52+05:30 — Keep browser fullscreen controls and save warnings usable
+
+- Fullscreen now toggles the document so the toolbar stays visible, exposes an Exit fullscreen action, and synchronizes the in-game settings label with the browser's actual state. A storage warning now reduces the remaining stage height instead of overflowing the window.
+- Validation: actual Chromium at 1280×720/DPR 1.25 enters/exits fullscreen through visible controls; Settings shows ON correctly. Controlled IndexedDB denial still boots combat and pause, displays the warning, and fits the stage exactly inside the 720px viewport. No page/console errors or provider calls; Godot import passes.
+
 ### 2026-10-27T08:31:46+05:30 — Export the exact pinned commit inside Dokploy
 
 - Dokploy injects routing labels/networks into its checked-out Compose file, so the clean-source gate rejected the deployment working tree before export. The exporter now reconstructs tracked source from the pinned Git commit in its private build stage, then runs the existing clean/source-consistency checks.

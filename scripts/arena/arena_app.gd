@@ -63,6 +63,8 @@ func _ready() -> void:
 	process_physics_priority = 200
 	get_window().content_scale_size = Vector2i(1920, 1080)
 	BrowserRuntime.set_mode("arena")
+	if OS.has_feature("web"):
+		BrowserRuntime.fullscreen_changed.connect(_browser_fullscreen_changed)
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	get_tree().auto_accept_quit = false
 	DisplayServer.window_set_title("Gloamthread - Wave Arena")
@@ -499,7 +501,7 @@ func _show_settings() -> void:
 	_label("ASSIST & CONTROLS", Vector2(980, 214), Vector2(640, 36), 22, GOLD)
 	var left := func(row: int) -> Rect2: return Rect2(300, 260 + row * 72, 640, 60)
 	var right := func(row: int) -> Rect2: return Rect2(980, 260 + row * 72, 640, 60)
-	var fullscreen := DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN
+	var fullscreen := BrowserRuntime.is_fullscreen()
 	_option("FULLSCREEN: %s" % _on_off(fullscreen), left.call(0), _toggle_fullscreen, "Switch between fullscreen and a window. F11 also works anywhere.")
 	var volumes := [["master_volume", "MASTER VOLUME", "Overall loudness."], ["music_volume", "MUSIC VOLUME", "Background music only."], ["sfx_volume", "EFFECTS VOLUME", "Hits, warnings and menu sounds."]]
 	for index in volumes.size():
@@ -530,6 +532,11 @@ func _toggle_fullscreen() -> void:
 		BrowserRuntime.fullscreen()
 		return
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN else DisplayServer.WINDOW_MODE_FULLSCREEN)
+	if screen == "settings":
+		_show_settings()
+
+
+func _browser_fullscreen_changed() -> void:
 	if screen == "settings":
 		_show_settings()
 
