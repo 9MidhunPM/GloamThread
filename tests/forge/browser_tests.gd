@@ -161,6 +161,27 @@ func _run() -> void:
 	pricing._update_budget({"budget": {"limits_enabled": false, "total_limit_usd": null, "total_reserved_usd": 0.25, "required_usd": 0}})
 	_check(pricing._cost.text.contains("recorded estimates $0.25") and pricing._cost.text.contains("New artwork $0.20"), "local phase reports retain named action estimates and update history")
 	pricing.free()
+	var refreshed := CharacterCreator.new()
+	var refresh_bridge := FakeRemote.new()
+	refreshed.bridge = refresh_bridge
+	refreshed.candidate = {"id": "retained-preview"}
+	for terminal: String in ["complete", "awaiting_approval"]:
+		var report := {"state": terminal, "message": "Retained terminal state"}
+		refreshed.state = terminal
+		refreshed._last_status = JSON.stringify(report)
+		refreshed._busy = true
+		refresh_bridge._running = false
+		refreshed._handle_status(report)
+		_check(not refreshed._busy and refreshed.state == terminal, "identical " + terminal + " after hosted refresh releases the busy latch")
+		refreshed._process(0.31)
+		_check(refreshed.candidate.get("id") == "retained-preview" and not is_instance_valid(refreshed._layout_editor) and refresh_bridge.calls == 0, "identical " + terminal + " refresh preserves preview without requests or false correction modal")
+	var old_terminal := {"state": "complete", "message": "Previous operation"}
+	refreshed._last_status = JSON.stringify(old_terminal)
+	refreshed._busy = true
+	refresh_bridge._running = true
+	refreshed._handle_status(old_terminal)
+	_check(refreshed._busy and refresh_bridge.calls == 0, "cached terminal report cannot release a genuinely running operation")
+	refreshed.free()
 	_finish()
 
 

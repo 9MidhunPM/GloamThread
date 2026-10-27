@@ -671,6 +671,12 @@ func _process(delta: float) -> void:
 func _handle_status(report: Dictionary) -> void:
 	var serial := JSON.stringify(report)
 	if serial == _last_status:
+		# Reopening a hosted draft temporarily marks the UI busy while a read-only
+		# refresh runs. An identical terminal response still finishes that refresh.
+		# Keep an actual in-flight operation busy if its cached report is older.
+		if _busy and report.get("state") in ["complete", "awaiting_approval", "failed", "cancelled"] and not bridge.is_running():
+			_busy = false
+			_update_controls()
 		return
 	_last_status = serial
 	state = str(report.get("state", "failed"))

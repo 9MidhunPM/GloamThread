@@ -112,7 +112,8 @@ func _ready() -> void:
 	alpha_help.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	panel.add_child(alpha_help)
 	_preview = TextureRect.new()
-	_preview.custom_minimum_size = Vector2(360, 240)
+	# Leave room for prices and the conversion actions on the 1080px UI canvas.
+	_preview.custom_minimum_size = Vector2(360, 180)
 	_preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_preview.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST

@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-27T09:22:47+05:30 — Finish identical completed-draft refreshes safely
+
+- Real completed-draft recovery could latch Busy when the refreshed terminal report matched its cached report, then falsely report a stopped worker. Identical terminal reports now release Busy after transport finishes, without replacing the preview, opening a correction modal or starting an operation; truly running work stays busy.
+- Reduced the retained-editor preview height so prices and conversion controls fit the 1080px logical canvas.
+- Validation: native Forge 178 assertions and browser boundaries 40 assertions pass, including complete/approval duplicate reports and genuine running work. No new provider request; the pending real cached correction remains retained.
+
 ### 2026-10-27T09:10:23+05:30 — Offer cached crop correction after successful conversion
 
 - The real generated theme board included a large figure even though conversion and bundle validation succeeded. Successful previews now expose the existing retained-board crop editor, without opening it automatically or sending a new request, so scenery can be corrected for free before acceptance.
