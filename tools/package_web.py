@@ -73,6 +73,9 @@ def package(output: Path, allow_dirty: bool = False) -> dict:
         raise ValueError("The Web release requires Godot 4.7.2 standard.")
     if not (ROOT / "build/templates/web_nothreads_release.zip").is_file():
         raise ValueError("Run python3 tools/fetch_web_templates.py first.")
+    # Existing exported PNGs must not become editor-imported source resources
+    # on later builds, adding .import files to an otherwise exact public payload.
+    (ROOT / "build/.gdignore").touch(exist_ok=True)
     _validate_output(output)
     output = output.resolve()
     if not output.is_relative_to((ROOT / "build").resolve()):

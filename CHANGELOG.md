@@ -1,5 +1,10 @@
 # Change log
 
+### 2026-10-27T08:42:33+05:30 — Keep exported payloads outside Godot's source scanner
+
+- The Web packager now creates the ignored build directory's `.gdignore` before importing. This prevents a later editor import from adding PNG `.import` sidecars inside an earlier exact-inventory Web payload.
+- Validation: ten package failure/rollback tests pass; fresh QA export and actual fullscreen/storage-denial browser routes pass. The inventory guard still preserves and rejects unexpected pre-existing output entries rather than deleting them.
+
 ### 2026-10-27T08:42:20+05:30 — Give hosted Forge a private unambiguous upstream
 
 - Public static gameplay was healthy, but Nginx's generic `api` hostname resolved another project's alias on the shared Dokploy network and returned 502. Added the unique private alias `gloamthread-forge-api` and dynamic Docker DNS resolution so API recreation also refreshes its address.
