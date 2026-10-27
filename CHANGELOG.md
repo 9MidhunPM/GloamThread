@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-27T09:34:25+05:30 — Remove completed browser download copies
+
+- Completed Forge snapshot refreshes now remove their own temporary staging and previous-copy directories after every replacement succeeds, including unchanged files skipped during publication. Retained source, provenance, candidate data, accepted fighters and older failed-recovery directories stay intact; failed publication still rolls back and preserves its recovery data.
+- Snapshot writes are flushed and checked before admission/publication. Cleanup is best effort after success and does not turn an installed preview into a false failure.
+- Validation: Godot 4.7.2 browser transfer suite passes 50 assertions, including changed/unchanged cleanup and forced mid-publication rollback; native Forge passes 178 assertions. No provider request or live deployment was performed for this fix.
+
 ### 2026-10-27T09:22:47+05:30 — Finish identical completed-draft refreshes safely
 
 - Real completed-draft recovery could latch Busy when the refreshed terminal report matched its cached report, then falsely report a stopped worker. Identical terminal reports now release Busy after transport finishes, without replacing the preview, opening a correction modal or starting an operation; truly running work stays busy.

@@ -150,6 +150,7 @@ func _run() -> void:
 		await process_frame
 		_check(not is_instance_valid(view) and probe.get("persistent_owner", false) and probe.get("completed", false), "cancellation transport and bridge survive creator scene disposal")
 		_check(probe.get("calls") == 1 and bridge.read_json(path.get_base_dir().path_join("status.json")).get("state") == "cancelled", "creator disposal completes one cancellation without a retry or further stage")
+	_test_snapshot_cleanup(bridge, image, builtins)
 	var pricing := CharacterCreator.new()
 	pricing.bridge = Bridge.new()
 	pricing._cost = Label.new()
@@ -183,6 +184,53 @@ func _run() -> void:
 	_check(refreshed._busy and refresh_bridge.calls == 0, "cached terminal report cannot release a genuinely running operation")
 	refreshed.free()
 	_finish()
+
+
+func _test_snapshot_cleanup(bridge: WebForgeBridge, image: Image, builtins: Array[Dictionary]) -> void:
+	var created := bridge.create_job(image, "Download cleanup fixture", "Cleanup")
+	_check(created.get("ok", false), "download cleanup fixture retains its source")
+	if not created.get("ok", false):
+		return
+	var path: String = created["path"]
+	var folder := path.get_base_dir()
+	var source_hash := FileAccess.get_sha256(folder.path_join("source.png"))
+	bridge.write_json(folder.path_join("_remote.json"), {"job_id": "retained-remote-job"})
+	var recovery := folder.path_join(".download-previous-recovery/raw")
+	DirAccess.make_dir_recursive_absolute(recovery)
+	bridge.write_json(recovery.path_join("recovery.json"), {"retained": true})
+	var snapshot: Dictionary = {"provenance.json": Marshalls.raw_to_base64('{"schema_version":1,"revision":1}'.to_utf8_buffer()), "raw/source.png": Marshalls.raw_to_base64(FileAccess.get_file_as_bytes(folder.path_join("source.png")))}
+	for name: String in ["manifest.json"] + Library.FILENAMES:
+		snapshot["candidate/" + name] = Marshalls.raw_to_base64(FileAccess.get_file_as_bytes(str(builtins[0]["manifest_path"]).get_base_dir().path_join(name)))
+	_check(bridge.apply_snapshot(path, {"files": snapshot, "candidate_dir": "candidate"}).get("ok", false), "successful snapshot publishes candidate and retained artwork")
+	_check(_download_directories(folder) == [".download-previous-recovery"], "successful snapshot removes its nested staging tree and keeps older recovery data")
+	var replacement: Dictionary = snapshot.duplicate()
+	replacement["provenance.json"] = Marshalls.raw_to_base64('{"schema_version":1,"revision":2}'.to_utf8_buffer())
+	var second: Dictionary = builtins[mini(1, builtins.size() - 1)]
+	for name: String in ["manifest.json"] + Library.FILENAMES:
+		replacement["candidate/" + name] = Marshalls.raw_to_base64(FileAccess.get_file_as_bytes(str(second["manifest_path"]).get_base_dir().path_join(name)))
+	_check(bridge.apply_snapshot(path, {"files": replacement, "candidate_dir": "candidate"}).get("ok", false) and bridge.read_json(folder.path_join("provenance.json")).get("revision") == 2, "replacement snapshot publishes the new candidate and provenance")
+	var candidate_hash := FileAccess.get_sha256(folder.path_join("candidate/manifest.json"))
+	_check(_download_directories(folder) == [".download-previous-recovery"] and bridge.read_json(folder.path_join("candidate/manifest.json")).get("id") == second["id"], "successful replacement removes obsolete candidate backup copies")
+	_check(bridge.apply_snapshot(path, {"files": replacement, "candidate_dir": "candidate"}).get("ok", false) and _download_directories(folder) == [".download-previous-recovery"], "unchanged snapshot refresh removes skipped duplicate artwork")
+	_check(FileAccess.get_sha256(folder.path_join("source.png")) == source_hash and FileAccess.get_sha256(folder.path_join("raw/source.png")) == source_hash and bridge.read_json(folder.path_join("_remote.json")).get("job_id") == "retained-remote-job", "successful cleanup retains local source, raw provenance inputs and remote identity")
+	var failed := folder.path_join(".download-failed-fixture")
+	DirAccess.make_dir_recursive_absolute(failed)
+	bridge.write_json(failed.path_join("provenance.json"), {"schema_version": 1, "revision": 3})
+	var install: Array[String] = ["provenance.json", "missing.json"]
+	_check(not bridge._publish_snapshot(folder, failed, install).get("ok", false), "failed snapshot publication remains a failure")
+	_check(bridge.read_json(folder.path_join("provenance.json")).get("revision") == 2 and FileAccess.get_sha256(folder.path_join("candidate/manifest.json")) == candidate_hash, "failed publication restores previous provenance and leaves admitted candidate intact")
+	_check(DirAccess.dir_exists_absolute(failed) and bridge.read_json(recovery.path_join("recovery.json")).get("retained", false) and _download_directories(folder).size() > 1, "failed publication retains current staging and older recovery data")
+
+
+func _download_directories(folder: String) -> Array[String]:
+	var result: Array[String] = []
+	var directory := DirAccess.open(folder)
+	directory.include_hidden = true
+	for name: String in directory.get_directories():
+		if name.begins_with(".download-"):
+			result.append(name)
+	result.sort()
+	return result
 
 
 func _find_header(bytes: PackedByteArray, header: int) -> int:

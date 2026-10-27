@@ -251,7 +251,11 @@ func apply_snapshot(path: String, snapshot: Dictionary) -> Dictionary:
 		if file == null:
 			return {"ok": false, "error": "Could not retain the hosted artwork in browser storage."}
 		file.store_buffer(decoded[name])
+		file.flush()
+		var written := file.get_error() == OK
 		file.close()
+		if not written:
+			return {"ok": false, "error": "Could not finish staging the hosted artwork. Previous draft and preview are preserved."}
 	var has_candidate := files.has(candidate_dir + "/manifest.json")
 	if has_candidate:
 		var checked := FighterLibrary.new().load_bundle(staging.path_join(candidate_dir + "/manifest.json"))
@@ -302,7 +306,26 @@ func _publish_snapshot(folder: String, staging: String, names: Array[String]) ->
 			_rollback_snapshot(moves)
 			return {"ok": false, "error": "Browser storage could not publish the new draft. Previous draft and preview are preserved."}
 		move["installed"] = true
+	# Keep every rollback copy until all replacements have succeeded. Only these
+	# two trees belong to this successful download; older recovery data stays put.
+	_remove_download_tree(staging)
+	_remove_download_tree(backup)
 	return {"ok": true}
+
+
+func _remove_download_tree(path: String) -> void:
+	var directory := DirAccess.open(path)
+	if directory == null:
+		return
+	for filename: String in directory.get_files():
+		DirAccess.remove_absolute(path.path_join(filename))
+	for name: String in directory.get_directories():
+		var child := path.path_join(name)
+		if directory.is_link(name):
+			DirAccess.remove_absolute(child)
+		else:
+			_remove_download_tree(child)
+	DirAccess.remove_absolute(path)
 
 
 func _rollback_snapshot(moves: Array[Dictionary]) -> void:
