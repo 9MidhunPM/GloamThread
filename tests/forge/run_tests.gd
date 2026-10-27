@@ -460,6 +460,10 @@ func _check_layout_correction(view: SubViewport, library: FighterLibrary, previo
 	no_materials.erase("material_crops")
 	_check(mock.source_layout_error(no_materials, raw).is_empty(), "optional material crops can retain strict defaults")
 	_check(not mock.raw_layout_context("/tmp/outside/job.json")["ok"], "raw correction cannot read arbitrary job paths")
+	var requests_before_preview := mock.commands.size()
+	creator._handle_status({"state": "complete", "message": "Fixture valid retained preview", "candidate_path": folder.path_join("candidate")})
+	_check(creator._repair.visible and not creator._layout_context.is_empty() and creator._layout_job_path == path, "successful retained preview exposes cached layout correction")
+	_check(not is_instance_valid(creator._layout_editor) and mock.commands.size() == requests_before_preview, "successful preview offers correction without opening its editor or starting any authoring request")
 	creator._handle_status({"state": "failed", "message": "Fixture conversion rejected its grid", "reserved_usd": 0.25})
 	await process_frame
 	await process_frame
@@ -525,7 +529,7 @@ func _check_layout_correction(view: SubViewport, library: FighterLibrary, previo
 	_check(mock.read_json(local_folder.path_join("source_layout.json"))["background_crop"] == [0.0, 140.0, 576.0, 324.0], "new draft retains the corrected hash-bound crop annotation")
 	_check(FileAccess.get_sha256(path) == saved_original and FileAccess.get_sha256(folder.path_join("provenance.json")) == saved_provenance and FileAccess.get_sha256(folder.path_join("rig_edits.json")) == saved_edits and FileAccess.get_sha256(folder.path_join("candidate/manifest.json")) == saved_candidate, "local correction preserves old job, provenance, masks/pivots and candidate byte-for-byte")
 	_check(not FileAccess.file_exists(local_folder.path_join("rig.json")) and not FileAccess.file_exists(local_folder.path_join("rig_edits.json")) and not DirAccess.dir_exists_absolute(local_folder.path_join("candidate")) and not FileAccess.file_exists(local_folder.path_join("budget.json")), "fresh correction excludes previous rig, edits, candidate and ledger")
-	_check(creator.candidate["manifest_path"] == previous["manifest_path"], "local conversion keeps previous valid preview until replacement validates")
+	_check(creator.candidate["manifest_path"] == folder.path_join("candidate/manifest.json"), "local conversion keeps the latest successful preview until replacement validates")
 	_make_bundle(local_folder.path_join("candidate"))
 	creator._handle_status({"state": "complete", "message": "Synthetic local conversion", "candidate_path": local_folder.path_join("candidate")})
 	_check(creator.candidate["manifest_path"] == local_folder.path_join("candidate/manifest.json") and not creator._edit_dirty, "valid local conversion replaces the preview and clears stale part edit state")

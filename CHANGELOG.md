@@ -1,5 +1,10 @@
 # Change log
 
+### 2026-10-27T09:10:23+05:30 — Offer cached crop correction after successful conversion
+
+- The real generated theme board included a large figure even though conversion and bundle validation succeeded. Successful previews now expose the existing retained-board crop editor, without opening it automatically or sending a new request, so scenery can be corrected for free before acceptance.
+- Validation: native Forge 178 assertions and browser boundaries 35 assertions pass, including correction visibility/context and zero new authoring commands on preview. Original paid artwork and the three-request history are preserved. A real cached crop conversion is being verified next.
+
 ### 2026-10-27T08:58:06+05:30 — Preserve and name hosted request estimates
 
 - A real public browser analysis succeeded, preserving the approved name and Frost identity, but revealed that status projection dropped the prospective artwork estimate and displayed zero before Generate.

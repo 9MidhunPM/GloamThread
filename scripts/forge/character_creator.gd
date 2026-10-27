@@ -749,17 +749,19 @@ func _update_budget(report: Dictionary) -> void:
 	_cost.text = "Total $%.2f / $%.2f reserved | $%.2f left\nJob $%.2f / $%.2f left | Need $%.2f; local edits free" % [float(budget.get("total_reserved_usd", 0)), float(budget.get("total_limit_usd", 0)), float(budget.get("total_remaining_usd", 0)), float(budget.get("job_remaining_usd", 0)), float(budget.get("job_limit_usd", 0.5)), float(budget.get("required_usd", 0))]
 
 
-func _offer_layout_correction() -> void:
+func _offer_layout_correction(open_editor: bool = true) -> void:
 	_layout_context = {}
 	if job_path.is_empty() or not FileAccess.file_exists(job_path.get_base_dir().path_join("raw/parts.png")) or not FileAccess.file_exists(job_path.get_base_dir().path_join("raw/theme.png")):
 		return
 	var context := bridge.raw_layout_context(job_path)
 	if not context["ok"]:
-		_notice(_message.text + " " + context["error"])
+		if open_editor:
+			_notice(_message.text + " " + context["error"])
 		return
 	_layout_context = context
 	_layout_job_path = job_path
-	_open_layout_editor(_message.text)
+	if open_editor:
+		_open_layout_editor(_message.text)
 
 
 func _open_layout_editor(error_message: String = "") -> void:
@@ -915,6 +917,9 @@ func _preview_candidate(reported_path: Variant = "") -> void:
 	_apply_proposal({"name": candidate["name"], "rig_id": candidate["rig_id"], "kit_id": candidate["kit_id"], "theme": candidate["theme"], "features": _features.duplicate()})
 	_apply_identity_kit(false)
 	_notice("Conversion complete. Review every animation, then Accept fighter & play to save it in Your fighters.")
+	# Valid conversion can still need an artistic crop correction. Keep the
+	# retained-board editor available without opening it or starting any work.
+	_offer_layout_correction(false)
 
 
 func resume_job(path: String) -> void:
