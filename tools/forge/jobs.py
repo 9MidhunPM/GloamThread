@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
+from contextvars import ContextVar
 from datetime import datetime, timezone
 import fcntl
 import hashlib
@@ -20,6 +21,9 @@ from .provider import (ANALYSIS_PROMPT, ForgeError, OpenAIProvider, settings,
                        validate_config, validate_proposal)
 
 ROOT = Path(__file__).resolve().parents[2]
+# Only an explicitly supplied hosted worker store changes accounting. Native
+# calls keep their durable JSON ledger and never inspect server configuration.
+_ACCOUNTING = ContextVar("forge_accounting", default=None)
 VERSION = "arena-forge-1"
 RESERVATIONS = {"analyse": 50000, "parts": 100000, "theme": 100000}
 MAX_SOURCE_BYTES = 20 * 1024 * 1024
@@ -121,6 +125,8 @@ def budget_path(root: Path) -> Path:
 
 
 def ledger(root: Path) -> dict:
+    if _ACCOUNTING.get() is not None:
+        return _ACCOUNTING.get().ledger()
     path = budget_path(root)
     if not path.exists():
         return {"schema_version": 1, "cap_microusd": None, "reserved_usd": 0, "reservations": []}
@@ -149,6 +155,8 @@ def job_id(path: Path) -> str:
 
 
 def reserved(root: Path, job: Path) -> float:
+    if _ACCOUNTING.get() is not None:
+        return _ACCOUNTING.get().status(job)["job_reserved_usd"]
     with lock(budget_path(root).with_suffix(".lock")):
         return sum(r["microusd"] for r in ledger(root)["reservations"] if r["job"] == job_id(job)) / 1000000
 
@@ -156,6 +164,8 @@ def reserved(root: Path, job: Path) -> float:
 def budget_status(root: Path, job: Path | None = None, *, total_cap: int | None = None,
                   required: int = 0) -> dict:
     """Accounting only; legacy total_cap is ignored and no settings are loaded."""
+    if _ACCOUNTING.get() is not None:
+        return _ACCOUNTING.get().status(job, required)
     with lock(budget_path(root).with_suffix(".lock")):
         value = ledger(root)
         total = sum(record["microusd"] for record in value["reservations"])
@@ -171,6 +181,9 @@ def budget_status(root: Path, job: Path | None = None, *, total_cap: int | None 
 def reserve(root: Path, job: Path, kind: str, key: str, cap: int | None = None,
             total_cap: int | None = None) -> None:
     """Record one request durably; legacy cap arguments no longer limit it."""
+    if _ACCOUNTING.get() is not None:
+        _ACCOUNTING.get().reserve(job, kind, key)
+        return
     with lock(budget_path(root).with_suffix(".lock")):
         value = ledger(root)
         records = value["reservations"]
@@ -186,6 +199,9 @@ def reserve(root: Path, job: Path, kind: str, key: str, cap: int | None = None,
 
 
 def mark_reservation(root: Path, job: Path, kind: str, state: str) -> None:
+    if _ACCOUNTING.get() is not None:
+        _ACCOUNTING.get().mark(job, kind, state)
+        return
     with lock(budget_path(root).with_suffix(".lock")):
         value = ledger(root)
         for record in value["reservations"]:
@@ -450,6 +466,10 @@ def preflight_images(folder: Path, root: Path, job: Path, cap: int | None,
                           config["quality"], image_prompt(kind, proposal, description, art_mode))
         if cached_request(kind, folder, provenance, key) is None:
             missing.append(kind)
+    if _ACCOUNTING.get() is not None:
+        if _ACCOUNTING.get().attempted(job, missing):
+            raise ForgeError("A missing image request was already attempted. Its reservation is retained; automatic retries are disabled.")
+        return
     with lock(budget_path(root).with_suffix(".lock")):
         records = ledger(root)["reservations"]
         local_records = [record for record in records if record["job"] == job_id(job)]
@@ -693,7 +713,17 @@ def publish_candidate(candidate: Path, folder: Path, root: Path, provenance: dic
 
 
 def run_job(command: str, job_path: Path, *, root: Path = ROOT, provider=None, converter=None,
-            baker=None, config: dict | None = None) -> dict:
+            baker=None, config: dict | None = None, accounting=None) -> dict:
+    token = _ACCOUNTING.set(accounting)
+    try:
+        return _run_job(command, job_path, root=root, provider=provider,
+                        converter=converter, baker=baker, config=config)
+    finally:
+        _ACCOUNTING.reset(token)
+
+
+def _run_job(command: str, job_path: Path, *, root: Path = ROOT, provider=None, converter=None,
+             baker=None, config: dict | None = None) -> dict:
     if command not in {"analyse", "generate", "bake"}:
         raise ForgeError("Unsupported authoring command.")
     job_path, root = Path(job_path), Path(root).resolve()

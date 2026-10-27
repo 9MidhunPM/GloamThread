@@ -1,0 +1,5 @@
+# Hosted authoring API/worker only; the browser game has no Python dependency.
+fastapi>=0.115,<1
+uvicorn>=0.30,<1
+httpx>=0.27,<1
+-r requirements-authoring.txt

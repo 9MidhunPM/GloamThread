@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-27T08:13:49+05:30 — Add invitation-protected hosted Forge
+
+- **Why:** let invited browser players use the existing authoring pipeline without exposing a provider key or changing offline combat.
+- **Changed:** FastAPI endpoints, hashed/revocable invite sessions, owner-isolated jobs, durable idempotent operations, a single background worker, safe artifact snapshots and hosted SQLite request accounting. Native JSON accounting remains the default. Worker-only secret files and genuine model metadata keep credentials outside API responses.
+- **Validation:** 30 hosted/core/HTTP tests pass; 61 native provider/accounting/recovery tests passed during integration. Tests cover duplicate and interrupted requests, cross-owner denial, revocation/cancellation between image calls, real SDK-free conversion and whole-master corrections. No live model calls or public deployment at this checkpoint.
+
 ### 2026-10-27T08:10:48+05:30 — Repair arena lifecycle regression fixtures
 
 - **Why:** restore a useful green baseline before browser integration. Guard retained enemy references before casting them, preventing freed-instance errors during pursuit cleanup.

@@ -8,6 +8,8 @@ A pixel-art side-view fighter for **one or two players on one computer**. Surviv
 
 **Jump to:** [Watch](#watch-the-game) · [Play in three steps](#play-in-three-steps) · [Controls](#controls) · [Accessibility](#accessibility) · [Modes](#what-you-can-play) · [Make a fighter](#draw-and-forge-a-fighter) · [Developers](#for-developers) · [Docs map](#documentation-map)
 
+The optional [hosted Forge service](server/README.md) supports private creation jobs unlocked with individual invitation codes. It runs a separate Python worker with server-held credentials and durable request history; gameplay and saved fighters do not require this service. Browser release integration is in progress.
+
 ## Watch the game
 
 Every gameplay video is a real engine capture of the game's own automated demo scripts (no human players, no editing). Download or stream them from the [videos release](https://github.com/9MidhunPM/GloamThread/releases/tag/videos-2026-10-26).
