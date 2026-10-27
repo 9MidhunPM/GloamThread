@@ -184,7 +184,7 @@ func _next_wave() -> void:
 	spawn_queue.clear()
 	telegraphs.clear()
 	_paid.clear()
-	for enemy: Node in enemies:
+	for enemy: Variant in enemies:
 		if is_instance_valid(enemy):
 			enemy.queue_free()
 	enemies.clear()
@@ -368,7 +368,7 @@ func _enemy_visible(enemy: ArenaEnemy) -> bool:
 
 
 func _process_pursuit() -> void:
-	for enemy: ArenaEnemy in enemies:
+	for enemy: Variant in enemies:
 		if not is_instance_valid(enemy) or enemy.dead:
 			continue
 		# Nearby enemies hidden in another elevation must also catch up. The old
@@ -413,7 +413,8 @@ func _spawn_enemy(record: Dictionary) -> void:
 
 func living_enemies() -> int:
 	var count := 0
-	for enemy: Node in enemies:
+	# Validate before coercing a potentially freed reference to a Node type.
+	for enemy: Variant in enemies:
 		if is_instance_valid(enemy) and not enemy.dead:
 			count += 1
 	return count
@@ -459,7 +460,7 @@ func hit_enemies(rect: Rect2, damage: float, slot: int, attack_id: int, tags: Di
 				count += 1
 	if phase != "combat":
 		return count
-	for enemy: Node2D in enemies.duplicate():
+	for enemy: Variant in enemies.duplicate():
 		if not is_instance_valid(enemy) or enemy.dead or not rect.intersects(enemy.get_hurt_rect()):
 			continue
 		var query := PhysicsRayQueryParameters2D.create(fighters[slot].get_hurt_rect().get_center(), enemy.get_hurt_rect().get_center(), ArenaCombat.TERRAIN_MASK)

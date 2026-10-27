@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-27T08:10:48+05:30 — Repair arena lifecycle regression fixtures
+
+- **Why:** restore a useful green baseline before browser integration. Guard retained enemy references before casting them, preventing freed-instance errors during pursuit cleanup.
+- **Changed:** `run_session.gd` and the revival/world runtime scenarios. Revival now isolates spawning explicitly; pursuit checks enforce one warning per enemy while allowing the current nearby catch-up behavior.
+- **Validation:** isolated Godot 4.7.2 headless arena suite passes 23/23 scenarios. These are automated scenarios; no hardware, listening or human-balance claim.
+
 ### 2026-10-27T00:25:15+05:30 — Accessibility options, newcomer documentation and published videos
 
 - **Why:** make the game playable and understandable for more people (one hand, slower reactions, low vision, photosensitivity, first-time Godot users) and let anyone see the whole game without installing it.

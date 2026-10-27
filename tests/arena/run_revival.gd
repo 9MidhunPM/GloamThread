@@ -1,6 +1,12 @@
 extends Scenario
 ## Controlled recovery fixture; the separate route driver supplies normal-play evidence.
 
+class RecoveryWorld extends ArenaRunSession:
+	# Keep the real session/revival physics while excluding encounter damage.
+	# A long cadence no longer suppresses the empty-field catch-up spawn rule.
+	func _process_spawns() -> void:
+		pass
+
 
 func run() -> void:
 	var catalog := ArenaCatalog.load_catalog()
@@ -8,13 +14,12 @@ func run() -> void:
 	for slot in 2:
 		InputRouter.assign(slot, DeviceSource.keyboard_left() if slot == 0 else DeviceSource.keyboard_right())
 		InputRouter.set_test_input(slot, 0)
-	var world := ArenaRunSession.new()
+	var world := RecoveryWorld.new()
 	world.configure(catalog, [bundles[0], bundles[1]], 55)
 	add_child(world)
 	await ticks(3)
 	world.phase = "combat"
-	# Keep an authored wave queued while isolating recovery from enemy attacks.
-	world._spawn_ticks = 100000
+	# The authored queue still prevents an empty encounter from clearing.
 	world.fighters[0].immunity_ticks = 0
 	world.fighters[0].take_damage(10000, Vector2.ZERO)
 	await ticks(790)

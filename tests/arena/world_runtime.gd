@@ -165,12 +165,14 @@ func _check_spawns_and_pursuit() -> void:
 	var freeze := enemy._freeze
 	for tick in 179:
 		world._process_pursuit()
-	assert_eq(_pending_relocations(), 0, "ordinary pursuit waits all one hundred eighty unseen ticks")
+	assert_eq(_pending_relocations(enemy), 0, "ordinary pursuit waits all one hundred eighty unseen ticks")
 	world._process_pursuit()
-	assert_eq(_pending_relocations(), 1, "distant unseen enemy creates one relocation telegraph")
+	assert_eq(_pending_relocations(enemy), 1, "distant unseen enemy creates one relocation telegraph")
 	for tick in 60:
 		world._process_pursuit()
-	assert_eq(_pending_relocations(), 1, "repeated pursuit scans cannot duplicate an enemy's warning")
+	assert_eq(_pending_relocations(enemy), 1, "repeated pursuit scans cannot duplicate an enemy's warning")
+	for target: ArenaEnemy in world.enemies:
+		assert_true(_pending_relocations(target) <= 1, "each unseen actor owns at most one relocation warning")
 	for tick in 42:
 		world._process_spawns()
 	assert_eq(enemy.get_instance_id(), identity, "catch-up moves the original node")
@@ -266,10 +268,10 @@ func _pending_spawns() -> int:
 	return count
 
 
-func _pending_relocations() -> int:
+func _pending_relocations(target: ArenaEnemy = null) -> int:
 	var count := 0
 	for warning: Dictionary in world.telegraphs:
-		if warning.get("kind", "spawn") == "relocate":
+		if warning.get("kind", "spawn") == "relocate" and (target == null or (warning.enemy as WeakRef).get_ref() == target):
 			count += 1
 	return count
 

@@ -2,6 +2,10 @@
 
 Current product: solo/two-player scrolling wave fighter with dynamic split screen. The approved [world contract](SCROLLING_WORLD_PLAN.md) extends the [wave specification](WAVE_FIGHTER_SPEC.md). The original eight-room Story Mode remains selectable alongside the arena; overhead work remains historical.
 
+## Browser release baseline (2026-10-27)
+
+The arena suite now passes 23/23 headless scenarios on Godot 4.7.2. Revival fixtures explicitly isolate spawning, pursuit assertions track each enemy identity, and runtime pursuit cleanup checks freed references before casting. This resolves the two arena failures and freed-instance errors recorded in the earlier accessibility baseline. Browser integration is in progress; this checkpoint does not establish a deployed browser release.
+
 ## Accessibility, documentation and videos (2026-10-26)
 
 Arena **SETTINGS & CONTROLS** now offers per-player key/button remapping (clash refusal shared with Story rules, gamepad deadzone, reset), per-player press-to-toggle attack, game speed 100/80/60% (Engine time scale only while a run exists, fixed 60 Hz ticks unchanged), damage taken 100/75/50/25%, high-contrast menus/HUD, optional OS text-to-speech menu narration, separate master/music/effects volume with Left/Right adjust, visible per-option hints, cursor-preserving rebuilds and live control text. Solo P1 can choose the right-hand keyboard side. Assisted runs are labelled on results and in saved summaries. Settings stay `schema_version` 1; new keys are additive, stepped values are validated and Story preserves them. Godot's `audio/general/text_to_speech` is enabled. [Accessibility guide](ACCESSIBILITY.md).
