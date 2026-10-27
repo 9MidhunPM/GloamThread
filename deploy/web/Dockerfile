@@ -7,8 +7,10 @@ RUN case "$TARGETARCH" in arm64) arch=arm64 ;; amd64) arch=x86_64 ;; *) exit 1 ;
 WORKDIR /src
 COPY tools/fetch_web_templates.py /tmp/fetch_web_templates.py
 RUN python3 /tmp/fetch_web_templates.py --output /opt/web-templates
-COPY . .
-RUN mkdir -p build/templates && cp /opt/web-templates/*.zip build/templates/ && git config --global --add safe.directory /src && python3 tools/package_web.py
+# Dokploy adds routing labels to its working Compose file. Export the exact
+# pinned commit, independent of that deployment-only working-tree mutation.
+COPY .git .git
+RUN git config --global --add safe.directory /src && git archive -o /tmp/gloam-source.tar HEAD && tar -xf /tmp/gloam-source.tar -C /src && rm /tmp/gloam-source.tar && mkdir -p build/templates && cp /opt/web-templates/*.zip build/templates/ && python3 tools/package_web.py
 
 FROM nginx:1.28-alpine AS web
 COPY deploy/web/nginx.conf /etc/nginx/conf.d/default.conf

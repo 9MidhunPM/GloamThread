@@ -55,6 +55,8 @@ stages but cannot guarantee avoiding billing for an already dispatched request.
 [The Compose configuration](../deploy/web/compose.yaml) builds Nginx, the API and
 one worker. The Dockerfile downloads the matching official engine for amd64 or
 arm64, exports the clean revision, and copies only public Web files into Nginx.
+The export stage reconstructs its source from the pinned Git commit because
+Dokploy adds routing labels to the deployment's working Compose file.
 The API/worker image contains the conversion code and Python dependencies.
 
 The API and worker share the named `gloamthread-web-forge-data` volume at `/data`.

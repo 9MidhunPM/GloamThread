@@ -1,5 +1,10 @@
 # Change log
 
+### 2026-10-27T08:31:46+05:30 — Export the exact pinned commit inside Dokploy
+
+- Dokploy injects routing labels/networks into its checked-out Compose file, so the clean-source gate rejected the deployment working tree before export. The exporter now reconstructs tracked source from the pinned Git commit in its private build stage, then runs the existing clean/source-consistency checks.
+- This preserves deployment routing changes outside the exported source and keeps credentials out of the public image. Original failed build/tag history is retained. The revised production build is the next validation gate.
+
 ### 2026-10-27T08:25:31+05:30 — Add consistent private Forge backups
 
 - Added an operator backup CLI and optional Compose `ops` service. With idle authoring stopped, it snapshots SQLite including committed WAL data, retains private owner artifacts without following symlinks, atomically publishes a hash manifest/archive and keeps seven completed backups. Provider credentials remain on their separate worker-only volume.
