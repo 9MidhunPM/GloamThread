@@ -85,6 +85,7 @@ var _invite_status: Label
 var _invite_unlock: Button
 var _invite_lock: Button
 var _hosted_authenticated: bool = false
+var _hosted_request_estimates: Dictionary = {}
 
 
 func setup(player_slot: int, fighter_library: FighterLibrary) -> void:
@@ -725,12 +726,23 @@ func _refresh_configuration(show_notice: bool = true) -> void:
 
 
 func _update_budget(report: Dictionary) -> void:
+	var estimates: Variant = report.get("request_estimates")
+	if estimates is Dictionary:
+		var valid := true
+		for key: String in ["analyse_usd", "generate_usd", "bake_usd"]:
+			var value: Variant = estimates.get(key)
+			valid = valid and typeof(value) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(value)) and float(value) >= 0
+		if valid:
+			_hosted_request_estimates = estimates.duplicate()
 	var budget: Variant = report.get("budget")
 	if not budget is Dictionary or not budget.has("total_limit_usd"):
 		return
 	if budget.get("limits_enabled", true) == false:
 		if bridge is WebForgeBridge:
-			_cost.text = "Your invite's recorded estimates $%.2f\nNext request estimate $%.2f; saved artwork conversion makes no model request" % [float(budget.get("total_reserved_usd", 0)), float(budget.get("required_usd", 0))]
+			var prices := "Request estimates unavailable; saved artwork conversion makes no model request"
+			if not _hosted_request_estimates.is_empty():
+				prices = "Analyse $%.2f | New artwork $%.2f | Saved conversion $%.2f" % [float(_hosted_request_estimates["analyse_usd"]), float(_hosted_request_estimates["generate_usd"]), float(_hosted_request_estimates["bake_usd"])]
+			_cost.text = "Your invite's recorded estimates $%.2f\n%s" % [float(budget.get("total_reserved_usd", 0)), prices]
 		else:
 			_cost.text = "No local dollar cap | recorded estimates $%.2f\nNext request estimate $%.2f; local edits free" % [float(budget.get("total_reserved_usd", 0)), float(budget.get("required_usd", 0))]
 		return

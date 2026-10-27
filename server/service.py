@@ -15,7 +15,7 @@ from PIL import Image
 
 from tools.forge.art import RIG_PARTS
 from tools.forge.hosted_accounting import SqliteAccounting
-from tools.forge.jobs import (EDITABLE_FILES, ForgeError, atomic_bytes, read_bytes,
+from tools.forge.jobs import (EDITABLE_FILES, RESERVATIONS, ForgeError, atomic_bytes, read_bytes,
                               read_json, snapshot_source, validate_candidate, write_json)
 from tools.forge.provider import validate_proposal
 from .store import ServiceError, Store
@@ -23,6 +23,9 @@ from .store import ServiceError, Store
 MAX_BODY_BYTES = 48 * 1024 * 1024
 MAX_FILE_BYTES = 20 * 1024 * 1024
 MAX_SNAPSHOT_BYTES = 64 * 1024 * 1024
+REQUEST_ESTIMATES = {"analyse_usd": RESERVATIONS["analyse"] / 1000000,
+                     "generate_usd": (RESERVATIONS["parts"] + RESERVATIONS["theme"]) / 1000000,
+                     "bake_usd": 0}
 BUNDLE_FILES = {"manifest.json", "character.png", "portrait.png", "background.png", "materials.png", "provenance.json"}
 PART_IDS = set().union(*RIG_PARTS.values()) | {"master"}
 FIXED_FILES = {"source.png", "proposal.json", "provenance.json", "rig.json", "rig_edits.json",
@@ -134,7 +137,9 @@ class ForgeService:
                 "worker_ready": bool(state.get("ready")), "key_present": bool(state.get("key_present")),
                 "analysis_model": analysis, "image_model": image, "image_quality": quality,
                 "models": {"analysis": analysis, "image": image, "quality": quality},
-                "budget": self.accounting(owner).status() if owner else {"limits_enabled": False}}
+                "request_estimates": REQUEST_ESTIMATES,
+                "budget": self.accounting(owner).status(required=RESERVATIONS["analyse"]) if owner else {
+                    "limits_enabled": False, "required_usd": RESERVATIONS["analyse"] / 1000000}}
 
     def create_job(self, owner: str, payload: dict) -> dict:
         allowed = {"source_png", "description", "preferred_name", "art_mode", "parent_job_id"}
@@ -222,11 +227,19 @@ class ForgeService:
         if operation and raw and (state == "running" or raw.get("state") == state):
             state = raw.get("state", state)
             message = raw.get("message", message)
-        budget = self.accounting(owner).status(path)
+        # Project the prospective stage estimate without copying the worker's
+        # global accounting totals. A retained correction is SDK-free.
+        required = 0
+        if state == "awaiting_approval":
+            required = RESERVATIONS["parts"] + RESERVATIONS["theme"]
+        elif state == "draft" and not (path.parent / "provenance.json").exists():
+            required = RESERVATIONS["analyse"]
+        budget = self.accounting(owner).status(path, required=required)
         job = read_json(path, 32000)
         result = {"ok": True, "job_id": identity, "state": state,
                   "message": self.safe_message(message), "estimated_usd": budget["job_reserved_usd"],
                   "reserved_usd": budget["job_reserved_usd"], "budget": budget,
+                  "request_estimates": REQUEST_ESTIMATES,
                   "candidate_ready": False, "candidate_dir": "",
                   "description": job.get("description", ""),
                   "preferred_name": job.get("preferred_name", ""),

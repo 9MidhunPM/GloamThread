@@ -150,6 +150,17 @@ func _run() -> void:
 		await process_frame
 		_check(not is_instance_valid(view) and probe.get("persistent_owner", false) and probe.get("completed", false), "cancellation transport and bridge survive creator scene disposal")
 		_check(probe.get("calls") == 1 and bridge.read_json(path.get_base_dir().path_join("status.json")).get("state") == "cancelled", "creator disposal completes one cancellation without a retry or further stage")
+	var pricing := CharacterCreator.new()
+	pricing.bridge = Bridge.new()
+	pricing._cost = Label.new()
+	pricing.add_child(pricing._cost)
+	pricing._update_budget({"budget": {"limits_enabled": false, "total_limit_usd": null, "total_reserved_usd": 0.05, "required_usd": 0}, "request_estimates": {"analyse_usd": 0.05, "generate_usd": 0.20, "bake_usd": 0}})
+	_check(pricing._cost.text.contains("Analyse $0.05"), "hosted drawing analysis estimate is explicit")
+	_check(pricing._cost.text.contains("New artwork $0.20"), "hosted artwork estimate does not become zero between actions")
+	_check(pricing._cost.text.contains("Saved conversion $0.00"), "cached conversion remains explicitly SDK-free")
+	pricing._update_budget({"budget": {"limits_enabled": false, "total_limit_usd": null, "total_reserved_usd": 0.25, "required_usd": 0}})
+	_check(pricing._cost.text.contains("recorded estimates $0.25") and pricing._cost.text.contains("New artwork $0.20"), "local phase reports retain named action estimates and update history")
+	pricing.free()
 	_finish()
 
 

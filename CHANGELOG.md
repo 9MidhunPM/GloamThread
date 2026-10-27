@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-27T08:58:06+05:30 — Preserve and name hosted request estimates
+
+- A real public browser analysis succeeded, preserving the approved name and Frost identity, but revealed that status projection dropped the prospective artwork estimate and displayed zero before Generate.
+- Hosted configuration/status now project the trusted phase estimate and named Analyse/new-artwork/free-conversion estimates while keeping all history owner-scoped. The browser labels each action separately, including when a player generates without prior analysis. Estimates remain history/planning values, not provider receipts; no caps or retries were introduced.
+- Validation: 31 hosted tests and 35 browser-boundary assertions pass, including restart projection, unchanged request accounting and nonzero artwork labels. One live analysis is retained; generation and post-deployment draft recovery remain the next gates.
+
 ### 2026-10-27T08:42:33+05:30 — Keep exported payloads outside Godot's source scanner
 
 - The Web packager now creates the ignored build directory's `.gdignore` before importing. This prevents a later editor import from adding PNG `.import` sidecars inside an earlier exact-inventory Web payload.

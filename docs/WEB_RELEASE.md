@@ -49,6 +49,9 @@ silently retry a paid request; reopening can inspect its retained status.
 There are no local dollar caps. Durable estimates and uncertain outcomes are
 request history, not provider receipts. Revoking an invitation prevents new
 stages but cannot guarantee avoiding billing for an already dispatched request.
+The UI names the existing pipeline estimates separately: Analyse $0.05, new
+artwork $0.20 (two image requests), and saved conversion $0.00. These fixed local
+estimates are not a promise about provider charges.
 
 ## Docker and Dokploy
 
