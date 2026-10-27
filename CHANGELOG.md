@@ -1,5 +1,10 @@
 # Change log
 
+### 2026-10-27T09:38:38+05:30 — Preserve exported bytes through the CDN
+
+- Public payload verification found Cloudflare injecting its analytics script into the shell and obscuring license email addresses, changing both HTML hashes from the release manifest. Added `no-transform` to origin cache directives so the CDN preserves the exported payload; normal immutable caching/revalidation remains.
+- Validation: actual origin/public HTML diff diagnosed, official Cloudflare response-control documentation checked; Nginx configuration check and public post-deployment hashes are the next gate. No global Cloudflare settings or gameplay code changed.
+
 ### 2026-10-27T09:34:25+05:30 — Remove completed browser download copies
 
 - Completed Forge snapshot refreshes now remove their own temporary staging and previous-copy directories after every replacement succeeds, including unchanged files skipped during publication. Retained source, provenance, candidate data, accepted fighters and older failed-recovery directories stay intact; failed publication still rolls back and preserves its recovery data.
