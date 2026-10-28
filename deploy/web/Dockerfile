@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim AS exporter
+FROM node:24.22.1-bookworm-slim AS exporter
 ARG TARGETARCH
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl unzip python3 git libfontconfig1 libx11-6 libxcursor1 libxinerama1 libgl1 libasound2 libxi6 libxrandr2 libxrender1 libpulse0 libudev1 libvulkan1 libwayland-client0 && rm -rf /var/lib/apt/lists/*
 RUN case "$TARGETARCH" in arm64) arch=arm64 ;; amd64) arch=x86_64 ;; *) exit 1 ;; esac; \
@@ -10,7 +10,7 @@ RUN python3 /tmp/fetch_web_templates.py --output /opt/web-templates
 # Dokploy adds routing labels to its working Compose file. Export the exact
 # pinned commit, independent of that deployment-only working-tree mutation.
 COPY .git .git
-RUN git config --global --add safe.directory /src && git archive -o /tmp/gloam-source.tar HEAD && tar -xf /tmp/gloam-source.tar -C /src && rm /tmp/gloam-source.tar && mkdir -p build/templates && cp /opt/web-templates/*.zip build/templates/ && python3 tools/package_web.py
+RUN git config --global --add safe.directory /src && git archive -o /tmp/gloam-source.tar HEAD && tar -xf /tmp/gloam-source.tar -C /src && rm /tmp/gloam-source.tar && mkdir -p build/templates && cp /opt/web-templates/*.zip build/templates/ && npm --prefix web ci --no-audit --no-fund && python3 tools/package_web.py
 
 FROM nginx:1.28-alpine AS web
 COPY deploy/web/nginx.conf /etc/nginx/conf.d/default.conf

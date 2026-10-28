@@ -1,5 +1,13 @@
 # Change log
 
+### 2026-10-28T21:36:39+05:30 — Add the living 3D browser portal
+
+- Added the approved navy/amber homepage, an original deterministic Three.js island/tree/bridge scene with public fighter sprites, bounded pointer interaction, scene previews, staggered entrances and reduced-motion/poster fallbacks. The committed poster is an actual transparent renderer capture; original glyphs compile reproducibly into the website font. Design references and asset provenance are retained.
+- Split website presentation and browser lifecycle into maintained modules. Game downloads wait for Play; one guarded startup preserves mode sizing, pause/Home/Resume, storage warnings and manual recovery. The website renderer releases its context before Godot starts. Player help is generated from Markdown with validated anchors and readable desktop/mobile navigation.
+- Added locked local website bundling, explicit SHA-256 asset admission, immutable caching, compression, Three.js notices and Node-enabled Docker export. Existing clean-source, publication rollback, private Forge volumes and gameplay/save interfaces are preserved. Dependency/build directories are excluded from documentation scans and native exports.
+- Validation: 246 Python tests pass without skips in the existing isolated Web environment (system Python also passes, with 8 optional HTTP tests skipped); 17 packaging tests; Arena 23/23, Forge 178/178 and browser boundaries 50/50; import/four content validators, npm build/audit, font reproducibility and whitespace checks pass. Standards review found no issues; spec review's missing entrance/coarse-pointer hint fixes are included.
+- Actual precommit local Chromium153/SwiftShader and Firefox155/Xvfb/Mesa routes pass title, Story return, solo combat, pause/Home/Resume. Additional Chromium checks cover deferred downloads, zero website animation callbacks after Play, manual failure/stall recovery, denied storage/fullscreen, Story save/reload, co-op readiness and fighter ZIP integrity. A plain static QA server lacks the hosted Forge API and reports its genuine configuration error; no paid request was made. Clean-release/public verification follows separately; no human/device/listening or physical FPS claim.
+
 ### 2026-10-28T21:30:53+05:30 — Make player documentation browser-first
 
 - Reworked README and Player Guide around browser launch, Home/Resume, controls, hosted creation, storage recovery and fighter ZIP backups; kept native setup and the full Arena/Story instructions. Added a concise three-step introduction and controls table for the generated website guide.

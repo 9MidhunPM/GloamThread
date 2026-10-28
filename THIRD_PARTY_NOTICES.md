@@ -4,6 +4,12 @@ The game content, writing, pixel art, original bitmap font and synthesized audio
 
 The exported executable includes Godot Engine under the MIT license. The retained [engine copyright notices](docs/licenses/GODOT_COPYRIGHT.txt) and [MIT license](docs/licenses/GODOT_LICENSE.txt) accompany the binary. Source: https://github.com/godotengine/godot/blob/4.7.2-stable/COPYRIGHT.txt and https://godotengine.org/license/.
 
+The website bundles Three.js under its [MIT license](docs/licenses/THREE_LICENSE.txt).
+It provides the landing-page renderer; the diorama geometry, pixel textures,
+character art and display font remain original project content. The pinned
+version is recorded in `web/package-lock.json`. esbuild and marked are build
+tools and do not run as external services or receive player data.
+
 ## Godot Engine license
 
 Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md).

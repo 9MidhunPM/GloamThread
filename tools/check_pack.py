@@ -1,11 +1,22 @@
 #!/usr/bin/env python3
 """Validate this planning pack and its illustrations, not a playable game."""
 import json
+import os
 from pathlib import Path
 import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
+IGNORED_DOCUMENT_DIRS = {".git", ".godot", ".venv", ".pytest_cache", "__pycache__", "node_modules", "build", "dist", "coverage", "venv"}
+
+
+def project_documents():
+    """Check maintained docs without traversing installed dependencies or output."""
+    for directory, children, files in os.walk(ROOT):
+        children[:] = sorted(name for name in children if name not in IGNORED_DOCUMENT_DIRS)
+        for name in sorted(files):
+            if name.endswith(".md"):
+                yield Path(directory) / name
 
 
 def require(condition, message):
@@ -50,7 +61,7 @@ def main():
             "RULES.md: older event eligibility/credit rules are not current guidance")
     print("PASS Devin Hack Kochi event identity and current template guidance")
     link_count = 0
-    for path in ROOT.rglob("*.md"):
+    for path in project_documents():
         text = path.read_text(encoding="utf-8")
         for target in re.findall(r"!?\[[^\]]*\]\(([^)]+)\)", text):
             target = target.split("#", 1)[0]

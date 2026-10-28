@@ -12,27 +12,57 @@ release does not install a service worker for offline reloads.
 
 ## Build and serve
 
-Use Godot 4.7.2 standard and Python 3 from a clean committed checkout:
+Use Godot 4.7.2 standard, Python 3, and Node.js with npm from a clean committed
+checkout. Website dependencies are locked separately from the optional Forge:
 
 ```sh
+npm --prefix web ci
 python3 tools/fetch_web_templates.py
 python3 tools/package_web.py
 python3 -m http.server 8085 --directory build/web
 ```
 
-Open `http://localhost:8085`. The template downloader extracts only the two Web
-templates using HTTP byte ranges and checks their recorded SHA-256 hashes.
+Open `http://localhost:8085`. The packager also runs `npm --prefix web run build`
+to bundle the website and generate `help.html` from the Player Guide. For a fast
+website-only build, run that npm command directly; its intermediate output is
+`build/web-site`, which is assembled with the game by the packager. The template
+downloader extracts only the two Web templates using HTTP byte ranges and
+checks their recorded SHA-256 hashes.
 Packaging imports/exports a fresh payload, includes public original artwork and
 licenses, writes `BUILD.json`, precompresses large files and publishes the whole
 directory with rollback. It refuses changed source, unexpected files and an
 unsupported engine. `--allow-dirty` is for local QA and explicitly labels the
-manifest; production packaging requires committed source.
+manifest; production packaging requires committed source. Website scripts,
+styles, fonts and artwork have content-versioned filenames, and every public
+file has a size and SHA-256 in `BUILD.json`. The intermediate website inventory
+is build input, not a public endpoint.
+
+## Website and player help
+
+The landing page is a real Three.js diorama built from original geometry and
+public Gloamthread sprites. Arena/Story tabs preview the two modes; choose the
+actual mode in the game's home menu after pressing Play. The [design contract
+and approved concepts](WEB_DESIGN.md) describe the intended presentation.
+
+The website loads its 3D enhancement separately from the playable game. The
+Godot loader, WebAssembly and game pack download only after Play. The motion
+control honors reduced-motion preferences; a captured scene poster keeps the
+page usable without animation or a working 3D renderer. Animation suspends while
+hidden/offscreen, and the website renderer is disposed before the game starts.
+Home keeps the paused game and displays the poster rather than starting another
+graphics renderer.
+
+**Read the guide** opens the generated player guide with stable section links,
+readable controls and mobile contents. Once a game exists, help opens separately
+to retain the run. The guide is built from repository Markdown rather than a
+second copy of the instructions. Mobile website navigation is supported;
+gameplay still requires a desktop keyboard/controller setup.
 
 If startup makes no download progress for 30 seconds, the shell offers Retry
 loading while allowing the original download to continue. A missing engine
 script also has a recovery message. Retry reloads only when clicked.
 
-Play unlocks browser audio. Fullscreen is optional. The shell fits complete
+Play starts browser audio initialization. Fullscreen is optional. The shell fits complete
 integer world pixels in the available physical canvas and letterboxes spare
 space; Story restores its own logical dimensions. Home pauses and retains the
 running game. Refresh ends a run. Story checkpoints, settings, records and

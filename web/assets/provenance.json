@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "authorship": "Original Gloamthread website assets, authored in this repository.",
+  "font": {
+    "file": "display.woff2",
+    "source": "assets/source/art/glyphs.json",
+    "compiler": "tools/web_font.py",
+    "authoring_dependencies": [
+      "fonttools==4.67.0",
+      "brotli==1.2.0"
+    ],
+    "sha256": "a6d75a7d113b0f9c12e818ce6212a563be5a96e097671fde8dc1372fbd4bd2f9"
+  },
+  "poster": {
+    "file": "poster.webp",
+    "source": "web/src/diorama.js",
+    "source_sha256": "3555ce07d17c658c086397855e42026b1d8c5af87e02609b96fd9fddf769bf6e",
+    "capture": "Actual Three.js renderer, Chromium 153 / SwiftShader, isolated harness",
+    "viewport": [
+      1200,
+      1000
+    ],
+    "mode": "arena",
+    "motion": false,
+    "alpha": true,
+    "encoding": "Pillow lossless WebP, method=6; no visual alteration",
+    "sha256": "5675e2b3d99573b60fec38f548e8f6f13621afa54ca803ca7a099c33b3171317"
+  },
+  "favicon": {
+    "file": "favicon.svg",
+    "source": "Original angular thread SVG authored for the website",
+    "sha256": "4968af7fd90f7dfc511db574eea3a5844361c6bf594b9d98eaab1dfbea1733fa"
+  },
+  "character_textures": [
+    "assets/arena/builtin/kiln-fox-ai/character.png",
+    "assets/arena/builtin/thistlepaw/character.png"
+  ]
+}

@@ -6,59 +6,43 @@
   <meta name="theme-color" content="#101a24">
   <meta name="description" content="An original pixel fighter for one or two local players. Survive twenty waves, explore a growing world, or take a friend through Story Mode.">
   <title>Gloamthread — Play</title>
+  <link rel="icon" href="@@SITE_FAVICON@@" type="image/svg+xml">
+  <link rel="stylesheet" href="@@SITE_STYLE@@">
   $GODOT_HEAD_INCLUDE
-  <style>
-    :root{color-scheme:dark;font-family:ui-monospace,monospace;color:#eee9d9;background:#101a24}*{box-sizing:border-box}body{margin:0;min-height:100dvh;display:flex;flex-direction:column}button,a{font:inherit}button{cursor:pointer;border:1px solid #68838b;background:#172b35;color:#eee9d9;padding:10px 18px;border-radius:3px}button:hover,button:focus-visible{border-color:#f1bc68;outline:2px solid #f1bc68;outline-offset:3px}button.primary{background:#f1bc68;color:#14242e;border-color:#f1bc68;font-weight:bold}button:disabled{opacity:.5;cursor:wait}a{color:#85d9e7}header{padding:30px max(24px,calc((100vw - 1120px)/2));display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid #293e48}.wordmark{font-weight:bold;letter-spacing:.12em}.edition{font-size:12px;color:#a2b5bc}main{position:relative;flex:1;display:grid;place-items:center;min-height:0}.welcome{width:min(100%,1120px);padding:54px 24px;display:grid;grid-template-columns:1.05fr 1fr;gap:52px;align-items:center}.eyebrow{color:#f1bc68;font-size:12px;letter-spacing:.16em}h1{font-size:clamp(36px,5vw,62px);line-height:1.08;letter-spacing:-.06em;margin:18px 0 24px}p{color:#a2b5bc;line-height:1.8;font-size:14px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0 16px}.details{font-size:12px}figure{margin:0;border:1px solid #3e5862;padding:8px;background:#14242e;box-shadow:16px 16px 0 #0a121a}figure img{width:100%;height:auto;display:block;image-rendering:pixelated}figcaption{font-size:11px;color:#a2b5bc;padding:12px 6px 5px;line-height:1.7}.controls{width:min(100%,1120px);padding:0 24px 32px;margin:auto}.controls summary{cursor:pointer;color:#85d9e7}.controls p{font-size:12px}.controls table{font-size:12px;width:100%;text-align:left;border-collapse:collapse;margin-top:16px}.controls td,.controls th{padding:10px;border-bottom:1px solid #293e48}.status{min-height:24px;font-size:12px;color:#f1bc68;white-space:pre-wrap}progress{width:100%;accent-color:#f1bc68;margin:16px 0}footer{padding:18px 24px;border-top:1px solid #293e48;display:flex;gap:20px;justify-content:center;font-size:11px;color:#a2b5bc}.gamebar{display:none;height:32px;align-items:center;justify-content:space-between;padding:0 10px;font-size:11px}.gamebar button{padding:3px 8px;font-size:11px}.gamebar span{color:#a2b5bc}#stage{display:none;position:relative;width:100%;height:calc(100dvh - 32px);align-items:center;justify-content:center;background:#080f16;overflow:hidden}canvas{outline:none;image-rendering:pixelated;display:block}body.playing{height:100dvh;overflow:hidden}body.playing header,body.playing footer,body.playing .welcome,body.playing .controls{display:none}body.playing .gamebar{display:flex}body.playing main{display:block}body.playing #stage{display:flex;height:100%}body.loading .welcome{display:grid;position:absolute;inset:0;width:100%;max-width:none;background:#101a24;z-index:10;padding:40px max(24px,calc((100vw - 1120px)/2));overflow:auto}body.loading #stage{visibility:hidden}#stage:fullscreen{height:100dvh}.storage{display:none;background:#553c23;color:#fff0d5;padding:6px 12px;font-size:11px}.small{display:none}@media(max-width:700px){.welcome{grid-template-columns:1fr;padding-top:24px;gap:24px}figure{box-shadow:none}header{padding:18px 24px}.edition{display:none}.small{display:block;color:#f1bc68}.desktop{display:none}footer{flex-wrap:wrap}}
-  </style>
 </head>
-<body>
-<header><div class="wordmark">GLOAMTHREAD</div><div class="edition">AN ORIGINAL LOCAL CO-OP GAME</div></header>
-<div class="gamebar"><strong>GLOAMTHREAD</strong><span>Esc · pause &nbsp; / &nbsp; saves stay in this browser</span><div><button id="fullscreen">Fullscreen</button> <button id="home">Home</button></div></div>
-<div id="storage" class="storage" role="status"></div>
-<main>
-  <section class="welcome" aria-label="Play Gloamthread">
-    <div>
-      <div class="eyebrow">TAKE AN END. HOLD YOUR GROUND.</div>
-      <h1>A small world.<br>A wild fight.</h1>
-      <p>Twenty waves. Four bosses. A world that grows with you.<br>Go solo, share a keyboard, or bring two controllers.</p>
-      <p>There’s a whole two-player story here, too. And invited creators can draw a fighter and forge it into the game.</p>
-      <p class="small">This release is built for a computer with a keyboard or controller. Open it on a desktop or laptop to play.</p>
-      <div class="actions"><button id="play" class="primary">Play Gloamthread</button><button id="retry" hidden>Retry loading</button></div>
-      <div class="details">Free to play · No account required · Desktop browser</div>
-      <progress id="progress" hidden max="100" aria-label="Game download progress"></progress>
-      <p id="status" class="status" role="status" aria-live="polite">Your game loads when you press Play.</p>
-    </div>
-    <figure><img src="preview.png" width="960" height="540" alt="Actual Gloamthread co-op combat in its pixel world"><figcaption>ONE SHARED WORLD / TWO WAYS THROUGH IT<br>Actual gameplay. Original art, music and sound.</figcaption></figure>
-  </section>
-  <details class="controls"><summary>Controls, saves & fighter creation</summary><table><thead><tr><th>Action</th><th>Player 1</th><th>Player 2</th></tr></thead><tbody><tr><td>Move</td><td>WASD</td><td>Arrow keys</td></tr><tr><td>Jump / Attack</td><td>Space / F</td><td>Period / Comma</td></tr><tr><td>Special / Dodge</td><td>G / Left Shift</td><td>Slash / Apostrophe</td></tr><tr><td>Revive / Shop</td><td>E</td><td>M</td></tr><tr><td>Pause</td><td>Escape</td><td>Enter</td></tr></tbody></table><p>Gamepad: left stick to move, A jump, X attack, B special, RB dodge, Y revive/shop. Press a controller button to connect it. Remap controls in Settings. Two players share this computer.</p><p>Saved fighters, settings, scores and story checkpoints belong to this browser. Clearing site data removes them. Back up your fighters with Download fighter. New artwork requires a creator invite; built-in and saved fighters are always playable.</p></details>
-  <div id="stage"><canvas id="canvas" tabindex="0" aria-label="Gloamthread game"></canvas></div>
-</main>
-<footer><span>Made by Midhun P M</span><a href="https://github.com/9MidhunPM/GloamThread">Source & desktop version</a><a href="notices.html">Licenses</a></footer>
-<script src="$GODOT_URL"></script>
-<script>
-(() => {
-  const canvas=document.querySelector('#canvas'), stage=document.querySelector('#stage');
-  const status=document.querySelector('#status'), play=document.querySelector('#play'), progress=document.querySelector('#progress');
-  let engine, booted=false, started=false, mode='arena', focusListener=null, fullscreenListener=null;
-  let loadWatchdog=null, lastProgressAt=0, lastProgress=-1;
-  const stopLoadWatchdog=()=>{clearInterval(loadWatchdog);loadWatchdog=null;};
-  const watchLoad=()=>{stopLoadWatchdog();lastProgress=-1;lastProgressAt=performance.now();loadWatchdog=setInterval(()=>{if(performance.now()-lastProgressAt>=30000){status.textContent='Loading is taking longer than usual. You can wait, or Retry loading.';document.querySelector('#retry').hidden=false;}},1000);};
-  const resize=()=>{if(!started)return;const unit=mode==='story'?[960,360]:[640,360];const ratio=window.devicePixelRatio||1;const factor=Math.max(1,Math.floor(Math.min(stage.clientWidth*ratio/unit[0],stage.clientHeight*ratio/unit[1])));canvas.width=unit[0]*factor;canvas.height=unit[1]*factor;canvas.style.width=(canvas.width/ratio)+'px';canvas.style.height=(canvas.height/ratio)+'px';};
-  window.GloamWeb={setMode(value){mode=value;document.body.dataset.mode=value;resize();},onFocusLoss(callback){focusListener=callback;},onFullscreenChange(callback){fullscreenListener=callback;},storageWarning(message){const node=document.querySelector('#storage');node.textContent=message;node.style.display=message?'block':'none';resize();},home(){document.body.classList.remove('playing');started=false;status.textContent='Your game is still open. Press Resume to return.';play.textContent='Resume game';play.disabled=false;},async fullscreen(){try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();canvas.focus();}catch{status.textContent='Fullscreen is unavailable. You can keep playing in the browser.';}}};
-  const loseFocus=()=>{if(focusListener)focusListener();};document.addEventListener('visibilitychange',()=>{if(document.hidden)loseFocus();});window.addEventListener('blur',loseFocus);
-  window.addEventListener('resize',resize);document.addEventListener('fullscreenchange',()=>{resize();document.querySelector('#fullscreen').textContent=document.fullscreenElement?'Exit fullscreen':'Fullscreen';if(fullscreenListener)fullscreenListener();});
-  canvas.addEventListener('keydown',event=>{if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Tab'].includes(event.code))event.preventDefault();});
-  document.querySelector('#fullscreen').onclick=()=>window.GloamWeb.fullscreen();document.querySelector('#home').onclick=()=>{loseFocus();window.GloamWeb.home();};
-  document.querySelector('#retry').onclick=()=>location.reload();
-  play.onclick=async()=>{
-    if(engine&&booted){started=true;document.body.classList.add('playing');resize();canvas.focus();return;}
-    if(typeof Engine==='undefined'){status.textContent='The game loader could not download. Retry loading to try again.';document.querySelector('#retry').hidden=false;return;}
-    if(!window.WebAssembly||!Engine.isWebGLAvailable(2)){status.textContent='This browser needs WebAssembly and WebGL 2 to play. Try a current Chrome, Edge or Firefox browser.';return;}
-    play.disabled=true;progress.hidden=false;document.querySelector('#retry').hidden=true;status.textContent='Loading the world…';watchLoad();
-    try{engine=new Engine($GODOT_CONFIG);started=true;document.body.classList.add('playing','loading');resize();await engine.startGame({canvas,canvasResizePolicy:0,focusCanvas:true,onProgress(current,total){const changed=current!==lastProgress;if(changed){lastProgress=current;lastProgressAt=performance.now();document.querySelector('#retry').hidden=true;}if(total){progress.value=current/total*100;if(changed)status.textContent='Loading the world… '+Math.round(progress.value)+'%';}else if(changed)status.textContent='Loading the world…';},onPrintError(message){console.error(message);}});booted=true;stopLoadWatchdog();document.querySelector('#retry').hidden=true;document.body.classList.remove('loading');canvas.focus();}
-    catch(error){stopLoadWatchdog();started=false;document.body.classList.remove('playing','loading');status.textContent='The game could not start. '+(error?.message||String(error));document.querySelector('#retry').hidden=false;play.disabled=false;progress.hidden=true;}
-  };
-})();
-</script>
+<body data-game-state="idle">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="website">
+    <header class="site-header">
+      <a class="wordmark" href="./" aria-label="Gloamthread home">GLOAMTHREAD<svg class="brand-thread" width="106" height="28" viewBox="0 0 106 28" aria-hidden="true"><path d="M0 20h14v-8h14v8h18V8h10v12h50M18 4v16M42 16h18"/><path d="M11 9h6v6h-6zM43 2h8v8h-8z"/></svg></a>
+      <nav class="header-nav" aria-label="Main navigation"><a data-guide href="help.html">How to play</a><a href="https://github.com/9MidhunPM/GloamThread" target="_blank" rel="noopener">Source</a><button id="motion" class="motion-toggle" type="button" role="switch" aria-checked="true"><span>Motion on</span><span class="switch-track" aria-hidden="true"></span></button></nav>
+    </header>
+    <main id="main" class="site-main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <h1 id="hero-title">A small world.<br><span>A wild fight.</span></h1>
+          <p class="hero-description">Twenty waves. Four bosses. A world that grows with you. <br>Play solo or share the fight on one computer.</p>
+          <div class="hero-actions"><button id="play" class="button primary" type="button">Play Gloamthread <span aria-hidden="true">→</span></button><a class="text-link" data-guide href="help.html">Read the guide <span aria-hidden="true">→</span></a><button id="retry" class="button secondary" type="button" hidden>Retry loading</button></div>
+          <p class="play-details">Free to play <span>·</span> No account required <span>·</span> Desktop browser</p>
+          <p class="desktop-notice">Play on a computer with a keyboard or controller. This website works on mobile; the game needs desktop controls.</p>
+          <progress id="progress" hidden max="100" aria-label="Game download progress"></progress>
+          <p id="status" class="status" role="status" aria-live="polite">Your game loads when you press Play.</p>
+          <noscript><p class="status">JavaScript is needed to play. You can still <a href="help.html">read the guide</a> or <a href="https://github.com/9MidhunPM/GloamThread">get the desktop version</a>.</p></noscript>
+        </div>
+        <div class="hero-world">
+          <div class="diorama-frame"><img id="diorama-poster" class="diorama-poster" src="@@SITE_POSTER@@" width="1200" height="1000" alt="A miniature Gloamthread island with a lantern tree, raised paths and a bridge"><div id="diorama" aria-hidden="true"></div></div>
+          <div class="world-controls"><div class="scene-tabs" role="tablist" aria-label="Explore a miniature world"><button id="scene-arena" role="tab" type="button" aria-selected="true" data-scene="arena">Arena</button><button id="scene-story" role="tab" type="button" aria-selected="false" tabindex="-1" data-scene="story">Story</button></div><span class="drag-hint" aria-hidden="true">↔ &nbsp; Drag to explore</span><span class="sr-only" id="scene-status" role="status">Arena scene</span></div>
+        </div>
+      </section>
+      <section class="mode-strip" aria-labelledby="modes-title"><h2 id="modes-title">Two ways into <br>the world.</h2><div><h3>Arena</h3><p>1–2 players · Twenty waves, four bosses, endless if you dare.</p></div><div><h3>Story</h3><p>2 players · Eight rooms with Tavi and Neri.</p></div></section>
+      <nav class="guide-links" aria-label="Player help"><a data-guide href="help.html#controls">Controls <span aria-hidden="true">→</span></a><a data-guide href="help.html#saves-backups">Saves &amp; backups <span aria-hidden="true">→</span></a><a data-guide href="help.html#create-a-fighter">Create a fighter <span aria-hidden="true">→</span></a></nav>
+    </main>
+    <footer class="site-footer"><span>Made by Midhun P M</span><div><a href="https://github.com/9MidhunPM/GloamThread" target="_blank" rel="noopener">Source</a><a data-guide href="notices.html">Licenses</a></div></footer>
+  </div>
+  <div class="gamebar"><strong>GLOAMTHREAD</strong><span id="game-status" role="status" aria-live="polite">Esc · pause / saves stay in this browser</span><div><a data-guide href="help.html" target="_blank" rel="noopener">Help</a><button id="fullscreen" type="button">Fullscreen</button><button id="home" type="button" disabled>Home</button></div></div>
+  <div id="storage" class="storage" role="status" hidden></div>
+  <div id="stage"><canvas id="canvas" tabindex="0" aria-label="Gloamthread game. Escape pauses; use Home in the toolbar to return to the website."></canvas></div>
+  <script>window.GloamGameConfig={url:"$GODOT_URL",config:$GODOT_CONFIG};</script>
+  <script type="module" src="@@SITE_SCRIPT@@"></script>
 </body>
 </html>
