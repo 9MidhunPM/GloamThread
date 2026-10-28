@@ -1,5 +1,10 @@
 # Change log
 
+### 2026-10-28T21:50:29+05:30 — Polish generated guide navigation and tables
+
+- Corrected active-section tracking for Markdown aliases nested inside paragraphs and kept the parent selected while reading unlisted subheadings. Desktop controls tables now fill the article width; narrow tables retain horizontal scrolling.
+- Validation: actual Chromium guide navigation selects Start playing and Controls correctly; first table and row both measure 834px at 1536×1024. Website build, JS syntax and whitespace checks pass. Game lifecycle code is unchanged.
+
 ### 2026-10-28T21:36:39+05:30 — Add the living 3D browser portal
 
 - Added the approved navy/amber homepage, an original deterministic Three.js island/tree/bridge scene with public fighter sprites, bounded pointer interaction, scene previews, staggered entrances and reduced-motion/poster fallbacks. The committed poster is an actual transparent renderer capture; original glyphs compile reproducibly into the website font. Design references and asset provenance are retained.

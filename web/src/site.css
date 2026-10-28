@@ -739,6 +739,12 @@ body[data-game-state=loading] .hero-world {
   font-size: 14px;
   line-height: 1.6;
 }
+@media(min-width:851px) {
+  .guide-content table {
+    display: table;
+    table-layout: fixed;
+  }
+}
 .guide-content td,.guide-content th {
   text-align: left;
   padding: 10px 12px;
