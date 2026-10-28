@@ -2,6 +2,12 @@
 
 Start here for a quick look at the playable modes, a short demo route and real screenshots. For complete controls and walkthroughs, open the [Player Guide](PLAYER_GUIDE.md). The project follows **Devin Hack Kochi** guidance.
 
+## Play in a browser
+
+Open [gloamthread.midhunpm.in](https://gloamthread.midhunpm.in) in desktop Chromium or Firefox and choose **Play Gloamthread**. No account, API key or installation is needed to play Arena solo/co-op or the two-player Story. Choose a distinct input for each player in the game lobby.
+
+Use **Esc** to pause and the website toolbar for fullscreen. **Home** pauses and retains the running game; **Resume game** returns to it. Refresh ends a run. Settings, Story checkpoints and accepted fighters stay in browser storage where available; clearing site data removes them. Fighter ZIP download/import backs up accepted fighters, not Story progress or settings. [Browser help and controls](PLAYER_GUIDE.md).
+
 ## Launch the current source
 
 With **Godot 4.7.2 standard** installed, run these from inside your `GloamThread` checkout (or pass its full path to `--path`):
@@ -15,7 +21,7 @@ The import step is needed once after a fresh download. Add `--display-driver way
 
 **Short on time?** Watch the [videos](VIDEOS.md): a 48-second captioned intro, 2:23 of arena highlights, the full 25-wave run, the entire Story and a one-minute accessibility tour.
 
-**Package version matters:** the previously published **v0.4.0-counterplay** package is an older arena-only build. Use the source above, or a later package whose home screen includes **STORY MODE (2 PLAYERS)**, to review the restored campaign. Check the package's `BUILD.json` for its exact source identity. From a newly extracted complete package, run `chmod +x ./Gloamthread.x86_64` and `./Gloamthread.x86_64`.
+**Package version matters:** the previously published **v0.4.0-counterplay** package is an older arena-only build. Use the browser release, source above, or a later package whose home screen includes **STORY MODE (2 PLAYERS)**, to review the restored campaign. Check the package's `BUILD.json` for its exact source identity. From a newly extracted complete package, run `chmod +x ./Gloamthread.x86_64` and `./Gloamthread.x86_64`.
 
 ## What is available
 
@@ -25,7 +31,9 @@ The import step is needed once after a fresh download. Add `--display-driver way
 | **STORY MODE (2 PLAYERS)** | The original Tavi/Neri adventure: eight rooms, paired-anchor bridges, the Spoolwarden, shared Threadstep and a checkpoint-based journey home. |
 | **CHARACTER FORGE** | Draw/import, review name/body/compatible ability/theme, generate a full illustrated character, correct/import a retained cutout, preview and accept. |
 
-Built-in and accepted fighters play offline. Forge has **no local total or per-character dollar cap**; explicit model actions still use your API account. Request estimates, uncertain outcomes, cache checks, cancellation and protection against automatic retries remain. Local crop/mask/pivot rebakes make no new model request.
+Built-in and accepted fighters need no model service during play. Browser gameplay can continue after loading without network access; offline page reload is not provided. Native packages play offline.
+
+Browser Forge uses a personal creator invite and server-held provider credentials; native authoring uses your own API account through the Python helper. Both require explicit Analyse/Generate actions. Forge has **no local total or per-character dollar cap**; request estimates, uncertain outcomes, cache checks, cancellation and protection against automatic retries remain. Cached crop/mask/pivot corrections make no new model request. Hosted drafts stay privately on the server, while accepted fighters are saved in that browser; native drafts and accepted fighters stay on that machine.
 
 ## A suggested three-minute demo
 

@@ -2,6 +2,12 @@
 
 A solo or two-player local scrolling side-view wave fighter. Views merge nearby and split vertically when partners explore apart, with P1 always left and P2 right. Clear 20 waves across four five-wave stages, with a boss at each stage's end, then optionally continue into endless. Coins and upgrades belong to each player and reset with the run. Saved characters, settings and scores persist.
 
+## Choose a build
+
+The [current browser release](https://gloamthread.midhunpm.in) and [source checkout](../README.md#play-in-three-steps) include the restored **STORY MODE (2 PLAYERS)**, later accessibility options and illustrated fighter generation. Browser launch, saves, invite-based Forge and fighter ZIP backups are covered in the [Player Guide](PLAYER_GUIDE.md).
+
+The published [v0.4.0-counterplay Linux package](https://github.com/9MidhunPM/GloamThread/releases/tag/v0.4.0-counterplay) is an **older arena-only release**. It predates those additions. This page covers native Arena play and packaging; sections marked current source describe later functionality and do not imply it exists in that older binary. Read the package's `BUILD.json` for its exact source revision.
+
 ## Play the Linux package
 
 Extract the complete ZIP into a writable directory. Keep `authoring/` beside the executable if you want optional character generation. From the extracted directory:
@@ -73,7 +79,7 @@ This is a playtest candidate. Automated checks do not prove physical gamepad beh
 
 Source and editable assets: [9MidhunPM/GloamThread](https://github.com/9MidhunPM/GloamThread). See `THIRD_PARTY_NOTICES.md` and `docs/licenses/` for bundled engine notices.
 
-## Illustrated characters and attack identity
+## Current source: illustrated characters and attack identity
 
 New source generations use one complete detailed transparent character as the actual sprite source, followed by environment artwork. Thirty-two authored whole-body cutout poses preserve its design and proportions; this is not independent limb animation. Older parts-based jobs and fighters remain valid. To use a detailed version from an old background, extract it to an RGBA PNG, open its retained draft and choose **Use detailed character cutout PNG**. The fixed source/hash is retained, masks/pivots remain editable, and local conversion makes no API-key requests. Background/material crops can be adjusted separately.
 

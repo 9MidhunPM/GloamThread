@@ -1,6 +1,6 @@
 # Accessibility guide
 
-Gloamthread should be playable by as many people as possible: with one hand, a controller, slower reactions or low vision; while sensitive to flashing or motion; or by someone new to games. Every option below is **off by default**, can be changed at any time from **SETTINGS & CONTROLS** on the home screen or the pause menu, and is saved in your settings, never in run progress.
+Gloamthread offers remapping, assists and comfort settings for different ways of playing. Open **SETTINGS & CONTROLS** from the home screen or pause menu. Assists, toggle attack, high contrast and narration start off; game speed and damage taken start at 100%. Settings are saved separately from run progress.
 
 ![Arena settings with sight/sound and assist/control columns.](media/accessibility-settings.jpg)
 
@@ -20,6 +20,14 @@ Gloamthread should be playable by as many people as possible: with one hand, a c
 | Motion sickness | **REDUCED SHAKE** | Arena and Story settings |
 | Hearing or noise sensitivity | **MASTER / MUSIC / EFFECTS VOLUME** | Arena and Story settings |
 | Drifting stick or unsteady hands | **STICK DEADZONE** | Gamepad remap screen (both modes) |
+
+## Website motion and browser play
+
+The website's motion control pauses its 3D scenery and decorative page animations. It also respects your operating system's reduced-motion preference. This setting belongs to the website; use **REDUCED FLASH** and **REDUCED SHAKE** inside the game to change combat effects and camera movement.
+
+Website links and controls support keyboard focus, and the player guide can be read without starting the game. Browser zoom changes the website and guide; in-game text remains part of the game canvas. The mobile website is readable, but gameplay still needs a desktop/laptop keyboard or controller.
+
+Use the game toolbar's **Fullscreen** control in the browser. **Home** pauses and retains the game on the same page; **Resume game** brings it back. Leaving the tab pauses combat and clears held input. Refresh ends the current run. Browser storage warnings, save limits and recovery steps are in the [Player Guide](PLAYER_GUIDE.md#saves).
 
 ## Moving around the menus
 
@@ -64,12 +72,12 @@ Runs with reduced damage or speed are marked **ASSISTED RUN** on the results scr
 - **High contrast** brightens secondary text to full ink, thickens every menu/HUD outline, lifts dim borders and makes backdrops behind menus nearly solid. Toggling it mid-run immediately redraws the HUD.
 - **Player identity is never colour-only.** Each fighter carries a pixel **P1 / P2** label under its feet, and HUD panels are labelled by player.
 - **Enemy tells use shape and position as well as colour:** charge lanes are drawn on the ground, flyer dive points are marked, heavies show guard brackets. See [Enemy mechanics](ENEMY_MECHANICS.md).
-- The game renders at an exact 3× pixel scale for 1920×1080 and letterboxes other screens. **F11** toggles fullscreen anywhere; a window can be started with `--windowed --resolution 1920x1080`.
+- Native Arena uses a 640×360 world at 3× scale for 1920×1080 and letterboxes other screens. **F11** toggles native fullscreen; a window can be started with `--windowed --resolution 1920x1080`. The browser fits complete world pixels to the available canvas; use its fullscreen toolbar.
 
 ## Hearing the game
 
 - **Read menus aloud** speaks the focused menu item and its hint, screen titles, shop items with prices, wave starts/clears, a downed partner and notices. It uses your operating system's text-to-speech voice at the master volume.
-- It needs a system voice. On Linux install **speech-dispatcher** plus a voice such as **espeak-ng** (`sudo pacman -S speech-dispatcher espeak-ng`, `sudo apt install speech-dispatcher espeak-ng`, or `sudo dnf install speech-dispatcher espeak-ng`), then restart the game. Windows and macOS provide voices by default. If no voice is found the option stays off and says why.
+- Native narration needs a system voice. On Linux install **speech-dispatcher** plus a voice such as **espeak-ng** (`sudo pacman -S speech-dispatcher espeak-ng`, `sudo apt install speech-dispatcher espeak-ng`, or `sudo dnf install speech-dispatcher espeak-ng`), then restart the game. If no voice is found the option stays off and says why. Voice availability in a browser depends on that browser and operating system; audible browser narration has not been verified.
 - Important information is always shown as text as well as sound: wave numbers, countdowns, coin rewards, revive prompts, boss names and bars.
 - The [intro video](VIDEOS.md#intro) has burned-in captions and a full transcript.
 

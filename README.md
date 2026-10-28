@@ -1,18 +1,24 @@
 # Gloamthread — Two Ends
 
-A pixel-art side-view fighter for **one or two players on one computer**. Survive twenty waves and four bosses in a world that grows as you play, buy your own upgrades between rounds, and keep going in endless mode. Draw your own fighter, or play the original two-player **Story Mode** with the couriers Tavi and Neri. No account or API key is needed to play. Combat runs locally; the browser version downloads the game when you open it.
+A pixel-art side-view fighter for **one or two players on one computer**. Survive twenty waves and four bosses in a world that grows as you play, buy your own upgrades between rounds, and keep going in endless mode. Draw your own fighter, or play the original two-player **Story Mode** with the couriers Tavi and Neri. No account or API key is needed to play. Combat runs locally; the browser downloads the game when you press Play.
 
 [![Gloamthread intro: two couriers at opposite ends of a glowing thread. Click to watch the 48-second captioned intro.](docs/media/intro-poster.jpg)](https://github.com/9MidhunPM/GloamThread/releases/download/videos-2026-10-26/gloamthread-intro.mp4)
 
 *Click the image to watch the 48-second intro (captioned). [All videos, transcripts and details](docs/VIDEOS.md).*
 
-**[Play now at gloamthread.midhunpm.in](https://gloamthread.midhunpm.in)** — open in desktop Chrome/Chromium or Firefox, click **Play Gloamthread**, then choose Solo Run, Local Co-op or Story Mode. No installation. Use **Esc** to pause and the toolbar for fullscreen.
+**[Play now at gloamthread.midhunpm.in](https://gloamthread.midhunpm.in)** · **[Player guide](docs/PLAYER_GUIDE.md)** · **[Current release status](docs/STATUS.md)**
 
-**Jump to:** [Watch](#watch-the-game) · [Run from source](#play-in-three-steps) · [Controls](#controls) · [Accessibility](#accessibility) · [Modes](#what-you-can-play) · [Make a fighter](#draw-and-forge-a-fighter) · [Developers](#for-developers) · [Docs map](#documentation-map)
+**Jump to:** [Browser play](#play-in-your-browser) · [Watch](#watch-the-game) · [Run from source](#play-in-three-steps) · [Controls](#controls) · [Accessibility](#accessibility) · [Modes](#what-you-can-play) · [Make a fighter](#draw-and-forge-a-fighter) · [Developers](#for-developers) · [Docs map](#documentation-map)
 
-The optional [hosted Forge service](server/README.md) supports private creation jobs unlocked with individual invitation codes. It runs a separate Python worker with server-held credentials and durable request history; gameplay and saved fighters do not require this service. See the [browser build and deployment guide](docs/WEB_RELEASE.md) and [release evidence](evidence/web-release/README.md).
+## Play in your browser
 
-The browser version supports fighter ZIP backup/import and uses the same Arena and Story modes. Creation requires a personal invite; play is open. Saves stay in that browser; clearing site data removes them, so download a ZIP to keep your fighters. Refresh ends the current run. Mobile touch controls and online multiplayer are outside this release. Desktop Python authoring keeps its existing setup below.
+1. Open the website in desktop Chrome/Chromium or Firefox and select **Play Gloamthread**.
+2. Choose **SOLO RUN**, **LOCAL CO-OP** or **STORY MODE (2 PLAYERS)**. Each player needs a distinct keyboard zone or connected controller.
+3. Use **Esc** to pause, the toolbar for fullscreen, and **Home → Resume game** to return to the website and reopen the same paused game.
+
+Saves stay in that browser profile. Refresh ends the current run; clearing site data removes saved fighters, settings, scores and Story checkpoints. **Download fighter ZIP** backs up an accepted fighter, and **Import fighter ZIP** restores it; those ZIPs do not contain Story saves or settings. There is no cloud save sync or guaranteed offline reload. See the [save guide](docs/PLAYER_GUIDE.md#saves) and [browser troubleshooting](docs/PLAYER_GUIDE.md#troubleshooting).
+
+Play is open; optional new fighter creation requires a personal invite. The [hosted Forge](server/README.md) keeps credentials and private drafts on the server. Built-in and accepted fighters need no authoring service to play. Mobile touch controls and online multiplayer are outside this release. The website motion control is separate from the game's reduced flash/shake settings.
 
 ## Watch the game
 
@@ -70,9 +76,9 @@ On the home screen choose **SOLO RUN** or **LOCAL CO-OP**, pick fighters and an 
 
 ## Accessibility
 
-Open **SETTINGS & CONTROLS** from the home screen or the pause menu. All options are off by default and saved separately from your run.
+Open **SETTINGS & CONTROLS** from the home screen or the pause menu. Assists, toggle attack, high contrast and narration start off; game speed and damage taken start at 100%. Settings are saved separately from your run.
 
-- **Remap any action** per player, for keyboard or gamepad, with clash protection and a gamepad stick deadzone.
+- **Remap actions except Pause** per player, for keyboard or gamepad, with clash protection and a gamepad stick deadzone.
 - **Press-to-toggle attack** per player, so nothing has to be held down.
 - **Game speed** 100 / 80 / 60% and **damage taken** 100 / 75 / 50 / 25% assists (runs are labelled *assisted*, nothing is locked).
 - **High contrast** menus and HUD; player markers are labelled **P1/P2**, never colour-only.
@@ -96,7 +102,7 @@ Enemies telegraph their attacks: chargers mark a rush lane, heavies guard their 
 
 Three built-in fighters (including the AI-generated Kiln Fox) and any fighter you have accepted work offline. Character Forge offers a drawing canvas, PNG/JPEG import, editable body/ability/theme proposals, an animation preview and local correction tools. Name your fighter before analysing: names and weapon descriptions guide the artwork, and magic identities get projectile kits while sword/spear fighters get melee kits.
 
-On the website, enter your personal creator invite in **Character Forge**, then draw or upload original art. Review the proposal, generate, preview and accept. Download the fighter ZIP to keep a backup. The server holds the provider key; your browser never receives it. Cached crop/mask/pivot corrections send no model request.
+On the website, enter your personal creator invite in **Character Forge**, then draw or upload original art. Review the proposal, generate, preview and accept. Download the fighter ZIP to keep a backup. The server holds the provider key and retained private drafts; your browser stores accepted fighters. Cached crop/mask/pivot corrections send no model request. Follow the [browser creation and backup steps](docs/PLAYER_GUIDE.md#create-a-fighter).
 
 For **native desktop authoring**, generating new artwork is optional and uses **your own OpenAI API key** through a local Python helper:
 
@@ -142,11 +148,11 @@ Current results, resolved historical failures and remaining verification limits 
 
 | Read this | For |
 | --- | --- |
-| [Player Guide](docs/PLAYER_GUIDE.md) | Illustrated launch, modes, controls, walkthroughs, saves and troubleshooting |
+| [Player Guide](docs/PLAYER_GUIDE.md) | Start in the browser, learn modes/controls, create and back up fighters, or fix a problem |
 | [Accessibility guide](docs/ACCESSIBILITY.md) | Every accessibility option and its limits |
 | [Videos](docs/VIDEOS.md) | All videos, the intro transcript and how each was made |
 | [Final review desk](docs/FINAL_REVIEW.md) | A three-minute demo route and the real screenshot gallery |
-| [Web release and operations](docs/WEB_RELEASE.md) | Browser builds, invited creation, deployment and private backups |
+| [Web release and operations](docs/WEB_RELEASE.md) | Build and serve the website/game, deploy hosted Forge and manage private server backups |
 | [Status](docs/STATUS.md) | What is implemented and verified, and what is not |
 | [Wave fighter spec](docs/WAVE_FIGHTER_SPEC.md) · [Scrolling world plan](docs/SCROLLING_WORLD_PLAN.md) | Approved design contracts |
 | [Enemy mechanics](docs/ENEMY_MECHANICS.md) | How each enemy telegraphs and how to counter it |

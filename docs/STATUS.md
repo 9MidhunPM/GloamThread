@@ -2,6 +2,25 @@
 
 Current product: solo/two-player scrolling wave fighter with dynamic split screen. The approved [world contract](SCROLLING_WORLD_PLAN.md) extends the [wave specification](WAVE_FIGHTER_SPEC.md). The original eight-room Story Mode remains selectable alongside the arena; overhead work remains historical.
 
+## Current release at a glance
+
+- **Play:** the [browser release](https://gloamthread.midhunpm.in) or [current source](../README.md#play-in-three-steps) includes Arena solo/co-op, the restored two-player Story, accessibility settings and illustrated fighter creation.
+- **Download version:** the published **v0.4.0-counterplay Linux package** is older and predates restored Story, the later accessibility options and illustrated generation. Check `BUILD.json` for exact source identity; a shared version label alone does not establish equivalent builds.
+- **Evidence:** the 2026-10-27 browser-release record below is the latest completed release verification. Older checkpoint results remain historical, including failures that were later resolved and changes whose tests were skipped at that time.
+- **Help:** [Player Guide](PLAYER_GUIDE.md) for playing and saves; [web build and operations](WEB_RELEASE.md) for packaging, hosted Forge and deployment.
+
+## Implemented
+
+The seeded world begins four screens wide and expands after waves 5/10/15 to sixteen screens (10,240×720 logical pixels). Existing terrain, loot IDs and player positions remain intact. Connected raised routes and shallow caves use the same shared physics world. Four parallax layers, twenty-four authored props, four landmark families, cave texture/support details and visible frontier signs ship with editable sources.
+
+Nearby players share a 640×360 view; separated players receive 320×360 views at the same 3× pixel scale. Downed bodies remain camera targets. There is one simulation and audio mix. Personal shops can close independently for free exploration and reopen with owned interact; all active players Ready. Unique caches pay both active players; plants heal their collector. Existing twenty waves, bosses, six builds, run resets and endless remain.
+
+Spawns use reachable nearby anchors and 96 pixel player clearance. Unseen pursuit preserves enemy identity/HP/status/reward ownership and cancels on visibility/death. Ground foes navigate connected platforms; genuine flying enemies cross open planks while solid terrain still blocks them, using reachable anchors around cave ceilings. Generated character appearance never grants flight.
+
+## Remaining acceptance
+
+Physical controllers/hotplug, keyboard rollover, audio listening, fresh-human balance/enjoyment/clear time and other hardware/distributions remain unverified. No organizer submission has been made. See [submission record](../SUBMISSION.md) and **Devin Hack Kochi** [event guidance](../RULES.md).
+
 ## Browser release (2026-10-27)
 
 **[Play at gloamthread.midhunpm.in](https://gloamthread.midhunpm.in).** Desktop Chromium and Firefox run Arena solo/co-op and the preserved two-player Story. The public export uses Godot 4.7.2 standard Compatibility with versioned/precompressed assets and a clean-source `BUILD.json`. [Exact deployed revision and evidence](../evidence/web-release/README.md); [build and operations](WEB_RELEASE.md).
@@ -16,7 +35,11 @@ Actual public Chromium/Firefox checks cover title, solo combat, pause/Home/Resum
 
 The ARM64 Dokploy deployment retains named data/secrets volumes and uses a private unambiguous API alias. An actual idle production backup and isolated same-path restore verify database, artifacts and request history without changing production data. Backup retention keeps up to seven archives on the same host; off-server backup storage and recurring scheduling remain unconfigured. No Safari, mobile touch play, physical-controller/hotplug, audible listening, human balance/enjoyment or physical FPS claim is made. A full 20-wave browser playthrough remains unverified.
 
-## Accessibility, documentation and videos (2026-10-26)
+## Historical checkpoints (through 2026-10-26)
+
+These records describe what was checked at each milestone, not the current test state. Their original limits and results are retained for traceability; use the browser-release record above for the latest completed release evidence.
+
+### Accessibility, documentation and videos (2026-10-26)
 
 Arena **SETTINGS & CONTROLS** now offers per-player key/button remapping (clash refusal shared with Story rules, gamepad deadzone, reset), per-player press-to-toggle attack, game speed 100/80/60% (Engine time scale only while a run exists, fixed 60 Hz ticks unchanged), damage taken 100/75/50/25%, high-contrast menus/HUD, optional OS text-to-speech menu narration, separate master/music/effects volume with Left/Right adjust, visible per-option hints, cursor-preserving rebuilds and live control text. Solo P1 can choose the right-hand keyboard side. Assisted runs are labelled on results and in saved summaries. Settings stay `schema_version` 1; new keys are additive, stepped values are validated and Story preserves them. Godot's `audio/general/text_to_speech` is enabled. [Accessibility guide](ACCESSIBILITY.md).
 
@@ -26,39 +49,31 @@ Videos: the owner-supplied 48-second captioned intro is in `docs/media/` and on 
 
 Not verified: audible narration (no system voice on the test machine; the missing-voice path is tested), screen readers (AccessKit names are set but untested), assists with disabled players, physical controllers and Windows/macOS. Story Mode does not yet have the assist, contrast, narration or toggle-attack options.
 
-## Entire Story autoplay
+### Entire Story autoplay
 
 `./story_showcase.sh` starts a new isolated Tavi/Neri campaign and sequentially demonstrates all eight rooms, Oru/ending dialogue, both checkpoints, paired bridges, the hidden charm, Spoolwarden, earned Threadstep and return-home ending. It extends the existing owned-input campaign route with real Gallery cleanup and the secret staircase; no actor placement, room skips, health grants or debug combat. Space pause/resume,1/2/4 speed,Esc quit. Original two480×360 views retain their dimensions; a60px viewing banner sits below them. Temporary campaign/settings are removed after validation.
 
 Complete headless/native routes pass (12,305/12,198 route steps), all permanent flags and valid save, zero recoveries/failures/engine errors; final4/3hearts. Native viewport captures and handler pause/frozen/resume/speed checks pass. Early exit reports interrupted=true/completed=false without stale-instance cleanup errors. [Evidence](../evidence/story-showcase/README.md), [launch/options](STORY_SHOWCASE.md). No broad suite, API request, new export or human/hardware/listening claim.
 
-## Watchable gameplay showcase
+### Watchable gameplay showcase
 
 `./showcase.sh` runs labeled co-op highlight chapters1/5/10/15/20/25 and a staged64-foe finale with the ordinary32-live cap. `--full` keeps the25-wave route's normal progression; preset setup only exists in the highlight adapter. Space pause/resume,1/2/4 viewing speed,N highlight skip,Esc exit; temporary settings/records are cleaned and personal saves are untouched.
 
 Seven headless chapters pass, peak32/all six roles, no engine errors. Actual native boss/crowd captures inspected; controlled real-overlay key handlers verify pause/frozen/resume/speed/skip/exit with honest interrupted-report state. The original two-wave co-op input route still passes. [Evidence and limitations](../evidence/showcase/README.md). No new full25 rerun, human/hardware QA, API request or exported release.
 
-## Current wave-flow hotfix
+### Wave-flow hotfix checkpoint
 
 Fixed the reproduced nearby-cave catch-up gap: spawns prefer the visible fighting lane; unseen ordinary enemies catch up after180ticks regardless of distance, with42tick warning and original identity/HP. Camera visibility uses a16px edge margin. Normal arrivals warn24ticks, schedule at most18ticks apart, release their delay after kills and request up to three when empty. Pending warnings still consume caps and reserve space. Wave countdown45ticks; clear celebration24ticks; shops retain all-player Ready.
 
 Focused `--filter wave_flow`:1passed/0failed. Actual owned-input solo and co-op bots both clear the first two waves (1198/2267ticks respectively), no route/engine errors, seed18427, Godot4.7.2 headless60Hz. [Exact commands and reports](../evidence/wave-flow/README.md). No broad suite/export/model call. Full-run balance and physical/visible play remain unverified for this patch; use current source rather than the older published ZIP.
 
-## Implemented
-
-The seeded world begins four screens wide and expands after waves 5/10/15 to sixteen screens (10,240×720 logical pixels). Existing terrain, loot IDs and player positions remain intact. Connected raised routes and shallow caves use the same shared physics world. Four parallax layers, twenty-four authored props, four landmark families, cave texture/support details and visible frontier signs ship with editable sources.
-
-Nearby players share a 640×360 view; separated players receive 320×360 views at the same 3× pixel scale. Downed bodies remain camera targets. There is one simulation and audio mix. Personal shops can close independently for free exploration and reopen with owned interact; all active players Ready. Unique caches pay both active players; plants heal their collector. Existing twenty waves, bosses, six builds, run resets and endless remain.
-
-Spawns use reachable nearby anchors and 96 pixel player clearance. Unseen pursuit preserves enemy identity/HP/status/reward ownership and cancels on visibility/death. Ground foes navigate connected platforms; genuine flying enemies cross open planks while solid terrain still blocks them, using reachable anchors around cave ceilings. Generated character appearance never grants flight.
-
-## Previously verified v0.4 counterplay baseline
+### Previously verified v0.4 counterplay baseline
 
 Chargers now commit to a marked lane and expose miss/wall recovery; heavies use directional guards with rear/control/late-swing counters; shooters announce locked three-shot bursts; flyers mark committed dives and retreat. Contact direction follows actual melee/projectile/chain origins. A moving target crossing behind terrain cannot cancel/rewrite the flyer's announced attack. [Mechanics](ENEMY_MECHANICS.md).
 
-The v0.4 source checkpoint passed **21 arena scenarios, 173 creator assertions and 187 Python tests**. Ordinary-input solo 20 (36,998 ticks) and co-op 25 (50,023 ticks) both pass with no route/engine errors. Four actual native 1080p snapshots were inspected with matching source hashes and no errors. [Current evidence](../evidence/enemy-counterplay/README.md). Physical/human balance and a new performance claim remain unverified. The [v0.4 prerelease](https://github.com/9MidhunPM/GloamThread/releases/tag/v0.4.0-counterplay) packages `a65bf14a2a2676a290aab7505bf2cca5fcf4fede`; its official 25-wave export passes offline in 50,487 ticks, and its normal package boots offline. All 30 archive entries/payload hashes match.
+The v0.4 source checkpoint passed **21 arena scenarios, 173 creator assertions and 187 Python tests**. Ordinary-input solo 20 (36,998 ticks) and co-op 25 (50,023 ticks) both pass with no route/engine errors. Four actual native 1080p snapshots were inspected with matching source hashes and no errors. [Checkpoint evidence](../evidence/enemy-counterplay/README.md). Physical/human balance and a new performance claim remain unverified. The [v0.4 prerelease](https://github.com/9MidhunPM/GloamThread/releases/tag/v0.4.0-counterplay) packages `a65bf14a2a2676a290aab7505bf2cca5fcf4fede`; its official 25-wave export passes offline in 50,487 ticks, and its normal package boots offline. All 30 archive entries/payload hashes match.
 
-## Verified v0.3 baseline
+### Verified v0.3 baseline
 
 Godot 4.7.2 import, **19 arena scenarios**, **162 creator assertions**, **186 Python tests** and all world/content/scenery validators pass. These include real Fighter/Chaser/Flyer terrain traversal, multi-seed graph/identity checks, strict media admission, both-view state ownership, independent shops/shared pause, exact loot and pursuit lifecycle regressions.
 
@@ -66,7 +81,7 @@ Ordinary-input automated routes pass without actor/currency/progression override
 
 Actual native 1920×1080 captures cover merged landmark, split main/cave, final frontier, independent shopping and dense split combat. A ten-second controlled 32 enemy/77 projectile offscreen fixture measured median 10.976 ms and p95 24.522 ms frame intervals. It is not physical scanout FPS or a 60 FPS guarantee. [Commands, hashes and limits](../evidence/scrolling-world/README.md). The official QA export at `26c56b48abe4a7154e2546f86f4659f3d18b24aa` completes 25 waves offline outside the checkout (52,184 ticks, no errors), reaching all four regions/landmarks and 15 loot. The normal package boots offline and its actual native title was inspected. All 30 archive entries and payload hashes pass. [Published prerelease](https://github.com/9MidhunPM/GloamThread/releases/tag/v0.3.0-world).
 
-## Creator recovery and accounting
+### Creator recovery and accounting
 
 The user removed local total/per-character dollar caps through the parallel Agent 2 session. Legacy settings no longer block generation. `budget.limits_enabled=false` distinguishes numeric request history/estimates from null limits and remaining amounts; provider billing is not inferred from these records. Explicit Analyse/Generate, cache validation, cancellation, uncertain attempt history and no automatic retries remain.
 
@@ -74,26 +89,22 @@ The Save/convert loop was reproduced: a click without dragging replaced a crop w
 
 The creator suite passes 173 assertions. The real retained drawing completed native conversion, preview, acceptance, lobby selection and entry into combat with networking disabled and unchanged accounting. The recovered latest fighter is installed in the private local library, with a complete editable draft preserved; no additional image request was made. Its drawing/generated art is absent from Git and packages. [Recovery evidence](../evidence/creator-recovery/README.md).
 
-## Remaining acceptance
+### Source integration checkpoint: Story Mode
 
-Physical controllers/hotplug, keyboard rollover, audio listening, fresh-human balance/enjoyment/clear time and other hardware/distributions remain unverified. No organizer submission has been made. See [submission record](../SUBMISSION.md) and **Devin Hack Kochi** [event guidance](../RULES.md).
+The arena title now offers **STORY MODE (2 PLAYERS)** for the retained Tavi/Neri eight-room campaign. Story title offers **Back to arena**; story pause offers **Save and return to arena**. Each mode restores its logical resolution; shared inputs/audio persist while scene replacement frees the previous world. Existing save/settings paths are preserved. Tests/import/build were skipped at this checkpoint; the browser release above records later verification. The v0.4 package predates this wiring.
 
-## Latest source: Story Mode
+### Source integration checkpoint: name-led generation
 
-The arena title now offers **STORY MODE (2 PLAYERS)** for the retained Tavi/Neri eight-room campaign. Story title offers **Back to arena**; story pause offers **Save and return to arena**. Each mode restores its logical resolution; shared inputs/audio persist while scene replacement frees the previous world. Existing save/settings paths are preserved. Tests/import/build were skipped at user request; current source must be restarted, and the v0.4 package predates this wiring.
+An explicit Name is now sent before analysis and preserved exactly. Names and weapon descriptions take priority in fresh image prompts, including a sword attached to the front hand and the complete master. Sword archetypes suggest Stone melee instead of Nature shooting, while manual ability choices remain within the compatible attack category. New identity context is cache-bound; old paid artwork remains recoverable and accepted fighters are preserved. Tests, import/build and live image calls were skipped at this checkpoint; fresh output quality was not verified in that pass. The browser release above records later checks and a real hosted creation route.
 
-## Latest source: name-led generation
-
-An explicit Name is now sent before analysis and preserved exactly. Names and weapon descriptions take priority in fresh image prompts, including a sword attached to the front hand and the complete master. Sword archetypes suggest Stone melee instead of Nature shooting, while manual ability choices remain within the compatible attack category. New identity context is cache-bound; old paid artwork remains recoverable and accepted fighters are preserved. Tests, import/build and live image calls were skipped as requested; new-output quality has not been verified. Restart the source game to use this change.
-
-## Latest source: illustrated master and attack discipline
+### Source integration checkpoint: illustrated master and attack discipline
 
 New authoring jobs use art_mode=illustrated-master-v1: one full detailed transparent character, then its environment, using the same two image requests. Its complete design becomes the actual atlas/portrait with 32 authored whole-body cutout poses; original full-resolution input, masks, pivot and pose recipe are retained. Older limb-based jobs remain compatible. A fixed-name/hash-validated transparent PNG can replace a retained draft’s sprite through **Use detailed character cutout PNG**.
 
 The detailed wizard shown by the user was extracted through the built-in image tool, converted locally and accepted into the private library. Actual native preview, all atlas poses and in-game appearance were inspected. Lobby/session/fighter resolve its old Ember metadata to Frost; the request ledger remained unchanged and no user-API-key requests were sent. The built-in cutout edit is separate from those API-key records. Drawings, generated art and native captures remain private; only sanitized metadata is retained publicly.
 
-Shared identity rules now constrain creator/lobby/session/fighter consistently: magic identities use projectile kits, physical weapon identities use melee kits. Existing accepted files are not rewritten. Broad tests/builds were skipped as requested; new generation quality beyond the reviewed cutout and whole-game balance remain unverified.
+Shared identity rules now constrain creator/lobby/session/fighter consistently: magic identities use projectile kits, physical weapon identities use melee kits. Existing accepted files are not rewritten. Broad tests/builds were skipped at this checkpoint. Its visual evidence covers the reviewed cutout; the browser release above records later verification. Whole-game human balance remains unverified.
 
-## Final review integration
+### Final review integration
 
 All fetched local/origin feature tips are included by ancestry after merging the final-review, sideview prompt and historical overhead heads. The overhead merge retains the current 2D tree because its older session/HUD APIs conflict with the restored product; its history remains accessible. The illustrated implementation was merged at `27eee9e`; subsequent integration retains the same active runtime with expanded physical-role keywords. [Review gallery](FINAL_REVIEW.md) links actual public screenshots and precise evidence boundaries. The v0.4 executable remains older than current source.

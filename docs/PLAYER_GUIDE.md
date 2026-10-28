@@ -1,49 +1,56 @@
-# Gloamthread player guide
+# Your first adventure.
 
-Choose a mode, give each player a distinct input, and start playing. **Arena** is a solo or two-player wave fighter with custom characters, exploration and personal upgrades. **Story Mode** restores the original two-player adventure with Tavi and Neri, paired bridges and the Lantern Loom.
+Everything you need to play, save your progress, and bring a fighter of your own.
 
-This guide targets the build with **STORY MODE (2 PLAYERS)** on its home screen. Earlier arena-only downloads do not contain that menu entry. This project follows **Devin Hack Kochi** event guidance.
+<span id="start-playing"></span>
+<span id="1-launch-the-game"></span>
 
-## 1. Launch the game
+## Start playing
 
-### Run the source
+1. **Open the game**
 
-Install Godot **4.7.2 standard** (not the .NET build) from [godotengine.org](https://godotengine.org/download) or your package manager, then get the game:
+   Visit **[gloamthread.midhunpm.in](https://gloamthread.midhunpm.in)** in desktop Chrome/Chromium or Firefox. Select **Play Gloamthread** to load the game. No account or installation needed.
 
-```sh
-git clone https://github.com/9MidhunPM/GloamThread.git
-cd GloamThread
-```
+2. **Choose your way through**
 
-Import its resources once after a fresh download, then launch. Run these from inside the `GloamThread` folder:
+   Go solo, share a keyboard in **LOCAL CO-OP**, or take a friend into **STORY MODE (2 PLAYERS)**. Give each player a distinct keyboard zone or connected controller.
 
-```sh
-godot --headless --path . --editor --import --quit
-godot --path .
-```
+3. **Keep your progress safe**
 
-From any other folder, replace `.` with the full path to your copy, for example `godot --path ~/Games/GloamThread`. For an Arena window instead of fullscreen:
+   Settings, scores and Story checkpoints stay in this browser. Refresh ends the current run. Download accepted fighter ZIPs to keep a backup of your creations.
 
-```sh
-godot --path . --windowed --resolution 1920x1080
-```
+## A keyboard. A friend. A fair fight.
 
-### Run an extracted Linux package
+| Action | Player 1 | Player 2 |
+| --- | --- | --- |
+| Move | A / D | Left / Right arrows |
+| Jump | Space | Period `.` |
+| Attack | F | Comma `,` |
+| Special | G | Slash `/` |
 
-Extract the **whole ZIP** into a writable folder. Open a terminal in that folder:
+[View all controls](#controls)
 
-```sh
-chmod +x ./Gloamthread.x86_64
-./Gloamthread.x86_64
-```
+### Browser setup and saves
 
-You can also run the executable by its absolute path from another directory. Keep `authoring/` beside it if you want optional generation. Playing built-in or already accepted fighters needs no installed Godot, Python, account, API key or network connection.
+![Home screen with Arena, Character Forge and Story Mode choices.](screenshots/title.png)
 
-The package targets Linux x86_64 with OpenGL Compatibility rendering. If automatic display selection fails, try `./Gloamthread.x86_64 --display-driver wayland` on Wayland or `--display-driver x11` on X11. Arena supports **F11** to toggle fullscreen. Story uses its original 960×360 logical split-screen layout; returning to Arena restores its 1920×1080 presentation. Letterboxing preserves the pixel-art proportions.
+The browser needs WebAssembly and WebGL 2. Two players share this computer; there is no online multiplayer. You can read the website on a phone, but the game has no mobile touch controls. Browser checks cover desktop Chromium and Firefox; Safari and physical controllers remain unverified.
+
+### Browser controls and returning to the website
+
+- **Fullscreen** in the game toolbar expands the game. Use the toolbar again to leave fullscreen; browser-reserved shortcuts can behave differently from the native game's F11.
+- **Home** pauses the game and returns to the website. **Resume game** reopens the same game; use the game's Resume action if its pause screen is showing.
+- Switching tabs or leaving the window pauses combat. Release held keys or buttons before resuming; the game does not catch up on missed time.
+- **Refreshing or closing the tab ends an Arena run.** Home retains it only while that page remains open. Save Story progress through its checkpoint/pause flow before leaving.
+- The website's motion control changes its 3D scene and page animations. In-game **REDUCED FLASH** and **REDUCED SHAKE** are separate settings.
+
+If a download stalls, **Retry loading** appears after 30 seconds without progress. You can keep waiting or explicitly retry; Retry reloads the page. See [browser troubleshooting](#8-troubleshooting) for startup and save problems.
+
+<span id="modes"></span>
 
 ## 2. Choose a mode
 
-![Home screen with Arena, Character Forge and Story Mode choices.](screenshots/title.png)
+Choose a mode, give each player a distinct input, and start playing. **Arena** is a solo or two-player wave fighter with custom characters, exploration and personal upgrades. **Story Mode** restores the original two-player adventure with Tavi and Neri, paired bridges and the Lantern Loom.
 
 | Choice | Players | What you do | What carries forward |
 | --- | --- | --- | --- |
@@ -55,6 +62,8 @@ The package targets Linux x86_64 with OpenGL Compatibility rendering. If automat
 Arena coins and purchased run upgrades reset when the run ends or restarts. Story has its own checkpoint progression. A generated fighter belongs to Arena; Story keeps its fixed couriers and shared traversal unlocks.
 
 In Story, **Return to title** opens the Story menu. **Back to arena** on that menu returns to the Arena home. During a journey, **Save and return to arena** is the direct route back; resolve any visible save error before leaving.
+
+<span id="controls"></span>
 
 ## 3. Inputs, menus and joining
 
@@ -99,6 +108,8 @@ The tables below show defaults. Remapped controls shown in-game take precedence:
 | Map and current objective | Tab | Semicolon `;` | Select / Back |
 
 **Shift means different things in the two modes:** Arena dodge is available during a run; Story Threadstep unlocks after defeating the Spoolwarden. Pressing it before that story unlock does not open the gated route.
+
+<span id="accessibility"></span>
 
 ### Accessibility and comfort
 
@@ -206,13 +217,160 @@ Story is a **two-player** adventure with a fixed split screen and two colour tre
 
 **After the ending:** keep exploring, return to the Story title, or start a new journey with the characters swapped. Checkpoint recovery keeps permanent shared restorations. **Continue** resumes at a validated checkpoint, not an arbitrary mid-jump position.
 
+<span id="create-a-fighter"></span>
+
 ## 6. Make an Arena fighter
 
 ![Character Forge with creation controls and animation preview.](screenshots/character-forge.png)
 
-Built-ins and accepted fighters work offline. Optional **Analyse** and **Generate** use your API account; local cropping, masks, pivots, rebaking and acceptance do not send another model request.
+Built-ins and accepted fighters need no generation service to play. Optional **Analyse** and **Generate** send model requests only when chosen. Cached crop/mask/pivot corrections, cutout conversion and acceptance do not send another model request.
 
-### Set up optional authoring
+### Create in your browser
+
+Open **CHARACTER FORGE** and enter your personal creator invitation. An invite unlocks creation; it is not required for playing or importing an accepted fighter. The hosted service keeps its provider credentials on the server. Never enter an API key into a drawing, fighter name or description.
+
+Draw or choose an original PNG/JPEG with the browser file picker, then follow the review and acceptance steps below. Analysis and generation send your selected drawing and description to the hosted worker and its model provider. Private drafts remain on the server for recovery; accepted fighters are stored in your browser. Closing the page does not automatically retry a paid request. Reopen Forge to inspect its retained status before starting another request.
+
+The creator shows request **estimates**, not a provider receipt. Current labels separate Analyse ($0.05), new artwork ($0.20 for two image requests) and saved conversion ($0.00). No local dollar caps are applied. Cancellation cannot guarantee that an already dispatched request was unbilled. An unavailable or revoked invite does not prevent play with built-in or already accepted fighters.
+
+For native play, use the [desktop authoring setup](#set-up-native-desktop-authoring) below.
+
+### Draw, review, generate and accept
+
+1. Open **CHARACTER FORGE**, or **DRAW / IMPORT** for the desired lobby player.
+2. Enter your preferred **Fighter name** and describe its body, colours and **weapon concept (guides art)**. Draw on the canvas or import your own PNG/JPEG. Keep the preferred name explicit so it can be retained in the proposal.
+3. Choose Analyse for a suggested design, or enter the settings yourself. Review the name, upright/four-legged/floating body, theme and suggested ability family before generating.
+4. Choose Generate when those settings are right. New generations create a complete illustrated character followed by environment artwork. The character cutout becomes the sprite and portrait; 32 authored whole-body poses preserve its design. Combat still uses the six supported families. A weapon description does not create arbitrary new attack code or grant flight.
+5. Inspect the returned animation preview, including run, attacks, downed and revive poses. Check that the silhouette and theme remain readable in motion.
+6. If needed, edit the Master mask/pivot with **Erase**, **Restore** or **Joint**, then **Apply edits · local bake**. Older parts-based fighters still expose their individual parts. Inspect the new animation again.
+7. Choose **Accept fighter & play**. This saves the validated bundle in **Your fighters** and opens the lobby with that fighter selected. Choose **START RUN** to enter combat.
+
+Conversion and acceptance are separate. A successful conversion creates a preview; it does not by itself install the fighter. Cancelling or rejecting a candidate preserves accepted fighters.
+
+A swordsman/spearman concept uses melee kits such as **Stone**; a wizard uses projectile kits such as **Frost**. You can select a compatible family before generating. These remain the six game-owned combat families. Older named fighters with incompatible kits are corrected at runtime without rewriting their accepted artwork.
+
+### Correct a retained drawing or image layout
+
+For an older draft, **Use detailed character cutout PNG** imports a transparent full-character PNG (32–2048 pixels per side, at most 8 MB). It creates a fresh correction draft and retains the older job. An opaque background crop needs a genuine transparent cutout first. Edit the Master mask/pivot in the preview; background and material crops can be corrected separately. Whole-body poses transform the cutout rather than animating independent limbs.
+
+![Cached image-layout correction with crop targets and opacity controls.](screenshots/layout-correction.png)
+
+If a generated board does not match the expected arrangement, use **Correct cached layout** instead of generating it again:
+
+1. Select the complete-character **Master** crop and drag around its visible artwork. For older parts-based jobs, check every body part as well.
+2. Review the background and material crops. Keep scenery out of the character pieces.
+3. Adjust the opacity cutoff if faint haze surrounds the artwork. Every part and the master must still contain visible pixels above that cutoff.
+4. Save and convert. A simple click without dragging preserves the previous crop. An empty crop remains selected in the editor with an explanation; correct it rather than repeatedly saving unchanged inputs.
+5. Review the animation preview, make any part-mask/joint edits, then **Accept fighter & play**.
+
+This uses retained raw images in a new correction draft and makes no new image request. In the browser, correction uploads go to the hosted worker's conversion service; native correction runs locally. If parts have already been converted, changing their original crop recipe requires a new correction draft. Keep the earlier preview until the corrected one is ready.
+
+### Back up and import a fighter ZIP
+
+1. In **CHARACTER FORGE → Your fighters**, choose **Download fighter ZIP** on the fighter you want to keep. Store the downloaded ZIP somewhere you control.
+2. In the destination browser, open **CHARACTER FORGE** and choose **Import fighter ZIP**.
+3. Select the original ZIP. The game validates the complete six-file bundle; after success, select the fighter from **Your fighters** in the lobby.
+
+A fighter ZIP preserves that accepted fighter's playable bundle. It does **not** include Story checkpoints, settings, scores, an active run, private source drawings or hosted drafts. Import rejects invalid or oversized archives and preserves previous fighters. Do not unpack or modify the ZIP before importing it.
+
+<span id="saves"></span>
+
+## 7. Saves, offline play and leaving safely
+
+| Data | Browser | Native desktop |
+| --- | --- | --- |
+| Arena coins, upgrades, current wave and run power | End on refresh/close or a new/restarted run; Home retains the current page's paused game. | End with a new/restarted run or closing the game; no mid-run Continue. |
+| Accepted fighters | Stored in this browser; use fighter ZIP download/import for a portable backup. | Stored in the local fighter library and reusable offline. |
+| Forge drafts and cached images | Private hosted jobs remain on the server for review/recovery. | Retained in local authoring data for review/recovery. |
+| Settings and recorded scores | Browser storage, separate from temporary run power. | Per-user application data, separate from temporary run power. |
+| Story campaign | Checkpoint progress in this browser; Continue validates it before loading. | Checkpoint progress in per-user application data; Continue validates it before loading. |
+
+### Browser saves and offline limits
+
+Saves belong to this browser profile and website origin. Other browsers, private windows and other computers do not automatically share them. Clearing site data removes local settings, scores, Story checkpoints and accepted fighters. There is no cloud save synchronization or whole-save export. Download each accepted fighter ZIP before clearing data or switching browsers.
+
+If browser storage is blocked or unavailable, the game shows a persistence warning and can still be played; do not rely on that session surviving a refresh. Allow storage for the site and restart before expecting durable saves. Reimport accepted fighter ZIPs if necessary.
+
+The game must finish loading before it can play without the network. There is no service worker or guaranteed offline reload. Hosted Forge operations need a network connection even when the loaded game remains playable.
+
+### Native save locations
+
+Godot stores player data in its per-user application-data directory, not beside the executable. Forge's `fighters/` and `forge_jobs/` contain accepted characters and drafts. Optional authoring keeps its request-accounting history below its own `build/forge/` folder. Preserve these files when moving installations; never upload private drawings or a key file as a bug-report attachment.
+
+Story saves keep a validated previous-save backup. If the game offers backup recovery, read the message and choose it explicitly. If a save fails, play can remain open: retry after fixing storage permissions/space. The Story title/exit flow distinguishes retrying from explicitly discarding unsaved progress. Starting a new journey can replace the current campaign, so use Continue when you intend to resume.
+
+<span id="troubleshooting"></span>
+
+## 8. Troubleshooting
+
+| Problem | What to check |
+| --- | --- |
+| Browser says WebAssembly or WebGL 2 is unavailable | Use a current desktop Chromium/Firefox browser with graphics acceleration available. The website remains readable without launching the game. |
+| Game loading stalls or the loader cannot download | Read the visible error. Wait for progress or choose **Retry loading** explicitly; it reloads the page. Check your connection before retrying. |
+| Browser controls scroll the page or the fighter does not respond | Select the game canvas to focus it, confirm the assigned player input and release held keys before resuming. |
+| Fullscreen is unavailable or exits unexpectedly | Keep playing in the browser window or retry the toolbar's **Fullscreen** button. Browser Escape/F11 behavior may differ from native play. |
+| Browser warns that saves will not persist | Allow site storage and check available space. Play is possible, but do not expect progress to survive refresh while the warning remains. |
+| Browser saves disappeared | Check the same browser profile and website address. Clearing site data removes local saves; import previously downloaded fighter ZIPs to restore those fighters. |
+| Website movement is uncomfortable | Use the website motion control or your system's reduced-motion preference. Set **REDUCED FLASH/SHAKE** separately inside the game. |
+| Creator invite is rejected or hosted Forge is unavailable | Read the service message and contact the invitation issuer if needed. Built-in and accepted fighters remain playable; avoid resubmitting an uncertain paid job. |
+| Fighter ZIP import is rejected | Choose the original downloaded fighter ZIP, not a general archive or extracted files. Previous fighters remain intact; read the validation message. |
+| Godot opens another project or says no project exists | Pass the folder that contains `project.godot`: `--path .` from inside it, or the full path from elsewhere. |
+| A fight is too fast or too punishing | Use the Game speed, Damage taken or press-to-toggle attack options in Arena settings. See the [Accessibility guide](ACCESSIBILITY.md). |
+| Read menus aloud stays off | Native Linux needs a system voice such as speech-dispatcher plus espeak-ng, then a restart. Browser voice availability depends on the browser/OS; read the in-game message. |
+| Story Mode is missing | You may be running an older arena-only package. Use the build whose home has **STORY MODE (2 PLAYERS)**. |
+| One player cannot move or confirm | Check that player's assigned input. Shared menus have an owner; personal shops use each player's own controls. |
+| Two keyboard players lose simultaneous actions | Test different bindings or use a controller; keyboard rollover varies by hardware. |
+| A controller disconnects | Reconnect it or select a free input on the recovery screen, then resume deliberately. Held buttons may need releasing first. |
+| Arena has not cleared although your view is empty | Check for offscreen enemies and arrival warnings. A wave needs no queued, arriving or living enemies. |
+| An Arena player cannot move between waves | Their own shop is still open. Choose Explore; Interact reopens it later. |
+| Story exit or bridge does nothing | For an exit, rally both living couriers. For a bridge, activate two different anchors, one per courier. |
+| Story dash does nothing | Defeat the Spoolwarden first. Threadstep is a shared story unlock. |
+| Native Forge says tools/Python are unavailable | Keep `authoring/` beside the package and run its setup helper, or install the source authoring dependencies. |
+| Analysis/generation reports key, model, account or quota failure | Native: check your private configuration and provider account. Browser: contact the service operator. Do not repeatedly submit an uncertain request; built-ins and accepted fighters remain playable. |
+| Save/convert keeps returning to the crop editor | Read the visible crop error, select its part/master and adjust the rectangle or cutoff. Saving unchanged empty pixels cannot fix it. |
+| Converted fighter is not in the lobby | Finish preview review and choose **Accept fighter & play**; conversion alone is not acceptance. |
+| Required assets fail validation or scenery is missing | Re-extract a complete matching package. For source, import resources with Godot 4.7.2; do not mix files from different releases. |
+
+## Native desktop setup
+
+This guide covers the current browser release and source build with **STORY MODE (2 PLAYERS)** on the home screen. The older **v0.4.0-counterplay Linux download** lacks Story Mode, the newer accessibility settings and the latest fighter creation. Check a build's `BUILD.json` for its source revision.
+
+### Run the native source
+
+Install Godot **4.7.2 standard** (not the .NET build) from [godotengine.org](https://godotengine.org/download) or your package manager, then get the game:
+
+```sh
+git clone https://github.com/9MidhunPM/GloamThread.git
+cd GloamThread
+```
+
+Import its resources once after a fresh download, then launch. Run these from inside the `GloamThread` folder:
+
+```sh
+godot --headless --path . --editor --import --quit
+godot --path .
+```
+
+From any other folder, replace `.` with the full path to your copy, for example `godot --path ~/Games/GloamThread`. For an Arena window instead of fullscreen:
+
+```sh
+godot --path . --windowed --resolution 1920x1080
+```
+
+### Run an extracted Linux package
+
+Extract the **whole ZIP** into a writable folder. Open a terminal in that folder:
+
+```sh
+chmod +x ./Gloamthread.x86_64
+./Gloamthread.x86_64
+```
+
+You can also run the executable by its absolute path from another directory. Keep `authoring/` beside it if you want optional generation. Playing built-in or already accepted fighters needs no installed Godot, Python, account, API key or network connection.
+
+The package targets Linux x86_64 with OpenGL Compatibility rendering. If automatic display selection fails, try `./Gloamthread.x86_64 --display-driver wayland` on Wayland or `--display-driver x11` on X11. Arena supports **F11** to toggle fullscreen. Story uses its original 960×360 logical split-screen layout; returning to Arena restores its 1920×1080 presentation. Letterboxing preserves the pixel-art proportions.
+
+### Set up native desktop authoring
 
 For an extracted package, run this from its folder:
 
@@ -234,77 +392,8 @@ Source authoring reads the private `.env` in that checkout. Keep an existing key
 
 There is **no local total or per-character dollar cap**. Earlier allowance settings no longer block generation. Recorded request estimates and uncertain outcomes remain history, not billing receipts. Analyse/Generate are deliberate actions; automatic retries and model fallback remain disabled. Provider account limits can still reject a request. Cancellation stops later work but cannot guarantee that a request already in flight was unbilled.
 
-### Draw → review → generate → accept
-
-1. Open **CHARACTER FORGE**, or **DRAW / IMPORT** for the desired lobby player.
-2. Enter your preferred **Fighter name** and describe its body, colours and **weapon concept (guides art)**. Draw on the canvas or import your own PNG/JPEG. Keep the preferred name explicit so it can be retained in the proposal.
-3. Choose Analyse for a suggested design, or enter the settings yourself. Review the name, upright/four-legged/floating body, theme and suggested ability family before generating.
-4. Choose Generate when those settings are right. The drawing informs appearance and suggestions; combat still uses the six supported families. A weapon description does not create arbitrary new attack code or grant flight.
-5. Inspect the returned animation preview, including run, attacks, downed and revive poses. Check that the silhouette and theme remain readable in motion.
-6. If needed, select a part, use **Erase**, **Restore** or **Joint**, then **Apply edits · local bake**. Inspect the new animation again.
-7. Choose **Accept fighter & play**. This saves the validated bundle in **Your fighters** and opens the lobby with that fighter selected. Choose **START RUN** to enter combat.
-
-Conversion and acceptance are separate. A successful conversion creates a preview; it does not by itself install the fighter. Cancelling or rejecting a candidate preserves accepted fighters.
-
-A swordsman/spearman concept uses melee kits such as **Stone**; a wizard uses projectile kits such as **Frost**. You can select a compatible family before generating. These remain the six game-owned combat families.
-
-### Recover a returned image layout locally
-
-![Cached image-layout correction with crop targets and opacity controls.](screenshots/layout-correction.png)
-
-If a generated board does not match the expected arrangement, use **Correct cached layout** instead of generating it again:
-
-1. Select each body part and drag a rectangle around its visible artwork. Include the complete-character **master** crop too.
-2. Review the background and material crops. Keep scenery out of the character pieces.
-3. Adjust the opacity cutoff if faint haze surrounds the artwork. Every part and the master must still contain visible pixels above that cutoff.
-4. Save and convert. A simple click without dragging preserves the previous crop. An empty crop remains selected in the editor with an explanation; correct it rather than repeatedly saving unchanged inputs.
-5. Review the animation preview, make any part-mask/joint edits, then **Accept fighter & play**.
-
-This uses retained raw images in a local correction draft and makes no new image request. If parts have already been converted, changing their original crop recipe requires a new local correction draft; it must not silently leave the old part pixels in place. Keep the earlier preview until the corrected one is ready.
-
-## 7. Saves, offline play and leaving safely
-
-| Data | Behaviour |
-| --- | --- |
-| Arena coins, upgrades, current wave and run power | Reset with a new/restarted run; there is no promised mid-run Continue. |
-| Accepted fighters | Stored locally and reusable offline. |
-| Forge drafts and cached images | Retained locally for review/recovery. |
-| Settings and recorded scores | Stored separately from temporary run power. |
-| Story campaign | Shared progress saved through checkpoints; Continue validates it before loading. |
-
-Godot stores player data in its per-user application-data directory, not beside the executable. Forge's `fighters/` and `forge_jobs/` contain accepted characters and drafts. Optional authoring keeps its request-accounting history below its own `build/forge/` folder. Preserve these files when moving installations; never upload private drawings or a key file as a bug-report attachment.
-
-Story saves keep a validated previous-save backup. If the game offers backup recovery, read the message and choose it explicitly. If a save fails, play can remain open: retry after fixing storage permissions/space. The Story title/exit flow distinguishes retrying from explicitly discarding unsaved progress. Starting a new journey can replace the current campaign, so use Continue when you intend to resume.
-
-## 8. Troubleshooting
-
-| Problem | What to check |
-| --- | --- |
-| Godot opens another project or says no project exists | Pass the folder that contains `project.godot`: `--path .` from inside it, or the full path from elsewhere. |
-| A fight is too fast or too punishing | Use the Game speed, Damage taken or press-to-toggle attack options in Arena settings. See the [Accessibility guide](ACCESSIBILITY.md). |
-| Read menus aloud stays off | Install a system text-to-speech voice (Linux: speech-dispatcher plus espeak-ng) and restart the game. |
-| Story Mode is missing | You may be running an older arena-only package. Use the build whose home has **STORY MODE (2 PLAYERS)**. |
-| One player cannot move or confirm | Check that player's assigned input. Shared menus have an owner; personal shops use each player's own controls. |
-| Two keyboard players lose simultaneous actions | Test different bindings or use a controller; keyboard rollover varies by hardware. |
-| A controller disconnects | Reconnect it or select a free input on the recovery screen, then resume deliberately. Held buttons may need releasing first. |
-| Arena has not cleared although your view is empty | Check for offscreen enemies and arrival warnings. A wave needs no queued, arriving or living enemies. |
-| An Arena player cannot move between waves | Their own shop is still open. Choose Explore; Interact reopens it later. |
-| Story exit or bridge does nothing | For an exit, rally both living couriers. For a bridge, activate two different anchors, one per courier. |
-| Story dash does nothing | Defeat the Spoolwarden first. Threadstep is a shared story unlock. |
-| Forge says tools/Python are unavailable | Keep `authoring/` beside the package and run its setup helper, or install the source authoring dependencies. |
-| Analysis/generation reports key, model, account or quota failure | Check the private configuration and the actual provider account. Do not repeatedly submit an uncertain request; built-ins and accepted fighters remain playable. |
-| Save/convert keeps returning to the crop editor | Read the visible crop error, select its part/master and adjust the rectangle or cutoff. Saving unchanged empty pixels cannot fix it. |
-| Converted fighter is not in the lobby | Finish preview review and choose **Accept fighter & play**; conversion alone is not acceptance. |
-| Required assets fail validation or scenery is missing | Re-extract a complete matching package. For source, import resources with Godot 4.7.2; do not mix files from different releases. |
-
 ## Evidence and feedback
 
 Screenshots illustrate real captured game states. The retained Arena shop/split scenes are controlled native setups. Story title/join/Lantern Rest images cover the freshly restored entry flow; the bridge image comes from the original campaign route. They do not establish a fresh full human playthrough of the combined mode-switch build.
 
-For the current implementation, exact checks and limitations, see [STATUS.md](STATUS.md). Physical gamepads/hotplug, keyboard hardware rollover, fresh-human balance, listening quality and other hardware/distributions remain separate acceptance questions. When reporting a problem, include the mode, version/commit from the package's `BUILD.json`, player/input assignments, what you pressed and what happened. Keep credentials and private artwork out of shared logs or screenshots.
-
-### Latest source: use the complete illustrated design
-
-New generations create a complete illustrated character, used directly for the playable sprite and portrait. The 32 poses transform that whole cutout rather than squeezing its limbs into starter shapes. For an older draft, **Use detailed character cutout PNG** imports a transparent full-character PNG (32–2048 pixels per side, at most 8 MB); it creates a fresh local correction draft, retaining the older job. Edit the Master mask/pivot in the preview and use cached layout correction for scenery/material crops. An opaque background crop requires a genuine transparent cutout first.
-
-Wizard/mage/sorcerer/other magical identities use projectile kits; sword/spear/axe fighters use melee kits. Name and description guide new proposals, and the runtime also corrects incompatible kits on older named fighters. Manual choices stay within the compatible category. No new image requests are made by cutout import or local rebaking.
+For the current implementation, exact checks and limitations, see [STATUS.md](STATUS.md). Physical gamepads/hotplug, keyboard hardware rollover, fresh-human balance, listening quality and other hardware/distributions remain separate acceptance questions. When reporting a problem, include browser/OS or native platform, mode, source revision from `BUILD.json`, player/input assignments, what you pressed and what happened. Keep credentials, invitation codes and private artwork out of shared logs or screenshots.

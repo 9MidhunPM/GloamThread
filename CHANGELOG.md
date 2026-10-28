@@ -1,5 +1,11 @@
 # Change log
 
+### 2026-10-28T21:30:53+05:30 — Make player documentation browser-first
+
+- Reworked README and Player Guide around browser launch, Home/Resume, controls, hosted creation, storage recovery and fighter ZIP backups; kept native setup and the full Arena/Story instructions. Added a concise three-step introduction and controls table for the generated website guide.
+- Corrected hosted invite/server-draft versus native API-key/local-draft instructions and accessibility defaults. STATUS now separates current release evidence from historical checkpoints; Arena demo and final-review guides distinguish current browser/source from the older v0.4 Linux package.
+- Validation: `python3 tools/check_pack.py` passes 290 relative links and pack contracts; documentation fragment and whitespace checks pass. No model request or gameplay change. Website rendering, packaging and deployment are recorded with their separate implementation milestone.
+
 ### 2026-10-27T09:52:52+05:30 — Record the deployed browser release and recovery evidence
 
 - Published `web-v0.5.0-r9` / `1dac45b3816ca5174e5cf123100bd7f690f246b4` at https://gloamthread.midhunpm.in with open gameplay, browser-local saves/ZIP backups and invited hosted creation. Updated README, STATUS, submission record and Web operations guide; preserved the older Linux release and intermediate history.
