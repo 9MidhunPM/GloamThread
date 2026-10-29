@@ -1,5 +1,10 @@
 # Change log
 
+### 2026-10-29T06:17:28+05:30 — Keep Resume stable while returning Home
+
+- Actual Firefox stress input reproduced an intermittent missed Resume click: focusing Play triggered smooth document scrolling between pointer-down (on Play) and pointer-up (on an ancestor). Home now focuses Resume with `preventScroll: true`, keeping the retained-game action stationary.
+- Validation: the captured public failing trace identifies the scroll/click boundary with no game or network error. Focused repeated-click verification and patched deployment are recorded in the portal release evidence after this fix; no game/save/provider interface changes.
+
 ### 2026-10-28T21:50:29+05:30 — Polish generated guide navigation and tables
 
 - Corrected active-section tracking for Markdown aliases nested inside paragraphs and kept the parent selected while reading unlisted subheadings. Desktop controls tables now fill the article width; narrow tables retain horizontal scrolling.

@@ -208,7 +208,8 @@ window.GloamWeb = {
     status.textContent = 'Your game is still open. Press Resume to return.';
     play.innerHTML = 'Resume game <span aria-hidden="true">→</span>';
     play.disabled = false;
-    play.focus();
+    // Smooth focus scrolling can move Resume between pointer-down and pointer-up.
+    play.focus({ preventScroll: true });
   },
   async fullscreen() {
     try {
