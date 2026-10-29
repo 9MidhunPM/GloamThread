@@ -1,5 +1,10 @@
 # Change log
 
+### 2026-10-29T06:24:27+05:30 — Scope smooth scrolling to the player guide
+
+- The same real Firefox click loop showed that focus suppression alone did not eliminate scrolling during click preparation. Scoped smooth anchor scrolling to the guide document; the retained-game page now uses immediate scrolling so Resume stays under the pointer. Reduced-motion guide navigation still jumps immediately.
+- Validation: original public and focus-only sources both reproduced pointer-down on Play followed by pointer-up on an ancestor as scrollY changed. A controlled Home-only scroll-auto probe passed 35 immediate Firefox Home/Resume cycles with stable pointer targets and zero errors; actual-source regression/export follows separately. Prior failed traces are retained, not replaced by a fabricated success.
+
 ### 2026-10-29T06:17:28+05:30 — Keep Resume stable while returning Home
 
 - Actual Firefox stress input reproduced an intermittent missed Resume click: focusing Play triggered smooth document scrolling between pointer-down (on Play) and pointer-up (on an ancestor). Home now focuses Resume with `preventScroll: true`, keeping the retained-game action stationary.

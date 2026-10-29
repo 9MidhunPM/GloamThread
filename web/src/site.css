@@ -24,8 +24,12 @@
   box-sizing: border-box;
 }
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   scroll-padding-top: 100px;
+}
+/* Retained-game actions must stay stationary while the browser focuses them. */
+html.guide-document {
+  scroll-behavior: smooth;
 }
 body {
   margin: 0;
@@ -1202,7 +1206,7 @@ body[data-game-state=loading] .hero-world {
   }
 }
 @media(prefers-reduced-motion:reduce) {
-  html {
+  html,html.guide-document {
     scroll-behavior: auto;
   }
   *,*:before,*:after {
