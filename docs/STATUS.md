@@ -6,8 +6,18 @@ Current product: solo/two-player scrolling wave fighter with dynamic split scree
 
 - **Play:** the [browser release](https://gloamthread.midhunpm.in) or [current source](../README.md#play-in-three-steps) includes Arena solo/co-op, the restored two-player Story, accessibility settings and illustrated fighter creation.
 - **Download version:** the published **v0.4.0-counterplay Linux package** is older and predates restored Story, the later accessibility options and illustrated generation. Check `BUILD.json` for exact source identity; a shared version label alone does not establish equivalent builds.
-- **Evidence:** the 2026-10-27 browser-release record below is the latest completed release verification. Older checkpoint results remain historical, including failures that were later resolved and changes whose tests were skipped at that time.
+- **Evidence:** the 2026-10-29 website-portal verification below is the latest release record. The 2026-10-27 browser record retains hosted-generation/backup evidence. Older checkpoint results remain historical, including failures later resolved and checks skipped at those earlier milestones.
 - **Help:** [Player Guide](PLAYER_GUIDE.md) for playing and saves; [web build and operations](WEB_RELEASE.md) for packaging, hosted Forge and deployment.
+
+## Living 3D website and browser guide (2026-10-29)
+
+The [public website](https://gloamthread.midhunpm.in) serves immutable tag **web-v0.6.1-resume**, implementation **37f5bff1f056c7811bb84a4260c1f95ee660d03d**. It adds a real original Three.js diorama, owned fighter sprites/font, scene previews, staggered entrances, reduced-motion/poster fallback and a [generated player guide](https://gloamthread.midhunpm.in/help.html). The game retains its Arena and Story modes. [Exact checks, source and limitations](../evidence/web-portal/README.md); [design comparison](../evidence/web-portal/visual-review.md).
+
+Godot downloads wait for Play. The website renderer releases its context before gameplay; Home retains the paused game and Resume returns to it. Actual Firefox pointer tracing found smooth focus scrolling could move Resume between press and release. Focus suppression alone was insufficient, so smooth scrolling is now restricted to the guide. The corrected clean source passes **50 rapid local Firefox Home/Resume cycles**, then **10 public cycles each in Chromium153 and Firefox155**, with real Story return, solo combat, guide retention and zero console/network errors. Website animation callbacks drop from one to zero before Godot starts; no physical performance claim is made.
+
+The source baseline passes **246 Python tests without skips, 17 packaging tests, 23 Arena scenarios, 178 native Forge assertions and 50 browser-boundary assertions**, plus import/four validators and website build/audit. The subsequent correction changes only the shell's focus/scroll behavior and documentation; Godot scripts, scenes, assets and settings remain identical to that checked baseline. Public clean-source BUILD and all **30 delivered file sizes/hashes** match, known private values are absent, and web/API health plus Forge readiness pass. Forge UI opens unauthenticated with no paid request. Desktop/reference-size and 390px touch layouts, guide anchors/tables, motion preferences and real-render poster are verified separately. The older Linux binary remains unchanged.
+
+Physical controllers, listening, human play and a full 20-wave browser route remain outside this evidence. No new generation, billing, cloud save, offline reload or mobile touch-gameplay claim is made.
 
 ## Implemented
 

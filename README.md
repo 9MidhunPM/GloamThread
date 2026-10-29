@@ -6,11 +6,13 @@ A pixel-art side-view fighter for **one or two players on one computer**. Surviv
 
 *Click the image to watch the 48-second intro (captioned). [All videos, transcripts and details](docs/VIDEOS.md).*
 
-**[Play now at gloamthread.midhunpm.in](https://gloamthread.midhunpm.in)** · **[Player guide](docs/PLAYER_GUIDE.md)** · **[Current release status](docs/STATUS.md)**
+**[Play now at gloamthread.midhunpm.in](https://gloamthread.midhunpm.in)** · **[Browser guide](https://gloamthread.midhunpm.in/help.html)** · **[Player guide source](docs/PLAYER_GUIDE.md)** · **[Current release status](docs/STATUS.md)**
 
 **Jump to:** [Browser play](#play-in-your-browser) · [Watch](#watch-the-game) · [Run from source](#play-in-three-steps) · [Controls](#controls) · [Accessibility](#accessibility) · [Modes](#what-you-can-play) · [Make a fighter](#draw-and-forge-a-fighter) · [Developers](#for-developers) · [Docs map](#documentation-map)
 
 ## Play in your browser
+
+Explore the interactive 3D lantern-tree miniature, switch its Arena/Story preview, or turn motion off before playing. The current website release is **web-v0.6.1-resume**; [release checks and actual captures](evidence/web-portal/README.md) cover the website, generated guide and tested browser game.
 
 1. Open the website in desktop Chrome/Chromium or Firefox and select **Play Gloamthread**.
 2. Choose **SOLO RUN**, **LOCAL CO-OP** or **STORY MODE (2 PLAYERS)**. Each player needs a distinct keyboard zone or connected controller.

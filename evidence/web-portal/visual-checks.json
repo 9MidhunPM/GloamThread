@@ -1,0 +1,38 @@
+{
+  "recorded_at_utc": "2026-10-29T01:06:52.851Z",
+  "base": "https://gloamthread.midhunpm.in/",
+  "implementation_commit": "37f5bff1f056c7811bb84a4260c1f95ee660d03d",
+  "browser": "153.0.8010.12",
+  "errors": [],
+  "results": [
+    {
+      "name": "desktop render, scene tab, persisted motion-off poster",
+      "passed": true,
+      "mode_strip_top": 782,
+      "viewport": {
+        "width": 1536,
+        "height": 1024
+      }
+    },
+    {
+      "name": "guide active aliases and full-width controls table",
+      "passed": true,
+      "widths": {
+        "table": 834,
+        "row": 834.4375
+      }
+    },
+    {
+      "name": "touch-sized homepage and guide, no overflow, accurate hint",
+      "passed": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "name": "OS reduced motion uses usable poster without 3D initialization",
+      "passed": true
+    }
+  ]
+}

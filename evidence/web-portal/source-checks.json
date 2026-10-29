@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "source_revision": "8390db805df6c8da4524d05f6ff684d2a116a0ba",
+  "source_clean_before_checks": true,
+  "recorded_at_utc": "2026-10-29T00:40:32+00:00",
+  "environment": {
+    "platform": "Linux",
+    "godot": "4.7.2.stable.arch_linux.ed1daf0bf",
+    "python": "3.14.8",
+    "node": "26.12.1",
+    "npm": "12.2.1",
+    "python_environment": "ignored build/web-test-venv with system site packages; requirements-web.txt installed",
+    "fastapi": "0.162.0",
+    "openai": "2.54.0",
+    "Pillow": "12.3.0"
+  },
+  "checks": [
+    {
+      "name": "pack",
+      "command": "python3 tools/check_pack.py",
+      "exit_code": 0,
+      "duration_seconds": 0.126,
+      "result": {
+        "relative_file_links": 290
+      },
+      "local_log": "build/web-portal-checks/pack.log",
+      "log_sha256": "6af4abb5c1eb613d4dc771ea982b438dc2ba133f55c4097a7df3687382122e5a"
+    },
+    {
+      "name": "content",
+      "command": "python3 -m tools.forge.content --validate",
+      "exit_code": 0,
+      "duration_seconds": 0.532,
+      "result": {
+        "arenas": 4,
+        "bundles": 3,
+        "kits": 6,
+        "waves": 20,
+        "scenery_props": 24
+      },
+      "local_log": "build/web-portal-checks/content.log",
+      "log_sha256": "d7feaa88fdbbb0dbb53d2c618673fbc9ac800cd54a44eb39702b2bd8cdf82817"
+    },
+    {
+      "name": "retained",
+      "command": "python3 -m tools.forge.retained --validate",
+      "exit_code": 0,
+      "duration_seconds": 0.142,
+      "result": {
+        "validated_sources": [
+          "kiln-fox-ai"
+        ]
+      },
+      "local_log": "build/web-portal-checks/retained.log",
+      "log_sha256": "96be5d46474d58f0258bd94b2106ffcd8cdd0624a609624ff723c2f1a9626c31"
+    },
+    {
+      "name": "world",
+      "command": "python3 -m tools.forge.world --validate",
+      "exit_code": 0,
+      "duration_seconds": 0.121,
+      "result": {
+        "templates": 4,
+        "regions": 4
+      },
+      "local_log": "build/web-portal-checks/world.log",
+      "log_sha256": "0633b465be7caee53d325595e4ad287aed564e31a43591f2944f55084bce20fd"
+    },
+    {
+      "name": "scenery",
+      "command": "python3 -m tools.forge.scenery --validate",
+      "exit_code": 0,
+      "duration_seconds": 0.153,
+      "result": {
+        "props": 24,
+        "landmarks": 4,
+        "layers": 4
+      },
+      "local_log": "build/web-portal-checks/scenery.log",
+      "log_sha256": "c346ea379a668318be1dbc09bb4c3988741a4cfcc1a6f99b0dbb2210d1a57da4"
+    },
+    {
+      "name": "python",
+      "command": "build/web-test-venv/bin/python -m unittest discover -s tools/tests -p test_*.py",
+      "exit_code": 0,
+      "duration_seconds": 31.759,
+      "result": {
+        "tests": 246,
+        "failed": 0,
+        "skipped": 0
+      },
+      "local_log": "build/web-portal-checks/python.log",
+      "log_sha256": "4a40c6eb8d7d5c2ce09934a9da6370dd3452573169221442cff4b93eca85527d"
+    },
+    {
+      "name": "packaging",
+      "command": "build/web-test-venv/bin/python -m unittest tools.tests.test_web_package",
+      "exit_code": 0,
+      "duration_seconds": 0.183,
+      "result": {
+        "tests": 17,
+        "failed": 0,
+        "skipped": 0
+      },
+      "local_log": "build/web-portal-checks/packaging.log",
+      "log_sha256": "201d2b14a4653a455545529c4f88525371103a602e8467e48ab13e0bef680b32"
+    },
+    {
+      "name": "import",
+      "command": "godot --headless --path . --editor --import --quit",
+      "exit_code": 0,
+      "duration_seconds": 5.536,
+      "result": {
+        "engine_script_errors": 0
+      },
+      "local_log": "build/web-portal-checks/import.log",
+      "log_sha256": "32d26967e2e458eeabf4e54d932cc39a5f19a9655dfe22912a57f0c739e846fe"
+    },
+    {
+      "name": "arena",
+      "command": "godot --headless --fixed-fps 60 --path . --script tests/arena/run_tests.gd",
+      "exit_code": 0,
+      "duration_seconds": 12.398,
+      "result": {
+        "passed": 23,
+        "failed": 0
+      },
+      "local_log": "build/web-portal-checks/arena.log",
+      "log_sha256": "a8daeced38b15dcaf0c51bfbe0ae505e06f33ca4c314c698b67fe3351bf29b7b"
+    },
+    {
+      "name": "forge",
+      "command": "godot --headless --fixed-fps 60 --path . --script tests/forge/run_tests.gd",
+      "exit_code": 0,
+      "duration_seconds": 2.923,
+      "result": {
+        "assertions": 178,
+        "failed": 0
+      },
+      "local_log": "build/web-portal-checks/forge.log",
+      "log_sha256": "9b0a1bb3fe6eb68c0b071df2af28ddaa3d412cc2a55ea09e86a671ee23f96803"
+    },
+    {
+      "name": "browser",
+      "command": "godot --headless --fixed-fps 60 --path . --script tests/forge/browser_tests.gd",
+      "exit_code": 0,
+      "duration_seconds": 1.198,
+      "result": {
+        "assertions": 50,
+        "failed": 0
+      },
+      "local_log": "build/web-portal-checks/browser.log",
+      "log_sha256": "59d4f2ac3073ec32b7b80a7597da686dbb7f70e885091aa79d14c3247f96a2ae"
+    },
+    {
+      "name": "website-build",
+      "command": "npm --prefix web run build",
+      "exit_code": 0,
+      "duration_seconds": 0.634,
+      "result": {
+        "public_website_files": 21
+      },
+      "local_log": "build/web-portal-checks/website-build.log",
+      "log_sha256": "337fad81288243ac5e97b7f93d3a4a0b0b9604a98e7ef608f86b8c093961b9f4"
+    },
+    {
+      "name": "npm-audit",
+      "command": "npm --prefix web audit --json",
+      "exit_code": 0,
+      "duration_seconds": 1.01,
+      "result": {
+        "vulnerabilities": 0
+      },
+      "local_log": "build/web-portal-checks/npm-audit.log",
+      "log_sha256": "5ea292b7337101bae7e4f6e63e575418a8d6bc76dfd06e8d5e3b23338b38eda0"
+    }
+  ],
+  "scope": "Static and headless source validation only. No rendered-browser, physical-device, listening, human-playtest, provider-request, or deployment claim. Deterministic content was validated without rebuilding."
+}

@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-10-29T01:08:34.302Z",
+  "host": {
+    "platform": "linux",
+    "architecture": "x64",
+    "kernel": "7.2.11-arch1-1",
+    "node": "v26.12.1"
+  },
+  "browser_automation": "Playwright; fresh isolated contexts, public ordinary mouse/keyboard input",
+  "browser_plugin": "Not available in this task; regular Playwright used.",
+  "expected_commit": "37f5bff1f056c7811bb84a4260c1f95ee660d03d",
+  "browsers": {
+    "chromium": {
+      "passed": true,
+      "recorded_at_utc": "2026-10-29T01:07:15.471Z",
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+      "runtime": {
+        "headless": true,
+        "software_rendering_requested": "ANGLE SwiftShader",
+        "executable": "/home/midhun/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome"
+      },
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "build_commit": "37f5bff1f056c7811bb84a4260c1f95ee660d03d",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    "firefox": {
+      "passed": true,
+      "recorded_at_utc": "2026-10-29T01:07:15.475Z",
+      "user_agent": "Mozilla/5.0 (X11; Linux x86_64; rv:155.0) Gecko/20100101 Firefox/155.0",
+      "runtime": {
+        "headless": false,
+        "display": ":196",
+        "software_rendering_requested": "Mesa software rendering",
+        "executable": "/home/midhun/Coading/Gloamthread/build/browser-qa/browsers/firefox-1543/firefox/firefox",
+        "xvfb": "/home/midhun/Coading/Gloamthread/build/browser-qa/xvfb/usr/bin/Xvfb"
+      },
+      "renderer": "llvmpipe, or similar",
+      "build_commit": "37f5bff1f056c7811bb84a4260c1f95ee660d03d",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    }
+  },
+  "claims_excluded": [
+    "physical GPU frame rate",
+    "audio listening",
+    "physical controllers",
+    "human enjoyment",
+    "paid Forge generation"
+  ]
+}

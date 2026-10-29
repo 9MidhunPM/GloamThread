@@ -1,0 +1,14 @@
+{
+  "recorded_at_utc": "2026-10-29T01:18:14+00:00",
+  "deployed_source": "37f5bff1f056c7811bb84a4260c1f95ee660d03d",
+  "documentation_check": {
+    "command": "python3 tools/check_pack.py",
+    "passed": true,
+    "relative_file_links": 312,
+    "log_sha256": "dfaf712ae9866cb8cd8b0e08e1311889bf17f8357218fe0785923a367c987959"
+  },
+  "known_private_values_absent_from_tracked_and_prospective_files": true,
+  "files_scanned": 1013,
+  "private_values_checked": 2,
+  "runtime_unchanged_from_source_suite": "git diff 8390db8..37f5bff -- scripts scenes assets project.godot is empty"
+}

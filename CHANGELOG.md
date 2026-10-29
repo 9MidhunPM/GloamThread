@@ -1,5 +1,12 @@
 # Change log
 
+### 2026-10-29T06:47:22+05:30 — Record the verified 3D portal and Resume release
+
+- Published immutable `web-v0.6.1-resume` / `37f5bff1f056c7811bb84a4260c1f95ee660d03d` at https://gloamthread.midhunpm.in. Added durable public/source reports, reproducible verification scripts, real desktop/mobile/game captures, design comparison and preserved Resume failure/regression history; updated README, STATUS and Web operations links.
+- Actual public Chromium153 and Firefox155 pass Story return, solo combat, pause/Home/Resume, guide retention, deferred downloads, renderer teardown and ten rapid Resume cycles each with zero console/network errors. Actual patched clean-source Firefox passes50 cycles; global smooth scrolling was the confirmed missed-click cause. Public Forge opens unauthenticated and ready with zero paid/non-GET authoring requests.
+- All30 delivered file sizes/SHA-256 values match the clean public BUILD; known private credential/invite values are absent. Web/API are healthy and the worker is ready; data/secrets volumes are retained. Desktop1536×1024 and touch390×844 visual/guide/motion checks pass and were compared against the approved concepts with original font/geometry adaptations disclosed.
+- Full source baseline:246 Python tests without skips,17 package tests, Arena23/23, Forge178/178, browser50/50, import/four validators and npm build/audit pass. The focus/scroll patch leaves Godot scripts/scenes/assets/settings identical to that baseline and has separate actual-source/public regressions. Final documentation links/whitespace and prospective-file private-value scans pass. No new generation, physical FPS, physical-controller, audio-listening, human enjoyment or full20-wave browser claim.
+
 ### 2026-10-29T06:24:27+05:30 — Scope smooth scrolling to the player guide
 
 - The same real Firefox click loop showed that focus suppression alone did not eliminate scrolling during click preparation. Scoped smooth anchor scrolling to the guide document; the retained-game page now uses immediate scrolling so Resume stays under the pointer. Reduced-motion guide navigation still jumps immediately.

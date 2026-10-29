@@ -1,0 +1,1366 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-10-29T01:07:15.471Z",
+  "browser": "chromium",
+  "url": "https://gloamthread.midhunpm.in/",
+  "expected_commit": "37f5bff1f056c7811bb84a4260c1f95ee660d03d",
+  "viewport": {
+    "width": 1366,
+    "height": 768
+  },
+  "passed": true,
+  "checks": {
+    "public_build": true,
+    "deferred_game_assets": true,
+    "renderer_disposed": true,
+    "story_entry_return": true,
+    "solo_combat_inputs": true,
+    "pause_home_resume_guide": true,
+    "fast_home_resume_cycles": 10,
+    "console_and_network": true
+  },
+  "screenshots": {
+    "title": "docs/media/web-portal-chromium-title.png",
+    "combat": "docs/media/web-portal-chromium-combat.png",
+    "guide": "docs/media/web-portal-chromium-guide.png",
+    "resumed": "docs/media/web-portal-chromium-resumed.png",
+    "forge": "docs/media/web-portal-chromium-forge.png"
+  },
+  "errors": [],
+  "request_failures": [],
+  "limitations": [
+    "Automated software-rendered input route, not a human playtest or physical GPU/controller/audio test.",
+    "No full twenty-wave browser run or complete Story walkthrough is performed by this smoke."
+  ],
+  "runtime": {
+    "headless": true,
+    "software_rendering_requested": "ANGLE SwiftShader",
+    "executable": "/home/midhun/.cache/ms-playwright/chromium-1243/chrome-linux64/chrome"
+  },
+  "build": {
+    "schema_version": 1,
+    "implementation_commit": "37f5bff1f056c7811bb84a4260c1f95ee660d03d",
+    "source_tree": "87e8c95a5c431dca5b71b0f04234d955534a1680",
+    "dirty_qa_build": false,
+    "engine": "4.7.2.stable.official.ed1daf0bf",
+    "export_preset": "Web",
+    "built_at_utc": "2026-10-29T01:04:32+00:00",
+    "files": {
+      "notices.html": {
+        "bytes": 106193,
+        "sha256": "3d5bac26e946d1f464a4dc1c5a312d324ab28628244698365b7a939d33888819"
+      },
+      "site-744679b0a8b85ad2.png": {
+        "bytes": 19346,
+        "sha256": "744679b0a8b85ad2a5547aa7f16c09ffdd65a0924c9633c5c0d72f9061b53c1c"
+      },
+      "site-ed976d0ee44bb405.png": {
+        "bytes": 108654,
+        "sha256": "ed976d0ee44bb405e04cbe8d81807cbe1fd527f37c71e1e927813b0eacb649a4"
+      },
+      "site-COPWG5W2.js": {
+        "bytes": 559146,
+        "sha256": "d5155ab7a0e7882eaf79436834785b487e04a41962f1f2c80633ebfd22cd39c1"
+      },
+      "site-2862c41d081a6ec6.png": {
+        "bytes": 175790,
+        "sha256": "2862c41d081a6ec6bc439803cc15caae7e65de5b409643a3f8bb1800adcb871d"
+      },
+      "site-5675e2b3d99573b6.webp": {
+        "bytes": 138394,
+        "sha256": "5675e2b3d99573b60fec38f548e8f6f13621afa54ca803ca7a099c33b3171317"
+      },
+      "index.html": {
+        "bytes": 5559,
+        "sha256": "f16ae4cc70e328fe8011335b3bee54f720cf00798c56c0933de087464c457542"
+      },
+      "site-47FMO4SH.js": {
+        "bytes": 1193,
+        "sha256": "64d2716f9a03415e9f035c3e1ff63b90f1175897300c29e435177ad73ad28169"
+      },
+      "site-S67DKODG.png": {
+        "bytes": 36400,
+        "sha256": "7e12550f557caa2c6702080aff85820d78156dcadcc57a5b80734f78e8d74fac"
+      },
+      "site-LIJGX7Q5.js": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "site-aae6eb47f852eae0.png": {
+        "bytes": 8056,
+        "sha256": "aae6eb47f852eae0d656ba40fa9b65c8da08214b6b40321e0cdc24cb7c44d94f"
+      },
+      "site-7T2PTTBR.js": {
+        "bytes": 6063,
+        "sha256": "deb4b4d5e20854794cf57c2e62c5785d27f40d40ef454d3c58b6d3c1d064b138"
+      },
+      "site-4968af7fd90f7dfc.svg": {
+        "bytes": 309,
+        "sha256": "4968af7fd90f7dfc511db574eea3a5844361c6bf594b9d98eaab1dfbea1733fa"
+      },
+      "game-37f5bff1f056c781.png": {
+        "bytes": 21443,
+        "sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e"
+      },
+      "site-66c92d7d8573b130.png": {
+        "bytes": 105208,
+        "sha256": "66c92d7d8573b130f69bc572730322392e092bf6f87dff753267a117d6d35750"
+      },
+      "site-65b5cbd8991379d7.png": {
+        "bytes": 512106,
+        "sha256": "65b5cbd8991379d7f7d82f7e5e78b2149fe547a83bf5be64f2c5f101698ee7be"
+      },
+      "preview.png": {
+        "bytes": 128698,
+        "sha256": "2e2dc942461321f32fb2763360dff2fa871cb4066ee4bef81d734c3cbb1983af"
+      },
+      "site-ULEBYIAK.css": {
+        "bytes": 20365,
+        "sha256": "720546713222fa0d1775cd0dcedeed9b5e23228608f4fecef5d4b423d225f6fa"
+      },
+      "site-ETGTA7YX.png": {
+        "bytes": 13173,
+        "sha256": "0a4af22dc42baccc1eb34f7d16ef40810720466c028a0e9d1f4ec2cf5ac17a7f"
+      },
+      "site-BQGHP7WS.woff2": {
+        "bytes": 1904,
+        "sha256": "a6d75a7d113b0f9c12e818ce6212a563be5a96e097671fde8dc1372fbd4bd2f9"
+      },
+      "game-37f5bff1f056c781.js": {
+        "bytes": 279815,
+        "sha256": "33c94cb3175f3333b82e2a3be5e8e86f77986f0aa2042b1631f6367a4e5bb6ba"
+      },
+      "site-6d04cffcffb00119.png": {
+        "bytes": 138616,
+        "sha256": "6d04cffcffb001193fd986db54e76a81584ad83bcc51481055a1127cde7b6c3d"
+      },
+      "game-37f5bff1f056c781.wasm": {
+        "bytes": 39514754,
+        "sha256": "fc74679e3b97f76878947fcd4fbe1268cbfa6188182a2e33bbc3f5dc9bfa57d0"
+      },
+      "game-37f5bff1f056c781.audio.worklet.js": {
+        "bytes": 7298,
+        "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3"
+      },
+      "site-c0100c2cf9b6fbc0.png": {
+        "bytes": 5818,
+        "sha256": "c0100c2cf9b6fbc01a1ac12c696f2fba1f98648887ff35236ef47ad7619c23a1"
+      },
+      "game-37f5bff1f056c781.audio.position.worklet.js": {
+        "bytes": 2973,
+        "sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8"
+      },
+      "game-37f5bff1f056c781.pck": {
+        "bytes": 18266880,
+        "sha256": "334f003308cf1b136fbefa73ea00f62c9fbcd81e09de3161ee17993a418af431"
+      },
+      "help.html": {
+        "bytes": 42730,
+        "sha256": "b1026d333383be12e2c1d88413dfd164f35d813213aeb0d25a407dfc85a35d76"
+      },
+      "site-49773742305df026.png": {
+        "bytes": 19549,
+        "sha256": "49773742305df0260580dfe4175d1e83fbc410e6c50893a6fb611e02549c891f"
+      },
+      "site-2e2dc942461321f3.png": {
+        "bytes": 128698,
+        "sha256": "2e2dc942461321f32fb2763360dff2fa871cb4066ee4bef81d734c3cbb1983af"
+      }
+    }
+  },
+  "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+  "landing_title": "Gloamthread \u2014 Play",
+  "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+  "website_frames_before_play": 1,
+  "website_frames_after_play": 0,
+  "story_canvas": {
+    "width": 960,
+    "height": 360
+  },
+  "guide_title": "Gloamthread \u2014 Player guide",
+  "resume_cycles": [
+    {
+      "cycle": 1,
+      "state": "playing"
+    },
+    {
+      "cycle": 2,
+      "state": "playing"
+    },
+    {
+      "cycle": 3,
+      "state": "playing"
+    },
+    {
+      "cycle": 4,
+      "state": "playing"
+    },
+    {
+      "cycle": 5,
+      "state": "playing"
+    },
+    {
+      "cycle": 6,
+      "state": "playing"
+    },
+    {
+      "cycle": 7,
+      "state": "playing"
+    },
+    {
+      "cycle": 8,
+      "state": "playing"
+    },
+    {
+      "cycle": 9,
+      "state": "playing"
+    },
+    {
+      "cycle": 10,
+      "state": "playing"
+    }
+  ],
+  "game_canvas": {
+    "width": 1280,
+    "height": 720,
+    "rectangle": {
+      "x": 43,
+      "y": 45,
+      "width": 1280,
+      "height": 720,
+      "top": 45,
+      "right": 1323,
+      "bottom": 765,
+      "left": 43
+    },
+    "stage": {
+      "x": 0,
+      "y": 42,
+      "width": 1366,
+      "height": 726,
+      "top": 42,
+      "right": 1366,
+      "bottom": 768,
+      "left": 0
+    }
+  },
+  "engine_assets_requested_after_play": [
+    "/game-37f5bff1f056c781.js",
+    "/game-37f5bff1f056c781.wasm",
+    "/game-37f5bff1f056c781.pck"
+  ],
+  "forge": {
+    "http_status": 200,
+    "authenticated": false,
+    "worker_ready": true,
+    "key_present": true,
+    "ui_opened_by_canvas_input": true,
+    "requests": [
+      {
+        "method": "GET",
+        "path": "/api/forge/configuration"
+      }
+    ],
+    "paid_requests": 0
+  },
+  "final_title": "Gloamthread - Wave Arena",
+  "state_trace": [
+    {
+      "event": "state",
+      "state": "idle",
+      "classes": "diorama-ready",
+      "time": 1731.5
+    },
+    {
+      "event": "pointerdown",
+      "target": "play",
+      "button": "play",
+      "state": "idle",
+      "x": 187.3699951171875,
+      "y": 513.780029296875,
+      "scroll_y": 0,
+      "time": 8514.80000000028
+    },
+    {
+      "event": "pointerup",
+      "target": "play",
+      "button": "play",
+      "state": "idle",
+      "x": 187.3699951171875,
+      "y": 513.780029296875,
+      "scroll_y": 0,
+      "time": 8516.399999999907
+    },
+    {
+      "event": "click",
+      "target": "play",
+      "button": "play",
+      "state": "idle",
+      "x": 187,
+      "y": 513,
+      "scroll_y": 0,
+      "time": 8516.80000000028
+    },
+    {
+      "event": "state",
+      "state": "loading",
+      "classes": "loading scene-static",
+      "time": 8528.899999999907
+    },
+    {
+      "event": "state",
+      "state": "playing",
+      "classes": "scene-static playing",
+      "time": 25360.5
+    },
+    {
+      "event": "pointerdown",
+      "target": "canvas",
+      "state": "playing",
+      "x": 309.6666564941406,
+      "y": 501,
+      "scroll_y": 0,
+      "time": 27707
+    },
+    {
+      "event": "pointerup",
+      "target": "canvas",
+      "state": "playing",
+      "x": 309.6666564941406,
+      "y": 501,
+      "scroll_y": 0,
+      "time": 27710.899999999907
+    },
+    {
+      "event": "click",
+      "target": "canvas",
+      "state": "playing",
+      "x": 309,
+      "y": 501,
+      "scroll_y": 0,
+      "time": 28040
+    },
+    {
+      "event": "pointerdown",
+      "target": "canvas",
+      "state": "playing",
+      "x": 309.6666564941406,
+      "y": 398.3333435058594,
+      "scroll_y": 0,
+      "time": 31441.5
+    },
+    {
+      "event": "pointerup",
+      "target": "canvas",
+      "state": "playing",
+      "x": 309.6666564941406,
+      "y": 398.3333435058594,
+      "scroll_y": 0,
+      "time": 31441.899999999907
+    },
+    {
+      "event": "click",
+      "target": "canvas",
+      "state": "playing",
+      "x": 309,
+      "y": 398,
+      "scroll_y": 0,
+      "time": 31456
+    },
+    {
+      "event": "pointerdown",
+      "target": "canvas",
+      "state": "playing",
+      "x": 1103,
+      "y": 641.6666870117188,
+      "scroll_y": 0,
+      "time": 32259.80000000028
+    },
+    {
+      "event": "pointerup",
+      "target": "canvas",
+      "state": "playing",
+      "x": 1103,
+      "y": 641.6666870117188,
+      "scroll_y": 0,
+      "time": 32260.5
+    },
+    {
+      "event": "click",
+      "target": "canvas",
+      "state": "playing",
+      "x": 1103,
+      "y": 641,
+      "scroll_y": 0,
+      "time": 32400.30000000028
+    },
+    {
+      "event": "pointerdown",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 38111.60000000009
+    },
+    {
+      "event": "pointerup",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 38112
+    },
+    {
+      "event": "click",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328,
+      "y": 20,
+      "scroll_y": 0,
+      "time": 38112.200000000186
+    },
+    {
+      "event": "home-call",
+      "stack": "Error\n    at window.GloamWeb.home (eval at evaluate (:311:30), <anonymous>:4:63)\n    at HTMLButtonElement.<anonymous> (https://gloamthread.midhunpm.in/site-7T2PTTBR.js:1:4700)",
+      "time": 38112.39999999991
+    },
+    {
+      "event": "state",
+      "state": "home",
+      "classes": "scene-static",
+      "time": 38117.10000000009
+    },
+    {
+      "event": "pointerdown",
+      "target": "",
+      "state": "home",
+      "x": 1028.5400390625,
+      "y": 41,
+      "scroll_y": 0,
+      "time": 38407.5
+    },
+    {
+      "event": "pointerup",
+      "target": "",
+      "state": "home",
+      "x": 1028.5400390625,
+      "y": 41,
+      "scroll_y": 0,
+      "time": 38407.89999999991
+    },
+    {
+      "event": "click",
+      "target": "",
+      "state": "home",
+      "x": 1028,
+      "y": 41,
+      "scroll_y": 0,
+      "time": 38408
+    },
+    {
+      "event": "pointerdown",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 513.780029296875,
+      "scroll_y": 0,
+      "time": 40502.200000000186
+    },
+    {
+      "event": "pointerup",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 513.780029296875,
+      "scroll_y": 0,
+      "time": 40502.60000000009
+    },
+    {
+      "event": "click",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157,
+      "y": 513,
+      "scroll_y": 0,
+      "time": 40502.700000000186
+    },
+    {
+      "event": "state",
+      "state": "playing",
+      "classes": "scene-static playing",
+      "time": 40504.30000000028
+    },
+    {
+      "event": "pointerdown",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 43538.89999999991
+    },
+    {
+      "event": "pointerup",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 43539.200000000186
+    },
+    {
+      "event": "click",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328,
+      "y": 20,
+      "scroll_y": 0,
+      "time": 43539.200000000186
+    },
+    {
+      "event": "home-call",
+      "stack": "Error\n    at window.GloamWeb.home (eval at evaluate (:311:30), <anonymous>:4:63)\n    at HTMLButtonElement.<anonymous> (https://gloamthread.midhunpm.in/site-7T2PTTBR.js:1:4700)",
+      "time": 43539.30000000028
+    },
+    {
+      "event": "state",
+      "state": "home",
+      "classes": "scene-static",
+      "time": 43541.30000000028
+    },
+    {
+      "event": "pointerdown",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 242.77999877929688,
+      "scroll_y": 271,
+      "time": 44816.700000000186
+    },
+    {
+      "event": "pointerup",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 242.77999877929688,
+      "scroll_y": 271,
+      "time": 44816.89999999991
+    },
+    {
+      "event": "click",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157,
+      "y": 242,
+      "scroll_y": 271,
+      "time": 44817
+    },
+    {
+      "event": "state",
+      "state": "playing",
+      "classes": "scene-static playing",
+      "time": 44818.89999999991
+    },
+    {
+      "event": "pointerdown",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 47798.200000000186
+    },
+    {
+      "event": "pointerup",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 47799.200000000186
+    },
+    {
+      "event": "click",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328,
+      "y": 20,
+      "scroll_y": 0,
+      "time": 47799.39999999991
+    },
+    {
+      "event": "home-call",
+      "stack": "Error\n    at window.GloamWeb.home (eval at evaluate (:311:30), <anonymous>:4:63)\n    at HTMLButtonElement.<anonymous> (https://gloamthread.midhunpm.in/site-7T2PTTBR.js:1:4700)",
+      "time": 47799.60000000009
+    },
+    {
+      "event": "state",
+      "state": "home",
+      "classes": "scene-static",
+      "time": 47805.700000000186
+    },
+    {
+      "event": "pointerdown",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 513.780029296875,
+      "scroll_y": 0,
+      "time": 49407.30000000028
+    },
+    {
+      "event": "pointerup",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 513.780029296875,
+      "scroll_y": 0,
+      "time": 49407.39999999991
+    },
+    {
+      "event": "click",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157,
+      "y": 513,
+      "scroll_y": 0,
+      "time": 49407.5
+    },
+    {
+      "event": "state",
+      "state": "playing",
+      "classes": "scene-static playing",
+      "time": 49408.700000000186
+    },
+    {
+      "event": "pointerdown",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 52400.5
+    },
+    {
+      "event": "pointerup",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 52400.80000000028
+    },
+    {
+      "event": "click",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328,
+      "y": 20,
+      "scroll_y": 0,
+      "time": 52400.80000000028
+    },
+    {
+      "event": "home-call",
+      "stack": "Error\n    at window.GloamWeb.home (eval at evaluate (:311:30), <anonymous>:4:63)\n    at HTMLButtonElement.<anonymous> (https://gloamthread.midhunpm.in/site-7T2PTTBR.js:1:4700)",
+      "time": 52401
+    },
+    {
+      "event": "state",
+      "state": "home",
+      "classes": "scene-static",
+      "time": 52404.30000000028
+    },
+    {
+      "event": "pointerdown",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 525.1900024414062,
+      "scroll_y": 0,
+      "time": 52579.80000000028
+    },
+    {
+      "event": "pointerup",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 525.1900024414062,
+      "scroll_y": 0,
+      "time": 52579.89999999991
+    },
+    {
+      "event": "click",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157,
+      "y": 525,
+      "scroll_y": 0,
+      "time": 52580
+    },
+    {
+      "event": "state",
+      "state": "playing",
+      "classes": "scene-static playing",
+      "time": 52581.10000000009
+    },
+    {
+      "event": "pointerdown",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 54563.700000000186
+    },
+    {
+      "event": "pointerup",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 54564
+    },
+    {
+      "event": "click",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328,
+      "y": 20,
+      "scroll_y": 0,
+      "time": 54564.10000000009
+    },
+    {
+      "event": "home-call",
+      "stack": "Error\n    at window.GloamWeb.home (eval at evaluate (:311:30), <anonymous>:4:63)\n    at HTMLButtonElement.<anonymous> (https://gloamthread.midhunpm.in/site-7T2PTTBR.js:1:4700)",
+      "time": 54564.200000000186
+    },
+    {
+      "event": "state",
+      "state": "home",
+      "classes": "scene-static",
+      "time": 54567.60000000009
+    },
+    {
+      "event": "pointerdown",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 525.780029296875,
+      "scroll_y": 0,
+      "time": 54670.30000000028
+    },
+    {
+      "event": "pointerup",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 525.780029296875,
+      "scroll_y": 0,
+      "time": 54670.5
+    },
+    {
+      "event": "click",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157,
+      "y": 525,
+      "scroll_y": 0,
+      "time": 54670.60000000009
+    },
+    {
+      "event": "state",
+      "state": "playing",
+      "classes": "scene-static playing",
+      "time": 54673
+    },
+    {
+      "event": "pointerdown",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 56433
+    },
+    {
+      "event": "pointerup",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 56433.39999999991
+    },
+    {
+      "event": "click",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328,
+      "y": 20,
+      "scroll_y": 0,
+      "time": 56433.5
+    },
+    {
+      "event": "home-call",
+      "stack": "Error\n    at window.GloamWeb.home (eval at evaluate (:311:30), <anonymous>:4:63)\n    at HTMLButtonElement.<anonymous> (https://gloamthread.midhunpm.in/site-7T2PTTBR.js:1:4700)",
+      "time": 56433.60000000009
+    },
+    {
+      "event": "state",
+      "state": "home",
+      "classes": "scene-static",
+      "time": 56437.200000000186
+    },
+    {
+      "event": "pointerdown",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 525.780029296875,
+      "scroll_y": 0,
+      "time": 56590.39999999991
+    },
+    {
+      "event": "pointerup",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 525.780029296875,
+      "scroll_y": 0,
+      "time": 56591.30000000028
+    },
+    {
+      "event": "click",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157,
+      "y": 525,
+      "scroll_y": 0,
+      "time": 56591.60000000009
+    },
+    {
+      "event": "state",
+      "state": "playing",
+      "classes": "scene-static playing",
+      "time": 56596.89999999991
+    },
+    {
+      "event": "pointerdown",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 58762.700000000186
+    },
+    {
+      "event": "pointerup",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 58763
+    },
+    {
+      "event": "click",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328,
+      "y": 20,
+      "scroll_y": 0,
+      "time": 58763.10000000009
+    },
+    {
+      "event": "home-call",
+      "stack": "Error\n    at window.GloamWeb.home (eval at evaluate (:311:30), <anonymous>:4:63)\n    at HTMLButtonElement.<anonymous> (https://gloamthread.midhunpm.in/site-7T2PTTBR.js:1:4700)",
+      "time": 58763.200000000186
+    },
+    {
+      "event": "state",
+      "state": "home",
+      "classes": "scene-static",
+      "time": 58766.60000000009
+    },
+    {
+      "event": "pointerdown",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 523.7899780273438,
+      "scroll_y": 0,
+      "time": 58971.89999999991
+    },
+    {
+      "event": "pointerup",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 523.7899780273438,
+      "scroll_y": 0,
+      "time": 58972.10000000009
+    },
+    {
+      "event": "click",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157,
+      "y": 523,
+      "scroll_y": 0,
+      "time": 58972.30000000028
+    },
+    {
+      "event": "state",
+      "state": "playing",
+      "classes": "scene-static playing",
+      "time": 58973.80000000028
+    },
+    {
+      "event": "pointerdown",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 61328.30000000028
+    },
+    {
+      "event": "pointerup",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 61328.60000000009
+    },
+    {
+      "event": "click",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328,
+      "y": 20,
+      "scroll_y": 0,
+      "time": 61328.60000000009
+    },
+    {
+      "event": "home-call",
+      "stack": "Error\n    at window.GloamWeb.home (eval at evaluate (:311:30), <anonymous>:4:63)\n    at HTMLButtonElement.<anonymous> (https://gloamthread.midhunpm.in/site-7T2PTTBR.js:1:4700)",
+      "time": 61328.80000000028
+    },
+    {
+      "event": "state",
+      "state": "home",
+      "classes": "scene-static",
+      "time": 61331.5
+    },
+    {
+      "event": "pointerdown",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 525.780029296875,
+      "scroll_y": 0,
+      "time": 61520.80000000028
+    },
+    {
+      "event": "pointerup",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 525.780029296875,
+      "scroll_y": 0,
+      "time": 61520.80000000028
+    },
+    {
+      "event": "click",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157,
+      "y": 525,
+      "scroll_y": 0,
+      "time": 61520.89999999991
+    },
+    {
+      "event": "state",
+      "state": "playing",
+      "classes": "scene-static playing",
+      "time": 61522
+    },
+    {
+      "event": "pointerdown",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 63560.30000000028
+    },
+    {
+      "event": "pointerup",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 63560.700000000186
+    },
+    {
+      "event": "click",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328,
+      "y": 20,
+      "scroll_y": 0,
+      "time": 63560.700000000186
+    },
+    {
+      "event": "home-call",
+      "stack": "Error\n    at window.GloamWeb.home (eval at evaluate (:311:30), <anonymous>:4:63)\n    at HTMLButtonElement.<anonymous> (https://gloamthread.midhunpm.in/site-7T2PTTBR.js:1:4700)",
+      "time": 63560.89999999991
+    },
+    {
+      "event": "state",
+      "state": "home",
+      "classes": "scene-static",
+      "time": 63564.30000000028
+    },
+    {
+      "event": "pointerdown",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 525.780029296875,
+      "scroll_y": 0,
+      "time": 63728.200000000186
+    },
+    {
+      "event": "pointerup",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 525.780029296875,
+      "scroll_y": 0,
+      "time": 63728.5
+    },
+    {
+      "event": "click",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157,
+      "y": 525,
+      "scroll_y": 0,
+      "time": 63728.60000000009
+    },
+    {
+      "event": "state",
+      "state": "playing",
+      "classes": "scene-static playing",
+      "time": 63730.200000000186
+    },
+    {
+      "event": "pointerdown",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 65915.3999999999
+    },
+    {
+      "event": "pointerup",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 65916.3999999999
+    },
+    {
+      "event": "click",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328,
+      "y": 20,
+      "scroll_y": 0,
+      "time": 65916.6000000001
+    },
+    {
+      "event": "home-call",
+      "stack": "Error\n    at window.GloamWeb.home (eval at evaluate (:311:30), <anonymous>:4:63)\n    at HTMLButtonElement.<anonymous> (https://gloamthread.midhunpm.in/site-7T2PTTBR.js:1:4700)",
+      "time": 65916.80000000028
+    },
+    {
+      "event": "state",
+      "state": "home",
+      "classes": "scene-static",
+      "time": 65923.1000000001
+    },
+    {
+      "event": "pointerdown",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 242.77999877929688,
+      "scroll_y": 271,
+      "time": 67106.6000000001
+    },
+    {
+      "event": "pointerup",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 242.77999877929688,
+      "scroll_y": 271,
+      "time": 67106.80000000028
+    },
+    {
+      "event": "click",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157,
+      "y": 242,
+      "scroll_y": 271,
+      "time": 67106.8999999999
+    },
+    {
+      "event": "state",
+      "state": "playing",
+      "classes": "scene-static playing",
+      "time": 67108.30000000028
+    },
+    {
+      "event": "pointerdown",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 70364.8999999999
+    },
+    {
+      "event": "pointerup",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328.3499755859375,
+      "y": 20.5,
+      "scroll_y": 0,
+      "time": 70365.20000000019
+    },
+    {
+      "event": "click",
+      "target": "home",
+      "button": "home",
+      "state": "playing",
+      "x": 1328,
+      "y": 20,
+      "scroll_y": 0,
+      "time": 70365.30000000028
+    },
+    {
+      "event": "home-call",
+      "stack": "Error\n    at window.GloamWeb.home (eval at evaluate (:311:30), <anonymous>:4:63)\n    at HTMLButtonElement.<anonymous> (https://gloamthread.midhunpm.in/site-7T2PTTBR.js:1:4700)",
+      "time": 70365.30000000028
+    },
+    {
+      "event": "state",
+      "state": "home",
+      "classes": "scene-static",
+      "time": 70367.6000000001
+    },
+    {
+      "event": "pointerdown",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 525.780029296875,
+      "scroll_y": 0,
+      "time": 70555.5
+    },
+    {
+      "event": "pointerup",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157.3699951171875,
+      "y": 525.780029296875,
+      "scroll_y": 0,
+      "time": 70555.70000000019
+    },
+    {
+      "event": "click",
+      "target": "play",
+      "button": "play",
+      "state": "home",
+      "x": 157,
+      "y": 525,
+      "scroll_y": 0,
+      "time": 70558.70000000019
+    },
+    {
+      "event": "state",
+      "state": "playing",
+      "classes": "scene-static playing",
+      "time": 70561.30000000028
+    },
+    {
+      "event": "pointerdown",
+      "target": "canvas",
+      "state": "playing",
+      "x": 676.3333129882812,
+      "y": 498.3333435058594,
+      "scroll_y": 0,
+      "time": 74122.8999999999
+    },
+    {
+      "event": "pointerup",
+      "target": "canvas",
+      "state": "playing",
+      "x": 676.3333129882812,
+      "y": 498.3333435058594,
+      "scroll_y": 0,
+      "time": 74123.5
+    },
+    {
+      "event": "click",
+      "target": "canvas",
+      "state": "playing",
+      "x": 676,
+      "y": 498,
+      "scroll_y": 0,
+      "time": 74127.5
+    },
+    {
+      "event": "pointerdown",
+      "target": "canvas",
+      "state": "playing",
+      "x": 776.3333129882812,
+      "y": 451.6666564941406,
+      "scroll_y": 0,
+      "time": 75289.8999999999
+    },
+    {
+      "event": "pointerup",
+      "target": "canvas",
+      "state": "playing",
+      "x": 776.3333129882812,
+      "y": 451.6666564941406,
+      "scroll_y": 0,
+      "time": 75290.30000000028
+    },
+    {
+      "event": "click",
+      "target": "canvas",
+      "state": "playing",
+      "x": 776,
+      "y": 451,
+      "scroll_y": 0,
+      "time": 75314.70000000019
+    },
+    {
+      "event": "pointerdown",
+      "target": "canvas",
+      "state": "playing",
+      "x": 309.6666564941406,
+      "y": 551.6666870117188,
+      "scroll_y": 0,
+      "time": 76220.80000000028
+    },
+    {
+      "event": "pointerup",
+      "target": "canvas",
+      "state": "playing",
+      "x": 309.6666564941406,
+      "y": 551.6666870117188,
+      "scroll_y": 0,
+      "time": 76221.1000000001
+    },
+    {
+      "event": "click",
+      "target": "canvas",
+      "state": "playing",
+      "x": 309,
+      "y": 551,
+      "scroll_y": 0,
+      "time": 76477.1000000001
+    }
+  ],
+  "visual_inspection": {
+    "method": "Codex view_image on actual browser captures",
+    "images": [
+      "docs/media/web-portal-chromium-combat.png",
+      "docs/media/web-portal-chromium-forge.png",
+      "docs/media/web-portal-chromium-guide.png"
+    ],
+    "observations": [
+      "Actual original fighter combat renders within the fitted game canvas below the toolbar.",
+      "The guide is readable in its separate tab; returning keeps the current game.",
+      "Actual Forge library shows the three original built-in fighters and invite-only creation guidance, without a service-error message."
+    ]
+  }
+}

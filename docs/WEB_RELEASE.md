@@ -1,7 +1,9 @@
 # Browser release and operations
 
 **[Play the public release](https://gloamthread.midhunpm.in).** Its exact deployed
-source and verification are recorded in [release evidence](../evidence/web-release/README.md).
+source and verification are recorded in [portal release evidence](../evidence/web-portal/README.md).
+The [earlier browser release](../evidence/web-release/README.md) retains the hosted
+generation and production backup/restore evidence.
 
 The browser version targets desktop Chromium and Firefox with WebAssembly and
 WebGL 2. Keyboard and gamepad play share one computer. Arena solo/co-op and the

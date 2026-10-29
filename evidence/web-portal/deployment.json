@@ -1,0 +1,26 @@
+{
+  "recorded_at_utc": "2026-10-29T01:07:16+00:00",
+  "domain": "https://gloamthread.midhunpm.in",
+  "release_tag": "web-v0.6.1-resume",
+  "implementation_commit": "37f5bff1f056c7811bb84a4260c1f95ee660d03d",
+  "deployment": {
+    "id": "yzhjwda7zhS5UrlxFJUW-",
+    "status": "done"
+  },
+  "containers": [
+    {
+      "name": "gloamthread-web-37uiwx-web-1",
+      "status": "Up 2 minutes (healthy)"
+    },
+    {
+      "name": "gloamthread-web-37uiwx-worker-1",
+      "status": "Up 2 minutes"
+    },
+    {
+      "name": "gloamthread-web-37uiwx-api-1",
+      "status": "Up 2 minutes (healthy)"
+    }
+  ],
+  "data_volumes_preserved": true,
+  "previous_release_tag": "web-v0.6.0-diorama"
+}
